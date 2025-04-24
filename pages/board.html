@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Join</title>
+    <meta name="description" content="Join, dein Kanban Management Tool"/>
+    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool"/>
+    <link rel="stylesheet" type="text/css" href="../styles/board.css"/>
+    <link rel="stylesheet" type="text/css" href="../styles/media/board.css"/>
+    <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
+    <link rel="stylesheet" type="text/css" href="../style.css"/>
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png"/>
+    <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
+  </head>
+  <body>
+    <header class="header">
+        <h2 class="title">Kanban Project Management Tool</h2>
+        <div class="header-icons">
+            <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
+            <a href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+        </div>
+    </header>
+    
+    <nav class="nav">
+        <div class="nav-top">
+            <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
+            <a href="../pages/summary.html"> 
+              <img src="../assets/icons/frame/nav/summary.svg" alt="">
+              <p>Summary</p>
+            </a>
+
+            <a href="../pages/add_task.html"> 
+              <img src="../assets/icons/frame/nav/add_task.svg" alt="">
+              <p>Add Task</p>
+            </a>
+            
+            <a class="current-site" href="../pages/board.html"> 
+              <img src="../assets/icons/frame/nav/board_active.svg" alt="">
+              <p>Board</p>
+            </a>
+            
+            <a href="../pages/contacts.html"> 
+              <img src="../assets/icons/frame/nav/contacts.svg" alt="">
+              <p>Contacts</p>
+            </a>
+        </div>
+
+        <div class="nav-bottom">
+            <a href="../pages/privacy_policy.html">Privacy Policy</a>
+            <a href="../pages/legal_notice.html">Legal notice</a>
+        </div>
+    </nav>
+
+    <section class="board-nav">
+        <div class="board-nav-top">
+            <h1 class="board-header">Board</h1>
+            <div class="find-add-div">
+                <input class="findtask" type="text" placeholder="Find Task">
+                <button class="addtask-btn">
+                    <span>Add task</span>
+                    <img class="plus" src="../assets/icons/board/add.svg" alt="">
+                </button>
+            </div>
+        </div>
+
+        <div class="board-nav-bottom">
+            <div>
+                <span class="category-span">To do</span>
+                <span class="categoryplus">+</span>
+            </div>
+            <div>
+                <span class="category-span">In Progress</span>
+                <span class="categoryplus">+</span>
+            </div>
+            <div>
+                <span class="category-span">Await feedback</span>
+                <span class="categoryplus">+</span>
+            </div>
+            <div>
+                <span class="category-span">Done</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="board">
+        <div id="toDo" class="category-container">
+            <div class="notask">
+                No tasks To Do
+            </div>
+        </div>
+
+        <div id="inProgress" class="category-container">
+            <div class="task">
+                <span class="task-header tech-task">User Story</span>
+                <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
+                <p class="task-info">Build start page with recipe recommendation...</p>
+                <div class="task-bar">
+                    <div class="bar-wrapper">
+                        <div class="progress-bar">
+                            <span class="progress-bar-fill" style="width: 50%;"></span>
+                        </div>
+                    </div>
+                    <span class="sub-task">1/2 Subtasks</span>
+                </div>
+                <div class="task-status">
+                    <div>
+                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                    </div>
+                    <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div id="awaitFeedback" class="category-container">
+            <div class="task">
+                <span class="task-header user-task">Technical Task</span>
+                <h4 class="task-title">HTML Base Template Creation</h4>
+                <p class="task-info">Create reusable HTML base templates...</p>
+                <div class="task-status">
+                    <div>
+                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                    </div>
+                    <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
+                </div>
+            </div>
+            <div class="task">
+                <span class="task-header tech-task">User Story</span>
+                <h4 class="task-title">Daily Kochwelt Recipe</h4>
+                <p class="task-info">Implement daily recipe and portion calculator...</p>
+                <div class="task-bar">
+                    <div class="bar-wrapper">
+                        <div class="progress-bar">
+                            <span class="progress-bar-fill" style="width: 50%;"></span>
+                        </div>
+                    </div>
+                    <span class="sub-task">1/2 Subtasks</span>
+                </div>
+                <div class="task-status">
+                    <div>
+                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                    </div>
+                    <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="category-container">
+            <div class="task">
+                <span class="task-header user-task">Technical Task</span>
+                <h4 class="task-title">CSS Architecture Planning</h4>
+                <p class="task-info">Define CSS naming conventions and structure</p>
+                <div class="task-bar">
+                    <div class="bar-wrapper">
+                        <div class="progress-bar">
+                            <span class="progress-bar-fill" style="width: 100%;"></span>
+                        </div>
+                    </div>
+                    <span class="sub-task">2/2 Subtasks</span>
+                </div>
+                <div class="task-status">
+                    <div>
+                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                    </div>
+                    <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+  </body>
+</html>
