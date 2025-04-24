@@ -1,0 +1,70 @@
+.main_content{
+    margin-top: 206px; margin-left: 328px;
+}
+.title { 
+    display: flex; align-items: center; width: 625px; height: 73px;
+    gap: 30px;
+}
+.title h2 { 
+    color: rgb(0, 0, 0, 1); font-size: 61px; font-weight: bold; display: inline-block; 
+}
+.title span { 
+    display: flex; align-items: center; margin-left: 1rem; color: rgba(42, 54, 71, 1); font-size: 27px; border-left: 3px solid rgba(41, 171, 226, 1); height: 73px; padding-left: 30px;
+}
+.content { 
+    display: flex; padding-top: 80px; gap: 60px;
+}
+.metrics-panel { 
+    display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto 0;
+    width: 560px; gap: 30px;
+}
+.card { 
+    width: 264px; height: 168px; gap: 18px; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; 
+    display: flex; align-items: center; justify-content: center; padding: 1rem; text-align: center; 
+}
+.card .icon { 
+    font-size: 1.5rem; margin-bottom: 0.5rem; 
+}
+.card .value { 
+    font-size: 64px; font-weight: 600; 
+}
+.card .label { 
+    font-size: 20px; color: rgba(42, 54, 71, 1); 
+}
+.urgent { 
+    grid-column: 1 / span 2; display: flex; gap: 61px; align-items: center; justify-content: center; border: 1px solid #e0f2fe; border-radius: 8px; 
+    width: 560px; height: 168px; background: #fff
+}
+.urgent-left { 
+    display: flex; align-items: center; gap: 0.75rem; border-right: 2px solid rgba(209, 209, 209, 1); padding-right: 30px;
+}
+.urgent-left .value {
+    font-weight: 600; font-size: 64px;
+}
+.urgent-left .label {
+    font-size: 16px; color: rgba(42, 54, 71, 1); 
+}
+.urgent-left .seperator { 
+    width: 1px;
+    background: #d1d5db;
+    height: 40px;
+    margin: 0 1.5rem;
+}
+.urgent-left .value, .urgent-left .label { 
+    margin: 0;
+ }
+.urgent-right { 
+    display: flex; align-items: center; color: rgba(42, 54, 71, 1); font-size: 21px; 
+}
+.card_count {
+    display: flex; flex-direction: column; width: 168px; height: 168px;
+}
+.greeting { 
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 3px;
+}
+.greeting p { 
+    font-size: 47px; color: rgba(42, 54, 71, 1); 
+}
+.greeting h3 { 
+    font-size: 64px; color: rgba(41, 171, 226, 1);
+}

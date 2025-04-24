@@ -1,0 +1,107 @@
+/* help area */
+
+.description {
+    box-sizing: border-box;
+    padding: 100px 100px 100px 100px;
+    margin-left: 232px;
+}
+
+.text-area {
+    height: calc(100vh - 296px);
+    width: 100%;
+    max-width: 1208px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.text-area::-webkit-scrollbar {
+    display: none;
+}
+
+.text-area>h2 {
+    margin-block-end: 0px;
+}
+
+.text-area>h3 {
+    margin-block-end: 0px;
+}
+
+.text-area>span {
+    font-size: 17px;
+}
+
+.text-title {
+    height: 116px;
+    width: 100%;
+    max-width: 1108px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-title>h1 {
+    font-size: 60px;
+}
+
+.arrow-left {
+    height: 22px;
+    width: 22px;
+    object-fit: cover;
+    position: fixed;
+    top: 225px;
+    left: 90%
+    
+}
+
+.arrow-left:hover {
+    cursor: pointer;
+    background-color: rgb(240, 240, 240);
+    border-radius: 50%;
+    scale: 140%;
+    padding: 2px;
+}
+
+.numbers {
+    font-size: 17px;
+    padding-left: 34px;
+    margin-top: 12px;
+}
+
+.numbers>li {
+    padding-left: 24px;
+}
+
+.numbers>li::marker {
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 12px;
+}
+
+.numbers>li>h3 {
+    position: relative;
+    bottom: 10px;
+    margin-block-start: 4px;
+    margin-block-end: 4px;
+}
+
+.numbers>li>span {
+    position: relative;
+    bottom: 10px;
+}
+
+.bottom-message {
+    margin: 0px;
+}
+
+.highlight-word {
+    color: rgb(41, 171, 226);
+}
+
+/* nav addition */
+
+.current-site {
+    background-color: #091931;
+    color: white;
+}

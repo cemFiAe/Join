@@ -1,0 +1,203 @@
+/* contact list */
+
+.contacts {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+    margin-left: 232px;
+    height: calc(100vh - 96px);
+    width: 456px;
+    padding-block: 32px;
+    padding-inline: 24px;
+    filter: drop-shadow(4px 0px 4px rgba(0,0,0,0.08));
+    overflow-y: auto;
+}
+
+.person_add {
+    object-fit: cover;
+    height: 32px;
+    width: 32px;
+}
+
+.new_contact_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 352px;
+    height: 56px;
+    background-color: #2A3647;
+    color: white;
+    font-size: 21px;
+    font-weight: 700;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #2A3647;
+}
+
+.new_contact_btn:hover {
+    background-color: #29ABE2;
+    border-color: #29ABE2;
+    cursor: pointer;   
+}
+
+.contact_letter {
+    display: flex;
+    justify-content: flex-start !important;
+    width: 352px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #000000;
+    padding-block: 17px;
+    padding-inline: 36px;
+}
+
+.contact_devider {
+    height: 1px;
+    width: 352px;
+    background-color: #EEEEEE;
+}
+
+.contact_entry {
+    width: 352px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 35px;
+    padding-block: 15px;
+    padding-inline: 24px;
+}
+
+.contact_icon {
+    object-fit: cover;
+    height: 42px;
+    width: 42px;
+    border-radius: 45px;
+    border-color: white;
+    border-width: 2px;
+}
+
+.contact_name {
+    font-size: 20px;
+    font-weight: 400;
+    color: black;
+}
+
+.contact_mail {
+    font-size: 20px;
+    font-weight: 400;
+    color: #007CEE;
+}
+
+/* contact overview */
+
+.contact_wrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.contact_overview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    height: 73px;
+    margin-left: 55px;
+    margin-top: 110px;
+}
+
+.contact_overview h1 {
+    font-size: 61px;
+    font-weight: 700;
+}
+
+.contact_overview span {
+    font-size: 27px;
+    font-weight: 400;
+}
+
+.co-devider {
+    width: 4px;
+    border-radius: 3px;
+    height: 59px;
+    background-color: #29ABE2;
+}
+
+/* contact information */
+
+.contact_information {
+    position: absolute;
+    top: 311px;
+    left: 750px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.ci-wrapper {
+    display: flex;
+    gap: 54px;
+}
+
+.ci-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.ci-edit {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    gap: 16px;
+}
+
+.ci-icon {
+    object-fit: cover;
+    height: 120px;
+    width: 120px;
+    border-radius: 70px;
+    border-width: 2px;
+    border-color: white;
+    filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.1));
+}
+
+.ci-name {
+    font-size: 47px;
+    font-weight: 500;
+}
+
+.ci-edit a{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2A3647;
+}
+
+.ci-edit a:hover {
+    color: #29ABE2;
+}
+
+.ci-edit a:hover img {
+    filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
+}
+
+.ci-edit img{
+    object-fit: cover;
+    height: 24px;
+    width: 24px;
+}
+
+.ci-head {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.ci-text {
+    font-size: 16px;
+}
+
+.ci-mail {
+    color: #007CEE;
+}
