@@ -5,12 +5,9 @@
 }
 
 .text-area {
-    height: calc(100vh - 196px);
+    height: calc(100vh - 212px);
     width: 100%;
     max-width: 1208px;
-    display: flex;
-    align-items: start;
-    flex-direction: column;
     overflow-y: scroll;
 }
 
@@ -19,11 +16,11 @@
 }
 
 .text-area>h2 {
-    margin-block-end: 0px;
+    margin-block-end: 4px;
 }
 
 .text-area>h3 {
-    margin-block-end: 0px;
+    margin-block-end: 4px;
 }
 
 .text-area>span {
@@ -41,52 +38,6 @@
 
 .text-title>h1 {
     font-size: 60px;
-}
-
-.arrow-left {
-    position: fixed;
-    left: 1312px;
-}
-
-.arrow-left:hover {
-    cursor: pointer;
-    background-color: rgb(240, 240, 240);
-    border-radius: 50%;
-    height: 23px;
-    width: 23px;
-    padding: 2px;
-}
-
-.numbers {
-    font-size: 17px;
-    padding-left: 34px;
-    margin-top: 12px;
-}
-
-.numbers>li {
-    padding-left: 24px;
-}
-
-.numbers>li::marker {
-    font-size: 30px;
-    font-weight: bold;
-    padding-top: 12px;
-}
-
-.numbers>li>h3 {
-    position: relative;
-    bottom: 10px;
-    margin-block-start: 4px;
-    margin-block-end: 4px;
-}
-
-.numbers>li>span {
-    position: relative;
-    bottom: 10px;
-}
-
-.bottom-message {
-    margin: 0px;
 }
 
 .highlight-word {
