@@ -55,128 +55,154 @@
         </div>
     </nav>
 
-    <section class="board-nav">
-        <div class="board-nav-top">
-            <h1 class="board-header">Board</h1>
-            <div class="find-add-div">
-                <input class="findtask" type="text" placeholder="Find Task">
-                <button class="addtask-btn">
-                    <span>Add task</span>
-                    <img class="plus" src="../assets/icons/board/add.svg" alt="">
-                </button>
-            </div>
-        </div>
+    <nav class="mobile-header">
+        <a href=""><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
+        <a href=""><img class="mobile-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+      </nav>
 
-        <div class="board-nav-bottom">
-            <div>
-                <span class="category-span">To do</span>
-                <span class="categoryplus">+</span>
+    <section class="main-content">
+        <section class="board-nav">
+            <div class="board-nav-top">
+                <h1 class="board-header">Board</h1>
+                <div class="find-add-div">
+                    <input class="findtask" type="text" placeholder="Find Task">
+                    <button class="addtask-btn">
+                        <span>Add task</span>
+                        <img class="plus" src="../assets/icons/board/add.svg" alt="">
+                    </button>
+                </div>
             </div>
-            <div>
-                <span class="category-span">In Progress</span>
-                <span class="categoryplus">+</span>
+    
+            <div class="board-nav-bottom">
+                <div>
+                    <span class="category-span">To do</span>
+                    <span class="categoryplus">+</span>
+                </div>
+                <div>
+                    <span class="category-span">In Progress</span>
+                    <span class="categoryplus">+</span>
+                </div>
+                <div>
+                    <span class="category-span">Await feedback</span>
+                    <span class="categoryplus">+</span>
+                </div>
+                <div>
+                    <span class="category-span">Done</span>
+                </div>
             </div>
-            <div>
-                <span class="category-span">Await feedback</span>
-                <span class="categoryplus">+</span>
+        </section>
+    
+        <section class="board">
+            <div id="toDo" class="category-container">
+                <div class="notask">
+                    No tasks To Do
+                </div>
             </div>
-            <div>
-                <span class="category-span">Done</span>
+    
+            <div id="inProgress" class="category-container">
+                <div class="task">
+                    <span class="task-header tech-task">User Story</span>
+                    <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
+                    <p class="task-info">Build start page with recipe recommendation...</p>
+                    <div class="task-bar">
+                        <div class="bar-wrapper">
+                            <div class="progress-bar">
+                                <span class="progress-bar-fill" style="width: 50%;"></span>
+                            </div>
+                        </div>
+                        <span class="sub-task">1/2 Subtasks</span>
+                    </div>
+                    <div class="task-status">
+                        <div>
+                            <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                        </div>
+                        <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
+                    </div>
+                </div>
             </div>
-        </div>
+    
+            <div id="awaitFeedback" class="category-container">
+                <div class="task">
+                    <span class="task-header user-task">Technical Task</span>
+                    <h4 class="task-title">HTML Base Template Creation</h4>
+                    <p class="task-info">Create reusable HTML base templates...</p>
+                    <div class="task-status">
+                        <div>
+                            <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                        </div>
+                        <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
+                    </div>
+                </div>
+                <div class="task">
+                    <span class="task-header tech-task">User Story</span>
+                    <h4 class="task-title">Daily Kochwelt Recipe</h4>
+                    <p class="task-info">Implement daily recipe and portion calculator...</p>
+                    <div class="task-bar">
+                        <div class="bar-wrapper">
+                            <div class="progress-bar">
+                                <span class="progress-bar-fill" style="width: 50%;"></span>
+                            </div>
+                        </div>
+                        <span class="sub-task">1/2 Subtasks</span>
+                    </div>
+                    <div class="task-status">
+                        <div>
+                            <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                        </div>
+                        <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="category-container">
+                <div class="task">
+                    <span class="task-header user-task">Technical Task</span>
+                    <h4 class="task-title">CSS Architecture Planning</h4>
+                    <p class="task-info">Define CSS naming conventions and structure</p>
+                    <div class="task-bar">
+                        <div class="bar-wrapper">
+                            <div class="progress-bar">
+                                <span class="progress-bar-fill" style="width: 100%;"></span>
+                            </div>
+                        </div>
+                        <span class="sub-task">2/2 Subtasks</span>
+                    </div>
+                    <div class="task-status">
+                        <div>
+                            <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                            <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                        </div>
+                        <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
     </section>
 
-    <section class="board">
-        <div id="toDo" class="category-container">
-            <div class="notask">
-                No tasks To Do
-            </div>
+    <footer class="mobile-footer">
+        <div class="footer-btn footer-active">
+          <a class="footer-icon" href=""><img src="../assets/icons/frame/nav/summary_active.svg" alt=""></a>
+          <span class="footer-span span-active">Summary</span>
         </div>
-
-        <div id="inProgress" class="category-container">
-            <div class="task">
-                <span class="task-header tech-task">User Story</span>
-                <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
-                <p class="task-info">Build start page with recipe recommendation...</p>
-                <div class="task-bar">
-                    <div class="bar-wrapper">
-                        <div class="progress-bar">
-                            <span class="progress-bar-fill" style="width: 50%;"></span>
-                        </div>
-                    </div>
-                    <span class="sub-task">1/2 Subtasks</span>
-                </div>
-                <div class="task-status">
-                    <div>
-                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                    </div>
-                    <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                </div>
-            </div>
+        <div class="footer-btn">
+          <a class="footer-icon" href=""><img src="../assets/icons/frame/nav/add_task.svg" alt=""></a>
+          <span class="footer-span">Add Task</span>
         </div>
-
-        <div id="awaitFeedback" class="category-container">
-            <div class="task">
-                <span class="task-header user-task">Technical Task</span>
-                <h4 class="task-title">HTML Base Template Creation</h4>
-                <p class="task-info">Create reusable HTML base templates...</p>
-                <div class="task-status">
-                    <div>
-                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                    </div>
-                    <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
-                </div>
-            </div>
-            <div class="task">
-                <span class="task-header tech-task">User Story</span>
-                <h4 class="task-title">Daily Kochwelt Recipe</h4>
-                <p class="task-info">Implement daily recipe and portion calculator...</p>
-                <div class="task-bar">
-                    <div class="bar-wrapper">
-                        <div class="progress-bar">
-                            <span class="progress-bar-fill" style="width: 50%;"></span>
-                        </div>
-                    </div>
-                    <span class="sub-task">1/2 Subtasks</span>
-                </div>
-                <div class="task-status">
-                    <div>
-                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                    </div>
-                    <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                </div>
-            </div>
+        <div class="footer-btn">
+          <a class="footer-icon" href=""><img src="../assets/icons/frame/nav/board.svg" alt=""></a>
+          <span class="footer-span">Board</span>
         </div>
-
-        <div class="category-container">
-            <div class="task">
-                <span class="task-header user-task">Technical Task</span>
-                <h4 class="task-title">CSS Architecture Planning</h4>
-                <p class="task-info">Define CSS naming conventions and structure</p>
-                <div class="task-bar">
-                    <div class="bar-wrapper">
-                        <div class="progress-bar">
-                            <span class="progress-bar-fill" style="width: 100%;"></span>
-                        </div>
-                    </div>
-                    <span class="sub-task">2/2 Subtasks</span>
-                </div>
-                <div class="task-status">
-                    <div>
-                        <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                        <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                    </div>
-                    <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
-                </div>
-            </div>
+        <div class="footer-btn">
+          <a class="footer-icon" href=""><img src="../assets/icons/frame/nav/contacts.svg" alt=""></a>
+          <span class="footer-span">Contacts</span>
         </div>
-    </section>
+      </footer>
   </body>
 </html>
