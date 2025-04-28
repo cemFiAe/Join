@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+    .description {
+        padding: 100px 60px 0px 60px;
+    }
+}
+
+@media (max-width: 690px) {
+    .text-area>h2 {
+        margin-block-start: 20px;
+    }
+}

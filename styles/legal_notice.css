@@ -16,11 +16,12 @@
 }
 
 .text-area>h2 {
-    margin-block-end: 4px;
+    margin-block-end: 20px;
 }
 
 .text-area>h3 {
-    margin-block-end: 4px;
+    margin-block-start: 16px;
+    margin-block-end: 0px;
 }
 
 .text-area>span {
@@ -37,7 +38,7 @@
 }
 
 .text-title>h1 {
-    font-size: 60px;
+    font-size: 56px;
 }
 
 .highlight-word {
