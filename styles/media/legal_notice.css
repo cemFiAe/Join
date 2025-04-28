@@ -1,14 +1,8 @@
 @media (max-width: 768px) {
     .header {
-        padding-left: 276px;
+        padding-left: 276px !important;
     }
     .description {
-        padding: 100px 60px 0px 60px;
-    }
-}
-
-@media (max-width: 690px) {
-    .text-area>h2 {
-        margin-block-start: 20px;
+        padding: 100px 40px 0px 40px;
     }
 }

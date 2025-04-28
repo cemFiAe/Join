@@ -2,7 +2,7 @@
 
 .description {
     box-sizing: border-box;
-    padding: 100px 100px 0px 100px;
+    padding: 100px 80px 0px 80px;
     margin-left: 232px;
 }
 
@@ -10,6 +10,9 @@
     height: calc(100vh - 212px);
     width: 100%;
     max-width: 1208px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
     overflow-y: scroll;
 }
 
@@ -18,10 +21,7 @@
 }
 
 .text-area>h2 {
-    margin-block-end: 4px;
-}
-
-.text-area>h3 {
+    margin-block-start: 20px;
     margin-block-end: 4px;
 }
 
@@ -31,6 +31,7 @@
 
 .text-title {
     height: 116px;
+    margin-bottom: 24px;
     width: 100%;
     max-width: 1108px;
     display: flex;
@@ -39,7 +40,7 @@
 }
 
 .text-title>h1 {
-    font-size: 60px;
+    font-size: 54px;
 }
 
 .arrow-left {
@@ -49,7 +50,6 @@
     position: fixed;
     top: 225px;
     left: 90%
-    
 }
 
 .arrow-left:hover {

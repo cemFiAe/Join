@@ -56,10 +56,10 @@ section {
 }
 
 .log-in-window {
-    height: 50px;
+    height: 450px;
     width: 650px;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     border-radius: 32px;
@@ -68,6 +68,15 @@ section {
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 12px 1px rgb(0, 0, 0, 0.05);
     margin-top: 12px;
+}
+
+.log-in-window>h1 {
+    font-size: 61px;
+    margin-block: 16px;
+    width: 360px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sign-up-window {
@@ -85,7 +94,7 @@ section {
     margin-top: 12px;
 }
 
-h1 {
+.sign-up-window>h1 {
     margin-right: 132px;
     font-size: 61px;
     margin-block: 16px;
@@ -118,7 +127,7 @@ h1 {
     box-shadow: 0px 0px 2px 1px rgb(0, 0, 0, 0.1);
 }
 
-.log-in-data {
+.log-in-section {
     height: 200px;
     display: flex;
     justify-content: center;

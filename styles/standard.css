@@ -52,7 +52,7 @@
   }
 
   body {
-    --sb-track-color: white;
+    --sb-track-color: rgb(255, 255, 255);
     --sb-thumb-color: #2A3647;
     --sb-size: 12px;
   }
