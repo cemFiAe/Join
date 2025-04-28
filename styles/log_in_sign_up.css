@@ -8,9 +8,9 @@ header {
     height: 60px;
     width: 280px;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
-    padding-right: 60px;
+    gap: 32px;
 }
 
 .buttons {
@@ -56,7 +56,7 @@ section {
 }
 
 .log-in-window {
-    height: 450px;
+    height: 50px;
     width: 650px;
     display: flex;
     justify-content: start;
@@ -74,7 +74,7 @@ section {
     height: 632px;
     width: 600px;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     border-radius: 32px;
@@ -85,24 +85,29 @@ section {
     margin-top: 12px;
 }
 
+h1 {
+    margin-right: 132px;
+    font-size: 61px;
+    margin-block: 16px;
+    width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .arrow-left {
-    position: absolute;
-    left: 460px;
-    top: 272px;
+    height: 22px;
+    width: 22px;
+    object-fit: cover;
+    position: static;
 }
 
 .arrow-left:hover {
     cursor: pointer;
-    background-color: rgb(222, 222, 222);
+    background-color: rgb(240, 240, 240);
     border-radius: 50%;
-    height: 23px;
-    width: 23px;
+    scale: 140%;
     padding: 2px;
-}
-
-h1 {
-    font-size: 61px;
-    margin-block: 16px;
 }
 
 .blue-line {
