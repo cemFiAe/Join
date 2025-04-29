@@ -1,57 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join</title>
-    <meta name="description" content="Join, dein Kanban Management Tool"/>
-    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool"/>
-    <link rel="stylesheet" type="text/css" href="../styles/log_in_sign_up.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/media/log_in_sign_up.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png"/>
-    <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
-  </head>
+    <meta name="description" content="Join, dein Kanban Management Tool" />
+    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
+    <link rel="stylesheet" type="text/css" href="../styles/log_in_sign_up.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/media/log_in_sign_up.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+    <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+    <script src="/scripts/log_in_loading.js"></script>
+</head>
 
-<body>
-    <header>
-        <img src="../assets/img/logo/logo_log_in.svg">
-        <div class="header-sign-up">
-            <label>Not a Join user?</label>
-            <button class="buttons">Sign up</button>
-        </div>
-    </header>
+<body onload="showLoadingScreen()">
+    <div id="overlay">
+        <img id="log-in-logo" class="log-in-logo" src="/assets/img/logo/join_logo_big.svg">
+    </div>
+    <div id="main-content" style="display: none;">
+        <header>
+            <img src="../assets/img/logo/logo_log_in.svg">
+            <div class="header-sign-up">
+                <label>Not a Join user?</label>
+                <button class="buttons">Sign up</button>
+            </div>
+        </header>
 
-    <section>
-        <div class="log-in-window">
-            <h1>Log in</h1>
-            <div class="blue-line"></div>
-            <div class="log-in-section">
-                <div class="email-password">
-                    <input required type="text" placeholder="Email">
-                    <img src="../assets/icons/log_in/mail.svg">
+        <section>
+            <div class="log-in-window">
+                <h1>Log in</h1>
+                <div class="blue-line"></div>
+                <div class="log-in-section">
+                    <div class="email-password">
+                        <input required type="text" placeholder="Email">
+                        <img src="../assets/icons/log_in/mail.svg">
+                    </div>
+                    <div class="email-password">
+                        <input required type="password" placeholder="Password">
+                        <img class="lock-logo" src="../assets/icons/log_in/lock.svg">
+                    </div>
                 </div>
-                <div class="email-password">
-                    <input required type="password" placeholder="Password">
-                    <img class="lock-logo" src="../assets/icons/log_in/lock.svg">
+                <div class="log-in-area">
+                    <button class="buttons bigger-buttons">Log in</button>
+                    <button class="buttons white-buttons bigger-buttons">Guest Log in</button>
                 </div>
             </div>
-            <div class="log-in-area">
-                <button class="buttons bigger-buttons">Log in</button>
-                <button class="buttons white-buttons bigger-buttons">Guest Log in</button>
-            </div>
-        </div>
+        </section>
 
-    </section>
-
-    <footer>
-        <a href="">Privacy policy</a>
-        <a href="">Legal notice</a>
-    </footer>
-
+        <footer>
+            <a href="">Privacy policy</a>
+            <a href="">Legal notice</a>
+        </footer>
+    </div>
 </body>
 
 </html>

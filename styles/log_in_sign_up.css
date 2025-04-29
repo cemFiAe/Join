@@ -250,3 +250,20 @@ footer>a:hover {
     color: rgb(41, 171, 226);
     font-weight: bold;
 }
+
+.log-in-logo{
+    display: none;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(246,247,248);
+}
+
