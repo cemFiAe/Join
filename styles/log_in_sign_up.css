@@ -251,19 +251,30 @@ footer>a:hover {
     font-weight: bold;
 }
 
-.log-in-logo{
-    display: none;
-}
-
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: 1440px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(246,247,248);
+    background-color: rgb(246, 247, 248);
 }
 
+.log-in-logo {
+    animation: move 0.5s ease forwards; /* 'forwards' ensures the logo stays in the final position */
+    animation-delay: 0.5s;
+    position: absolute;
+    top: 50%; /* Start centered vertically */
+    left: 50%; /* Start centered horizontally */
+    transform: translate(-50%, -50%); /* Centers the logo */
+}
+
+@keyframes move {
+    0% {
+        transform: translate(-50%, -50%) scale(1); /* Starts at the center */
+    }
+    100% {
+        transform: translate(-272.5%, -166.5%) scale(0.3651); /* Moves to the upper-left and scales down */
+    }
+}
