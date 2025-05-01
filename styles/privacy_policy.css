@@ -5,7 +5,7 @@
 }
 
 .text-area {
-    height: calc(100vh - 212px);
+    height: calc(100vh - 202px);
     width: 100%;
     max-width: 1208px;
     display: flex;

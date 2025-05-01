@@ -2,7 +2,12 @@
     .header {
         padding-left: 276px !important;
     }
+
     .description {
-        padding: 100px 40px 0px 40px;
+        padding: 100px 36px 0px 36px;
+    }
+
+    .text-title>h1 {
+        font-size: 40px;
     }
 }
