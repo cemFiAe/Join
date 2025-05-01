@@ -4,6 +4,10 @@ header {
     padding: 60px 60px 0px;
 }
 
+.mobile-header-logo {
+    display: none;
+}
+
 .header-sign-up {
     height: 60px;
     width: 280px;
@@ -227,6 +231,10 @@ section {
     font-size: 16.1px;
 }
 
+.footer-sign-up {
+    display: none;
+}
+
 footer {
     max-width: 1440px;
     position: fixed;
@@ -268,6 +276,10 @@ footer>a:hover {
     top: 50%; /* Start centered vertically */
     left: 50%; /* Start centered horizontally */
     transform: translate(-50%, -50%); /* Centers the logo */
+}
+
+.mobile-log-in-logo {
+    display: none;
 }
 
 @keyframes move {
