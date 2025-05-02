@@ -2,7 +2,7 @@
 
 .board-nav {
     margin-left: 232px;
-    height: 232px;
+    height: 208px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -61,24 +61,6 @@
     object-fit: cover;
 }
 
-.board-nav-bottom {
-    width: 1440px;
-    display: flex;
-    justify-content: space-between;
-    gap: 26px;
-    padding-inline: 64px;
-    padding-bottom: 16px;
-}
-
-.board-nav-bottom div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 24px;
-    flex-shrink: 0;
-    width: 244px;
-}
-
 .categoryplus {
     border-style: solid;
     border-color: #42526E;
@@ -108,15 +90,38 @@
 
 /* board */
 
+.trashLater {
+    display: none;
+}
+
 .board {
-    height: calc(100vh - 328px);
-    width: 1440px;
+    height: calc(100vh - 304px);
     overflow: auto;
     margin-left: 232px;
     padding-inline: 64px;
     display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+.board-nav-bottom {
+    width: 1440px;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     gap: 26px;
+}
+
+.task-container {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    width: 252px;
+}
+
+.span-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 .category-container {

@@ -1,1 +1,21 @@
-@media
+@media (max-width: 1800px) {
+    .board-nav-bottom {
+        flex-direction: column;
+        width: auto;
+    }
+    .category-container {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 1200px) {
+    .board-nav-top {
+       
+    }
+}
+
+@media (max-width: 1032px) {
+    .find-add-div {
+        display: none;
+    }
+}
