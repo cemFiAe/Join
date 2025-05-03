@@ -270,8 +270,8 @@ footer>a:hover {
 }
 
 .log-in-logo {
-    animation: move 0.5s ease forwards; /* 'forwards' ensures the logo stays in the final position */
-    animation-delay: 0.5s;
+    animation: move 0.25s ease forwards; /* 'forwards' ensures the logo stays in the final position */
+    animation-delay: 0.75s;
     position: absolute;
     top: 50%; /* Start centered vertically */
     left: 50%; /* Start centered horizontally */
