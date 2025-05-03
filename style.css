@@ -290,13 +290,8 @@ body {
         height: calc(100vh - 160px);
     }
 
-    /* log in mobile */
 
-    #main-content {
-        padding-top: 56px;
-        opacity: 0;
-        animation: fadeInMain 0.5s ease forwards;
-    }
+    /* log in mobile */
 
     .mobile-header-logo {
         display: block;
@@ -358,6 +353,13 @@ body {
         display: none;
     }
 
+
+    /* mobile log in - move logo effect */
+
+    #main-window {
+        padding-top: 56px;
+    }
+
     .loading-overlay {
         height: 100vh;
         width: 100%;
@@ -366,22 +368,20 @@ body {
         justify-content: center;
         align-items: center;
         background-color: rgb(42, 54, 71);
-        animation: fadeOutOverlay 1s ease forwards;
-        animation-delay: 0.5s;
+        animation: fadeOutOverlay 0.25s ease forwards;
+        animation-delay: 0.75s;
     }
 
     .mobile-log-in-logo {
         display: block;
-        animation: move 0.5s ease forwards, colorChange 0.1s ease forwards;
-        animation-delay: 0.5s;
+        animation: move 0.25s ease forwards;
+        animation-delay: 0.75s;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
 
-
-    /* Fade out overlay */
     @keyframes fadeOutOverlay {
         to {
             opacity: 0;
@@ -389,26 +389,11 @@ body {
         }
     }
 
-    /* Fade in content */
-    @keyframes fadeInMain {
-        to {
-            opacity: 1;
-        }
-    }
-
-    /* Move & scale logo */
     @keyframes move {
         100% {
             left: 55px;
             top: 55px;
             scale: 0.64;
-        }
-    }
-
-    /* Simulate color change (for images, requires filter) */
-    @keyframes colorChange {
-        to {
-            filter: brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(0%) hue-rotate(180deg);
         }
     }
 }
