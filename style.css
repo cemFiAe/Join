@@ -324,7 +324,7 @@ body {
     }
 
 
-    /* mobile log in - moe logo effect */
+    /* mobile log in - move logo effect */
 
     #main-window {
         padding-top: 56px;
@@ -358,12 +358,6 @@ body {
             visibility: hidden;
         }
     }
-
-    /* @keyframes fadeInMain {
-        to {
-            opacity: 1;
-        }
-    } */
 
     @keyframes move {
         100% {

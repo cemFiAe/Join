@@ -270,12 +270,12 @@ footer>a:hover {
 }
 
 .log-in-logo {
-    animation: move 0.25s ease forwards; /* 'forwards' ensures the logo stays in the final position */
+    animation: move 0.25s ease forwards; 
     animation-delay: 0.75s;
     position: absolute;
-    top: 50%; /* Start centered vertically */
-    left: 50%; /* Start centered horizontally */
-    transform: translate(-50%, -50%); /* Centers the logo */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .mobile-log-in-logo {
@@ -284,9 +284,9 @@ footer>a:hover {
 
 @keyframes move {
     0% {
-        transform: translate(-50%, -50%) scale(1); /* Starts at the center */
+        transform: translate(-50%, -50%) scale(1); 
     }
     100% {
-        transform: translate(-272.5%, -166.5%) scale(0.3651); /* Moves to the upper-left and scales down */
+        transform: translate(-272.5%, -166.5%) scale(0.3651); 
     }
 }
