@@ -34,6 +34,24 @@
     padding-inline: 16px;
     padding-block: 8px;
     width: 312px;
+    background-image: url('../assets/icons/board/search.svg');
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+}
+
+.findtaskMobile {
+    display: none;
+    height: 48px;
+    border-radius: 10px;
+    border-color: #A8A8A8;
+    border-style: solid;
+    padding-inline: 16px;
+    padding-block: 8px;
+    margin-inline: 64px;
+    width: calc(100% - 128px);
+    background-image: url('../assets/icons/board/search.svg');
+    background-repeat: no-repeat;
+    background-position: 98% 50%;
 }
 
 .addtask-btn {
@@ -94,18 +112,13 @@
     display: none;
 }
 
-.board {
-    height: calc(100vh - 304px);
-    overflow: auto;
-    margin-left: 232px;
-    padding-inline: 64px;
-    display: flex;
-    flex-direction: column;
-    gap: 26px;
-}
-
 .board-nav-bottom {
+    height: calc(100vh - 304px);
     width: 1440px;
+    margin-left: 232px;
+    margin-right: 64px;
+    padding-left: 64px;
+    overflow: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -128,6 +141,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: auto;
 }
 
 .notask {

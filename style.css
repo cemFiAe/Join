@@ -151,6 +151,7 @@ body {
 
 .main-content {
     height: calc(100vh - 96px);
+    overflow: auto;
 }
 
 /* mobile */
@@ -178,6 +179,25 @@ body {
     border: 3px solid;
     border-color: #2A3647;
     border-radius: 50%;
+}
+
+.addtask-btn-mobile {
+    width: 40px;
+    height: 40px;
+    background-color: #2A3647;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border-style: none;
+    color: white;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.addtask-btn-mobile:hover {
+    background-color: #29ABE2;
+    cursor: pointer;   
 }
 
 .mobile-footer {
@@ -222,7 +242,17 @@ body {
 
 /* mobile media */
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+    .user-icon {
+        height: 40px;
+        width: 40px;
+    }
+    .header {
+        padding-left: 296px;
+    }    
+}
+
+@media (max-width: 650px) {
 
     .mobile-header {
         display: flex;

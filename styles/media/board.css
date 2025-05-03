@@ -8,14 +8,36 @@
     }
 }
 
-@media (max-width: 1200px) {
-    .board-nav-top {
-       
+@media (max-width: 1050px) {
+    .find-add-div {
+        display: none;
+    }
+    .addtask-btn-mobile {
+        display: flex !important;
+    }
+    .findtaskMobile {
+        display: flex !important;
+    }
+    .board-nav-bottom {
+        margin-top: 26px;
     }
 }
 
-@media (max-width: 1032px) {
-    .find-add-div {
-        display: none;
+@media (max-width: 650px) {
+    .board-nav {
+        margin-inline: 16px;
+    }
+    .board-nav-top {
+        padding: 0;
+    }
+    .board-nav-bottom {
+        margin: 0;
+        padding-inline: 16px;
+        margin-top: 26px;
+        height: max-content;
+    }
+    .findtaskMobile {
+        margin-inline: 0px;
+        width: 100%;
     }
 }
