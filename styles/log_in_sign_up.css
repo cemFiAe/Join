@@ -77,7 +77,6 @@ section {
 .log-in-window>h1 {
     font-size: 61px;
     margin-block: 16px;
-    width: 360px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -185,7 +184,7 @@ section {
     padding-left: 2px;
 }
 
-.log-in-area {
+.log-in-buttons {
     width: 320px;
     display: flex;
     justify-content: space-between;
@@ -283,10 +282,10 @@ footer>a:hover {
 }
 
 @keyframes move {
-    0% {
-        transform: translate(-50%, -50%) scale(1); 
-    }
+
     100% {
-        transform: translate(-272.5%, -166.5%) scale(0.3651); 
+        left: 22px;
+        top: 14.5px;
+        scale: 0.365;
     }
 }

@@ -197,7 +197,7 @@ body {
 
 .addtask-btn-mobile:hover {
     background-color: #29ABE2;
-    cursor: pointer;   
+    cursor: pointer;
 }
 
 .mobile-footer {
@@ -237,7 +237,7 @@ body {
 }
 
 .span-active {
-    color: white;
+    color: #ffffff;
 }
 
 /* mobile media */
@@ -247,9 +247,10 @@ body {
         height: 40px;
         width: 40px;
     }
+
     .header {
         padding-left: 296px;
-    }    
+    }
 }
 
 @media (max-width: 650px) {
@@ -258,12 +259,12 @@ body {
         display: flex;
     }
 
-    .mobile-header-logo {
+    /* .mobile-header-logo {
         position: relative;
         left: 40px;
         top: 40px;
-        display: none;
-    }
+        display: block;
+    } */
 
     .mobile-footer {
         display: flex;
@@ -293,10 +294,6 @@ body {
 
     /* log in mobile */
 
-    .mobile-header-logo {
-        display: block;
-    }
-
     .log-in-window {
         height: 475px;
         width: 396px;
@@ -310,23 +307,26 @@ body {
         width: 88px;
     }
 
+    .log-in-section {
+        margin-bottom: 8px;
+    }
+
     .email-password>input {
         height: 48px;
         width: 304px;
     }
 
-    .log-in-section {
-        margin-bottom: 8px;
-    }
-
-    .log-in-area {
+    .log-in-buttons {
         width: 180px;
         flex-direction: column;
         gap: 20px;
     }
 
     .header-logo {
-        display: none;
+        position: absolute;
+        left: 20px;
+        top: 15px;
+        scale: 0.64;
     }
 
     .header-sign-up {
@@ -357,13 +357,13 @@ body {
     /* mobile log in - move logo effect */
 
     #main-window {
-        padding-top: 56px;
+        padding-top: 113px;
     }
 
     .loading-overlay {
         height: 100vh;
         width: 100%;
-        max-width: 428px;
+        max-width: 650px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -395,5 +395,24 @@ body {
             top: 55px;
             scale: 0.64;
         }
+    }
+}
+
+@media (max-width: 428px) {
+    .log-in-window {
+        width: 90%;
+        max-width: 396px;
+    }
+
+    .email-password>input {
+        width: 194px;
+    }
+
+    .log-in-buttons {
+        max-width: 160px;
+    }
+
+    .bigger-buttons {
+        padding: 12px;
     }
 }
