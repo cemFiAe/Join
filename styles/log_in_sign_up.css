@@ -190,9 +190,8 @@ section {
     justify-content: space-between;
 }
 
-.sign-up-area {
+.sign-up-buttons {
     height: 100px;
-    width: 320px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -201,7 +200,6 @@ section {
 
 .checkbox-area {
     height: 24px;
-    width: 320px;
     display: flex;
     justify-content: center;
     align-items: center;

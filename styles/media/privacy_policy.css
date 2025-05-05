@@ -1,13 +1,11 @@
-@media (max-width: 768px) {
-    .header {
-        padding-left: 276px !important;
-    }
 
+@media (max-width: 650px) {
     .description {
-        padding: 100px 36px 0px 36px;
-    }
+    padding: 40px 20px 0px 20px;
+    margin-left: 0px;
+}
 
-    .text-title>h1 {
-        font-size: 40px;
-    }
+.main-content {
+    height: calc(100vh - 160px);
+}
 }
