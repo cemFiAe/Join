@@ -298,12 +298,6 @@ footer>a:hover {
 /* sign up - signed up successfully screen */
 
 .signed-up-screen {
-    height: 100vh;
-    width: 100%;
-    max-width: 1440px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0,0,0,0.3);
+
 }
 
