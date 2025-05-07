@@ -20,8 +20,7 @@
 </head>
 
 <body>
-    <div id="signed-up" class="signed-up-screen">
-    </div>
+
     <header>
         <img class="header-logo" src="../assets/img/logo/logo_log_in.svg">
     </header>
@@ -54,11 +53,13 @@
                     <input class="checkbox" required type="checkbox">
                     <label>I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
                 </div>
-                <button onclick="" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
+                <button onclick="signedUp()" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
             </div>
         </div>
     </section>
-
+    <div id="signed-up"  class="signed-up-screen" style="display: none;">
+        <label class="signed-up-message">You Signed Up Successfully</label>
+    </div>
     <footer>
         <a href="../pages/guest/privacy_policy.html">Privacy Policy</a>
         <a href="../pages/guest/legal_notice.html">Legal Notice</a>
