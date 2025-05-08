@@ -303,10 +303,15 @@ footer>a:hover {
     height: 100vh;
     width: 100%;
     max-width: 1440px;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0); 
+    animation: fade-in 0.3s ease-out forwards;
 }
 
 .signed-up-message {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     height: 74px;
     width: 312px;
     display: flex;
@@ -316,6 +321,23 @@ footer>a:hover {
     border-radius: 20px;
     color: rgb(255, 255, 255);
     background-color: rgb(42, 54, 71);
-    transform: translateY(512px);
-    transition: ease-out 0.2s;
+    animation: slide-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+    from {
+        background-color: rgba(255,255,255, 0);
+    }
+    to {
+        background-color: rgba(0, 0, 0, 0.25);
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translate(-50%, 100vh); 
+    }
+    to {
+        transform: translate(-50%, -50%);
+    }
 }

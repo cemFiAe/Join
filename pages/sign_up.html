@@ -29,13 +29,13 @@
         <div class="sign-up-window">
             <h1><img class="arrow-left" src="../assets/icons/sign_up/arrow_left.svg">Sign up</h1>
             <div class="blue-line"></div>
-            <div class="sign-up-section">
+            <form id="sign-up-form" action="signedUp()" class="sign-up-section">
                 <div class="email-password">
-                    <input type="text" placeholder="Name">
+                    <input required type="text" placeholder="Name" autocomplete="off">
                     <img class="lock-logo" src="../assets/icons/sign_up/person.svg">
                 </div>
                 <div class="email-password">
-                    <input required type="text" placeholder="Email">
+                    <input required type="text" placeholder="Email" autocomplete="off">
                     <img src="../assets/icons/sign_up/mail.svg">
                 </div>
                 <div class="email-password">
@@ -47,13 +47,13 @@
                     <img class="lock-logo" src="../assets/icons/sign_up/lock.svg">
                 </div>
 
-            </div>
+            </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
                     <input class="checkbox" required type="checkbox">
                     <label>I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
                 </div>
-                <button onclick="signedUp()" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
+                <button form="sign-up-form" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
             </div>
         </div>
     </section>

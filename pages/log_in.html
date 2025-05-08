@@ -37,19 +37,19 @@
             <div class="log-in-window">
                 <h1>Log in</h1>
                 <div class="blue-line"></div>
-                <div class="log-in-section">
+                <form id="log-in-form" action="../pages/summary.html"  class="log-in-section">
                     <div class="email-password">
-                        <input required type="text" placeholder="Email">
+                        <input required type="text" placeholder="Email" autocomplete="off">
                         <img src="../assets/icons/log_in/mail.svg">
                     </div>
                     <div class="email-password">
                         <input required type="password" placeholder="Password">
                         <img class="lock-logo" src="../assets/icons/log_in/lock.svg">
                     </div>
-                </div>
+                </form>
                 <div class="log-in-buttons">
-                    <a href="../pages/summary.html" class="buttons bigger-buttons">Log in</a>
-                    <a href="#" class="buttons white-button bigger-buttons">Guest Log in</a>
+                    <button form="log-in-form" class="buttons bigger-buttons">Log in</button>
+                    <button class="buttons white-button bigger-buttons">Guest Log in</button>
                 </div>
             </div>
         </section>
