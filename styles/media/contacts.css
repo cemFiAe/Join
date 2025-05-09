@@ -1,0 +1,21 @@
+@media (max-width: 650px) {
+.contacts {
+    margin-left: 0px;
+    height: calc(100vh - 160px);
+    width: 100%;
+    padding: 24px;
+    align-items: flex-start;
+}
+.contact_overview {
+    display: none;
+}
+.new_contact_btn {
+    display: none;
+}
+.contact_letter {
+    width: 100%;
+}
+.contact_devider {
+    width: 90%;
+}
+}
