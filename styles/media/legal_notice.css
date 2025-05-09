@@ -1,11 +1,24 @@
+@media (max-width: 768px) {
+    .header {
+        padding-left: 276px !important;
+    }
+
+    .description {
+        padding: 100px 36px 0px 36px;
+    }
+
+    .text-title>h1 {
+        font-size: 40px;
+    }
+}
 
 @media (max-width: 650px) {
     .description {
-    padding: 40px 20px 0px 20px;
-    margin-left: 0px;
-}
+        padding: 40px 20px 0px 20px;
+        margin-left: 0px;
+    }
 
-.main-content {
-    height: calc(100vh - 160px);
-}
+    .main-content {
+        height: calc(100vh - 160px);
+    }
 }

@@ -102,17 +102,3 @@
     background-color: #091931;
     color: white;
 }
-
-@media (max-width: 768px) {
-    .header {
-        padding-left: 276px !important;
-    }
-
-    .description {
-        padding: 100px 36px 0px 36px;
-    }
-
-    .text-title>h1 {
-        font-size: 40px;
-    }
-}

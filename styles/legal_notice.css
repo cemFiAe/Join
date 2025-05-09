@@ -53,16 +53,3 @@
     color: rgb(41, 171, 226);
 }
 
-@media (max-width: 768px) {
-    .header {
-        padding-left: 276px !important;
-    }
-
-    .description {
-        padding: 100px 36px 0px 36px;
-    }
-
-    .text-title>h1 {
-        font-size: 40px;
-    }
-}
