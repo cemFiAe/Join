@@ -241,6 +241,8 @@ body {
     color: #ffffff;
 }
 
+/* mobile */
+
 .mobile-nav {
     display: flex;
     flex-direction: column;

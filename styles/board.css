@@ -39,6 +39,11 @@
     background-position: 95% 50%;
 }
 
+.findtask:focus {
+    outline: none;
+    border-color: #94D5F0 !important;
+}
+
 .findtaskMobile {
     display: none;
     height: 48px;
@@ -53,6 +58,11 @@
     background-repeat: no-repeat;
     background-position: 98% 50%;
 }
+
+.findtaskMobile:focus {
+    outline: none;
+    border-color: #94D5F0 !important;
+} 
 
 .addtask-btn {
     width: 160px;
@@ -142,6 +152,7 @@
     flex-direction: column;
     gap: 16px;
     width: auto;
+
 }
 
 .notask {

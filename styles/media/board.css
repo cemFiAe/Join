@@ -26,6 +26,7 @@
 @media (max-width: 650px) {
     .board-nav {
         margin-inline: 16px;
+        padding-top: 48px;
     }
     .board-nav-top {
         padding: 0;
@@ -34,7 +35,8 @@
         margin: 0;
         padding-inline: 16px;
         margin-top: 26px;
-        height: max-content;
+        margin-right: 16px;
+        margin-bottom: 16px;
     }
     .findtaskMobile {
         margin-inline: 0px;
