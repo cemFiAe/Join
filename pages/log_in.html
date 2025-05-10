@@ -19,11 +19,12 @@
     <script src="../scripts/log_in_loading.js"></script>
 </head>
 
-<body onload="showLoadingScreen()">
+<body onload="checkLoadingScreen()">
     <div id="overlay" class="loading-overlay">
         <img class="log-in-logo" src="../assets/img/logo/join_logo_big.svg">
         <img class="mobile-log-in-logo" src="../assets/img/logo/logo_nav.svg">
     </div>
+
     <div id="main-window" style="display: none;">
         <header>
             <img class="header-logo" src="../assets/img/logo/logo_log_in.svg">
@@ -53,6 +54,7 @@
                 </div>
             </div>
         </section>
+        
         <div class="sign-up-shortcut-footer">
             <label>Not a Join user?</label>
             <button class="buttons">Sign up</button>

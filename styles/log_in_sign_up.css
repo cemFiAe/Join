@@ -179,7 +179,7 @@ footer>a:hover {
 
 .log-in-logo {
     animation: move 0.25s ease forwards;
-    animation-delay: 0.75s;
+    animation-delay: 0.5s;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -294,6 +294,7 @@ footer>a:hover {
     border-bottom: 2px solid rgb(41, 171, 226);
     font-size: 16.1px;
 }
+
 
 /* sign up - signed up successfully screen */
 

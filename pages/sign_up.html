@@ -20,7 +20,6 @@
 </head>
 
 <body>
-
     <header>
         <img class="header-logo" src="../assets/img/logo/logo_log_in.svg">
     </header>
@@ -29,7 +28,7 @@
         <div class="sign-up-window">
             <h1><img class="arrow-left" src="../assets/icons/sign_up/arrow_left.svg">Sign up</h1>
             <div class="blue-line"></div>
-            <form id="sign-up-form" class="sign-up-section">
+            <form id="sign-up-form" class="sign-up-section" onsubmit="return signedUp(event)">
                 <div class="email-password">
                     <input required type="text" placeholder="Name" autocomplete="off">
                     <img class="lock-logo" src="../assets/icons/sign_up/person.svg">
@@ -50,21 +49,22 @@
             </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
-                    <input class="checkbox" required type="checkbox">
-                    <label>I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
+                    <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
+                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
                 </div>
-                <button type="submit" form="sign-up-form" onclick="return signedUp()" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
+                <button type="submit" form="sign-up-form" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
             </div>
         </div>
     </section>
-    <div id="signed-up"  class="signed-up-screen" style="display: none;">
+
+    <div id="signed-up" class="signed-up-screen" style="display: none;">
         <label class="signed-up-message">You Signed Up Successfully</label>
     </div>
+
     <footer>
         <a href="../pages/guest/privacy_policy.html">Privacy Policy</a>
         <a href="../pages/guest/legal_notice.html">Legal Notice</a>
     </footer>
-
 </body>
 
 </html>
