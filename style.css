@@ -51,6 +51,45 @@ body {
     background-color: #E1E5EC;
 }
 
+/* burger */
+
+.burger {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #2A3647;
+    width: 158px;
+    height: 150px;
+    padding: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 99;
+    position: absolute;
+    top: 96px;
+    right: 16px;
+}
+
+.burger a {
+    text-decoration: none;
+    color: #CDCDCD;
+    height: 46px;
+    width: 130px;
+    font-size: 16px;
+    font-weight: 400;
+    padding-block: 8px;
+    padding-inline: 8px;
+}
+
+.burger a:hover {
+    background-color: #2A3D59;
+    cursor: pointer;
+}
+
+.d_flex {
+    display: flex !important;
+}
+
 /* nav */
 
 .nav {
