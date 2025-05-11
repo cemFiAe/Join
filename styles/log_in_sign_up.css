@@ -19,31 +19,85 @@ section {
     box-shadow: 0px 0px 2px 1px rgb(0, 0, 0, 0.1);
 }
 
-.email-password {
+
+/* email input properties */
+
+.email {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 20px;
-    border-radius: 12px;
-    border: 2px solid rgb(0, 0, 0, 0.1);
 }
 
-.email-password>input {
+.email>input {
     height: 48px;
-    width: 352px;
+    width: 100%;
+    max-width: 352px;
     display: flex;
     justify-content: center;
     align-items: end;
-    border-style: none;
+    font-size: 24px;
+    padding-left: 16px;
+    margin: 8px;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    background-image: url(../assets/icons/log_in/mail.svg);
+    background-repeat: no-repeat;
+    background-position: 94%;
+    border-radius: 12px;
 }
 
-.email-password>input:hover {
+.email>input:hover {
     cursor: pointer;
 }
 
-.email-password>input::placeholder {
+.email>input::placeholder {
     font-size: 20px;
     color: rgb(209, 209, 209);
+}
+
+.email>input:focus {
+    border-color: rgb(41, 171, 226);
+    outline: none;
+}
+
+
+/* password input properties */
+
+.password {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.password>input {
+    height: 48px;
+    width: 100%;
+    max-width: 352px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    font-size: 24px;
+    padding-left: 16px;
+    margin: 8px;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    background-image: url(../assets/icons/log_in/lock.svg);
+    background-repeat: no-repeat;
+    background-position: 94%;
+    border-radius: 12px;
+}
+
+.password>input:hover {
+    cursor: pointer;
+}
+
+.password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.password>input:focus {
+    border-color: rgb(41, 171, 226);
+    outline: none;
+    background-image: url(../assets/icons/log_in/visibility_off.svg);
 }
 
 .lock-logo {
@@ -304,7 +358,7 @@ footer>a:hover {
     height: 100vh;
     width: 100%;
     max-width: 1440px;
-    background-color: rgba(0, 0, 0, 0); 
+    background-color: rgba(0, 0, 0, 0);
     animation: fade-in 0.3s ease-out forwards;
 }
 
@@ -327,8 +381,9 @@ footer>a:hover {
 
 @keyframes fade-in {
     from {
-        background-color: rgba(255,255,255, 0);
+        background-color: rgba(255, 255, 255, 0);
     }
+
     to {
         background-color: rgba(0, 0, 0, 0.25);
     }
@@ -336,8 +391,9 @@ footer>a:hover {
 
 @keyframes slide-in {
     from {
-        transform: translate(-50%, 100vh); 
+        transform: translate(-50%, 100vh);
     }
+
     to {
         transform: translate(-50%, -50%);
     }

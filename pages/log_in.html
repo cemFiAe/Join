@@ -17,6 +17,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/log_in_loading.js"></script>
+    <script src="../scripts/show_password.js"></script>
+
 </head>
 
 <body onload="checkLoadingScreen()">
@@ -39,13 +41,11 @@
                 <h1>Log in</h1>
                 <div class="blue-line"></div>
                 <form id="log-in-form" action="../pages/summary.html" class="log-in-section">
-                    <div class="email-password">
+                    <div class="email">
                         <input required type="text" placeholder="Email" autocomplete="off">
-                        <img src="../assets/icons/log_in/mail.svg">
                     </div>
-                    <div class="email-password">
-                        <input required type="password" placeholder="Password">
-                        <img class="lock-logo" src="../assets/icons/log_in/lock.svg">
+                    <div class="password">
+                        <input required type="password" id="password" onclick="showPassword()" placeholder="Password" autocomplete="off">
                     </div>
                 </form>
                 <div class="log-in-buttons">
