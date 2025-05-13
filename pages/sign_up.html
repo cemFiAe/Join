@@ -17,6 +17,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/signed_up.js"></script>
+    <script src="../scripts/show_password.js"></script>
+
 </head>
 
 <body>
@@ -29,30 +31,30 @@
             <h1><img class="arrow-left" src="../assets/icons/sign_up/arrow_left.svg">Sign up</h1>
             <div class="blue-line"></div>
             <form id="sign-up-form" class="sign-up-section" onsubmit="return signedUp(event)">
-                <div class="email-password">
+                <div class="name">
                     <input required type="text" placeholder="Name" autocomplete="off">
-                    <img class="lock-logo" src="../assets/icons/sign_up/person.svg">
                 </div>
-                <div class="email-password">
+                <div class="email">
                     <input required type="text" placeholder="Email" autocomplete="off">
-                    <img src="../assets/icons/sign_up/mail.svg">
                 </div>
-                <div class="email-password">
-                    <input required type="password" placeholder="Password">
-                    <img class="lock-logo" src="../assets/icons/sign_up/lock.svg">
+                <div class="password">
+                    <input required type="password" id="password" onclick="showPassword()" placeholder="Password"
+                        autocomplete="off">
                 </div>
-                <div class="email-password">
-                    <input required type="password" placeholder="Confirm password">
-                    <img class="lock-logo" src="../assets/icons/sign_up/lock.svg">
+                <div class="password">
+                    <input required type="password" id="confirm-password" onclick="confirmPassword()" placeholder="Confirm password"
+                        autocomplete="off">
                 </div>
 
             </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
                     <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
-                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
+                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy
+                            Policy</a></label>
                 </div>
-                <button type="submit" form="sign-up-form" class="buttons bigger-buttons mobile-sign-up-button">Sign up</button>
+                <button type="submit" form="sign-up-form" class="buttons bigger-buttons mobile-sign-up-button">Sign
+                    up</button>
             </div>
         </div>
     </section>

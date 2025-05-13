@@ -38,6 +38,10 @@
         scale: 0.64;
     }
 
+    .sign-up-shortcut {
+        display: none;
+    }
+
     .header-sign-up {
         display: none;
     }
