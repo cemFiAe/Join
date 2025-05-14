@@ -4,7 +4,7 @@ function signedUp(event) {
     let form = document.getElementById('sign-up-form');
     if (!form.checkValidity()) {
         return false;
-    }
+    } 
     
     let checkbox = document.getElementById('accept-privacy-policy');
     if (!checkbox.checked) {

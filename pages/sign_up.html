@@ -38,12 +38,12 @@
                     <input required type="text" placeholder="Email" autocomplete="off">
                 </div>
                 <div class="password">
-                    <input required type="password" id="password" onclick="showPassword()" placeholder="Password"
-                        autocomplete="off">
+                    <input required type="password" id="password" onclick="insertPassword()" placeholder="Password" autocomplete="off">
+                    <img src="../assets/icons/log_in/lock.svg" class="lock-logo" id="lock-logo" onclick="showPassword()">
                 </div>
-                <div class="password">
-                    <input required type="password" id="confirm-password" onclick="confirmPassword()" placeholder="Confirm password"
-                        autocomplete="off">
+                <div class="confirm-password">
+                    <input required type="password" id="confirm-password" onclick="insertPassword()" placeholder="Confirm password" autocomplete="off">
+                    <img src="../assets/icons/log_in/lock.svg" class="lock-logo" id="lock-logo" onclick="showPassword()">
                 </div>
 
             </form>
