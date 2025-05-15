@@ -42,6 +42,7 @@ section {
     margin: 0px 8px;
     border: 2px solid rgb(0, 0, 0, 0.1);
     background-image: url(../assets/icons/log_in/mail.svg);
+    background-size: 18px;
     background-repeat: no-repeat;
     background-position: 94%;
     border-radius: 12px;
@@ -73,9 +74,14 @@ section {
     margin: 0px 8px;
 }
 
-.blue-frame {
+.password-blue-frame {
     border-color: rgb(41, 171, 226);
     outline: none;
+}
+
+.confirm-password-blue-frame {
+    border-color: rgb(41, 171, 226) !important;
+    outline: none !important;
 }
 
 .red-frame {
@@ -102,6 +108,43 @@ section {
 }
 
 .password>input:focus {
+    border-color: rgb(41, 171, 226);
+    outline: none;
+}
+
+
+/* confirm password input properties */
+
+
+.confirm-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.confirm-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.confirm-password>input:hover {
+    cursor: pointer;
+}
+
+.confirm-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.confirm-password>input:focus {
     border-color: rgb(41, 171, 226);
     outline: none;
 }
