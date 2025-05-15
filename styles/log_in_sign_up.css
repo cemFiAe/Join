@@ -42,7 +42,7 @@ section {
     margin: 0px 8px;
     border: 2px solid rgb(0, 0, 0, 0.1);
     background-image: url(../assets/icons/log_in/mail.svg);
-    background-size: 18px;
+    background-size: 17px;
     background-repeat: no-repeat;
     background-position: 94%;
     border-radius: 12px;
@@ -62,6 +62,7 @@ section {
     outline: none;
 }
 
+
 /* password input properties */
 
 .password {
@@ -74,19 +75,9 @@ section {
     margin: 0px 8px;
 }
 
-.password-blue-frame {
-    border-color: rgb(41, 171, 226);
-    outline: none;
-}
-
-.confirm-password-blue-frame {
-    border-color: rgb(41, 171, 226) !important;
+.password:invalid {
+    border: 2px solid rgb(255, 0, 31) !important;
     outline: none !important;
-}
-
-.red-frame {
-    border-color: rgb(255, 0, 31);
-    outline: none;
 }
 
 .password>input {
@@ -112,9 +103,25 @@ section {
     outline: none;
 }
 
+.password-blue-frame {
+    border-color: rgb(41, 171, 226) !important;
+    outline: none !important;
+}
+
+.confirm-password-blue-frame {
+    border-color: rgb(41, 171, 226) !important;
+    outline: none !important;
+}
+
+/* this is to be used but first have to determine valid password
+
+input:invalid {
+    border-color: rgb(255, 0, 31) !important;
+    outline: none !important;
+} */
+
 
 /* confirm password input properties */
-
 
 .confirm-password {
     height: 48px;
@@ -150,10 +157,11 @@ section {
 }
 
 .lock-logo {
-    width: 18px;
+    width: 17px;
     margin-right: 20px;
     cursor: pointer;
 }
+
 
 /* buttons and footer properties */
 
@@ -270,6 +278,7 @@ footer>a:hover {
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 4px 4px 0px rgb(181, 181, 181);
 }
+
 
 /* log in - move logo effect */
 
@@ -440,6 +449,7 @@ footer>a:hover {
     border-bottom: 2px solid rgb(41, 171, 226);
     font-size: 16.1px;
 }
+
 
 /* sign up - signed up successfully screen */
 
