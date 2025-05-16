@@ -113,13 +113,10 @@ section {
     outline: none !important;
 }
 
-/* this is to be used but first have to determine valid password
-
-input:invalid {
-    border-color: rgb(255, 0, 31) !important;
-    outline: none !important;
-} */
-
+.red-frame {
+    border-color: rgb(255, 0, 31);
+    outline: none;
+}
 
 /* confirm password input properties */
 
