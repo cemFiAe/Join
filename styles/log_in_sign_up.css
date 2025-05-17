@@ -103,17 +103,17 @@ section {
     outline: none;
 }
 
-.password-blue-frame {
+.password-blue-highlight {
     border-color: rgb(41, 171, 226) !important;
     outline: none !important;
 }
 
-.confirm-password-blue-frame {
+.confirm-password-highlight {
     border-color: rgb(41, 171, 226) !important;
     outline: none !important;
 }
 
-.red-frame {
+.red-highlight {
     border-color: rgb(255, 0, 31);
     outline: none;
 }
