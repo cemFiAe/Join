@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/media/board.css"/>
     <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
+    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_task.css"/>
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
@@ -17,6 +18,52 @@
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
   </head>
   <body>
+    <dialog id="add_task_overlay" class="add_task_overlay">
+        <h1 class="headline">Add Task</h1>
+        <img onclick="closeAddTaskOverlay()" class="close-x" src="../assets/icons/board/Close.svg" alt="">
+
+        <div class="box-wrapper">
+            <div class="left-box">
+                <span>Title<sup class="sup">*</sup></span>
+                <input type="text" placeholder="Enter a Title">
+                
+                <span>Description</span>
+                <input id="description" class="description-input" type="text" placeholder="Enter a Description">
+
+                <span>Due Date</span>
+                <input type="text" placeholder="dd/mm/yyyy">
+            </div>
+
+            <div class="box-divider"></div>
+
+            <div class="right-box">
+                <span>Priority</span>
+                <div>
+                    <button class="prio-btn">Urgent<img src="../assets/icons/board/prio/prio top.svg" alt=""></button>
+                    <button class="prio-btn">Medium<img src="../assets/icons/board/prio/prio mid.svg" alt=""></button>
+                    <button class="prio-btn">Low<img src="../assets/icons/board/prio/prio low.svg" alt=""></button>
+                </div>
+
+                <span>Assigned to</span>
+                <input type="" placeholder="Select contacts to assign">
+
+                <span>Category</span>
+                <input type="text" placeholder="Select task category">
+
+                <span>Subtasks</span>
+                <input type="text" placeholder="Add new subtask">
+            </div>
+        </div>
+
+        <div class="bottom-wrapper">
+            <span><sup class="sup">*</sup>This field is required</span>
+            <div>
+                <button class="cancel-btn">Cancel<img src="../assets/icons/board/cancel.svg" alt=""></button>
+                <button class="create-btn">Create Task<img src="../assets/icons/board/check.svg" alt=""></button>
+            </div>
+        </div>
+    </dialog>
+
     <header class="header">
         <h2 class="title">Kanban Project Management Tool</h2>
         <div class="header-icons">
@@ -77,12 +124,12 @@
         <section class="board-nav">
             <div class="board-nav-top">
                 <h1 class="board-header">Board</h1>
-                <button class="addtask-btn-mobile">
+                <button onclick="openAddTaskOverlay()" class="addtask-btn-mobile">
                     <img class="plus" src="../assets/icons/board/add.svg" alt="">
                 </button>
                 <div class="find-add-div">
                     <input id="taskSearch" class="findtask" type="text" placeholder="Find Task">
-                    <button class="addtask-btn">
+                    <button onclick="openAddTaskOverlay()" class="addtask-btn">
                         <span>Add task</span>
                         <img class="plus" src="../assets/icons/board/add.svg" alt="">
                     </button>
@@ -284,5 +331,6 @@
       </footer>
 
       <script src="../scripts/burger_and_mobile_menu.js"></script>
+      <script src="../scripts/board.js"></script>
   </body>
 </html>
