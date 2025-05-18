@@ -28,10 +28,10 @@
                 <input type="text" placeholder="Enter a Title">
                 
                 <span>Description</span>
-                <input id="description" class="description-input" type="text" placeholder="Enter a Description">
+                <input class="description-input" type="text" placeholder="Enter a Description">
 
                 <span>Due Date</span>
-                <input type="text" placeholder="dd/mm/yyyy">
+                <input class="date-input" type="date" placeholder="dd/mm/yyyy">
             </div>
 
             <div class="box-divider"></div>
@@ -45,13 +45,13 @@
                 </div>
 
                 <span>Assigned to</span>
-                <input type="" placeholder="Select contacts to assign">
+                <input class="assign-input" type="search" placeholder="Select contacts to assign">
 
                 <span>Category</span>
-                <input type="text" placeholder="Select task category">
+                <input class="category-input" type="text" placeholder="Select task category">
 
                 <span>Subtasks</span>
-                <input type="text" placeholder="Add new subtask">
+                <input class="sub-input" type="text" placeholder="Add new subtask">
             </div>
         </div>
 
@@ -124,7 +124,7 @@
         <section class="board-nav">
             <div class="board-nav-top">
                 <h1 class="board-header">Board</h1>
-                <button onclick="openAddTaskOverlay()" class="addtask-btn-mobile">
+                <button onclick="openAddTaskMobile()" class="addtask-btn-mobile">
                     <img class="plus" src="../assets/icons/board/add.svg" alt="">
                 </button>
                 <div class="find-add-div">
