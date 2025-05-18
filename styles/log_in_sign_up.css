@@ -58,7 +58,6 @@ section {
 }
 
 .email>input:focus {
-    border-color: rgb(41, 171, 226);
     outline: none;
 }
 
@@ -99,24 +98,9 @@ section {
 }
 
 .password>input:focus {
-    border-color: rgb(41, 171, 226);
     outline: none;
 }
 
-.password-blue-highlight {
-    border-color: rgb(41, 171, 226) !important;
-    outline: none !important;
-}
-
-.confirm-password-highlight {
-    border-color: rgb(41, 171, 226) !important;
-    outline: none !important;
-}
-
-.red-highlight {
-    border-color: rgb(255, 0, 31);
-    outline: none;
-}
 
 /* confirm password input properties */
 
@@ -149,11 +133,10 @@ section {
 }
 
 .confirm-password>input:focus {
-    border-color: rgb(41, 171, 226);
     outline: none;
 }
 
-.lock-logo {
+.lock-icon {
     width: 17px;
     margin-right: 20px;
     cursor: pointer;
@@ -403,11 +386,10 @@ footer>a:hover {
     color: rgb(209, 209, 209);
 }
 
-.name>input:focus {
+/* .name>input:focus {
     border-color: rgb(41, 171, 226);
     outline: none;
-}
-
+} */
 
 .sign-up-buttons {
     height: 100px;
@@ -455,7 +437,7 @@ footer>a:hover {
     top: 0;
     height: 100vh;
     width: 100%;
-    max-width: 1440px;
+    /* max-width: 1440px; */
     background-color: rgba(0, 0, 0, 0);
     animation: fade-in 0.3s ease-out forwards;
 }
