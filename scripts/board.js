@@ -5,3 +5,7 @@ function openAddTaskOverlay() {
 function closeAddTaskOverlay() {
     document.getElementById('add_task_overlay').style.display = 'none';
 }
+
+function openAddTaskMobile() {
+    window.location.href = "./add_task.html";
+}
