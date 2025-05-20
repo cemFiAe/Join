@@ -16,9 +16,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
-    <script src="../scripts/signed_up.js"></script>
-    <script src="../scripts/email_events.js"></script>
-    <script src="../scripts/password_events.js"></script>
+    <script src="../scripts/signed_up.js" defer></script>
+    <script src="../scripts/email_events.js" defer></script>
+    <script src="../scripts/password_events.js" defer></script>
+
 </head>
 
 <body>
@@ -30,31 +31,41 @@
         <div class="sign-up-window">
             <h1><img class="arrow-left" src="../assets/icons/sign_up/arrow_left.svg">Sign up</h1>
             <div class="blue-line"></div>
-            <form id="sign-up-form" class="sign-up-section" onsubmit="return signedUp(event)">
+            <form id="sign-up-form" class="sign-up-form" onsubmit="return signedUp()">
                 <div class="name">
-                    <input  required type="text" placeholder="Name" autocomplete="off">
+                    <input required type="text" class="name-input" placeholder="Name" autocomplete="off">
                 </div>
                 <div class="email">
-                    <input  required type="text" placeholder="Email" autocomplete="off">
+                    <input type="text" class="email-input" id="email-input" placeholder="Email"
+                        autocomplete="off">
                 </div>
+                
+                <label class="alert-message" id="email-alert">Please insert correct email</label>
+
                 <div class="password">
-                    <input required type="password" id="password" placeholder="Password" autocomplete="off">
-                    <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon" onclick="toggleVisibility()">
+                    <input type="password" id="password" placeholder="Password" autocomplete="off">
+                    <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon"
+                        onclick="toggleVisibility()">
                 </div>
+
+                <label class="alert-message" id="password-alert">Please insert correct password</label>
+                
                 <div class="confirm-password">
-                    <input required type="password" id="confirm-password" placeholder="Confirm password" autocomplete="off">
-                    <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon" onclick="toggleConfirmVisibility()">
+                    <input type="password" id="confirm-password" placeholder="Confirm password"
+                        autocomplete="off">
+                    <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
+                        onclick="toggleConfirmVisibility()">
                 </div>
+
+                <label class="alert-message" id="confirm-password-alert">Please confirm your password</label>
 
             </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
                     <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
-                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy
-                            Policy</a></label>
+                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
                 </div>
-                <button type="submit" form="sign-up-form" class="buttons bigger-buttons mobile-sign-up-button">Sign
-                    up</button>
+                <button type="submit" id="sign-up-button" class="buttons bigger-buttons mobile-sign-up-button" form="sign-up-form">Sign up</button>
             </div>
         </div>
     </section>

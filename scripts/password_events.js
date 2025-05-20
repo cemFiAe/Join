@@ -9,23 +9,6 @@ function isPasswordValid(value) {
 
 
 // ---------- Password ---------- //
-
-// change password visibility and visibility matching icon:
-function toggleVisibility(iconElement) {
-    // Find the closest .password container to this icon
-    let passwordDiv = iconElement.closest('.password');
-    let passwordInput = passwordDiv.querySelector('input');
-
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        iconElement.src = "../assets/icons/log_in/visibility.svg";
-    } else {
-        passwordInput.type = "password";
-        iconElement.src = "../assets/icons/log_in/visibility_off.svg";
-    }
-}
-
-
 // check where is clicked, and perform accordingly:
 document.addEventListener('click', function (e) {
     let passwordDiv = document.querySelector('.password');
@@ -71,23 +54,6 @@ document.addEventListener('input', function (e) {
 
 
 // ---------- Confirming the password ---------- //
-
-// change confirm-password visibility and visibility matching icon:
-function toggleConfirmVisibility(iconElement) {
-    // Find the closest .confirm-password container to this icon
-    let confirmDiv = iconElement.closest('.confirm-password');
-    let confirmInput = confirmDiv.querySelector('input');
-
-    if (confirmInput.type === "password") {
-        confirmInput.type = "text";
-        iconElement.src = "../assets/icons/sign_up/visibility.svg";
-    } else {
-        confirmInput.type = "password";
-        iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
-    }
-}
-
-
 // check where is clicked, and perform accordingly:
 document.addEventListener('click', function (e) {
     let confirmDiv = document.querySelector('.confirm-password');
@@ -134,4 +100,35 @@ document.addEventListener('input', function (e) {
 });
 
 
+
+
+// change password visibility and visibility matching icon:
+function toggleVisibility(iconElement) {
+    // Find the closest .password container to this icon
+    let passwordDiv = iconElement.closest('.password');
+    let passwordInput = passwordDiv.querySelector('input');
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        iconElement.src = "../assets/icons/log_in/visibility.svg";
+    } else {
+        passwordInput.type = "password";
+        iconElement.src = "../assets/icons/log_in/visibility_off.svg";
+    }
+}
+
+// change confirm-password visibility and visibility matching icon:
+function toggleConfirmVisibility(iconElement) {
+    // Find the closest .confirm-password container to this icon
+    let confirmDiv = iconElement.closest('.confirm-password');
+    let confirmInput = confirmDiv.querySelector('input');
+
+    if (confirmInput.type === "password") {
+        confirmInput.type = "text";
+        iconElement.src = "../assets/icons/sign_up/visibility.svg";
+    } else {
+        confirmInput.type = "password";
+        iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
+    }
+}
 

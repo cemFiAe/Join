@@ -3,8 +3,10 @@ function signedUp(event) {
 
     let pass = document.getElementById('password');
     let confirm = document.getElementById('confirm-password');
+
     let passwordDiv = document.querySelector('.password');
     let confirmDiv = document.querySelector('.confirm-password');
+    
     let checkbox = document.getElementById('accept-privacy-policy');
 
     // Check if passwords match and follow rules
@@ -25,6 +27,7 @@ function signedUp(event) {
         alert('You must accept the privacy policy!');
         return false;
     }
+
 
     document.getElementById('signed-up').style.display = "block";
     setTimeout(() => {

@@ -16,10 +16,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
-    <script src="../scripts/log_in_loading.js"></script>
-    <script src="../scripts/email_events.js"></script>
-    <script src="../scripts/password_events.js"></script>
-
+    <script src="../scripts/log_in_loading.js" defer></script>
+    <script src="../scripts/email_events.js" defer></script>
+    <script src="../scripts/password_events.js" defer></script>
 </head>
 
 <body onload="checkLoadingScreen()">
@@ -33,7 +32,7 @@
             <img class="header-logo" src="../assets/img/logo/logo_log_in.svg">
             <div class="sign-up-shortcut">
                 <label>Not a Join user?</label>
-                <a href="../pages/sign_up.html" class="buttons" >Sign up</a>
+                <a href="../pages/sign_up.html" class="buttons">Sign up</a>
             </div>
         </header>
 
@@ -41,22 +40,30 @@
             <div class="log-in-window">
                 <h1>Log in</h1>
                 <div class="blue-line"></div>
-                <form id="log-in-form" action="../pages/summary.html" class="log-in-section">
+                <form id="log-in-form" class="log-in-form" action="../pages/summary.html">
                     <div class="email">
-                        <input required type="text" placeholder="Email" autocomplete="off">
+                        <input type="text" class="email-input" id="email-input" placeholder="Email"
+                            autocomplete="off">
                     </div>
+
+                    <label class="alert-message" id="email-alert">Please insert correct email</label>
+
                     <div class="password">
-                        <input required type="password" id="password" placeholder="Password" autocomplete="off">
-                        <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon" onclick="toggleVisibility()">
+                        <input type="password" id="password" placeholder="Password" autocomplete="off">
+                        <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon"
+                            onclick="toggleVisibility()">
                     </div>
+                    
+                    <label class="alert-message" id="password-alert" for="input">Please insert correct password</label>
+
                 </form>
                 <div class="log-in-buttons">
-                    <button form="log-in-form" class="buttons bigger-buttons">Log in</button>
-                    <button class="buttons white-button bigger-buttons">Guest Log in</button>
+                    <button type="submit" id="log-in-button" class="buttons bigger-buttons" form="log-in-form">Log in</button>
+                    <button type="submit" id="guest-log-in-button" class="buttons white-button bigger-buttons" form="log-in-form">Guest Log in</button>
                 </div>
             </div>
         </section>
-        
+
         <div class="sign-up-shortcut-footer">
             <label>Not a Join user?</label>
             <button class="buttons">Sign up</button>

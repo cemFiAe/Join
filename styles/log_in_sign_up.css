@@ -30,7 +30,7 @@ section {
     align-items: center;
 }
 
-.email>input {
+.email-input {
     height: 48px;
     width: 100%;
     max-width: 352px;
@@ -48,17 +48,28 @@ section {
     border-radius: 12px;
 }
 
-.email>input:hover {
+.email-input:hover {
     cursor: pointer;
 }
 
-.email>input::placeholder {
+.email-input::placeholder {
     font-size: 20px;
     color: rgb(209, 209, 209);
 }
 
-.email>input:focus {
+.email-input:focus {
     outline: none;
+}
+
+.alert-message {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    margin: 0px;
+    padding-left: 4px;
+    color: rgb(255,129,144);
+    display: none;
 }
 
 
@@ -231,13 +242,17 @@ footer>a:hover {
     align-items: center;
 }
 
-.log-in-section {
+.log-in-form {
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 24px;
+}
+
+.log-in-form:hover {
+    cursor: pointer;
 }
 
 .log-in-buttons {
@@ -337,7 +352,7 @@ footer>a:hover {
     padding: 2px;
 }
 
-.sign-up-section {
+.sign-up-form {
     padding-top: 8px;
     height: 320px;
     display: flex;
@@ -347,7 +362,7 @@ footer>a:hover {
     gap: 24px;
 }
 
-.sign-up-section:hover {
+.sign-up-form:hover {
     cursor: pointer;
 }
 
@@ -360,7 +375,7 @@ footer>a:hover {
     align-items: center;
 }
 
-.name>input {
+.name-input {
     height: 48px;
     width: 100%;
     max-width: 352px;
@@ -377,19 +392,18 @@ footer>a:hover {
     border-radius: 12px;
 }
 
-.name>input:hover {
+.name-input:hover {
     cursor: pointer;
 }
 
-.name>input::placeholder {
+.name-input::placeholder {
     font-size: 20px;
     color: rgb(209, 209, 209);
 }
 
-/* .name>input:focus {
-    border-color: rgb(41, 171, 226);
+.name>input:focus {
     outline: none;
-} */
+}
 
 .sign-up-buttons {
     height: 100px;
