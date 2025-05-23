@@ -25,9 +25,12 @@ section {
 /* email input properties */
 
 .email {
+    height: 72px;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
+    flex-direction: column;
+    margin: 0px 8px;
 }
 
 .email-input {
@@ -39,7 +42,6 @@ section {
     align-items: end;
     font-size: 24px;
     padding-left: 16px;
-    margin: 0px 8px;
     border: 2px solid rgb(0, 0, 0, 0.1);
     background-image: url(../assets/icons/log_in/mail.svg);
     background-size: 17px;
@@ -61,13 +63,24 @@ section {
     outline: none;
 }
 
-.alert-message {
+.email-alert {
     width: 100%;
     max-width: 352px;
     font-size: 12px;
     text-align: start;
     margin: 0px;
     padding-left: 4px;
+    color: rgb(255,129,144);
+    display: none;
+}
+
+.password-alert {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    margin: 0px;
+    padding-left: 12px;
     color: rgb(255,129,144);
     display: none;
 }
@@ -248,7 +261,6 @@ footer>a:hover {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 24px;
 }
 
 .log-in-form:hover {

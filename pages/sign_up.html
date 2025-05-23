@@ -36,36 +36,36 @@
                     <input required type="text" class="name-input" placeholder="Name" autocomplete="off">
                 </div>
                 <div class="email">
-                    <input type="text" class="email-input" id="email-input" placeholder="Email"
-                        autocomplete="off">
-                </div>
-                
-                <label class="alert-message" id="email-alert">Please insert correct email</label>
-
-                <div class="password">
-                    <input type="password" id="password" placeholder="Password" autocomplete="off">
-                    <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon"
-                        onclick="toggleVisibility()">
+                    <input type="text" class="email-input" id="email-input" placeholder="Email" autocomplete="off">
+                    <label class="email-alert" id="email-alert">Please insert correct email</label>
                 </div>
 
-                <label class="alert-message" id="password-alert">Please insert correct password</label>
-                
-                <div class="confirm-password">
-                    <input type="password" id="confirm-password" placeholder="Confirm password"
-                        autocomplete="off">
-                    <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
-                        onclick="toggleConfirmVisibility()">
+                <div>
+                    <div class="password">
+                        <input type="password" id="password" placeholder="Password" autocomplete="off">
+                        <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
+                            onclick="toggleVisibility()">
+                    </div>
+                    <label class="password-alert" id="password-alert">Please insert correct password</label>
                 </div>
 
-                <label class="alert-message" id="confirm-password-alert">Please confirm your password</label>
-
+                <div>
+                    <div class="confirm-password">
+                        <input type="password" id="confirm-password" placeholder="Confirm password" autocomplete="off">
+                        <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
+                            onclick="toggleConfirmVisibility()">
+                    </div>
+                    <label class="password-alert" id="confirm-password-alert">Please confirm your password</label>
+                </div>
             </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
                     <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
-                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
+                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy
+                            Policy</a></label>
                 </div>
-                <button type="submit" id="sign-up-button" class="buttons bigger-buttons mobile-sign-up-button" form="sign-up-form">Sign up</button>
+                <button type="submit" id="sign-up-button" class="buttons bigger-buttons mobile-sign-up-button"
+                    form="sign-up-form">Sign up</button>
             </div>
         </div>
     </section>

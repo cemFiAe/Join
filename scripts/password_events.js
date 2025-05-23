@@ -31,23 +31,29 @@ document.addEventListener('click', function (e) {
 
 // check input, and perform accordingly:
 document.addEventListener('input', function (e) {
+    let logInForm = document.querySelector('.log-in-form');
     let passwordDiv = document.querySelector('.password');
     let passwordInput = document.getElementById('password');
+    let passwordAlert = document.getElementById('password-alert')
     let lockLogo = document.getElementById('lock-icon');
 
     // if input is true;
-    if (passwordDiv.contains(e.target)) {
+    if (passwordDiv.contains(e.target)) {s
+        logInForm.style.padding = "16px 0px 0px"
         passwordDiv.classList.add('red-highlight');
         lockLogo.src = "../assets/icons/log_in/visibility_off.svg";
 
         // Validate the input/password and change border color accordingly:
-            // if valid;
-        if (isPasswordValid(passwordInput.value)) {
+        if (isPasswordValid(passwordInput.value)) {  // if valid;
+            logInForm.style.padding = "0px"
             passwordDiv.style.borderColor = 'rgb(41, 171, 226)';
             passwordDiv.classList.remove('red-highlight');
-            // if not valid;
-        } else {
+            passwordAlert.style.display = "none"
+
+        } else {  // if not valid;
+            logInForm.padding = "16px 0px 0px";
             passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
+            passwordAlert.style.display = "block"
         }
     }
 });
@@ -132,3 +138,12 @@ function toggleConfirmVisibility(iconElement) {
     }
 }
 
+// log in/sign up TODO:
+
+
+// for sign up page extra event listener!!!
+// Don´t allow log in or sign up before passwords are correctly fulfilled
+// and regarding to this show alert messages.
+// ...etc
+
+// check all current work, adjust what is eventually skipped!

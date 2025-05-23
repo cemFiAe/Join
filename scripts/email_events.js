@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isEmailValid(emailInput.value)) {
             emailInput.style.borderColor = 'rgb(41, 171, 226)';
             emailAlert.style.display = "none";
-            logInForm.style.gap = "24px"
             logInButton.disabled = false
             guestLogInButton.disabled = false
 
@@ -57,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             emailInput.style.borderColor = 'rgb(255, 0, 31)';
             emailAlert.style.display = "block"; // 
-            logInForm.style.gap = "5px";
             logInButton.disabled = true;
             guestLogInButton.disabled = true
         }
@@ -66,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (emailInput.value === "") {
             emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
             emailAlert.style.display = "none";
-            logInForm.style.gap = "24px"
             logInButton.disabled = false;
             guestLogInButton.disabled = false
         }
@@ -78,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
     logInButton.addEventListener('click', function () {
         if (emailInput.value === "") {
             emailAlert.style.display = "block";
-            logInForm.style.gap = "5px";
             logInButton.disabled = true;
         }
     })
@@ -86,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
     guestLogInButton.addEventListener('click', function () {
         if (emailInput.value === "") {
             emailAlert.style.display = "block";
-            logInForm.style.gap = "5px";
             guestLogInButton.disabled = true;
         }
     })
@@ -96,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // log in/sign up TODO:
 
+
+// for sign up page extra event listener!!!
 // Don´t allow log in or sign up before passwords are correctly fulfilled
 // and regarding to this show alert messages.
 // ...etc
