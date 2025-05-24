@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/media/contacts.css"/>
     <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
+    <link rel="stylesheet" type="text/css" href="../styles/overlays/contacts.css"/>
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
@@ -17,6 +18,32 @@
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
   </head>
   <body>
+    <div id="bg_overlay" class="bg_overlay"></div>
+
+    <dialog id="add_contact_overlay" class="add_contact_overlay">
+      <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+      <div class="left">
+        <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
+        <h1 class="side-title">Add contact</h1>
+        <span class="span">Tasks are better with a team!</span>
+        <div class="blue-line"></div>
+      </div>
+      <div class="mid">
+        <div class="circle">
+          <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
+        </div>
+      </div>
+      <div class="right">
+        <input class="name-input" type="text" placeholder="Name">
+        <input class="mail-input" type="text" placeholder="Email">
+        <input class="phone-input" type="text" placeholder="Phone">
+        <div>
+          <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+        </div>
+      </div>
+    </dialog>
+
     <header class="header">
       <h2 class="title">Kanban Project Management Tool</h2>
       <div class="header-icons">
@@ -76,7 +103,7 @@
     <section class="main-content">
       <section class="contact_wrapper">
         <section id="contacts" class="contacts">
-          <button class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>
+          <button onclick="openAddContact()" class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>
     
           <div class="contact_letter">A</div>
           <div class="contact_devider"></div>
@@ -212,5 +239,6 @@
     </footer>
 
     <script src="../scripts/burger_and_mobile_menu.js"></script>
+    <script src="../scripts/contacts.js"></script>
   </body>
 </html>

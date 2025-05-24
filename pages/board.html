@@ -18,6 +18,8 @@
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
   </head>
   <body>
+    <div id="bg_overlay" class="bg_overlay"></div>
+    
     <dialog id="add_task_overlay" class="add_task_overlay">
         <h1 class="headline">Add Task</h1>
         <img onclick="closeAddTaskOverlay()" class="close-x" src="../assets/icons/board/Close.svg" alt="">
@@ -45,9 +47,9 @@
                 </div>
 
                 <span>Assigned to</span>
-                <input class="assign-input" type="search" placeholder="Select contacts to assign">
+                <input class="assign-input" type="text" placeholder="Select contacts to assign">
 
-                <span>Category</span>
+                <span>Category<sup class="sup">*</sup></span>
                 <input class="category-input" type="text" placeholder="Select task category">
 
                 <span>Subtasks</span>
