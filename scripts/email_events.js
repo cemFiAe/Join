@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // when the form is empty, disable both buttons
+     if (!logInButton || !guestLogInButton) return;
 
     logInButton.addEventListener('click', function () {
         if (emailInput.value === "") {

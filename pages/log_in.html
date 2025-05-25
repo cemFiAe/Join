@@ -48,11 +48,11 @@
 
                     <div>
                         <div class="password">
-                            <input type="password" id="password" placeholder="Password" autocomplete="off">
-                            <img src="../assets/icons/log_in/lock.svg" class="lock-icon" id="lock-icon"
-                                onclick="toggleVisibility()">
+                            <input type="password" id="log-in-password" placeholder="Password" autocomplete="off">
+                            <img src="../assets/icons/log_in/lock.svg" id="log-in-lock-icon" class="lock-icon" 
+                                onclick="toggleVisibility(this)">
                         </div>
-                        <label class="password-alert" id="password-alert">Please insert correct password</label>
+                        <label class="password-alert" id="log-in-password-alert"></label>
                     </div>
                 </form>
                 <div class="log-in-buttons">

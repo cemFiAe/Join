@@ -42,20 +42,20 @@
 
                 <div>
                     <div class="password">
-                        <input type="password" id="password" placeholder="Password" autocomplete="off">
-                        <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
-                            onclick="toggleVisibility()">
+                        <input type="password" id="sign-up-password" placeholder="Password" autocomplete="off">
+                        <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon" 
+                            onclick="toggleVisibility(this)">
                     </div>
-                    <label class="password-alert" id="password-alert">Please insert correct password</label>
+                    <label class="password-alert" id="sign-up-password-alert"></label>
                 </div>
 
                 <div>
                     <div class="confirm-password">
                         <input type="password" id="confirm-password" placeholder="Confirm password" autocomplete="off">
-                        <img src="../assets/icons/sign_up/lock.svg" class="lock-icon" id="sign-up-lock-icon"
-                            onclick="toggleConfirmVisibility()">
+                        <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon" 
+                            onclick="toggleConfirmVisibility(this)">
                     </div>
-                    <label class="password-alert" id="confirm-password-alert">Please confirm your password</label>
+                    <label class="password-alert" id="confirm-password-alert"></label>
                 </div>
             </form>
             <div class="sign-up-buttons">
