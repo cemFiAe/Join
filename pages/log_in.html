@@ -17,8 +17,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/log_in_loading.js" defer></script>
-    <script src="../scripts/email_events.js" defer></script>
-    <script src="../scripts/password_events.js" defer></script>
+    <script src="../scripts/email_password_validation.js" defer></script>
+    <script src="../scripts/log_in_buttons.js" defer></script>
+    <script src="../scripts/log_in_password.js"></script>
 </head>
 
 <body onload="checkLoadingScreen()">
@@ -46,11 +47,11 @@
                         <label class="email-alert" id="email-alert">Please insert correct email</label>
                     </div>
 
-                    <div>
-                        <div class="password">
+                    <div style="height: 72px;">
+                        <div class="log-in-password">
                             <input type="password" id="log-in-password" placeholder="Password" autocomplete="off">
                             <img src="../assets/icons/log_in/lock.svg" id="log-in-lock-icon" class="lock-icon" 
-                                onclick="toggleVisibility(this)">
+                                onclick="logInVisibility(this)">
                         </div>
                         <label class="password-alert" id="log-in-password-alert"></label>
                     </div>

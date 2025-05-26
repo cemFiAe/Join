@@ -87,24 +87,24 @@ section {
 }
 
 
-/* password input properties */
+/* log in password input properties */
 
-.password {
+.log-in-password {
     height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border: 2px solid rgb(0, 0, 0, 0.1);
     border-radius: 12px;
-    margin: 0px 8px 4px            ;
+    margin: 0px 8px;
 }
 
-.password:invalid {
+.log-in-password:invalid {
     border: 2px solid rgb(255, 0, 31) !important;
     outline: none !important;
 }
 
-.password>input {
+.log-in-password>input {
     width: 100%;
     max-width: 310px;
     font-size: 24px;
@@ -113,16 +113,56 @@ section {
     padding-left: 16px;
 }
 
-.password>input:hover {
+.log-in-password>input:hover {
     cursor: pointer;
 }
 
-.password>input::placeholder {
+.log-in-password>input::placeholder {
     font-size: 20px;
     color: rgb(209, 209, 209);
 }
 
-.password>input:focus {
+.log-in-password>input:focus {
+    outline: none;
+}
+
+
+/* sign up password input properties */
+
+.sign-up-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.sign-up-password:invalid {
+    border: 2px solid rgb(255, 0, 31) !important;
+    outline: none !important;
+}
+
+.sign-up-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.sign-up-password>input:hover {
+    cursor: pointer;
+}
+
+.sign-up-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.sign-up-password>input:focus {
     outline: none;
 }
 
@@ -161,12 +201,16 @@ section {
     outline: none;
 }
 
+
 .lock-icon {
     width: 17px;
     margin-right: 20px;
     cursor: pointer;
 }
 
+.black-highlight {
+    border-color: black;
+}
 
 /* buttons and footer properties */
 

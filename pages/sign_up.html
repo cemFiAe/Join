@@ -17,8 +17,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/signed_up.js" defer></script>
-    <script src="../scripts/email_events.js" defer></script>
-    <script src="../scripts/password_events.js" defer></script>
+    <script src="../scripts/email_password_validation.js" defer></script>
+    <script src="../scripts/sign_up_password.js"></script>
+    <script src="../scripts/confirm_password.js"></script>
 
 </head>
 
@@ -40,20 +41,20 @@
                     <label class="email-alert" id="email-alert">Please insert correct email</label>
                 </div>
 
-                <div>
-                    <div class="password">
+                <div style="height: 72px;">
+                    <div class="sign-up-password">
                         <input type="password" id="sign-up-password" placeholder="Password" autocomplete="off">
                         <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon" 
-                            onclick="toggleVisibility(this)">
+                            onclick="signUpVisibility(this)">
                     </div>
                     <label class="password-alert" id="sign-up-password-alert"></label>
                 </div>
 
-                <div>
+                <div style="height: 72px;">
                     <div class="confirm-password">
                         <input type="password" id="confirm-password" placeholder="Confirm password" autocomplete="off">
-                        <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon" 
-                            onclick="toggleConfirmVisibility(this)">
+                        <img src="../assets/icons/sign_up/lock.svg" id="confirm-lock-icon" class="lock-icon" 
+                            onclick="confirmVisibility(this)">
                     </div>
                     <label class="password-alert" id="confirm-password-alert"></label>
                 </div>
