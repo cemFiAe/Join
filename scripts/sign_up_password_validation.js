@@ -1,4 +1,12 @@
 
+// Password validation function
+
+function isPasswordValid(value) {
+    let letters = (value.match(/[A-Za-z]/g) || []).length;
+    let numbers = (value.match(/[0-9]/g) || []).length;
+    return value.length >= 8 && letters >= 6 && numbers >= 2;
+}
+
 // Sign up password visibility and visibility matching icon:
 function signUpVisibility(iconElement) {
     // Find the closest .log-in-password container to this icon
