@@ -1,78 +1,119 @@
+
+// When name input is true, do the following 
+document.getElementById('name-input').addEventListener('input', function () {
+    const name = this.value.trim();
+    const nameDiv = this.closest('.name');
+    const nameAlert = document.getElementById('name-alert');
+
+    if (name !== "") {
+        this.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        nameDiv.style.padding = "0px 0px 24px";
+        nameAlert.style.display = "none";
+    }
+});
+
+
 function signedUp(event) {
     event.preventDefault();
 
-    let name = document.querySelector('.name')
-    let nameInput = document.getElementById('name-input');
-    let nameAlert = document.getElementById('name-alert');
+    // Form validation in steps
+    let isValid = true;
 
-    let emailInput = document.getElementById('sign-up-email-input');
-    let emailAlert = document.getElementById('sign-up-email-alert');
+    //  Name validation 
+    const nameInput = document.getElementById('name-input');
+    const nameAlert = document.getElementById('name-alert');
+    const nameDiv = nameInput.closest('.name');
+    const name = nameInput.value.trim();
 
-    let passwordDiv = document.querySelector('.sign-up-password');
-    let passwordAlert = document.getElementById('sign-up-password-alert');
-
-    let confirmDiv = document.querySelector('.confirm-password');
-    let confirmAlert = document.getElementById('confirm-password-alert');
-
-    let password = document.getElementById('sign-up-password');
-    let confirm = document.getElementById('confirm-password');
-
-    let checkbox = document.getElementById('accept-privacy-policy');
-
-    let validPassword = isPasswordValid(password.value);
-    let passwordsMatch = password.value === confirm.value;
-    let email = emailInput.value.trim();
-    let validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-    // Reset alerts and borders
-    nameInput.style.borderColor = '';
-    nameAlert.style.display = "none";
-    emailInput.style.borderColor = '';
-    emailAlert.style.display = "none";
-    passwordDiv.style.borderColor = '';
-    passwordAlert.style.display = "none";
-    confirmDiv.style.borderColor = '';
-    confirmAlert.style.display = "none";
-
-    // Validation checks
-    if (nameInput.value.trim() === "") {
+    if (name === "") {
         nameInput.style.borderColor = 'rgb(255, 0, 31)';
-        name.style.padding = "0px"
+        nameDiv.style.padding = "0px 0px 10px";
         nameAlert.style.display = "block";
-
-        return false;
+        isValid = false;
+    } else {
+        nameInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        nameDiv.style.padding = "0px 0px 24px";
+        nameAlert.style.display = "none";
     }
+
+    //  Email validation 
+    const emailInput = document.getElementById('sign-up-email-input');
+    const emailAlert = document.getElementById('sign-up-email-alert');
+    const email = emailInput.value.trim();
+    const validEmail = isEmailValid(email);
 
     if (!validEmail) {
         emailInput.style.borderColor = 'rgb(255, 0, 31)';
         emailAlert.style.display = "block";
-        return false;
+        isValid = false;
+    } else {
+        emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        emailAlert.style.display = "none";
     }
+
+    //  Password validation 
+    const passwordDiv = document.querySelector('.sign-up-password');
+    const passwordInput = document.getElementById('sign-up-password');
+    const passwordAlert = document.getElementById('sign-up-password-alert');
+    const password = passwordInput.value;
+    const validPassword = isPasswordValid(password);
 
     if (!validPassword) {
         passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-        passwordAlert.style.display = "block";
-        return false;
+        passwordAlert.innerHTML = "Please insert correct password";
+        isValid = false;
+    } else {
+        passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        passwordAlert.innerHTML = "";
     }
 
-    if (!passwordsMatch) {
+    //  Confirm-password validation 
+    const confirmDiv = document.querySelector('.confirm-password');
+    const confirmInput = document.getElementById('confirm-password');
+    const confirmAlert = document.getElementById('confirm-password-alert');
+    const confirmPassword = confirmInput.value;
+    const passwordsMatch = password === confirmPassword;
+
+    if (!confirmPassword || !passwordsMatch) {
         confirmDiv.style.borderColor = 'rgb(255, 0, 31)';
-        confirmAlert.style.display = "block";
-        return false;
+        confirmAlert.innerHTML = "Passwords do not match";
+        isValid = false;
+    } else {
+        confirmDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        confirmAlert.innerHTML = "";
     }
+
+    //  Privacy Policy validation
+    const checkbox = document.getElementById('accept-privacy-policy');
+    const policyAlert = document.getElementById('privacy-policy-alert');
 
     if (!checkbox.checked) {
-        alert('You must accept the privacy policy!');
-        return false;
+        policyAlert.style.display = "block";
+        isValid = false;
+    } else {
+        policyAlert.style.display = "none";
     }
 
-    // Show success screen
-    document.getElementById('signed-up-screen').style.display = "block";
-    setTimeout(() => {
-        document.getElementById('signed-up-screen').style.display = "none";
-        window.location.href = "../pages/log_in.html";
-        sessionStorage.setItem('cameFromSignUp', 'true');
-    }, 1000);
+    //  If form validation is true, do thew following 
+    if (isValid) {
+        document.getElementById('signed-up-screen').style.display = "block";
 
-    return true;
+        setTimeout(() => {
+            document.getElementById('signed-up-screen').style.display = "none";
+            window.location.href = "../pages/log_in.html";
+            sessionStorage.setItem('cameFromSignUp', 'true');
+        }, 1000);
+    }
+    return isValid;
 }
+
+// By changing checkbox status, show/hide alert message
+const checkbox = document.getElementById('accept-privacy-policy');
+const policyAlert = document.getElementById('privacy-policy-alert');
+
+checkbox.addEventListener('change', function () {
+    policyAlert.style.display = this.checked ? "none" : "block";
+});
+
+
+

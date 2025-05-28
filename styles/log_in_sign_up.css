@@ -67,7 +67,6 @@ section {
     max-width: 352px;
     font-size: 12px;
     text-align: start;
-    margin: 4px 0px;
     padding-left: 4px;
     color: rgb(255,129,144);
     display: none;
@@ -78,7 +77,6 @@ section {
     max-width: 352px;
     font-size: 12px;
     text-align: start;
-    margin: 4px 0px;
     padding-left: 4px;
     color: rgb(255,129,144);
     display: none;
@@ -93,7 +91,19 @@ section {
     margin: 0px;
     padding-left: 12px;
     color: rgb(255,129,144);
-    /* display: none; */
+}
+
+.password-alert:empty {
+    display: none;
+}
+
+.privacy-policy-alert {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: center;
+    color: rgb(255,129,144);
+    display: none;
 }
 
 
@@ -478,7 +488,7 @@ footer>a:hover {
 }
 
 .sign-up-buttons {
-    height: 100px;
+    height: 112px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -486,10 +496,10 @@ footer>a:hover {
 }
 
 .checkbox-area {
-    height: 24px;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    flex-direction: column;
     gap: 8px;
 }
 
@@ -501,7 +511,6 @@ footer>a:hover {
 
 .checkbox-area>label {
     font-size: 16px;
-    color: rgb(168, 168, 168);
 }
 
 .checkbox-area>label>a {

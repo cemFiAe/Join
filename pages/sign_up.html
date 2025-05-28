@@ -17,8 +17,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/sign_up_email_validation.js" defer></script>
-    <script src="../scripts/sign_up_password_validation.js"></script>
-    <script src="../scripts/confirm_password_validation.js"></script>
+    <script src="../scripts/sign_up_password_validation.js" defer></script>
+    <script src="../scripts/confirm_password_validation.js" defer></script>
     <script src="../scripts/sign_up_button.js" defer></script>
 
 </head>
@@ -35,36 +35,40 @@
             <form id="sign-up-form" class="sign-up-form" onsubmit="return signedUp(event)">
                 <div class="name">
                     <input type="text" id="name-input" class="name-input" placeholder="Name" autocomplete="off">
-                    <label id="name-alert" class="name-alert" >Please insert your name</label>
+                    <label id="name-alert" class="name-alert">Please insert your name</label>
                 </div>
                 <div class="email">
-                    <input type="text" id="sign-up-email-input" class="email-input"  placeholder="Email" autocomplete="off">
-                    <label id="sign-up-email-alert" class="email-alert" >Please insert correct email</label>
+                    <input type="text" id="sign-up-email-input" class="email-input" placeholder="Email"
+                        autocomplete="off">
+                    <label id="sign-up-email-alert" class="email-alert">Please insert correct email</label>
                 </div>
 
                 <div style="height: 72px;">
                     <div class="sign-up-password">
                         <input type="password" id="sign-up-password" placeholder="Password" autocomplete="off">
-                        <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon" 
+                        <img src="../assets/icons/sign_up/lock.svg" id="sign-up-lock-icon" class="lock-icon"
                             onclick="signUpVisibility(this)">
                     </div>
-                    <label id="sign-up-password-alert" class="password-alert" ></label>
+                    <label id="sign-up-password-alert" class="password-alert"></label>
                 </div>
 
                 <div style="height: 72px;">
                     <div class="confirm-password">
                         <input type="password" id="confirm-password" placeholder="Confirm password" autocomplete="off">
-                        <img src="../assets/icons/sign_up/lock.svg" id="confirm-lock-icon" class="lock-icon" 
+                        <img src="../assets/icons/sign_up/lock.svg" id="confirm-lock-icon" class="lock-icon"
                             onclick="confirmVisibility(this)">
                     </div>
-                    <label class="password-alert" id="confirm-password-alert"></label>
+                    <label id="confirm-password-alert" class="password-alert"></label>
                 </div>
             </form>
             <div class="sign-up-buttons">
                 <div class="checkbox-area">
-                    <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
-                    <label for="accept-privacy-policy">I accept the <a href="../pages/guest/privacy_policy.html">Privacy
-                            Policy</a></label>
+                    <div style="width: 320px; text-align: center;">
+                        <input required type="checkbox" id="accept-privacy-policy" class="checkbox">
+                        <label>I accept the <a href="../pages/guest/privacy_policy.html">Privacy Policy</a></label>
+                    </div>
+                    <label for="accept-privacy-policy" id="privacy-policy-alert" class="privacy-policy-alert">You must
+                        accept the privacy policy!</label>
                 </div>
                 <button id="sign-up-button" class="buttons bigger-buttons mobile-sign-up-button"
                     form="sign-up-form">Sign up</button>

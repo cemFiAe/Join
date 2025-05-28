@@ -1,15 +1,12 @@
-
 // Password validation function
-
 function isPasswordValid(value) {
     let letters = (value.match(/[A-Za-z]/g) || []).length;
     let numbers = (value.match(/[0-9]/g) || []).length;
     return value.length >= 8 && letters >= 6 && numbers >= 2;
 }
 
-// Sign up password visibility and visibility matching icon:
+// Toggle password visibility and visibility matching icon:
 function signUpVisibility(iconElement) {
-    // Find the closest .log-in-password container to this icon
     let passwordDiv = iconElement.closest('.sign-up-password');
     let passwordInput = passwordDiv.querySelector('input');
 
@@ -22,58 +19,44 @@ function signUpVisibility(iconElement) {
     }
 }
 
-
-////////// --- Password events for sign up page --- //////////
-
-// Check where is clicked, and perform accordingly:
+// Listen for clicks related to password input
 document.addEventListener('click', function (e) {
     let passwordDiv = document.querySelector('.sign-up-password');
-    let lockLogo = document.getElementById('sign-up-lock-icon');
-    let passwordAlert = document.getElementById('sign-up-password-alert')
+    let lockIcon = document.getElementById('sign-up-lock-icon');
+    let passwordAlert = document.getElementById('sign-up-password-alert');
 
-    // if the icon is clicked, call toggleVisibility() 
-    if (e.target.matches('sign-up-lock-icon')) {
+    if (e.target.id === 'sign-up-lock-icon') {
         signUpVisibility(e.target);
         return;
     }
 
-    // if outside password input is clicked, reset input
+    // Remove resetting the alert on outside click to keep validation messages visible
     if (!passwordDiv.contains(e.target)) {
-        lockLogo.src = "../assets/icons/sign_up/lock.svg";
-        passwordAlert.innerHTML = "";
+        lockIcon.src = "../assets/icons/sign_up/lock.svg";
+        // passwordAlert.innerHTML = "";  <-- Removed this line intentionally
     }
 });
 
-// Check input, and perform accordingly:
+// Listen for input in password field
 document.addEventListener('input', function (e) {
     let passwordDiv = document.querySelector('.sign-up-password');
     let passwordInput = document.getElementById('sign-up-password');
-    let lockLogo = document.getElementById('sign-up-lock-icon');
-    let passwordAlert = document.getElementById('sign-up-password-alert')
+    let iconElement = document.getElementById('sign-up-lock-icon');
+    let passwordAlert = document.getElementById('sign-up-password-alert');
 
-    // Check if input is true --->
     if (passwordDiv && passwordDiv.contains(e.target)) {
-        passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-        lockLogo.src = "../assets/icons/sign_up/visibility_off.svg";
-
-        // ---> check the input/password and change border color:
-        if (isPasswordValid(passwordInput.value)) {  // if valid;
-            passwordDiv.style.borderColor = 'rgb(41, 171, 226)';
-            passwordAlert.innerHTML = "";
-
-        } else {  // if not valid;
-            passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-            passwordAlert.innerHTML = "Please insert correct password";
-        }
-
-        // if input is empty:
         if (passwordInput.value === "") {
             passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
             passwordAlert.innerHTML = "";
-            lockLogo.src = "../assets/icons/sign_up/lock.svg";
+            iconElement.src = "../assets/icons/sign_up/lock.svg";
+        } else if (isPasswordValid(passwordInput.value)) {
+            passwordDiv.style.borderColor = 'rgb(41, 171, 226)';
+            passwordAlert.innerHTML = "";
+            iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
+        } else {
+            passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
+            passwordAlert.innerHTML = "Please insert correct password";
+            iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
         }
     }
 });
-
-
-
