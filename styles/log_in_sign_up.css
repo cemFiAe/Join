@@ -20,8 +20,23 @@ section {
     background-color: rgb(41, 171, 226);
 }
 
+.password-alert {
+    height: 15px;
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    margin: 0px;
+    padding-left: 12px;
+    color: rgb(255,129,144);
+}
 
-/* email input properties */
+.password-alert:empty {
+    display: none;
+}
+
+
+/* email input properties for both pages */
 
 .email {
     height: 72px;
@@ -62,16 +77,6 @@ section {
     outline: none;
 }
 
-.name-alert {
-    width: 100%;
-    max-width: 352px;
-    font-size: 12px;
-    text-align: start;
-    padding-left: 4px;
-    color: rgb(255,129,144);
-    display: none;
-}
-
 .email-alert {
     width: 100%;
     max-width: 352px;
@@ -82,20 +87,6 @@ section {
     display: none;
 }
 
-.password-alert {
-    height: 15px;
-    width: 100%;
-    max-width: 352px;
-    font-size: 12px;
-    text-align: start;
-    margin: 0px;
-    padding-left: 12px;
-    color: rgb(255,129,144);
-}
-
-.password-alert:empty {
-    display: none;
-}
 
 .privacy-policy-alert {
     width: 100%;
@@ -106,131 +97,12 @@ section {
     display: none;
 }
 
-
-/* log in password input properties */
-
-.log-in-password {
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    border-radius: 12px;
-    margin: 0px 8px;
-}
-
-.log-in-password:invalid {
-    border: 2px solid rgb(255, 0, 31) !important;
-    outline: none !important;
-}
-
-.log-in-password>input {
-    width: 100%;
-    max-width: 310px;
-    font-size: 24px;
-    border-radius: 12px;
-    border: none;
-    padding-left: 16px;
-}
-
-.log-in-password>input:hover {
-    cursor: pointer;
-}
-
-.log-in-password>input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.log-in-password>input:focus {
-    outline: none;
-}
-
-
-/* sign up password input properties */
-
-.sign-up-password {
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    border-radius: 12px;
-    margin: 0px 8px;
-}
-
-.sign-up-password:invalid {
-    border: 2px solid rgb(255, 0, 31) !important;
-    outline: none !important;
-}
-
-.sign-up-password>input {
-    width: 100%;
-    max-width: 310px;
-    font-size: 24px;
-    border-radius: 12px;
-    border: none;
-    padding-left: 16px;
-}
-
-.sign-up-password>input:hover {
-    cursor: pointer;
-}
-
-.sign-up-password>input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.sign-up-password>input:focus {
-    outline: none;
-}
-
-
-/* confirm password input properties */
-
-.confirm-password {
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    border-radius: 12px;
-    margin: 0px 8px;
-}
-
-.confirm-password>input {
-    width: 100%;
-    max-width: 310px;
-    font-size: 24px;
-    border-radius: 12px;
-    border: none;
-    padding-left: 16px;
-}
-
-.confirm-password>input:hover {
-    cursor: pointer;
-}
-
-.confirm-password>input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.confirm-password>input:focus {
-    outline: none;
-}
-
-
 .lock-icon {
     width: 17px;
     margin-right: 20px;
     cursor: pointer;
 }
 
-.black-highlight {
-    border-color: black;
-}
 
 /* buttons and footer properties */
 
@@ -279,8 +151,46 @@ footer>a:hover {
     font-weight: bold;
 }
 
-/* ----------------------------------------- */
+/* -------------- log in -------------------------- */
 
+/* log in password input properties */
+
+.log-in-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.log-in-password:invalid {
+    border: 2px solid rgb(255, 0, 31) !important;
+    outline: none !important;
+}
+
+.log-in-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.log-in-password>input:hover {
+    cursor: pointer;
+}
+
+.log-in-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.log-in-password>input:focus {
+    outline: none;
+}
 
 /* log in page properties */
 
@@ -306,7 +216,6 @@ footer>a:hover {
     flex-direction: column;
     border-radius: 32px;
     border-style: none;
-    /* font-size: 44px; */
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 12px 1px rgb(0, 0, 0, 0.05);
     margin-top: 12px;
@@ -388,6 +297,40 @@ footer>a:hover {
 }
 
 
+/* sign up password input properties */
+
+.sign-up-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.sign-up-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.sign-up-password>input:hover {
+    cursor: pointer;
+}
+
+.sign-up-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.sign-up-password>input:focus {
+    outline: none;
+}
+
 /* sign up page properties */
 
 .sign-up-window {
@@ -399,7 +342,6 @@ footer>a:hover {
     flex-direction: column;
     border-radius: 32px;
     border-style: none;
-    /* font-size: 44px; */
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 12px 1px rgb(0, 0, 0, 0.05);
     margin-top: 12px;
@@ -445,6 +387,14 @@ footer>a:hover {
     cursor: pointer;
 }
 
+.sign-up-buttons {
+    height: 112px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
 
 /* name input properties */
 
@@ -487,13 +437,16 @@ footer>a:hover {
     outline: none;
 }
 
-.sign-up-buttons {
-    height: 112px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
+.name-alert {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    padding-left: 4px;
+    color: rgb(255,129,144);
+    display: none;
 }
+
 
 .checkbox-area {
     display: flex;
@@ -523,6 +476,7 @@ footer>a:hover {
     border-bottom: 2px solid rgb(41, 171, 226);
     font-size: 16.1px;
 }
+
 
 
 /* sign up - signed up successfully screen */
@@ -572,4 +526,38 @@ footer>a:hover {
     to {
         transform: translate(-50%, -50%);
     }
+}
+
+/* confirm password input properties */
+
+.confirm-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.confirm-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.confirm-password>input:hover {
+    cursor: pointer;
+}
+
+.confirm-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.confirm-password>input:focus {
+    outline: none;
 }
