@@ -21,8 +21,8 @@
     <div id="bg_overlay" class="bg_overlay"></div>
 
     <dialog id="add_contact_overlay" class="add_contact_overlay">
-      <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
       <div class="left">
+        <img onclick="closeAddContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
         <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
         <h1 class="side-title">Add contact</h1>
         <span class="span">Tasks are better with a team!</span>
@@ -41,6 +41,7 @@
           <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
         </div>
+        <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
       </div>
     </dialog>
 
@@ -218,6 +219,10 @@
       </section>
   
     </section>
+
+    <button id="add_contact_btn" onclick="openAddContactMobile()" class="add_contact_btn">
+      <img class="mobile_add" src="../assets/icons/contacts/mobile_add.svg" alt="">
+    </button>
 
     <footer class="mobile-footer">
       <div class="footer-btn">
