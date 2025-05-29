@@ -297,6 +297,59 @@ footer>a:hover {
 }
 
 
+/*-------------------- sign up ------------------------*/
+/* name input properties */
+
+.name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    padding: 0px 0px 24px;
+    margin: 0px 8px;
+}
+
+.name-input {
+    height: 48px;
+    width: 100%;
+    max-width: 352px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    font-size: 24px;
+    padding-left: 16px;
+    margin: 0px 8px;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    background-image: url(../assets/icons/sign_up/person.svg);
+    background-repeat: no-repeat;
+    background-position: 94%;
+    border-radius: 12px;
+}
+
+.name-input:hover {
+    cursor: pointer;
+}
+
+.name-input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.name>input:focus {
+    outline: none;
+}
+
+.name-alert {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    padding-left: 4px;
+    color: rgb(255,129,144);
+    display: none;
+}
+
+
 /* sign up password input properties */
 
 .sign-up-password {
@@ -394,59 +447,6 @@ footer>a:hover {
     align-items: center;
     flex-direction: column;
 }
-
-
-/* name input properties */
-
-.name {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    padding: 0px 0px 24px;
-    margin: 0px 8px;
-}
-
-.name-input {
-    height: 48px;
-    width: 100%;
-    max-width: 352px;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    font-size: 24px;
-    padding-left: 16px;
-    margin: 0px 8px;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    background-image: url(../assets/icons/sign_up/person.svg);
-    background-repeat: no-repeat;
-    background-position: 94%;
-    border-radius: 12px;
-}
-
-.name-input:hover {
-    cursor: pointer;
-}
-
-.name-input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.name>input:focus {
-    outline: none;
-}
-
-.name-alert {
-    width: 100%;
-    max-width: 352px;
-    font-size: 12px;
-    text-align: start;
-    padding-left: 4px;
-    color: rgb(255,129,144);
-    display: none;
-}
-
 
 .checkbox-area {
     display: flex;

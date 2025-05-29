@@ -1,4 +1,7 @@
 /* contact list */
+body {
+    overflow-y: hidden;
+}
 
 .contacts {
     display: flex;
