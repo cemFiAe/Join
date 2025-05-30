@@ -34,14 +34,38 @@
         </div>
       </div>
       <div class="right">
-        <input class="name-input" type="text" placeholder="Name">
-        <input class="mail-input" type="text" placeholder="Email">
-        <input class="phone-input" type="text" placeholder="Phone">
+        <input id="add-name-input" class="name-input" type="text" placeholder="Name">
+        <input id="add-mail-input" class="mail-input" type="text" placeholder="Email">
+        <input id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
         <div>
           <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
         </div>
         <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+      </div>
+    </dialog>
+
+    <dialog id="edit_contact_overlay" class="edit_contact_overlay">
+      <div class="left">
+        <img onclick="closeEditContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
+        <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
+        <h1 class="side-title">Edit contact</h1>
+        <div class="blue-line"></div>
+      </div>
+      <div class="mid">
+        <div class="circle">
+          <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
+        </div>
+      </div>
+      <div class="right">
+        <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
+        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
+        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
+        <div>
+          <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+        </div>
+        <img onclick="closeEditContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
       </div>
     </dialog>
 
@@ -205,7 +229,7 @@
           <div class="ci-menu">
             <span class="ci-name">Anton Mayer</span>
             <div class="ci-edit">
-              <a href=""><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
+              <a onclick="openEditContact()" href=""><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
               <a href=""><img src="../assets/icons/contacts/delete.svg" alt="">Delete</a>
             </div>
           </div>
