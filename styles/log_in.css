@@ -1,0 +1,142 @@
+/* log in password input properties */
+
+.log-in-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.log-in-password:invalid {
+    border: 2px solid rgb(255, 0, 31) !important;
+    outline: none !important;
+}
+
+.log-in-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.log-in-password>input:hover {
+    cursor: pointer;
+}
+
+.log-in-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.log-in-password>input:focus {
+    outline: none;
+}
+
+/* log in page properties */
+
+.sign-up-shortcut {
+    height: 60px;
+    width: 280px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 32px;
+}
+
+.sign-up-shortcut-footer {
+    display: none;
+}
+
+.log-in-window {
+    height: 450px;
+    width: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 32px;
+    border-style: none;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 12px 1px rgb(0, 0, 0, 0.05);
+    margin-top: 12px;
+}
+
+.log-in-window>h1 {
+    font-size: 61px;
+    margin-block: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.log-in-form {
+    padding-top: 16px;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.log-in-form:hover {
+    cursor: pointer;
+}
+
+.log-in-buttons {
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.white-button {
+    color: rgb(42, 54, 71);
+    background-color: rgb(255, 255, 255);
+    border: 1.5px solid rgb(42, 54, 71);
+}
+
+.white-button:hover {
+    color: rgb(41, 171, 226);
+    border-color: rgb(41, 171, 226);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 4px 4px 0px rgb(181, 181, 181);
+}
+
+
+/* log in - move logo effect */
+
+.loading-overlay {
+    height: 100vh;
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(246, 247, 248);
+}
+
+.log-in-logo {
+    animation: move 0.25s ease forwards;
+    animation-delay: 0.5s;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mobile-log-in-logo {
+    display: none;
+}
+
+@keyframes move {
+
+    100% {
+        left: 22px;
+        top: 14.5px;
+        scale: 0.365;
+    }
+}

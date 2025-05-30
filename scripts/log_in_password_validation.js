@@ -9,6 +9,7 @@ function isPasswordValid(value) {
 
 // Log in password visibility and visibility matching icon:
 function logInVisibility(iconElement) {
+
     // Find the closest .log-in-password container to this icon
     let passwordDiv = iconElement.closest('.log-in-password');
     let passwordInput = passwordDiv.querySelector('input');
