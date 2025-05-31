@@ -61,6 +61,7 @@ body {
 .contact_devider {
     height: 1px;
     width: 352px;
+    margin-block: 4px;
     background-color: #EEEEEE;
 }
 
@@ -72,6 +73,12 @@ body {
     gap: 35px;
     padding-block: 15px;
     padding-inline: 24px;
+}
+
+.contact_entry:hover {
+    background-color: #F6F7F8;
+    cursor: pointer;
+    border-radius: 12px;
 }
 
 .contact_icon {
@@ -127,6 +134,14 @@ body {
     width: 4px;
     border-radius: 3px;
     height: 59px;
+    background-color: #29ABE2;
+}
+
+.co-devider-mobile {
+    display: none;
+    height: 4px;
+    border-radius: 3px;
+    width: 90px;
     background-color: #29ABE2;
 }
 
@@ -205,4 +220,69 @@ body {
 
 .ci-mail {
     color: #007CEE;
+}
+
+/* overlay and mobile-specials */
+
+.back_contact_btn {
+    display: none;
+    background: none;
+    border: none;
+    position: absolute;
+    top: 128px;
+    left: calc(100% - 48px);
+    height: 32px;
+    width: 32px;
+}
+
+.back-arrow-btn {
+    object-fit: cover;
+    width: 24px;
+    height: 24px;
+}
+
+.back-arrow-btn:hover {
+    cursor: pointer;
+}
+
+.contact-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+    z-index: 1000;
+    top: 83%;
+    left: 120%;
+    height: 100px;
+    width: 116px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 20px;
+    border-bottom-right-radius: 0px !important;
+    filter: drop-shadow(0px 4px 4px rgba(0,4,4,0.25));
+    transition: ease-in 0.3s;
+}
+
+.contact-options a {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+    color: #2A3647;
+    font-size: 16px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.contact-options a:visited {
+    text-decoration: none;
+}
+
+.contact-options a:hover {
+    color: #29ABE2;
+}
+
+.contact-options a:hover img {
+    filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
 }

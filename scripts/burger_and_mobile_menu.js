@@ -40,7 +40,7 @@ function openBurger() {
   document.addEventListener("click", outsideClickListener);
 }
 
-function closeMenu() {
+function closeBurger() {
   burger.classList.remove('d_flex');
   burgerOpen = false;
   document.removeEventListener("click", outsideClickListener);
@@ -49,12 +49,12 @@ function closeMenu() {
 function toggleBurgerMenu(event) {
   event.preventDefault();
   event.stopPropagation();
-  burgerOpen ? closeMenu() : openBurger();
+  burgerOpen ? closeBurger() : openBurger();
 }
 
 function outsideClickListener(event) {
   if (!burger.contains(event.target) && !toggleBurger.contains(event.target)) {
-    closeMenu();
+    closeBurger();
   }
 }
 

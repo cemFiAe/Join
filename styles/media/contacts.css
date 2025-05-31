@@ -8,6 +8,15 @@
 }
 .contact_overview {
     display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    height: auto;
+    margin-left: 16px;
+    margin-top: 48px;
+}
+.co-devider {
+    display: none;
 }
 .new_contact_btn {
     display: none;
@@ -17,5 +26,16 @@
 }
 .contact_devider {
     width: 90%;
+}
+.ci-edit {
+    display: none;
+}
+.ci-wrapper {
+    align-items: center;
+    gap: 20px;
+}
+.ci-name {
+    font-weight: 700;
+    font-size: 36px;
 }
 }

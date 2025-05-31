@@ -243,13 +243,13 @@
     width: 24px;
 }
 
-.add_contact_btn {
+.add_contact_btn, .burger_contact_btn {
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
     z-index: 999;
-    left: calc(100% - 5% - 48px);
+    left: calc(100% - 72px);
     top: 85%;
     width: 56px;
     height: 56px;
@@ -260,7 +260,11 @@
     filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
 }
 
-.add_contact_btn:hover {
+.burger_contact_btn {
+    display: none;
+}
+
+.add_contact_btn:hover, .burger_contact_btn:hover {
     cursor: pointer;
 }
 
@@ -274,7 +278,7 @@
 
 @media (min-width: 650px) {
     .add_contact_btn {
-        display: none;
+        display: none !important;
     }
 }
 
