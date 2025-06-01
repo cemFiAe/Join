@@ -60,7 +60,7 @@ a {
 }
 .main_content{
     display: flex; flex-direction: column;
-    margin-top: 206px; margin-left: 328px; gap: 30px; overflow-y: scroll;
+    margin-top: 206px; margin-left: 328px; gap: 30px; 
 }
 .title { 
     display: flex; justify-content: center; align-items: center; width: 625px; height: 73px;
