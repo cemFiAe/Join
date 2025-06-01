@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Task</title>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="logo_join">
+        <a href="./summary.html"><img src="./templates/Capa_2.png" alt="Join Logo"></a>
+      </div>
+      <nav class="nav">
+        <a href="./summary.html"><img src="./templates/summary.png" alt="Summary"></a>
+        <a href="#"><img src="./templates/Add_Task.png" alt="Add Task"></a>
+        <a href="#"><img src="./templates/Board.png" alt="Board"></a>
+        <a href="#"><img src="./templates/Contacts.png" alt="Contacts"></a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Legal notice</a>
+      </div>
+    </div>
+
+    <main class="main">
+      <header class="header">
+        <span><img src="./templates/mobil_join.png" alt=""></span>
+        <h1>Kanban Project Management Tool</h1>
+        <div class="header_right">
+          <img class="help" src="./templates/help.png" alt="Help">
+          <img class="avatar" src="./templates/User profile initials.png" alt="User">
+        </div>
+      </header>
+
+      <div class="main_content">
+        <div class="title">
+          <h2>Add Task</h2>
+        </div>
+
+        <div class="content">
+          <!-- linke Spalte -->
+          <form class="metrics-panel-left">
+            <div class="form-group title_input">
+              <label for="title">Title<span class="required">*</span></label>
+              <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
+            </div>
+
+            <div class="form-group description_input">
+              <label for="description">Description</label>
+              <textarea id="description" placeholder="Enter a Description"></textarea>
+            </div>
+
+            <div class="form-group date_input">
+              <label for="due">Due date<span class="required">*</span></label>
+              <div class="input-icon-date">
+                <input id="due" type="text" placeholder="dd/mm/yyyy" autocomplete="off">
+                <span class="icon"><img src="./templates/event.png" alt="Kalender Icon"></span>
+              </div>
+            </div>
+          </form>
+
+          <!-- Trennlinie -->
+          <div class="divider"></div>
+
+          <!-- rechte Spalte -->
+          <div class="metrics-panel-right">
+            <div class="form-group">
+              <label>Priority</label>
+              <div class="priority-buttons">
+                <button type="button" class="btn">Urgent <img src="./templates/urgent_small.png" alt="Urgent"></button>
+                <button type="button" class="btn btn_medium">
+                  Medium
+                  <img class="icon default" src="./templates/medium_orange.png" alt="Medium">
+                  <img class="icon hover"   src="./templates/medium.png"        alt="Medium">
+                </button>
+                <button type="button" class="btn">Low <img src="./templates/low.png" alt="Low"></button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="assigned">Assigned to</label>
+              <select id="assigned" class="option">
+                <option value="">Select contacts to assign</option>
+                <option value="">contact1</option>
+                <img class="icon" src="./templates/arrow_drop_down.png">
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="category">Category<span class="required">*</span></label>
+              <select id="category" class="option">
+                <option value="">Select task category</option>
+                <img class="icon" src="./templates/arrow_drop_down.png">
+              </select>
+            </div>
+            <div class="form-group subtask-group">
+              <label>Subtasks</label>
+              <div class="input-icon-subtask">
+                <input type="text" placeholder="Add new subtask" autocomplete="off">
+                <button type="button" class="add-subtask"><span class="icon"><img src="./templates/subtask_icon.png" alt="Add"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <nav class="nav-bottom">
+          <a href="./summary.html"><img src="./templates/mobil_summary.png" alt="Summary"></a>
+          <a href="#"><img src="./templates/mobil_board.png" alt="Board"></a>
+          <a href="#"><img src="./templates/mobil_addTasks.png" alt="Add Task"></a>
+          <a href="#"><img src="./templates/mobil_contact.png" alt="Contacts"></a>
+        </nav>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
