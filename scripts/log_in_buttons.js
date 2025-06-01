@@ -1,42 +1,47 @@
 
+let passwordInput = document.getElementById('log-in-password');
+let passwordAlert = document.getElementById('log-in-password-alert');
+
 let logInButton = document.getElementById('log-in-button');
 let guestLogInButton = document.getElementById('guest-log-in-button');
 
-// emailInput and emailAlert are already in email validation declared
-emailInput.addEventListener('input', function () {
-    // if input is true; enabled buttons
-    if (isEmailValid(emailInput.value)) {
-        logInButton.disabled = false
-        guestLogInButton.disabled = false
+// Validate fields
+function validateInputs() {
+    let emailEmpty = emailInput.value.trim() === "";
+    let passwordEmpty = passwordInput.value.trim() === "";
 
-        // if input is not true; disable the buttons
-    } else {
-        logInButton.disabled = true;
-        guestLogInButton.disabled = true
-    }
-
-    // when input field is clear, enable buttons
-    if (emailInput.value === "") {
-        logInButton.disabled = false;
-        guestLogInButton.disabled = false
-    }
-});
-
-// if the form is empty, disable buttons
-logInButton.addEventListener('click', function () {
-    if (emailInput.value === "") {
+    if (emailEmpty && passwordEmpty) {
         emailAlert.style.display = "block";
+        passwordAlert.innerHTML = "Please insert correct password";
         logInButton.disabled = true;
+        guestLogInButton.disabled = true;
+    } else if (emailEmpty) {
+        emailAlert.style.display = "block";
+        passwordAlert.innerHTML = "";
+        logInButton.disabled = true;
+        guestLogInButton.disabled = true;
+    } else if (passwordEmpty) {
+        emailAlert.style.display = "none";
+        passwordAlert.innerHTML = "Please insert correct password";
+        logInButton.disabled = true;
+        guestLogInButton.disabled = true;
     } else {
         emailAlert.style.display = "none";
+        passwordAlert.innerHTML = "";
+        logInButton.disabled = false;
+        guestLogInButton.disabled = false;
+    }
+}
 
-    }
+// Attach listeners to both buttons
+logInButton.addEventListener('click', function (e) {
+    e.preventDefault(); // Stop form submission
+    validateInputs();
 });
-guestLogInButton.addEventListener('click', function () {
-    if (emailInput.value === "") {
-        emailAlert.style.display = "block";
-        guestLogInButton.disabled = true;
-    }
+
+guestLogInButton.addEventListener('click', function (e) {
+    e.preventDefault(); // Stop form submission
+    validateInputs();
 });
 
 

@@ -20,21 +20,6 @@ section {
     background-color: rgb(41, 171, 226);
 }
 
-.password-alert {
-    height: 15px;
-    width: 100%;
-    max-width: 352px;
-    font-size: 12px;
-    text-align: start;
-    margin: 0px;
-    padding-left: 12px;
-    color: rgb(255,129,144);
-}
-
-.password-alert:empty {
-    display: none;
-}
-
 
 /* email input properties for both pages */
 
@@ -87,6 +72,20 @@ section {
     display: none;
 }
 
+.password-alert {
+    height: 15px;
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    margin: 0px;
+    padding-left: 12px;
+    color: rgb(255,129,144);
+}
+
+/* .password-alert:empty {
+    display: none;
+} */
 
 .privacy-policy-alert {
     width: 100%;
