@@ -37,10 +37,16 @@ document.addEventListener('click', function (e) {
     }
 
     // if outside password input is clicked, reset input
-    if (!passwordDiv.contains(e.target)) {
+    // but dont clear alert message if a button was clicked
+    if (
+        !passwordDiv.contains(e.target) &&
+        e.target.id !== 'log-in-button' &&
+        e.target.id !== 'guest-log-in-button'
+    ) {
         lockIcon.src = "../assets/icons/log_in/lock.svg";
         passwordAlert.innerHTML = "";
     }
+
 });
 
 // Check input, and perform accordingly:
