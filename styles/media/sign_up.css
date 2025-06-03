@@ -1,0 +1,38 @@
+@media (max-width: 650px) {
+
+    .sign-up-window {
+        height: 595px;
+        width: 396px;
+        justify-content: start;
+        margin-top: 300px;
+    }
+
+    .sign-up-window>h1 {
+        font-size: 48px;
+        margin-right: 60px;
+        margin-top: 32px;
+        max-width: 240px;
+    }
+
+    .sign-up-buttons {
+        margin-top: 32px;
+    }
+
+    .mobile-sign-up-button {
+        width: 180px;
+    }
+}
+
+
+@media (max-width: 428px) {
+
+    .sign-up-window {
+        width: 90%;
+        max-width: 396px;
+    }
+
+    .sign-up-window>h1 {
+        margin-right: 40px;
+        max-width: 212px;
+    }
+}
