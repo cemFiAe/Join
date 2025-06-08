@@ -40,26 +40,26 @@ function validateInputs() {
     }
 }
 
-// Email input event listener
+// Check Email input:
 emailInput.addEventListener('input', validateInputs);
 
-// Password input event listener
+// Check Password input:
 passwordInput.addEventListener('input', validateInputs);
 
-// Log In button click event listener
+// Log In button click:
 logInButton.addEventListener('click', function (e) {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
     if (validateInputs()) {
-        // If both email and password are valid, redirect
+        // If both email and password are valid;
         window.location.href = "../pages/summary.html";
     }
 });
 
-// Guest Log In button click event listener
+// Guest Log In button click:
 guestLogInButton.addEventListener('click', function (e) {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
     if (validateInputs()) {
-        // If both email and password are valid, redirect
+        // If both email and password are valid;
         window.location.href = "../pages/summary.html";
     }
 });
