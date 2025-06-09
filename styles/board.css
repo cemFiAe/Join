@@ -125,10 +125,9 @@
 .board-nav-bottom {
     height: calc(100vh - 304px);
     width: 1440px;
-    margin-left: 232px;
+    margin-left: 296px;
     margin-right: 64px;
     margin-bottom: 26px;
-    padding-left: 64px;
     overflow: auto;
     display: flex;
     flex-direction: row;
