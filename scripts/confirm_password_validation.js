@@ -12,21 +12,20 @@ function confirmVisibility(iconElement) {
     }
 }
 
-// Listen for clicks related to confirm password input
+// Listen for clicks at icon, which is in confirm password input
 document.addEventListener('click', function (e) {
     let confirmDiv = document.querySelector('.confirm-password');
     let lockIcon = document.getElementById('confirm-lock-icon');
-    let confirmAlert = document.getElementById('confirm-password-alert');
 
+    // if the icon is clicked, call confirmVisibility();
     if (e.target.id === 'confirm-lock-icon') {
         confirmVisibility(e.target);
         return;
     }
 
-    // Remove resetting the alert on outside click to keep validation messages visible
+    // if clicked outside of confirm input, reset icon
     if (!confirmDiv.contains(e.target)) {
         lockIcon.src = "../assets/icons/sign_up/confirm_lock.svg";
-        // confirmAlert.innerHTML = "";  <-- Removed this line intentionally
     }
 });
 
@@ -38,6 +37,7 @@ document.addEventListener('input', function (e) {
     let lockIcon = document.getElementById('confirm-lock-icon');
     let confirmAlert = document.getElementById('confirm-password-alert');
 
+    // If input is true, check the following and act accordingly
     if (confirmDiv.contains(e.target)) {
         let confirmValue = confirmInput.value;
         let passwordValue = passwordInput.value;

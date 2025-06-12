@@ -36,7 +36,7 @@ function isEmailValid(email) {
 let emailInput = document.getElementById('sign-up-email-input');
 let emailAlert = document.getElementById('sign-up-email-alert');
 
-// validating input value
+// Validate input value:
 emailInput.addEventListener('input', function () {
     // if input is true, make blue highlight and don't show alert message
     if (isEmailValid(emailInput.value)) {

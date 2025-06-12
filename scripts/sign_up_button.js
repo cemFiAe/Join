@@ -1,14 +1,18 @@
 
-// When name input is true, do the following 
+// When the user types in the name input, validate the input and update styles accordingly
 document.getElementById('name-input').addEventListener('input', function () {
     const name = this.value.trim();
     const nameDiv = this.closest('.name');
     const nameAlert = document.getElementById('name-alert');
 
-    if (name !== "") {
+    if (name == "") {
         this.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         nameDiv.style.padding = "0px 0px 24px";
         nameAlert.style.display = "none";
+    } else {
+        this.style.borderColor = 'rgb(255, 0, 31)';
+        nameDiv.style.padding = "0px 0px 10px";
+        nameAlert.style.display = "block";
     }
 });
 
@@ -94,7 +98,8 @@ function signedUp(event) {
         policyAlert.style.display = "none";
     }
 
-    //  If form validation is true, do thew following 
+    
+    //  If all validations in form are true, do thew following 
     if (isValid) {
         document.getElementById('signed-up-screen').style.display = "block";
 

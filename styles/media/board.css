@@ -32,14 +32,18 @@
         padding: 0;
     }
     .board-nav-bottom {
-        margin: 0;
-        padding-inline: 16px;
         margin-top: 26px;
-        margin-right: 16px;
+        margin-inline: 16px;
         margin-bottom: 16px;
     }
     .findtaskMobile {
         margin-inline: 0px;
         width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    html {
+        overflow: hidden;
     }
 }

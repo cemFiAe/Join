@@ -202,7 +202,6 @@ body {
 
 .main-content {
     height: calc(100vh - 96px);
-    overflow: auto;
     max-width: 1920px;
 }
 
@@ -329,6 +328,12 @@ body {
 
 /* responsive */
 
+@media (max-width: 1000px) {
+    .main-content {
+        overflow-y: auto;
+    }
+}
+
 @media (max-width: 800px) {
     .user-icon {
         height: 40px;
@@ -367,5 +372,11 @@ body {
 
     .main-content {
         height: calc(100vh - 160px);
+    }
+}
+
+@media (max-width: 340px) {
+    .footer-span {
+        font-size: 12px;
     }
 }

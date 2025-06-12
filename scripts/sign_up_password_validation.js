@@ -1,4 +1,6 @@
+
 // Password validation function
+
 function isPasswordValid(value) {
     let letters = (value.match(/[A-Za-z]/g) || []).length;
     let numbers = (value.match(/[0-9]/g) || []).length;
@@ -19,21 +21,20 @@ function signUpVisibility(iconElement) {
     }
 }
 
-// Listen for clicks related to password input
+// Listen for clicks at icon, which is in password input:
 document.addEventListener('click', function (e) {
     let passwordDiv = document.querySelector('.sign-up-password');
     let lockIcon = document.getElementById('sign-up-lock-icon');
-    let passwordAlert = document.getElementById('sign-up-password-alert');
 
+    // if the icon is clicked, call signUpVisibility();
     if (e.target.id === 'sign-up-lock-icon') {
         signUpVisibility(e.target);
         return;
     }
 
-    // Remove resetting the alert on outside click to keep validation messages visible
+    // if outside password input is clicked, reset input
     if (!passwordDiv.contains(e.target)) {
         lockIcon.src = "../assets/icons/sign_up/lock.svg";
-        // passwordAlert.innerHTML = "";  <-- Removed this line intentionally
     }
 });
 
@@ -44,16 +45,19 @@ document.addEventListener('input', function (e) {
     let iconElement = document.getElementById('sign-up-lock-icon');
     let passwordAlert = document.getElementById('sign-up-password-alert');
 
-    if (passwordDiv && passwordDiv.contains(e.target)) {
-        if (passwordInput.value === "") {
+    // Validate input 
+    if (passwordDiv.contains(e.target)) {
+        if (passwordInput.value === "") { // if no input
             passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
             passwordAlert.innerHTML = "";
             iconElement.src = "../assets/icons/sign_up/lock.svg";
-        } else if (isPasswordValid(passwordInput.value)) {
+
+        } else if (isPasswordValid(passwordInput.value)) { // if input is valid
             passwordDiv.style.borderColor = 'rgb(41, 171, 226)';
             passwordAlert.innerHTML = "";
             iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
-        } else {
+
+        } else { // if input is not valid
             passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
             passwordAlert.innerHTML = "Please insert correct password";
             iconElement.src = "../assets/icons/sign_up/visibility_off.svg";

@@ -5,6 +5,7 @@ function showLoadingScreen() {
     }, 500);
 }
 
+// Check if we came from sign up page, and based on it show the loading screen
 function checkLoadingScreen() {
     if (!sessionStorage.getItem('cameFromSignUp')) {
         showLoadingScreen();

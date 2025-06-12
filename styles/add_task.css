@@ -1,0 +1,139 @@
+
+a { 
+    text-decoration: none; color: inherit; 
+}
+.container{
+  display: flex;
+  height: calc(100vh - 96px);
+  width: 100%;
+}
+
+.main_content{
+    padding-top: 110px; padding-left: 328px; width: 100%;
+}
+.title { 
+    display: flex; align-items: center;  height: 73px;
+    gap: 30px;
+}
+.title h2 { 
+    color: rgb(0, 0, 0, 1); font-size: 61px; font-weight: bold; display: inline-block; 
+}
+.content { 
+    display: flex; gap: 60px; 
+}
+.metrics-panel-left {
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    gap: 30px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .form-group label {
+    font-size: 20px;
+    height: 24px;
+    color: #1f2937;
+  }
+  .required {
+    color: rgb(255, 129, 144, 1);
+    margin-left: 2px;
+    font-size: 24px;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111827;
+    background: #fff;
+    line-height: normal;    /* wichtig für vertikale Placeholder-Ausrichtung */
+    text-align: start;      /* linksbündiger Placeholder */
+    outline: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #9ca3af;
+    text-align: start;
+  }
+  .title_input input,
+  .date_input input {
+    height: 48px;
+  }
+  .description_input textarea {
+    height: 136px;
+    resize: none;       /* verhindert Größenänderung per Drag */
+  }
+  .date_input .input-icon-date {
+    position: relative;
+  }
+  .date_input .input-icon-date input {
+    padding-right: 40px;  /* Platz für Icon */
+  }
+  .date_input .input-icon-date .icon {
+    position: absolute;
+    top: 50%;
+    right: 38px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .date_input .input-icon img {
+    width: 20px;
+    height: 20px;
+  }
+  .input-icon-date input:hover {cursor: pointer;}
+  .divider { width: 1px; background: #d2d4d8; }
+
+  .metrics-panel-right { display: flex; flex-direction: column; gap: 24px; width: 440px;}
+
+  .priority-buttons {display: flex; justify-content: space-between;}
+
+  .btn { 
+    width: 136px; height: 56px; 
+    border: 1px solid #d1d5db; border-radius: 8px; 
+    padding: 10px; 
+    font-family: inherit; font-size: 20px; 
+    gap: 8px; color: #111827; background: #fff; 
+    line-height: normal; text-align: center; outline: none;
+  }
+
+  .btn:hover {filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); cursor: pointer;}
+
+  .btn_medium .icon.hover {
+    display: none;
+  }
+  
+  .form-group select {
+    border: 1px solid #d1d5db; 
+    border-radius: 8px; 
+    background: #fff;  
+    height: 48px; 
+    padding-top: 12px; 
+    padding-right: 16px; 
+    padding-left: 16px; 
+    padding-bottom: 12px; 
+    cursor: pointer;
+  }
+
+  .form-group select {
+    appearance: none;
+  }
+
+  .form-group select option {
+    width: 20px;
+    height: 20px;
+  }
+
+  .input-icon-subtask { position: relative; }
+  .input-icon-subtask input { padding-right: 40px; height: 48px;}
+  .input-icon-subtask .add-subtask { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
+  .input-icon-subtask .add-subtask img { width: 20px; height: 20px; }
+
+  .bottom-nav {
+    display: none;
+  }
