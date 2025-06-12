@@ -23,24 +23,25 @@ function signedUp(event) {
     // Form validation in steps
     let isValid = true;
 
-    //  Name validation 
+
+    //  1. Name validation 
     const nameInput = document.getElementById('name-input');
     const nameAlert = document.getElementById('name-alert');
     const nameDiv = nameInput.closest('.name');
-    const name = nameInput.value.trim();
+    const name = nameInput.value.trim()
 
     if (name === "") {
         nameInput.style.borderColor = 'rgb(255, 0, 31)';
         nameDiv.style.padding = "0px 0px 10px";
         nameAlert.style.display = "block";
-        isValid = false;
     } else {
         nameInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         nameDiv.style.padding = "0px 0px 24px";
         nameAlert.style.display = "none";
     }
 
-    //  Email validation 
+
+    //  2. Email validation 
     const emailInput = document.getElementById('sign-up-email-input');
     const emailAlert = document.getElementById('sign-up-email-alert');
     const email = emailInput.value.trim();
@@ -55,7 +56,7 @@ function signedUp(event) {
     }
 
 
-    //  Password validation 
+    //  3. Password validation 
     const passwordDiv = document.querySelector('.sign-up-password');
     const passwordInput = document.getElementById('sign-up-password');
     const passwordAlert = document.getElementById('sign-up-password-alert');
@@ -70,7 +71,8 @@ function signedUp(event) {
         passwordAlert.innerHTML = "";
     }
 
-    //  Confirm-password validation 
+
+    //  4. Confirm-password validation 
     const confirmDiv = document.querySelector('.confirm-password');
     const confirmInput = document.getElementById('confirm-password');
     const confirmAlert = document.getElementById('confirm-password-alert');
@@ -86,7 +88,7 @@ function signedUp(event) {
     }
 
 
-    //  Privacy Policy validation
+    //  5. Privacy Policy validation
     const checkbox = document.getElementById('accept-privacy-policy');
     const policyAlert = document.getElementById('privacy-policy-alert');
 
@@ -98,9 +100,10 @@ function signedUp(event) {
     }
 
 
-    //  If all validations in form are true, do thew following 
-
+    //  If all validations in form are true, do the following:
     if (isValid) {
+
+        // let the new useres sing up;
         const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
 
         const userData = {
@@ -116,6 +119,8 @@ function signedUp(event) {
             },
             body: JSON.stringify(userData)
         })
+
+            // then show signed up overlay, and then after 1s do the rest;
             .then(() => {
                 document.getElementById('signed-up-screen').style.display = "block";
                 setTimeout(() => {
