@@ -64,7 +64,7 @@ logInButton.addEventListener('click', (e) => {
             return response.json(); // Convert response to JSON
         })
         .then(function (data) {
-            // `data` contains all users from the database
+            // "data" contains all users from the database
             let user = null;
 
             // Loop through each user to find matching email
@@ -77,18 +77,17 @@ logInButton.addEventListener('click', (e) => {
 
             // Check if user exists and password matches
             if (user && user.password === password) {
-                // Success: redirect to summary page
+                // if true: redirect to summary page
                 window.location.href = "../pages/summary.html";
             } else {
-                // Failure: show error message
-                passwordAlert.textContent = "Invalid email or password";
+                // if not true: show error message
+                passwordAlert.innerHTML = "Invalid email or password";
                 passwordInput.style.borderColor = 'rgb(255, 0, 31)';
             }
         })
         .catch(function (error) {
-            // Handle fetch errors (like no internet or server issue)
             console.error("Login failed", error);
-            passwordAlert.textContent = "Login failed. Try again.";
+            passwordAlert.innerHTML = "Login failed. Try again.";
         });
 });
 
