@@ -5,7 +5,7 @@ document.getElementById('name-input').addEventListener('input', function () {
     const nameDiv = this.closest('.name');
     const nameAlert = document.getElementById('name-alert');
 
-    if (name == "") {
+    if (name === "") {
         this.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         nameDiv.style.padding = "0px 0px 24px";
         nameAlert.style.display = "none";
@@ -44,9 +44,8 @@ function signedUp(event) {
     const emailInput = document.getElementById('sign-up-email-input');
     const emailAlert = document.getElementById('sign-up-email-alert');
     const email = emailInput.value.trim();
-    const validEmail = isEmailValid(email);
 
-    if (!validEmail) {
+    if (!isEmailValid(email)) {
         emailInput.style.borderColor = 'rgb(255, 0, 31)';
         emailAlert.style.display = "block";
         isValid = false;
@@ -55,14 +54,14 @@ function signedUp(event) {
         emailAlert.style.display = "none";
     }
 
+
     //  Password validation 
     const passwordDiv = document.querySelector('.sign-up-password');
     const passwordInput = document.getElementById('sign-up-password');
     const passwordAlert = document.getElementById('sign-up-password-alert');
     const password = passwordInput.value;
-    const validPassword = isPasswordValid(password);
 
-    if (!validPassword) {
+    if (!isPasswordValid(password)) {
         passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
         passwordAlert.innerHTML = "Please insert correct password";
         isValid = false;
@@ -76,9 +75,8 @@ function signedUp(event) {
     const confirmInput = document.getElementById('confirm-password');
     const confirmAlert = document.getElementById('confirm-password-alert');
     const confirmPassword = confirmInput.value;
-    const passwordsMatch = password === confirmPassword;
 
-    if (!confirmPassword || !passwordsMatch) {
+    if (!confirmPassword || confirmPassword !== password) {
         confirmDiv.style.borderColor = 'rgb(255, 0, 31)';
         confirmAlert.innerHTML = "Passwords do not match";
         isValid = false;
@@ -86,6 +84,7 @@ function signedUp(event) {
         confirmDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         confirmAlert.innerHTML = "";
     }
+
 
     //  Privacy Policy validation
     const checkbox = document.getElementById('accept-privacy-policy');
@@ -98,17 +97,38 @@ function signedUp(event) {
         policyAlert.style.display = "none";
     }
 
-    
-    //  If all validations in form are true, do thew following 
-    if (isValid) {
-        document.getElementById('signed-up-screen').style.display = "block";
 
-        setTimeout(() => {
-            document.getElementById('signed-up-screen').style.display = "none";
-            window.location.href = "../pages/log_in.html";
-            sessionStorage.setItem('cameFromSignUp', 'true');
-        }, 1000);
+    //  If all validations in form are true, do thew following 
+
+    if (isValid) {
+        const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+
+        const userData = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        fetch(`${BASE_URL}users.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+            .then(() => {
+                document.getElementById('signed-up-screen').style.display = "block";
+                setTimeout(() => {
+                    document.getElementById('signed-up-screen').style.display = "none";
+                    window.location.href = "../pages/log_in.html";
+                    sessionStorage.setItem('cameFromSignUp', 'true');
+                }, 1000);
+            })
+            .catch(error => {
+                console.error("Failed to save user:", error);
+            });
     }
+
     return isValid;
 }
 
