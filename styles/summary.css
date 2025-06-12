@@ -6,9 +6,7 @@
 body { 
     font-family: Arial, sans-serif; color: #374151; background: #f9fafb; 
 }
-a { 
-    text-decoration: none; color: inherit; 
-}
+
 .container { 
     display: flex; height: 100vh; 
 }
@@ -58,9 +56,15 @@ a {
 .avatar { 
     width: 56px; height: 56px; background: #e5e7eb; border-radius: 559px; display: flex; align-items: center; justify-content: center; color: #4b5563; font-size: 0.875rem; 
 }
+.main-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 200px;
+}
 .main_content{
-    display: flex; flex-direction: column;
-    margin-top: 206px; margin-left: 328px; gap: 30px; 
+    display: flex;
+    flex-direction: column; gap: 30px;
 }
 .title { 
     display: flex; justify-content: center; align-items: center; width: 625px; height: 73px;
@@ -73,6 +77,7 @@ a {
     height: 59px; width: 3px; background-color: rgba(41, 171, 226, 1);
 }
 .title span { 
+    display: flex; align-items: center;
     color: rgba(42, 54, 71, 1); font-size: 27px; font-weight: 400; height: 32px; width: 301px;
 }
 .divider{
