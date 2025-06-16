@@ -94,3 +94,75 @@ function goBack() {
     document.getElementById('burger_contact_btn').style.display = "none";
     document.getElementById('back_contact_btn').style.display = "none";
 }
+
+// BACK END
+
+const BASE_URL = "https://join-18def-default-rtdb.europe-west1.firebasedatabase.app/"
+
+let contacts = [];
+
+
+// onload Funktion 
+
+/*
+// post/put
+async function onloadFunction() {
+    test = await putData("/contacts/-OSsdmm1y4jXi-2dTIUG", {"name": "Alex Klar", "mail": "alex.klar@mail.de", "phone": "+49 7894 567 89 0"});
+    console.log(test);
+} 
+*/
+
+// contacts Array füllen und auslesen
+async function onloadFunction() {
+    let contactResponse = await loadData("/contacts");
+    let contactsArray = Object.keys(contactResponse);
+    
+    for (let index = 0; index < contactsArray.length; index++) {
+        contacts.push(
+            {
+                id: contactsArray[index],
+                data: contactResponse[contactsArray[index]],
+            }
+        )
+    }
+    
+    console.log(contacts);
+}
+
+// Daten anzeigen
+async function loadData(path="") {
+    let response = await fetch(BASE_URL + path + ".json");
+    return responseToJson = await response.json();
+}
+
+// Daten erzeugen
+async function postData(path="", data={}) {
+    let response = await fetch(BASE_URL + path + ".json", {
+       method: "POST",
+       header: {
+        "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data) 
+    });
+    return responseToJson = await response.json();
+}
+
+// Daten ersetzen
+async function putData(path="", data={}) {
+    let response = await fetch(BASE_URL + path + ".json", {
+       method: "PUT",
+       header: {
+        "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data) 
+    });
+    return responseToJson = await response.json();
+}
+
+// Daten löschen
+async function deleteData(path="") {
+    let response = await fetch(BASE_URL + path + ".json",{
+        method: "DELETE",
+    });
+    return responseToJson = await response.json();
+}
