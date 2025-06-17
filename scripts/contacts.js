@@ -127,7 +127,10 @@ async function onloadFunction() {
     }
     
     console.log(contacts);
+    renderAllContacts();
 }
+
+// HILFSFUNKTIONEN werden später angewendet und hier entfernt
 
 // Daten anzeigen
 async function loadData(path="") {
@@ -165,4 +168,84 @@ async function deleteData(path="") {
         method: "DELETE",
     });
     return responseToJson = await response.json();
+}
+
+
+// Template for a contact
+function getContactTemplateByData(data) {
+    const initials = getInitials(data.name);
+    const bgColor = getColorFromName(data.name);
+    const icon = createInitialIcon(initials, bgColor);
+
+    return `<div onclick="openContactOverview()" class="contact_entry">
+              ${icon}
+              <div>
+                <h4 class="contact_name">${data.name}</h4>
+                <span class="contact_mail">${data.mail}</span>
+              </div>
+            </div>`;
+}
+
+// get Initials from contact in firebaseDB
+function getInitials(name) {
+    const parts = name.trim().split(' ');
+    return (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+}
+
+// Gibt eine HSL-Farbe für denselben Namen zurück
+function getColorFromName(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `hsl(${hash % 360}, 70%, 60%)`;
+}
+
+// Erstellt das HTML für den farbigen Initialen-Kreis
+function createInitialIcon(initials, color) {
+    return `<div class="contact_icon_placeholder" style="background-color: ${color};">
+              ${initials.toUpperCase()}
+            </div>`;
+}
+
+// Gruppiert Kontakte nach erstem Buchstaben des Namens
+function groupContactsByInitial(contactList) {
+    const grouped = {};
+    contactList.sort((a, b) => a.data.name.localeCompare(b.data.name));
+    for (let contact of contactList) {
+        const letter = contact.data.name.charAt(0).toUpperCase();
+        if (!grouped[letter]) grouped[letter] = [];
+        grouped[letter].push(contact);
+    }
+    return grouped;
+}
+
+// Erzeugt ein HTML-Element mit Überschrift (z. B. "A") und allen Kontakten dieser Gruppe
+function createContactGroup(letter, contacts) {
+    const group = document.createElement('div');
+    group.classList.add('contact-group');
+    group.innerHTML = `<h3 class="contact_letter">${letter}</h3>` +
+                      contacts.map(c => getContactTemplateByData(c.data)).join('');
+    return group;
+}
+
+// Erzeugt einen Devider nach den Gruppierungen
+function createDivider() {
+    const divider = document.createElement('div');
+    divider.classList.add('contact_devider');
+    return divider;
+}
+
+// rendert alle Kontakte, alphabetisch geordnet
+function renderAllContacts() {
+    const container = document.getElementById('contacts');
+    const groups = groupContactsByInitial(contacts);
+    const letters = Object.keys(groups).sort();
+
+    for (let i = 0; i < letters.length; i++) {
+        const letter = letters[i];
+        const group = createContactGroup(letter, groups[letter]);
+        container.appendChild(group);
+        if (i < letters.length - 1) container.appendChild(createDivider());
+    }
 }

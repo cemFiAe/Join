@@ -81,6 +81,20 @@ body {
     border-radius: 12px;
 }
 
+.contact_icon_placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 200;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
 .contact_icon {
     object-fit: cover;
     height: 42px;
