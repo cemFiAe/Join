@@ -1,11 +1,12 @@
 
 // When the user types in the name input, validate the input and update styles accordingly
 document.getElementById('name-input').addEventListener('input', function () {
-    const name = this.value.trim();
-    const nameDiv = this.closest('.name');
+    const nameInput = document.getElementById('name-input');
     const nameAlert = document.getElementById('name-alert');
+    const nameDiv = nameInput.closest('.name');
+    const name = nameInput.value.trim()
 
-    if (name === "") {
+    if (name !== "") {
         this.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         nameDiv.style.padding = "0px 0px 24px";
         nameAlert.style.display = "none";
@@ -23,14 +24,14 @@ function signedUp(event) {
     // Form validation in steps
     let isValid = true;
 
-
     //  1. Name validation 
+
     const nameInput = document.getElementById('name-input');
     const nameAlert = document.getElementById('name-alert');
     const nameDiv = nameInput.closest('.name');
     const name = nameInput.value.trim()
 
-    if (name === "") {
+    if (name == "") {
         nameInput.style.borderColor = 'rgb(255, 0, 31)';
         nameDiv.style.padding = "0px 0px 10px";
         nameAlert.style.display = "block";
@@ -129,11 +130,10 @@ function signedUp(event) {
                     sessionStorage.setItem('cameFromSignUp', 'true');
                 }, 1000);
             })
-            .catch(error => {
-                console.error("Failed to save user:", error);
-            });
+            // .catch(error => {
+            //     console.error("Failed to save user:", error);
+            // });
     }
-
     return isValid;
 }
 

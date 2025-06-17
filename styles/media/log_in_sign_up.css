@@ -1,5 +1,12 @@
 @media (max-width: 650px) {
 
+    .header-logo {
+        position: absolute;
+        left: 20px;
+        top: 15px;
+        scale: 0.64;
+    }
+
     .mobile-header {
         display: flex;
     }

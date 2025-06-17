@@ -25,7 +25,7 @@ function isEmailValid(email) {
     let domain = domainParts[1];
 
     // Valid providers list
-    let validProviders = ['gmail', 'yahoo', 'outlook', 'hotmail', 'icloud', 'edu'];
+    let validProviders = ['gmail', 'yahoo', 'outlook', 'hotmail', 'icloud', 'gmx', 'edu'];
     if (!validProviders.includes(provider)) return false;
 
     // Domain must be letters only and at least 2 characters
