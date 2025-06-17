@@ -107,32 +107,43 @@ function signedUp(event) {
         // let the new useres sing up;
         const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
 
-        const userData = {
+        let userData = {
             name: name,
             email: email,
             password: password
         };
 
-        fetch(`${BASE_URL}users.json`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
+        async function signUpUser(userData) {
+            try {
+                let response = await fetch(`${BASE_URL}users.json`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // we are sending .json content, and database must know that
+                    },
+                    body: JSON.stringify(userData) // important, to send our datas as text!
+                });
 
-            // then show signed up overlay, and then after 1s do the rest;
-            .then(() => {
+                if (!response.ok) { // check if there any errors
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Show the signed-up screen
                 document.getElementById('signed-up-screen').style.display = "block";
+
+                // Wait for 1 second, then redirect
                 setTimeout(() => {
                     document.getElementById('signed-up-screen').style.display = "none";
-                    window.location.href = "../pages/log_in.html";
                     sessionStorage.setItem('cameFromSignUp', 'true');
+                    window.location.href = "../pages/log_in.html";
                 }, 1000);
-            })
-            // .catch(error => {
-            //     console.error("Failed to save user:", error);
-            // });
+
+            } catch (error) {
+                console.error("Failed to save user:", error.message);
+            }
+        }
+        signUpUser(userData);
+
     }
     return isValid;
 }

@@ -51,44 +51,44 @@ const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebase
 
 // Log In button click:
 logInButton.addEventListener('click', (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent from default submitting
 
     if (!validateInputs()) return;
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    let email = emailInput.value.trim();
+    let password = passwordInput.value;
 
-    // Send request to Firebase to get all users
-    fetch(BASE_URL + "users.json")
-        .then(function (response) {
-            return response.json(); // Convert response to JSON
-        })
-        .then(function (data) {
-            // "data" contains all users from the database
+    async function logInUser() {
+        try {
+            let response = await fetch(BASE_URL + "users.json"); // get all users 
+            let database = await response.json(); // and recieve it as .json
+
             let user = null;
 
-            // Loop through each user to find matching email
-            for (let key in data) {
-                if (data[key].email === email) {
-                    user = data[key]; // Save matched user
-                    break; // Stop loop once found
+            // Check each user in database to find matching email
+            for (let key in database) {
+                if (database[key].email === email) {
+                    // if some users email from database matches the email in input:
+                    user = database[key]; // we save that in user variable
+                    break; // and stop with checking
                 }
             }
 
             // Check if user exists and password matches
             if (user && user.password === password) {
-                // if true: redirect to summary page
                 window.location.href = "../pages/summary.html";
             } else {
-                // if not true: show error message
                 passwordAlert.innerHTML = "Invalid email or password";
                 passwordInput.style.borderColor = 'rgb(255, 0, 31)';
             }
-        })
-        .catch(function (error) {
+
+        } catch (error) {
             console.error("Login failed", error);
             passwordAlert.innerHTML = "Login failed. Try again.";
-        });
+        }
+    }
+    logInUser();
+    
 });
 
 // Guest Log In button click:
