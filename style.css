@@ -24,7 +24,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: absolute;
     padding-top: 20px;
     padding-right: 40px;
     padding-bottom: 20px;

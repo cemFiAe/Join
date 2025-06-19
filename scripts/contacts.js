@@ -170,20 +170,29 @@ async function deleteData(path="") {
     return responseToJson = await response.json();
 }
 
+// HILFSFUNKTIONEN
 
 // Template for a contact
-function getContactTemplateByData(data) {
+function getContactTemplateByData(data, id) {
     const initials = getInitials(data.name);
     const bgColor = getColorFromName(data.name);
     const icon = createInitialIcon(initials, bgColor);
 
-    return `<div onclick="openContactOverview()" class="contact_entry">
-              ${icon}
-              <div>
-                <h4 class="contact_name">${data.name}</h4>
-                <span class="contact_mail">${data.mail}</span>
-              </div>
-            </div>`;
+    return `<div onclick="handleContactClick('${id}')" class="contact_entry">
+          ${icon}
+          <div>
+            <h4 class="contact_name">${data.name}</h4>
+            <span class="contact_mail">${data.mail}</span>
+          </div>
+        </div>`;
+}
+
+// führt entsprechend entwerder openContactOverview oder showDetails aus
+function handleContactClick(id) {
+    if (window.innerWidth <= 650) {
+        openContactOverview();
+    }
+    showDetails(id);
 }
 
 // get Initials from contact in firebaseDB
@@ -225,7 +234,7 @@ function createContactGroup(letter, contacts) {
     const group = document.createElement('div');
     group.classList.add('contact-group');
     group.innerHTML = `<h3 class="contact_letter">${letter}</h3>` +
-                      contacts.map(c => getContactTemplateByData(c.data)).join('');
+                      contacts.map(c => getContactTemplateByData(c.data, c.id)).join('');
     return group;
 }
 
@@ -239,6 +248,7 @@ function createDivider() {
 // rendert alle Kontakte, alphabetisch geordnet
 function renderAllContacts() {
     const container = document.getElementById('contacts');
+    container.innerHTML = '<button onclick="openAddContact()" class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>';
     const groups = groupContactsByInitial(contacts);
     const letters = Object.keys(groups).sort();
 
@@ -248,4 +258,144 @@ function renderAllContacts() {
         container.appendChild(group);
         if (i < letters.length - 1) container.appendChild(createDivider());
     }
+}
+
+// fügt einen Kontakt der firebaseDB hinzu und rerendert die Liste
+async function addNewContact(event) {
+    event.preventDefault();
+    const newContactData = getFormData();
+    if (!validateContactData(newContactData)) return;
+
+    const newId = await saveContactToFirebase(newContactData);
+    addContactLocally(newId, newContactData);
+    closeAddContactMobile();
+    rerenderContactList();
+    showSuccessOverlay();
+    focusOnNewContact(newContactData);
+}
+
+// returnt die form Daten
+function getFormData() {
+    return {
+        name: document.getElementById('add-name-input').value.trim(),
+        mail: document.getElementById('add-mail-input').value.trim(),
+        phone: document.getElementById('add-phone-input').value.trim()
+    };
+}
+
+// Form validation
+function validateContactData({ name, mail, phone }) {
+    if (!name || !mail || !phone) {
+        alert("Bitte alle Felder ausfüllen.");
+        return false;
+    }
+    return true;
+}
+
+// in firebaseDB posten
+async function saveContactToFirebase(data) {
+    const response = await postData("/contacts", data);
+    return response.name;
+}
+
+// lokal in contacts array speichern
+function addContactLocally(id, data) {
+    contacts.push({ id, data });
+}
+
+// Liste neu rendern mit neuem Kontakt
+function rerenderContactList() {
+    const container = document.getElementById('contacts');
+    container.innerHTML = '';
+    renderAllContacts();
+}
+
+// successful overlay
+function showSuccessOverlay() {
+    const overlay = document.createElement('div');
+    overlay.textContent = "Kontakt hinzugefügt";
+    overlay.classList.add('added-contact-overlay');
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 2000);
+}
+
+// neuen Kontakt focusen
+function focusOnNewContact(data) {
+    setTimeout(() => {
+        const target = findContactElement(data);
+        if (target) highlightAndScrollTo(target);
+    }, 100);
+}
+
+// neuen Kontakt finden
+function findContactElement(data) {
+    const initials = getInitials(data.name).toUpperCase();
+    const bgColor = getColorFromName(data.name);
+    return [...document.querySelectorAll('.contact_entry')].find(entry => {
+        const icon = entry.querySelector('.contact_icon_placeholder');
+        return icon && icon.textContent.trim() === initials && icon.style.backgroundColor === bgColor;
+    });
+}
+
+// zum neuen Kontakt scrollen
+function highlightAndScrollTo(element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    element.classList.add('highlight-contact');
+    setTimeout(() => element.classList.remove('highlight-contact'), 2000);
+}
+
+// Kontakt löschen
+
+async function deleteContact(id) {
+    await deleteContactFromFirebase(id);
+    removeContactFromLocalArray(id);
+    document.getElementById('contact_information').innerHTML = '';
+    rerenderContactList();
+}
+
+// aus fbDB entfernen  
+async function deleteContactFromFirebase(id) {
+    await deleteData(`/contacts/${id}`);
+}
+
+// aus array entfernen
+function removeContactFromLocalArray(id) {
+    contacts = contacts.filter(contact => contact.id !== id);
+}
+
+
+// zeigt Kontaktinformationen an
+function showDetails(id) {
+    const contact = contacts.find(c => c.id === id);
+    if (!contact) return;
+
+    const data = contact.data;
+    const initials = getInitials(data.name);
+    const bgColor = getColorFromName(data.name);
+    const container = document.getElementById('contact_information');
+    
+    container.innerHTML = getContactDetailsTemplate(id, data, initials, bgColor);
+
+    container.style.left = "100%";
+    void container.offsetWidth;
+    container.style.left = "750px";
+}
+
+function getContactDetailsTemplate(id, data, initials, bgColor) {
+    return `
+    <div class="ci-wrapper">
+      <div class="ci-icon" style="background-color: ${bgColor};">${initials}</div>
+      <div class="ci-menu">
+        <span class="ci-name">${data.name}</span>
+        <div class="ci-edit">
+          <a onclick="openEditContact('${id}')" href="#"><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
+          <a onclick="event.stopPropagation(); deleteContact('${id}')" href="#"><img src="../assets/icons/contacts/delete.svg" alt="">Delete</a>
+        </div>
+      </div>
+    </div>
+    <span class="ci-head">Contact Information</span>
+    <h3 class="ci-text">Email</h3>
+    <span class="ci-mail ci-text">${data.mail}</span>
+    <h3 class="ci-text">Phone</h3>
+    <span class="ci-text">${data.phone}</span>`;
 }

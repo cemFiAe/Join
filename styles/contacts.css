@@ -164,7 +164,8 @@ body {
 .contact_information {
     position: absolute;
     top: 311px;
-    left: 750px;
+    left: 100%;
+    transition: left ease-in 0.3s;
     display: flex;
     flex-direction: column;
     gap: 22px;
@@ -188,9 +189,15 @@ body {
 }
 
 .ci-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     object-fit: cover;
     height: 120px;
     width: 120px;
+    font-size: 47px;
+    font-weight: 500;
+    color: white;
     border-radius: 70px;
     border-width: 2px;
     border-color: white;

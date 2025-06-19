@@ -151,6 +151,12 @@
     gap: 24px;
 }
 
+.right form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .add_contact_overlay input, .edit_contact_overlay input {
     border-radius: 10px;
     border-color: #EEEEEE;
@@ -272,6 +278,35 @@
     object-fit: cover;
     height: 32px;
     width: 32px;
+}
+
+/* add new contact*/
+
+.added-contact-overlay {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-weight: bold;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.highlight-contact {
+    outline: 2px solid #4CAF50;
+    border-radius: 8px;
+    transition: outline 0.3s ease;
 }
 
 /* media */

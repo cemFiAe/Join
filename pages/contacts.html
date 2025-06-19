@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../styles/media/contacts.css"/>
     <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/overlays/contacts.css"/>
+    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_contact.css"/>
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
@@ -34,13 +34,15 @@
         </div>
       </div>
       <div class="right">
-        <input id="add-name-input" class="name-input" type="text" placeholder="Name">
-        <input id="add-mail-input" class="mail-input" type="text" placeholder="Email">
-        <input id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
-        <div>
-          <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
-        </div>
+        <form onsubmit="addNewContact(event)">
+          <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
+          <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
+          <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
+          <div>
+           <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+           <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+          </div>
+        </form>
         <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
       </div>
     </dialog>
@@ -58,12 +60,17 @@
         </div>
       </div>
       <div class="right">
-        <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
-        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
-        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
+        <form onsubmit="editContact(event)">
+          <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
+          <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
+          <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
+          <div>
+            <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+            <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+          </div>
+        </form>
+        
         <div>
-          <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
         </div>
         <img onclick="closeEditContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
       </div>
@@ -128,50 +135,6 @@
     <section class="main-content">
       <section class="contact_wrapper">
         <section id="contacts" class="contacts">
-          <button onclick="openAddContact()" class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>
-    
-          <div class="contact_letter">A</div>
-          <div class="contact_devider"></div>
-          <div id="A">
-            <div onclick="openContactOverview()" class="contact_entry">
-              <img class="contact_icon" src="../assets/img/profile/am.png" alt="">
-              <div>
-                <h4 class="contact_name">Anton Mayer</h4>
-                <span class="contact_mail">anton@gmail.com</span>
-              </div>
-            </div>
-            <div class="contact_entry">
-              <img class="contact_icon" src="../assets/img/profile/as.png" alt="">
-              <div>
-                <h4 class="contact_name">Anja Schulz</h4>
-                <span class="contact_mail">anja@gmail.com</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="contact_letter">B</div>
-          <div class="contact_devider"></div>
-          <div id="B">
-            <div class="contact_entry">
-              <img class="contact_icon" src="../assets/img/profile/bz.png" alt="">
-              <div>
-                <h4 class="contact_name">Benedikt Ziegler</h4>
-                <span class="contact_mail">benedikt@gmail.com</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="contact_letter">D</div>
-          <div class="contact_devider"></div>
-          <div id="D">
-            <div class="contact_entry">
-              <img class="contact_icon" src="../assets/img/profile/de.png" alt="">
-              <div>
-                <h4 class="contact_name">David Eisenberg</h4>
-                <span class="contact_mail">david@gmail.com</span>
-              </div>
-            </div>
-          </div>
         </section>
   
         <section id="contact-overview" class="contact_overview">
@@ -182,21 +145,6 @@
         </section>
 
         <div id="contact_information" class="contact_information">
-        <div class="ci-wrapper">
-          <img class="ci-icon" src="../assets/img/profile/am.png" alt="">
-          <div class="ci-menu">
-            <span class="ci-name">Anton Mayer</span>
-            <div class="ci-edit">
-              <a onclick="openEditContact()" href=""><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
-              <a href=""><img src="../assets/icons/contacts/delete.svg" alt="">Delete</a>
-            </div>
-          </div>
-        </div>
-        <span class="ci-head">Contact Information</span>
-        <h3 class="ci-text">Email</h3>
-        <span class="ci-mail ci-text">anton@gmail.com</span>
-        <h3 class="ci-text">Phone</h3>
-        <span class="ci-text">+49 1111 111 11 1</span>
         </div>
       </section>
   
