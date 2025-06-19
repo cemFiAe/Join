@@ -88,14 +88,13 @@ logInButton.addEventListener('click', (e) => {
         }
     }
     logInUser();
-    
 });
 
 // Guest Log In button click:
 guestLogInButton.addEventListener('click', function (e) {
     e.preventDefault();
-    if (validateInputs()) {
-        // If both email and password are valid;
+    // if (validateInputs()) {
+    //     // If both email and password are valid;
         window.location.href = "../pages/summary.html";
-    }
+    // }
 })
