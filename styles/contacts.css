@@ -171,6 +171,36 @@ body {
     gap: 22px;
 }
 
+.slide-in {
+  animation: slideInFromRight 0.3s forwards;
+}
+
+.slide-out {
+  animation: slideOutToRight 0.3s forwards;
+}
+
+@keyframes slideInFromRight {
+  from {
+    left: 100%;
+    opacity: 0;
+  }
+  to {
+    left: 750px;
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    left: 750px;
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
 .ci-wrapper {
     display: flex;
     gap: 54px;
