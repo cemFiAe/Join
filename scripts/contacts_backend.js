@@ -1,19 +1,6 @@
-// BACK END
-
 const BASE_URL = "https://join-18def-default-rtdb.europe-west1.firebasedatabase.app/"
 
 let contacts = [];
-
-
-// onload Funktion 
-
-/*
-// post/put
-async function onloadFunction() {
-    test = await putData("/contacts/-OSsdmm1y4jXi-2dTIUG", {"name": "Alex Klar", "mail": "alex.klar@mail.de", "phone": "+49 7894 567 89 0"});
-    console.log(test);
-} 
-*/
 
 // contacts Array füllen und auslesen
 async function onloadFunction() {
@@ -33,7 +20,7 @@ async function onloadFunction() {
     renderAllContacts();
 }
 
-// HILFSFUNKTIONEN werden später angewendet und hier entfernt
+// HILFSFUNKTIONEN
 
 // Daten anzeigen
 async function loadData(path="") {
@@ -305,8 +292,13 @@ function renderContactDetails(container, contact, id) {
 }
 
 function animateContactDetails(container) {
-    container.classList.add('slide-in');
-    container.style.left = '750px';
+    if (window.innerWidth > 650) {
+        container.classList.add('slide-in');
+        container.style.left = '750px';
+    } else {
+        container.style.left = '16px';
+        container.classList.remove('slide-in', 'slide-out');
+    }
 }
 
 function getContactDetailsTemplate(id, data, initials, bgColor) {
@@ -316,7 +308,7 @@ function getContactDetailsTemplate(id, data, initials, bgColor) {
       <div class="ci-menu">
         <span class="ci-name">${data.name}</span>
         <div class="ci-edit">
-          <a onclick="openEditContact('${id}')" href="#"><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
+          <a onclick="openEditContact('${id}', event)" href="#"><img src="../assets/icons/contacts/edit.svg" alt="">Edit</a>
           <a onclick="event.stopPropagation(); deleteContact('${id}')" href="#"><img src="../assets/icons/contacts/delete.svg" alt="">Delete</a>
         </div>
       </div>
