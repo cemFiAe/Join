@@ -93,4 +93,6 @@ function goBack() {
     document.getElementById('add_contact_btn').style.display = "flex";
     document.getElementById('burger_contact_btn').style.display = "none";
     document.getElementById('back_contact_btn').style.display = "none";
+    document.getElementById('contact_information').innerHTML = '';
+    currentDisplayedContactId = null;
 }

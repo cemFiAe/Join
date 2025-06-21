@@ -32,6 +32,7 @@ body {
     gap: 16px;
     width: 352px;
     height: 56px;
+    padding-block: 9px;
     background-color: #2A3647;
     color: white;
     font-size: 21px;

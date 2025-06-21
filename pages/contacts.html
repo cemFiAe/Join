@@ -49,7 +49,7 @@
 
     <dialog id="edit_contact_overlay" class="edit_contact_overlay">
       <div class="left">
-        <img onclick="closeEditContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
+        <img onclick="closeEditContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
         <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
         <h1 class="side-title">Edit contact</h1>
         <div class="blue-line"></div>
@@ -163,8 +163,8 @@
     </button>
 
     <nav id="contact-options" class="contact-options">
-      <a href=""><img src="../assets/icons/contacts/edit.svg" alt="pen-icon">Edit</a>
-      <a href=""><img src="../assets/icons/contacts/delete.svg" alt="trashcan-icon">Delete</a>
+      <a id="edit-btn-mobile" onclick="editMobileContact()" href=""><img src="../assets/icons/contacts/edit.svg" alt="pen-icon">Edit</a>
+      <a id="delete-btn-mobile" onclick="deleteMobileContact()" href=""><img src="../assets/icons/contacts/delete.svg" alt="trashcan-icon">Delete</a>
     </nav>
 
     <footer class="mobile-footer">
@@ -189,5 +189,7 @@
     <script src="../scripts/burger_and_mobile_menu.js"></script>
     <script src="../scripts/contacts.js"></script>
     <script src="../scripts/contacts_backend.js"></script>
+    <script src="../scripts/contacts_add_remove.js"></script>
+    <script src="../scripts/contacts_edit.js"></script>
   </body>
 </html>
