@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join</title>
-    <meta name="description" content="Join, dein Kanban Management Tool"/>
-    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool"/>
-    <link rel="stylesheet" type="text/css" href="../styles/board.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/media/board.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_task.css"/>
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png"/>
-    <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
-  </head>
-  <body>
+    <meta name="description" content="Join, dein Kanban Management Tool" />
+    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
+    <link rel="stylesheet" type="text/css" href="../styles/board.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/media/board.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_task.css" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+    <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+    <script src="../scripts/log_out_user.js"></script>
+
+</head>
+
+<body>
     <div id="bg_overlay" class="bg_overlay"></div>
-    
+
     <dialog id="add_task_overlay" class="add_task_overlay">
         <h1 class="headline">Add Task</h1>
         <img onclick="closeAddTaskOverlay()" class="close-x" src="../assets/icons/board/Close.svg" alt="">
@@ -28,7 +32,7 @@
             <div class="left-box">
                 <span>Title<sup class="sup">*</sup></span>
                 <input type="text" placeholder="Enter a Title">
-                
+
                 <span>Description</span>
                 <input class="description-input" type="text" placeholder="Enter a Description">
 
@@ -73,34 +77,34 @@
             <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
         </div>
     </header>
-    
+
     <nav id="burger" class="burger">
-      <a href="./legal_notice.html">Legal Notice</a>
-      <a href="./privacy_policy.html">Privacy Policy</a>
-      <a href="">Log out</a>
+        <a href="./legal_notice.html">Legal Notice</a>
+        <a href="./privacy_policy.html">Privacy Policy</a>
+        <a href="#" onclick="logOutUser()">Log out</a>
     </nav>
 
     <nav class="nav">
         <div class="nav-top">
             <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
-            <a href="../pages/summary.html"> 
-              <img src="../assets/icons/frame/nav/summary.svg" alt="">
-              <p>Summary</p>
+            <a href="../pages/summary.html">
+                <img src="../assets/icons/frame/nav/summary.svg" alt="">
+                <p>Summary</p>
             </a>
 
-            <a href="../pages/add_task.html"> 
-              <img src="../assets/icons/frame/nav/add_task.svg" alt="">
-              <p>Add Task</p>
+            <a href="../pages/add_task.html">
+                <img src="../assets/icons/frame/nav/add_task.svg" alt="">
+                <p>Add Task</p>
             </a>
-            
-            <a class="current-site" href="../pages/board.html"> 
-              <img src="../assets/icons/frame/nav/board_active.svg" alt="">
-              <p>Board</p>
+
+            <a class="current-site" href="../pages/board.html">
+                <img src="../assets/icons/frame/nav/board_active.svg" alt="">
+                <p>Board</p>
             </a>
-            
-            <a href="../pages/contacts.html"> 
-              <img src="../assets/icons/frame/nav/contacts.svg" alt="">
-              <p>Contacts</p>
+
+            <a href="../pages/contacts.html">
+                <img src="../assets/icons/frame/nav/contacts.svg" alt="">
+                <p>Contacts</p>
             </a>
         </div>
 
@@ -113,13 +117,13 @@
     <nav class="mobile-header">
         <a href=""><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
         <a id="menuToggle" href=""><img class="mobile-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
-      </nav>
-    
+    </nav>
+
     <nav id="mobileNav" class="mobile-nav">
         <a href="./help.html">Help</a>
         <a href="./legal_notice.html">Legal Notice</a>
         <a href="./privacy_policy.html">Privacy Policy</a>
-        <a href="">Log out</a>
+        <a href="#" onclick="logOutUser()">Log out</a>
     </nav>
 
     <section class="main-content">
@@ -141,159 +145,164 @@
                 <input id="taskSearchMobile" class="findtaskMobile" type="text" placeholder="Find Task">
             </div>
         </section>
-    
-        
+
+
         <section class="board-nav-bottom">
-                <div class="task-container">
-                    <div class="span-container">
-                        <span class="category-span">To do</span>
-                        <span class="categoryplus">+</span>
-                    </div>
-                    
-                    <div id="toDo" class="category-container">
-                        <div class="notask">
-                            No tasks To Do
-                        </div>
-                    </div>
+            <div class="task-container">
+                <div class="span-container">
+                    <span class="category-span">To do</span>
+                    <span class="categoryplus">+</span>
                 </div>
 
-                <div class="task-container">
-                    <div class="span-container">
-                        <span class="category-span">In Progress</span>
-                        <span class="categoryplus">+</span>
-                    </div>
-                    <div id="inProgress" class="category-container">
-                        <div class="task">
-                            <span class="task-header tech-task">User Story</span>
-                            <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
-                            <p class="task-info">Build start page with recipe recommendation...</p>
-                            <div class="task-bar">
-                                <div class="bar-wrapper">
-                                    <div class="progress-bar">
-                                        <span class="progress-bar-fill" style="width: 50%;"></span>
-                                    </div>
-                                </div>
-                                <span class="sub-task">1/2 Subtasks</span>
-                            </div>
-                            <div class="task-status">
-                                <div>
-                                    <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                                </div>
-                                <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                            </div>
-                        </div>
+                <div id="toDo" class="category-container">
+                    <div class="notask">
+                        No tasks To Do
                     </div>
                 </div>
-                
-                <div class="task-container">
-                    <div class="span-container">
-                        <span class="category-span">Await feedback</span>
-                        <span class="categoryplus">+</span>
-                    </div>
-                    <div id="awaitFeedback" class="category-container">
-                        <div class="task">
-                            <span class="task-header user-task">Technical Task</span>
-                            <h4 class="task-title">HTML Base Template Creation</h4>
-                            <p class="task-info">Create reusable HTML base templates...</p>
-                            <div class="task-status">
-                                <div>
-                                    <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                                </div>
-                                <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
-                            </div>
-                        </div>
-                        <div class="task">
-                            <span class="task-header tech-task">User Story</span>
-                            <h4 class="task-title">Daily Kochwelt Recipe</h4>
-                            <p class="task-info">Implement daily recipe and portion calculator...</p>
-                            <div class="task-bar">
-                                <div class="bar-wrapper">
-                                    <div class="progress-bar">
-                                        <span class="progress-bar-fill" style="width: 50%;"></span>
-                                    </div>
-                                </div>
-                                <span class="sub-task">1/2 Subtasks</span>
-                            </div>
-                            <div class="task-status">
-                                <div>
-                                    <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                                </div>
-                                <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                            </div>
-                        </div>
-                        <div class="task">
-                            <span class="task-header user-task">Technical Task</span>
-                            <h4 class="task-title">HTML Base Template Creation</h4>
-                            <p class="task-info">Create reusable HTML base templates...</p>
-                            <div class="task-status">
-                                <div>
-                                    <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                                </div>
-                                <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
 
-                <div class="task-container">
-                    <div class="span-container">
-                        <span class="category-span">Done</span>
-                    </div>
-                    <div id="done" class="category-container">
-                        <div class="task">
-                            <span class="task-header user-task">Technical Task</span>
-                            <h4 class="task-title">CSS Architecture Planning</h4>
-                            <p class="task-info">Define CSS naming conventions and structure</p>
-                            <div class="task-bar">
-                                <div class="bar-wrapper">
-                                    <div class="progress-bar">
-                                        <span class="progress-bar-fill" style="width: 100%;"></span>
-                                    </div>
+            <div class="task-container">
+                <div class="span-container">
+                    <span class="category-span">In Progress</span>
+                    <span class="categoryplus">+</span>
+                </div>
+                <div id="inProgress" class="category-container">
+                    <div class="task">
+                        <span class="task-header tech-task">User Story</span>
+                        <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
+                        <p class="task-info">Build start page with recipe recommendation...</p>
+                        <div class="task-bar">
+                            <div class="bar-wrapper">
+                                <div class="progress-bar">
+                                    <span class="progress-bar-fill" style="width: 50%;"></span>
                                 </div>
-                                <span class="sub-task">2/2 Subtasks</span>
                             </div>
-                            <div class="task-status">
-                                <div>
-                                    <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                    <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                                </div>
-                                <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
+                            <span class="sub-task">1/2 Subtasks</span>
+                        </div>
+                        <div class="task-status">
+                            <div>
+                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
                             </div>
+                            <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="task-container">
+                <div class="span-container">
+                    <span class="category-span">Await feedback</span>
+                    <span class="categoryplus">+</span>
+                </div>
+                <div id="awaitFeedback" class="category-container">
+                    <div class="task">
+                        <span class="task-header user-task">Technical Task</span>
+                        <h4 class="task-title">HTML Base Template Creation</h4>
+                        <p class="task-info">Create reusable HTML base templates...</p>
+                        <div class="task-status">
+                            <div>
+                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                            </div>
+                            <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="task">
+                        <span class="task-header tech-task">User Story</span>
+                        <h4 class="task-title">Daily Kochwelt Recipe</h4>
+                        <p class="task-info">Implement daily recipe and portion calculator...</p>
+                        <div class="task-bar">
+                            <div class="bar-wrapper">
+                                <div class="progress-bar">
+                                    <span class="progress-bar-fill" style="width: 50%;"></span>
+                                </div>
+                            </div>
+                            <span class="sub-task">1/2 Subtasks</span>
+                        </div>
+                        <div class="task-status">
+                            <div>
+                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                            </div>
+                            <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="task">
+                        <span class="task-header user-task">Technical Task</span>
+                        <h4 class="task-title">HTML Base Template Creation</h4>
+                        <p class="task-info">Create reusable HTML base templates...</p>
+                        <div class="task-status">
+                            <div>
+                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                            </div>
+                            <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-container">
+                <div class="span-container">
+                    <span class="category-span">Done</span>
+                </div>
+                <div id="done" class="category-container">
+                    <div class="task">
+                        <span class="task-header user-task">Technical Task</span>
+                        <h4 class="task-title">CSS Architecture Planning</h4>
+                        <p class="task-info">Define CSS naming conventions and structure</p>
+                        <div class="task-bar">
+                            <div class="bar-wrapper">
+                                <div class="progress-bar">
+                                    <span class="progress-bar-fill" style="width: 100%;"></span>
+                                </div>
+                            </div>
+                            <span class="sub-task">2/2 Subtasks</span>
+                        </div>
+                        <div class="task-status">
+                            <div>
+                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
+                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
+                            </div>
+                            <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </section>
 
     <footer class="mobile-footer">
         <div class="footer-btn">
-          <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg" alt=""></a>
-          <span class="footer-span">Summary</span>
+            <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg"
+                    alt=""></a>
+            <span class="footer-span">Summary</span>
         </div>
         <div class="footer-btn">
-          <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg" alt=""></a>
-          <span class="footer-span">Add Task</span>
+            <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg"
+                    alt=""></a>
+            <span class="footer-span">Add Task</span>
         </div>
         <div class="footer-btn footer-active">
-          <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board_active.svg" alt=""></a>
-          <span class="footer-span">Board</span>
+            <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board_active.svg"
+                    alt=""></a>
+            <span class="footer-span">Board</span>
         </div>
         <div class="footer-btn">
-          <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts.svg" alt=""></a>
-          <span class="footer-span">Contacts</span>
+            <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts.svg"
+                    alt=""></a>
+            <span class="footer-span">Contacts</span>
         </div>
-      </footer>
+    </footer>
 
-      <script src="../scripts/burger_and_mobile_menu.js"></script>
-      <script src="../scripts/board.js"></script>
-  </body>
+    <script src="../scripts/burger_and_mobile_menu.js"></script>
+    <script src="../scripts/board.js"></script>
+</body>
+
 </html>

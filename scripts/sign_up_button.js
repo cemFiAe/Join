@@ -135,7 +135,7 @@ function signedUp(event) {
                 setTimeout(() => {
                     document.getElementById('signed-up-screen').style.display = "none";
                     sessionStorage.setItem('cameFromSignUp', 'true');
-                    window.location.href = "../pages/log_in.html";
+                    window.location.href = "../pages/index.html";
                 }, 1000);
 
             } catch (error) {

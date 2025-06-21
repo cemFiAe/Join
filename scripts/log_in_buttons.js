@@ -76,6 +76,7 @@ logInButton.addEventListener('click', (e) => {
 
             // Check if user exists and password matches
             if (user && user.password === password) {
+                localStorage.setItem("loggedIn", "true");
                 window.location.href = "../pages/summary.html";
             } else {
                 passwordAlert.innerHTML = "Invalid email or password";
@@ -95,6 +96,7 @@ guestLogInButton.addEventListener('click', function (e) {
     e.preventDefault();
     // if (validateInputs()) {
     //     // If both email and password are valid;
-        window.location.href = "../pages/summary.html";
+    localStorage.setItem("loggedIn", "true");
+    window.location.href = "../pages/summary.html";
     // }
 })

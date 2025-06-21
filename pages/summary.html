@@ -1,64 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Join</title>
-    <meta name="description" content="Join, dein Kanban Management Tool"/>
-    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool"/>
-    <link rel="stylesheet" type="text/css" href="../styles/summary.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/media/summary.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png"/>
-    <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
-  </head>
-  <body>
-    <header class="header">
-      <h2 class="title">Kanban Project Management Tool</h2>
-      <div class="header-icons">
-          <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
-          <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
-      </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+  <meta name="description" content="Join, dein Kanban Management Tool" />
+  <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
+  <link rel="stylesheet" type="text/css" href="../styles/summary.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/media/summary.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+  <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+  <script src="../scripts/log_out_user.js"></script>
+
+</head>
+
+<body>
+  <header class="header">
+    <h2 class="title">Kanban Project Management Tool</h2>
+    <div class="header-icons">
+      <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
+      <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+    </div>
   </header>
 
   <nav id="burger" class="burger">
-      <a href="./legal_notice.html">Legal Notice</a>
-      <a href="./privacy_policy.html">Privacy Policy</a>
-      <a href="">Log out</a>
-    </nav>
-  
+    <a href="./legal_notice.html">Legal Notice</a>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
+  </nav>
+
   <nav class="nav">
-      <div class="nav-top">
-          <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
-          <a class="current-site" href="../pages/summary.html"> 
-            <img src="../assets/icons/frame/nav/summary.svg" alt="">
-            <p>Summary</p>
-          </a>
+    <div class="nav-top">
+      <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
+      <a class="current-site" href="../pages/summary.html">
+        <img src="../assets/icons/frame/nav/summary.svg" alt="">
+        <p>Summary</p>
+      </a>
 
-          <a href="../pages/add_task.html"> 
-            <img src="../assets/icons/frame/nav/add_task.svg" alt="">
-            <p>Add Task</p>
-          </a>
-          
-          <a href="../pages/board.html"> 
-            <img src="../assets/icons/frame/nav/board.svg" alt="">
-            <p>Board</p>
-          </a>
-          
-          <a href="../pages/contacts.html"> 
-            <img src="../assets/icons/frame/nav/contacts.svg" alt="">
-            <p>Contacts</p>
-          </a>
-      </div>
+      <a href="../pages/add_task.html">
+        <img src="../assets/icons/frame/nav/add_task.svg" alt="">
+        <p>Add Task</p>
+      </a>
 
-      <div class="nav-bottom">
-          <a href="../pages/privacy_policy.html">Privacy Policy</a>
-          <a href="../pages/legal_notice.html">Legal notice</a>
-      </div>
+      <a href="../pages/board.html">
+        <img src="../assets/icons/frame/nav/board.svg" alt="">
+        <p>Board</p>
+      </a>
+
+      <a href="../pages/contacts.html">
+        <img src="../assets/icons/frame/nav/contacts.svg" alt="">
+        <p>Contacts</p>
+      </a>
+    </div>
+
+    <div class="nav-bottom">
+      <a href="../pages/privacy_policy.html">Privacy Policy</a>
+      <a href="../pages/legal_notice.html">Legal notice</a>
+    </div>
   </nav>
 
   <nav class="mobile-header">
@@ -70,75 +74,78 @@
     <a href="./help.html">Help</a>
     <a href="./legal_notice.html">Legal Notice</a>
     <a href="./privacy_policy.html">Privacy Policy</a>
-    <a href="">Log out</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
   </nav>
 
   <section class="main-content">
-          <div class="main_content">
-          <div class="title">
-            <h2>Join 360</h2><div class="divider_middle"></div><span>Key Metrics at a Glance</span><div class="divider"></div>
+    <div class="main_content">
+      <div class="title">
+        <h2>Join 360</h2>
+        <div class="divider_middle"></div><span>Key Metrics at a Glance</span>
+        <div class="divider"></div>
 
-          </div>
-          <div class="content">
-            <div class="metrics-panel">
-              <div class="cards">
-              <div class="card">
-                <div class="icon"><img src="../assets/icons/summary/edit.svg" alt=""></div>
-                <div>
+      </div>
+      <div class="content">
+        <div class="metrics-panel">
+          <div class="cards">
+            <div class="card">
+              <div class="icon"><img src="../assets/icons/summary/edit.svg" alt=""></div>
+              <div>
                 <div class="value">1</div>
                 <div class="label">To-do</div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="icon"><img src="../assets/icons/summary/check.svg" " alt=""></div>
-                <div>
-                <div class="value">1</div>
-                <div class="label">Done</div>
-                </div>
-              </div>
-              </div>
-              <div class="urgent">
-                <div class="urgent-left">
-                  <div class="icon"><img src="../assets/icons/summary/urgent.svg"  alt=""></div>
-                <div>
-                    <p class="value">1</p>
-                    <p class="label">Urgent</p>
-                  </div>
-                </div>
-                <div class="separator"></div>
-                <div class="urgent-right">
-                  <div>October 16, 2022</div>
-                  <small>Upcoming Deadline</small>
-                </div>
-              </div>
-              <div class="card_count_container">
-              <div class="card card_count">
-                <div class="value">5</div>
-                <div class="label">Tasks in Board</div>
-              </div>
-              <div class="card card_count">
-                <div class="value">2</div>
-                <div class="label">Tasks In Progress</div>
-              </div>
-              <div class="card card_count">
-                <div class="value">2</div>
-                <div class="label">Awaiting Feedback</div>
               </div>
             </div>
-            </div>
-            <div class="greeting">
-              <div>
-                <p>Good morning,</p>
-                <h3>Sofia Müller</h3>
-              </div>
+            <div class="card">
+              <div class="icon"><img src="../assets/icons/summary/check.svg" " alt=""></div>
+                <div>
+                <div class=" value">1</div>
+              <div class="label">Done</div>
             </div>
           </div>
         </div>
+        <div class="urgent">
+          <div class="urgent-left">
+            <div class="icon"><img src="../assets/icons/summary/urgent.svg" alt=""></div>
+            <div>
+              <p class="value">1</p>
+              <p class="label">Urgent</p>
+            </div>
+          </div>
+          <div class="separator"></div>
+          <div class="urgent-right">
+            <div>October 16, 2022</div>
+            <small>Upcoming Deadline</small>
+          </div>
+        </div>
+        <div class="card_count_container">
+          <div class="card card_count">
+            <div class="value">5</div>
+            <div class="label">Tasks in Board</div>
+          </div>
+          <div class="card card_count">
+            <div class="value">2</div>
+            <div class="label">Tasks In Progress</div>
+          </div>
+          <div class="card card_count">
+            <div class="value">2</div>
+            <div class="label">Awaiting Feedback</div>
+          </div>
+        </div>
+      </div>
+      <div class="greeting">
+        <div>
+          <p>Good morning,</p>
+          <h3>Sofia Müller</h3>
+        </div>
+      </div>
+    </div>
+    </div>
   </section>
 
   <footer class="mobile-footer">
     <div class="footer-btn footer-active">
-      <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary_active.svg" alt=""></a>
+      <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary_active.svg"
+          alt=""></a>
       <span class="footer-span span-active">Summary</span>
     </div>
     <div class="footer-btn">
@@ -156,4 +163,4 @@
   </footer>
 
   <script src="../scripts/burger_and_mobile_menu.js"></script>
-  </body>
+</body>

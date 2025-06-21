@@ -1,195 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Join</title>
-    <meta name="description" content="Join, dein Kanban Management Tool"/>
-    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool"/>
-    <link rel="stylesheet" type="text/css" href="../styles/contacts.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/media/contacts.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/standard.css"/>
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
-    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_contact.css"/>
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png"/>
-    <link rel="manifest" href="../assets/icons/fav/site.webmanifest"/>
-  </head>
-  <body onload="onloadFunction()">
-    <div id="bg_overlay" class="bg_overlay"></div>
 
-    <dialog id="add_contact_overlay" class="add_contact_overlay">
-      <div class="left">
-        <img onclick="closeAddContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
-        <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
-        <h1 class="side-title">Add contact</h1>
-        <span class="span">Tasks are better with a team!</span>
-        <div class="blue-line"></div>
-      </div>
-      <div class="mid">
-        <div class="circle">
-          <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
-        </div>
-      </div>
-      <div class="right">
-        <form onsubmit="addNewContact(event)">
-          <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
-          <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
-          <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
-          <div>
-           <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-           <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
-          </div>
-        </form>
-        <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
-      </div>
-    </dialog>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+  <meta name="description" content="Join, dein Kanban Management Tool" />
+  <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
+  <link rel="stylesheet" type="text/css" href="../styles/contacts.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/media/contacts.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/overlays/add_contact.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+  <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+  <script src="../scripts/log_out_user.js"></script>
 
-    <dialog id="edit_contact_overlay" class="edit_contact_overlay">
-      <div class="left">
-        <img onclick="closeEditContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg" alt="x-btn">
-        <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
-        <h1 class="side-title">Edit contact</h1>
-        <div class="blue-line"></div>
+</head>
+
+<body onload="onloadFunction()">
+  <div id="bg_overlay" class="bg_overlay"></div>
+
+  <dialog id="add_contact_overlay" class="add_contact_overlay">
+    <div class="left">
+      <img onclick="closeAddContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
+        alt="x-btn">
+      <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
+      <h1 class="side-title">Add contact</h1>
+      <span class="span">Tasks are better with a team!</span>
+      <div class="blue-line"></div>
+    </div>
+    <div class="mid">
+      <div class="circle">
+        <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
       </div>
-      <div class="mid">
-        <div class="circle">
-          <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
-        </div>
-      </div>
-      <div class="right">
-        <form onsubmit="editContact(event)">
-          <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
-          <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
-          <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
-          <div>
-            <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-            <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
-          </div>
-        </form>
-        
+    </div>
+    <div class="right">
+      <form onsubmit="addNewContact(event)">
+        <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
+        <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
+        <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
         <div>
+          <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg"
+              alt="checkmark"></button>
         </div>
-        <img onclick="closeEditContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+      </form>
+      <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+    </div>
+  </dialog>
+
+  <dialog id="edit_contact_overlay" class="edit_contact_overlay">
+    <div class="left">
+      <img onclick="closeEditContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
+        alt="x-btn">
+      <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
+      <h1 class="side-title">Edit contact</h1>
+      <div class="blue-line"></div>
+    </div>
+    <div class="mid">
+      <div class="circle">
+        <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
       </div>
-    </dialog>
+    </div>
+    <div class="right">
+      <form onsubmit="editContact(event)">
+        <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
+        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
+        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
+        <div>
+          <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+        </div>
+      </form>
 
-    <header class="header">
-      <h2 class="title">Kanban Project Management Tool</h2>
-      <div class="header-icons">
-          <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
-          <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+      <div>
       </div>
-    </header>
+      <img onclick="closeEditContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+    </div>
+  </dialog>
 
-    <nav id="burger" class="burger">
-      <a href="./legal_notice.html">Legal Notice</a>
-      <a href="./privacy_policy.html">Privacy Policy</a>
-      <a href="">Log out</a>
-    </nav>
+  <header class="header">
+    <h2 class="title">Kanban Project Management Tool</h2>
+    <div class="header-icons">
+      <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
+      <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+    </div>
+  </header>
 
-    <nav class="nav">
-      <div class="nav-top">
-        <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
-        <a href="../pages/summary.html"> 
-          <img src="../assets/icons/frame/nav/summary.svg" alt="">
-          <p>Summary</p>
-        </a>
+  <nav id="burger" class="burger">
+    <a href="./legal_notice.html">Legal Notice</a>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
+  </nav>
 
-        <a href="../pages/add_task.html"> 
-          <img src="../assets/icons/frame/nav/add_task.svg" alt="">
-          <p>Add Task</p>
-        </a>
-        
-        <a href="../pages/board.html"> 
-          <img src="../assets/icons/frame/nav/board.svg" alt="">
-          <p>Board</p>
-        </a>
-        
-        <a class="current-site" href="../pages/contacts.html"> 
-          <img src="../assets/icons/frame/nav/contacts_active.svg" alt="">
-          <p>Contacts</p>
-        </a>
+  <nav class="nav">
+    <div class="nav-top">
+      <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
+      <a href="../pages/summary.html">
+        <img src="../assets/icons/frame/nav/summary.svg" alt="">
+        <p>Summary</p>
+      </a>
+
+      <a href="../pages/add_task.html">
+        <img src="../assets/icons/frame/nav/add_task.svg" alt="">
+        <p>Add Task</p>
+      </a>
+
+      <a href="../pages/board.html">
+        <img src="../assets/icons/frame/nav/board.svg" alt="">
+        <p>Board</p>
+      </a>
+
+      <a class="current-site" href="../pages/contacts.html">
+        <img src="../assets/icons/frame/nav/contacts_active.svg" alt="">
+        <p>Contacts</p>
+      </a>
     </div>
 
-        <div class="nav-bottom">
-            <a href="../pages/privacy_policy.html">Privacy Policy</a>
-            <a href="../pages/legal_notice.html">Legal notice</a>
-        </div>
-    </nav>
+    <div class="nav-bottom">
+      <a href="../pages/privacy_policy.html">Privacy Policy</a>
+      <a href="../pages/legal_notice.html">Legal notice</a>
+    </div>
+  </nav>
 
-    <nav class="mobile-header">
-      <a href=""><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
-      <a id="menuToggle" href=""><img class="mobile-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
-    </nav>
+  <nav class="mobile-header">
+    <a href=""><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
+    <a id="menuToggle" href=""><img class="mobile-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
+  </nav>
 
-    <nav id="mobileNav" class="mobile-nav">
-      <a href="./help.html">Help</a>
-      <a href="./legal_notice.html">Legal Notice</a>
-      <a href="./privacy_policy.html">Privacy Policy</a>
-      <a href="">Log out</a>
-    </nav>
+  <nav id="mobileNav" class="mobile-nav">
+    <a href="./help.html">Help</a>
+    <a href="./legal_notice.html">Legal Notice</a>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
+  </nav>
 
-    <section class="main-content">
-      <section class="contact_wrapper">
-        <section id="contacts" class="contacts">
-        </section>
-  
-        <section id="contact-overview" class="contact_overview">
-          <h1>Contacts</h1>
-          <div class="co-devider"></div>
-          <span>Better with a team</span>
-          <div id="co-devider-mobile" class="co-devider-mobile"></div>
-        </section>
-
-        <div id="contact_information" class="contact_information">
-        </div>
+  <section class="main-content">
+    <section class="contact_wrapper">
+      <section id="contacts" class="contacts">
       </section>
-  
+
+      <section id="contact-overview" class="contact_overview">
+        <h1>Contacts</h1>
+        <div class="co-devider"></div>
+        <span>Better with a team</span>
+        <div id="co-devider-mobile" class="co-devider-mobile"></div>
+      </section>
+
+      <div id="contact_information" class="contact_information">
+      </div>
     </section>
 
-    <button id="add_contact_btn" onclick="openAddContactMobile()" class="add_contact_btn">
-      <img class="mobile_add" src="../assets/icons/contacts/mobile_add.svg" alt="">
-    </button>
+  </section>
 
-    <button id="burger_contact_btn" onclick="openContactOptions()" class="burger_contact_btn">
-      <img class="mobile_add" src="../assets/icons/contacts/more.svg" alt="">
-    </button>
+  <button id="add_contact_btn" onclick="openAddContactMobile()" class="add_contact_btn">
+    <img class="mobile_add" src="../assets/icons/contacts/mobile_add.svg" alt="">
+  </button>
 
-    <button id="back_contact_btn" onclick="goBack()" class="back_contact_btn">
-      <img class="back-arrow-btn" src="../assets/icons/contacts/arrow_left.svg" alt="">
-    </button>
+  <button id="burger_contact_btn" onclick="openContactOptions()" class="burger_contact_btn">
+    <img class="mobile_add" src="../assets/icons/contacts/more.svg" alt="">
+  </button>
 
-    <nav id="contact-options" class="contact-options">
-      <a id="edit-btn-mobile" onclick="editMobileContact()" href=""><img src="../assets/icons/contacts/edit.svg" alt="pen-icon">Edit</a>
-      <a id="delete-btn-mobile" onclick="deleteMobileContact()" href=""><img src="../assets/icons/contacts/delete.svg" alt="trashcan-icon">Delete</a>
-    </nav>
+  <button id="back_contact_btn" onclick="goBack()" class="back_contact_btn">
+    <img class="back-arrow-btn" src="../assets/icons/contacts/arrow_left.svg" alt="">
+  </button>
 
-    <footer class="mobile-footer">
-      <div class="footer-btn">
-        <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg" alt=""></a>
-        <span class="footer-span">Summary</span>
-      </div>
-      <div class="footer-btn">
-        <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg" alt=""></a>
-        <span class="footer-span">Add Task</span>
-      </div>
-      <div class="footer-btn">
-        <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board.svg" alt=""></a>
-        <span class="footer-span">Board</span>
-      </div>
-      <div class="footer-btn footer-active">
-        <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts_active.svg" alt=""></a>
-        <span class="footer-span">Contacts</span>
-      </div>
-    </footer>
+  <nav id="contact-options" class="contact-options">
+    <a id="edit-btn-mobile" onclick="editMobileContact()" href=""><img src="../assets/icons/contacts/edit.svg"
+        alt="pen-icon">Edit</a>
+    <a id="delete-btn-mobile" onclick="deleteMobileContact()" href=""><img src="../assets/icons/contacts/delete.svg"
+        alt="trashcan-icon">Delete</a>
+  </nav>
 
-    <script src="../scripts/burger_and_mobile_menu.js"></script>
-    <script src="../scripts/contacts.js"></script>
-    <script src="../scripts/contacts_backend.js"></script>
-    <script src="../scripts/contacts_add_remove.js"></script>
-    <script src="../scripts/contacts_edit.js"></script>
-  </body>
+  <footer class="mobile-footer">
+    <div class="footer-btn">
+      <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg" alt=""></a>
+      <span class="footer-span">Summary</span>
+    </div>
+    <div class="footer-btn">
+      <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg" alt=""></a>
+      <span class="footer-span">Add Task</span>
+    </div>
+    <div class="footer-btn">
+      <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board.svg" alt=""></a>
+      <span class="footer-span">Board</span>
+    </div>
+    <div class="footer-btn footer-active">
+      <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts_active.svg"
+          alt=""></a>
+      <span class="footer-span">Contacts</span>
+    </div>
+  </footer>
+
+  <script src="../scripts/burger_and_mobile_menu.js"></script>
+  <script src="../scripts/contacts.js"></script>
+  <script src="../scripts/contacts_backend.js"></script>
+  <script src="../scripts/contacts_add_remove.js"></script>
+  <script src="../scripts/contacts_edit.js"></script>
+</body>
+
 </html>
