@@ -1,3 +1,4 @@
+
 /* general properties for both log in and sign up */
 
 header {
@@ -41,6 +42,7 @@ section {
     align-items: end;
     font-size: 24px;
     padding-left: 16px;
+    padding-right: 56px;
     border: 2px solid rgb(0, 0, 0, 0.1);
     background-image: url(../assets/icons/log_in/mail.svg);
     background-size: 17px;
@@ -81,11 +83,8 @@ section {
     margin: 0px;
     padding-left: 12px;
     color: rgb(255,129,144);
-}
-
-/* .password-alert:empty {
     display: none;
-} */
+}
 
 .privacy-policy-alert {
     width: 100%;
@@ -113,7 +112,7 @@ section {
     color: rgb(255, 255, 255);
     background-color: rgb(42, 54, 71);
     padding: 14px 16px;
-    transition: 150ms;
+    transition: 125ms;
 }
 
 .buttons:hover {

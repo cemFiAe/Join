@@ -1,6 +1,9 @@
+    var passwordDiv = document.querySelector('.sign-up-password');
+    var passwordInput = document.getElementById('sign-up-password');
+    var iconElement = document.getElementById('sign-up-lock-icon');
+    var passwordAlert = document.getElementById('sign-up-password-alert');
 
 // Password validation function
-
 function isPasswordValid(value) {
     let letters = (value.match(/[A-Za-z]/g) || []).length;
     let numbers = (value.match(/[0-9]/g) || []).length;
@@ -9,9 +12,6 @@ function isPasswordValid(value) {
 
 // Toggle password visibility and visibility matching icon:
 function signUpVisibility(iconElement) {
-    let passwordDiv = iconElement.closest('.sign-up-password');
-    let passwordInput = passwordDiv.querySelector('input');
-
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         iconElement.src = "../assets/icons/sign_up/visibility.svg";
@@ -23,8 +23,7 @@ function signUpVisibility(iconElement) {
 
 // Listen for clicks at icon, which is in password input:
 document.addEventListener('click', function (e) {
-    let passwordDiv = document.querySelector('.sign-up-password');
-    let lockIcon = document.getElementById('sign-up-lock-icon');
+
 
     // if the icon is clicked, call signUpVisibility();
     if (e.target.id === 'sign-up-lock-icon') {
@@ -40,10 +39,6 @@ document.addEventListener('click', function (e) {
 
 // Listen for input in password field
 document.addEventListener('input', function (e) {
-    let passwordDiv = document.querySelector('.sign-up-password');
-    let passwordInput = document.getElementById('sign-up-password');
-    let iconElement = document.getElementById('sign-up-lock-icon');
-    let passwordAlert = document.getElementById('sign-up-password-alert');
 
     // Validate input 
     if (passwordDiv.contains(e.target)) {

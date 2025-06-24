@@ -1,5 +1,5 @@
 
-// Email validation function
+// Email validation function for both Log in and Sign up pages
 
 function isEmailValid(email) {
     let emailParts = email.split('@');
@@ -39,25 +39,19 @@ function isEmailValid(email) {
 let emailInput = document.getElementById('log-in-email-input');
 let emailAlert = document.getElementById('log-in-email-alert');
 
-// Validating input value
-if (emailInput) {
-    emailInput.addEventListener('input', function () {
-        // if input is true, highlight blue and don't show alert message
-        if (isEmailValid(emailInput.value)) {
-            emailInput.style.borderColor = 'rgb(41, 171, 226)';
-            emailAlert.style.display = "none";
-        } else {
-            // if input is not true, highlight red and show alert message
-            emailInput.style.borderColor = 'rgb(255, 0, 31)';
-            emailAlert.style.display = "block";
-        }
-        
-        // when input field is clear, remove highlight and alert message (reset)
-        if (emailInput.value === "") {
-            emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-            emailAlert.style.display = "none";
-        }
-    });
-}
+emailInput.addEventListener('input', function () {
+    // Reset when the input is empty
+    if (emailInput.value === "") {
+        emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+        emailAlert.style.display = "none";
+        return;
+    }
+
+    // Apply styles after validation: if isValid(?) then 'color/display' otherwise(:) 'color/display'
+    const isValid = isEmailValid(emailInput.value);
+    emailInput.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    emailAlert.style.display = isValid ? "none" : "block";
+});
+
 
 

@@ -1,102 +1,70 @@
-let passwordInput = document.getElementById('log-in-password');
-let passwordAlert = document.getElementById('log-in-password-alert');
+var passwordDiv = document.querySelector('.log-in-password')
+// for updating styles to Div, not to Input 
+var passwordInput = document.getElementById('log-in-password');
+var passwordAlert = document.getElementById('log-in-password-alert');
+var logInButton = document.getElementById('log-in-button');
+var guestLogInButton = document.getElementById('guest-log-in-button');
 
-let logInButton = document.getElementById('log-in-button');
-let guestLogInButton = document.getElementById('guest-log-in-button');
-
-
-// Check if both inputs are valid
 function validateInputs() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
 
-    // Validate Email
-    if (!emailValid) {
-        emailInput.style.borderColor = 'rgb(255, 0, 31)';
-        emailAlert.style.display = "block";
-    } else {
-        emailInput.style.borderColor = 'rgb(41, 171, 226)';
-        emailAlert.style.display = "none";
-    }
+    // Update styles and alerts based on validation
+    updateInputStyles(emailInput, emailAlert, emailValid);
+    updateInputStyles(passwordDiv, passwordAlert, passwordValid);
 
-    // Validate Password
-    if (!passwordValid) {
-        passwordInput.style.borderColor = 'rgb(255, 0, 31)';
-        passwordAlert.innerHTML = "Please insert correct password";
-    } else {
-        passwordInput.style.borderColor = 'rgb(41, 171, 226)';
-        passwordAlert.innerHTML = "";
-    }
+    // Disable the Log in button if email and password are not valid
+    logInButton.disabled = !(emailValid && passwordValid);
+    return emailValid && passwordValid;
+}
 
-    // Enable buttons if both fields are valid
-    if (emailValid && passwordValid) {
-        logInButton.disabled = false;
-        guestLogInButton.disabled = false;
-        return true;
+function updateInputStyles(input, alert, isValid) {
+    if (isValid) {
+        input.style.borderColor = 'rgb(41, 171, 226)';
+        alert.style.display = 'none';
     } else {
-        logInButton.disabled = true;
-        guestLogInButton.disabled = true;
-        return false;
+        input.style.borderColor = 'rgb(255, 0, 31)';
+        alert.style.display = 'block';
     }
 }
 
-// Check Email input:
 emailInput.addEventListener('input', validateInputs);
-
-// Check Password input:
 passwordInput.addEventListener('input', validateInputs);
 
-// Log In button click:
-const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+logInButton.addEventListener('click', async (e) => {
+    e.preventDefault(); // Prevent form submission
 
-// Log In button click:
-logInButton.addEventListener('click', (e) => {
-    e.preventDefault(); // prevent from default submitting
-
+    // Validate inputs and stop proceeding if email and/or password are not valid
     if (!validateInputs()) return;
 
-    let email = emailInput.value.trim();
-    let password = passwordInput.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
-    async function logInUser() {
-        try {
-            let response = await fetch(BASE_URL + "users.json"); // get all users 
-            let database = await response.json(); // and recieve it as .json
+    try {
+        const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+        const response = await fetch(BASE_URL + "users.json");
+        const database = await response.json();
+        
+        // Find matching user by email
+        const user = Object.values(database).find(user => user.email === email);
 
-            let user = null;
-
-            // Check each user in database to find matching email
-            for (let key in database) {
-                if (database[key].email === email) {
-                    // if some users email from database matches the email in input:
-                    user = database[key]; // we save that in user variable
-                    break; // and stop with checking
-                }
-            }
-
-            // Check if user exists and password matches
-            if (user && user.password === password) {
-                localStorage.setItem("loggedIn", "true");
-                window.location.href = "../pages/summary.html";
-            } else {
-                passwordAlert.innerHTML = "Invalid email or password";
-                passwordInput.style.borderColor = 'rgb(255, 0, 31)';
-            }
-
-        } catch (error) {
-            console.error("Login failed", error);
-            passwordAlert.innerHTML = "Login failed. Try again.";
+        if (user && user.password === password) {
+            localStorage.setItem("loggedIn", "true");
+            window.location.href = "../pages/summary.html";
+        } else {
+            passwordAlert.style.display = "block"
+            passwordAlert.innerHTML = "Invalid email or password";
+            passwordInput.style.borderColor = 'rgb(255, 0, 31)';
         }
+
+    } catch (error) {
+        console.error("Login failed", error);
+        passwordAlert.innerHTML = "Login failed. Try again.";
     }
-    logInUser();
 });
 
-// Guest Log In button click:
-guestLogInButton.addEventListener('click', function (e) {
+guestLogInButton.addEventListener('click', (e) => {
     e.preventDefault();
-    // if (validateInputs()) {
-    //     // If both email and password are valid;
     localStorage.setItem("loggedIn", "true");
     window.location.href = "../pages/summary.html";
-    // }
-})
+});

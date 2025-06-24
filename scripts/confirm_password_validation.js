@@ -1,8 +1,11 @@
+const confirmDiv = document.querySelector('.confirm-password');
+const confirmInput = document.getElementById('confirm-password');
+const passwordInput = document.getElementById('sign-up-password');
+const lockIcon = document.getElementById('confirm-lock-icon');
+const confirmAlert = document.getElementById('confirm-password-alert');
+
 // Toggle Confirm password visibility and visibility matching icon:
 function confirmVisibility(iconElement) {
-    let confirmDiv = iconElement.closest('.confirm-password');
-    let confirmInput = confirmDiv.querySelector('input');
-
     if (confirmInput.type === "password") {
         confirmInput.type = "text";
         iconElement.src = "../assets/icons/sign_up/confirm_visibility.svg";
@@ -31,12 +34,6 @@ document.addEventListener('click', function (e) {
 
 // Listen for input in confirm password field
 document.addEventListener('input', function (e) {
-    let confirmDiv = document.querySelector('.confirm-password');
-    let confirmInput = document.getElementById('confirm-password');
-    let passwordInput = document.getElementById('sign-up-password');
-    let lockIcon = document.getElementById('confirm-lock-icon');
-    let confirmAlert = document.getElementById('confirm-password-alert');
-
     // If input is true, check the following and act accordingly
     if (confirmDiv.contains(e.target)) {
         let confirmValue = confirmInput.value;
@@ -46,6 +43,7 @@ document.addEventListener('input', function (e) {
             confirmDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
             confirmAlert.innerHTML = "";
             lockIcon.src = "../assets/icons/sign_up/confirm_lock.svg";
+
         } else if (confirmValue === passwordValue) {
             confirmDiv.style.borderColor = 'rgb(41, 171, 226)';
             confirmAlert.innerHTML = "";

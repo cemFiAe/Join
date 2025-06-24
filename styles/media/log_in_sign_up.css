@@ -27,3 +27,10 @@
         font-size: 16px;
     }
 }
+
+@media (max-width: 428px) {
+
+    .email-input {
+        padding-right: 50px;
+    }
+}

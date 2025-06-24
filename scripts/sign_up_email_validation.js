@@ -36,22 +36,16 @@ function isEmailValid(email) {
 let emailInput = document.getElementById('sign-up-email-input');
 let emailAlert = document.getElementById('sign-up-email-alert');
 
-// Validate input value:
 emailInput.addEventListener('input', function () {
-    // if input is true, make blue highlight and don't show alert message
-    if (isEmailValid(emailInput.value)) {
-        emailInput.style.borderColor = 'rgb(41, 171, 226)';
-        emailAlert.style.display = "none";
-
-    // if input is not true, make red highlight and show alert message
-    } else {
-        emailInput.style.borderColor = 'rgb(255, 0, 31)';
-        emailAlert.style.display = "block"; // 
-    }
-
-    // when input field is clear, remove highlight and alert message
+    // Reset when the input is empty
     if (emailInput.value === "") {
         emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
         emailAlert.style.display = "none";
+        return;
     }
+
+    // Apply styles after validation: if isValid(?) then 'color/display' otherwise(:) 'color/display'
+    const isValid = isEmailValid(emailInput.value);
+    emailInput.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    emailAlert.style.display = isValid ? "none" : "block";
 });
