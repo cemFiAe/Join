@@ -1,7 +1,11 @@
-    var passwordDiv = document.querySelector('.sign-up-password');
-    var passwordInput = document.getElementById('sign-up-password');
-    var iconElement = document.getElementById('sign-up-lock-icon');
-    var passwordAlert = document.getElementById('sign-up-password-alert');
+
+// Password validation for Sign up page
+
+var passwordDiv = document.querySelector('.sign-up-password');
+var passwordInput = document.getElementById('sign-up-password');
+var passwordIcon = document.getElementById('sign-up-lock-icon');
+var passwordAlert = document.getElementById('sign-up-password-alert');
+
 
 // Password validation function
 function isPasswordValid(value) {
@@ -10,52 +14,42 @@ function isPasswordValid(value) {
     return value.length >= 8 && letters >= 6 && numbers >= 2;
 }
 
-// Toggle password visibility and visibility matching icon:
-function signUpVisibility(iconElement) {
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        iconElement.src = "../assets/icons/sign_up/visibility.svg";
-    } else {
-        passwordInput.type = "password";
-        iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
-    }
-}
 
-// Listen for clicks at icon, which is in password input:
-document.addEventListener('click', function (e) {
+// Check password input, validate it and update styles accordingly:
+passwordInput.addEventListener('input', function () {
+    const password = passwordInput.value;
 
-
-    // if the icon is clicked, call signUpVisibility();
-    if (e.target.id === 'sign-up-lock-icon') {
-        signUpVisibility(e.target);
+    if (password === "") {
+        passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
+        passwordAlert.style.display = 'block';
+        passwordIcon.src = "../assets/icons/sign_up/lock.svg";
         return;
     }
 
-    // if outside password input is clicked, reset input
-    if (!passwordDiv.contains(e.target)) {
-        lockIcon.src = "../assets/icons/sign_up/lock.svg";
+    const isValid = isPasswordValid(password);
+    passwordDiv.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    passwordAlert.style.display = isValid ? 'none' : 'block';
+});
+
+
+// Check if the icon in input filed is clicked and: 
+// toggle password visibility and matching icon,
+document.addEventListener('click', function (e) {
+    if (e.target.id === 'sign-up-lock-icon') {
+        singUpVisibility(passwordInput, e.target);
+    } else if (!passwordDiv.contains(e.target)) {
+        passwordInput.type = "password";
+        passwordIcon.src = "../assets/icons/sign_up/lock.svg";
     }
 });
 
-// Listen for input in password field
-document.addEventListener('input', function (e) {
-
-    // Validate input 
-    if (passwordDiv.contains(e.target)) {
-        if (passwordInput.value === "") { // if no input
-            passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-            passwordAlert.innerHTML = "";
-            iconElement.src = "../assets/icons/sign_up/lock.svg";
-
-        } else if (isPasswordValid(passwordInput.value)) { // if input is valid
-            passwordDiv.style.borderColor = 'rgb(41, 171, 226)';
-            passwordAlert.innerHTML = "";
-            iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
-
-        } else { // if input is not valid
-            passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-            passwordAlert.innerHTML = "Please insert correct password";
-            iconElement.src = "../assets/icons/sign_up/visibility_off.svg";
-        }
+// Utility function to toggle password visibility
+function singUpVisibility(input, icon) {
+    if (input.type === "password") {
+        input.type = "text";
+        icon.src = "../assets/icons/sign_up/visibility.svg";
+    } else {
+        input.type = "password";
+        icon.src = "../assets/icons/sign_up/visibility_off.svg";
     }
-});
+}

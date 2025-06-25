@@ -1,7 +1,23 @@
+
+// Password validation for Log in page
+
 var passwordDiv = document.querySelector('.log-in-password');
 var passwordInput = document.getElementById('log-in-password');
 var iconElement = document.getElementById('log-in-lock-icon');
 var passwordAlert = document.getElementById('log-in-password-alert')
+
+// Check password input, validate it and update styles accordingly:
+passwordInput.addEventListener('input', function () {
+    if (passwordInput.value === "") {
+        iconElement.src = "../assets/icons/log_in/lock.svg";
+        return;
+    }
+
+    const isValid = isPasswordValid(passwordInput.value);
+    passwordDiv.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    passwordAlert.style.display = isValid ? "none" : "block";
+    iconElement.src = isValid ? "../assets/icons/log_in/visibility.svg" : "../assets/icons/log_in/visibility_off.svg";
+});
 
 // Password validation function
 function isPasswordValid(value) {
@@ -10,7 +26,20 @@ function isPasswordValid(value) {
     return value.length >= 8 && letters >= 6 && numbers >= 2;
 }
 
-// Log in password visibility and visibility matching icon:
+
+// Check if the icon in input filed is clicked and: 
+        // toggle password visibility and matching icon,
+document.addEventListener('click', function (e) {
+    if (e.target.id === 'log-in-lock-icon') {
+        logInVisibility(e.target);
+    } else { 
+        // or hide password and show lock icon    
+        iconElement.src = "../assets/icons/log_in/lock.svg";
+        passwordInput.type = "password"
+    }
+});
+
+// Function for changing password visibility and matching icon
 function logInVisibility(iconElement) {
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
@@ -20,38 +49,3 @@ function logInVisibility(iconElement) {
         iconElement.src = "../assets/icons/log_in/visibility_off.svg";
     }
 }
-
-
-function resetProperties() {
-    passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-    passwordAlert.style.display = 'none';
-    iconElement.src = "../assets/icons/log_in/lock.svg";
-}
-
-passwordInput.addEventListener('input', function () {
-    // if input is empty reset styles
-    if (passwordInput.value === "") {
-        resetProperties()
-        return;
-    }
-
-    // if not empty validate and then update accordingly
-    const isValid = isPasswordValid(passwordInput.value);
-    passwordDiv.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
-    // passwordAlert.style.display = isValid ? "none" : "block";
-    iconElement.src = isValid ? "../assets/icons/log_in/visibility.svg" : "../assets/icons/log_in/visibility_off.svg";
-});
-
-// Listen for clicks at icon, which is in password input:
-document.addEventListener('click', function (e) {
-    // if the icon is clicked, call logInVisibility();
-    if (e.target.id === 'log-in-lock-icon') {
-        logInVisibility(e.target);
-        return;
-
-    // if on document clicked, but not on two buttons: reset input
-    } else if (e.target.id !== 'log-in-button' && e.target.id !== 'guest-log-in-button') {
-        resetProperties()
-    }
-});
-

@@ -1,24 +1,30 @@
-var passwordDiv = document.querySelector('.log-in-password')
+
 // for updating styles to Div, not to Input 
+var passwordDiv = document.querySelector('.log-in-password')
 var passwordInput = document.getElementById('log-in-password');
 var passwordAlert = document.getElementById('log-in-password-alert');
+
 var logInButton = document.getElementById('log-in-button');
 var guestLogInButton = document.getElementById('guest-log-in-button');
 
-function validateInputs() {
+
+function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
 
-    // Update styles and alerts based on validation
-    updateInputStyles(emailInput, emailAlert, emailValid);
-    updateInputStyles(passwordDiv, passwordAlert, passwordValid);
+    if (passwordInput.value == "") {
+        iconElement.src = "../assets/icons/log_in/lock.svg";
+    }
+
+    updateFormStyles(emailInput, emailAlert, emailValid);
+    updateFormStyles(passwordDiv, passwordAlert, passwordValid);
 
     // Disable the Log in button if email and password are not valid
     logInButton.disabled = !(emailValid && passwordValid);
     return emailValid && passwordValid;
 }
 
-function updateInputStyles(input, alert, isValid) {
+function updateFormStyles(input, alert, isValid) {
     if (isValid) {
         input.style.borderColor = 'rgb(41, 171, 226)';
         alert.style.display = 'none';
@@ -27,15 +33,15 @@ function updateInputStyles(input, alert, isValid) {
         alert.style.display = 'block';
     }
 }
+emailInput.addEventListener('input', validateForm);
+passwordInput.addEventListener('input', validateForm);
 
-emailInput.addEventListener('input', validateInputs);
-passwordInput.addEventListener('input', validateInputs);
-
+// Log in user
 logInButton.addEventListener('click', async (e) => {
     e.preventDefault(); // Prevent form submission
 
-    // Validate inputs and stop proceeding if email and/or password are not valid
-    if (!validateInputs()) return;
+    // Validate inputs and stop if email and/or password are not valid
+    if (!validateForm()) return;
 
     const email = emailInput.value;
     const password = passwordInput.value;
@@ -44,7 +50,7 @@ logInButton.addEventListener('click', async (e) => {
         const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
         const response = await fetch(BASE_URL + "users.json");
         const database = await response.json();
-        
+
         // Find matching user by email
         const user = Object.values(database).find(user => user.email === email);
 

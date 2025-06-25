@@ -1,52 +1,44 @@
+
+// Check name input and update styles accordingly
 const nameInput = document.getElementById('name-input');
 const nameAlert = document.getElementById('name-alert');
 const nameDiv = nameInput.closest('.name');
-// When the user types in the name input, update styles accordingly
 
-document.getElementById('name-input').addEventListener('input', function () {
-    let name = nameInput.value.trim()
-    if (name !== "") {
-        nameInput.style.borderColor = 'rgb(41, 171, 226)';
-        nameDiv.style.padding = "0px 0px 24px";
-        nameAlert.style.display = 'none';
-    } else {
-        nameInput.style.borderColor = 'rgb(255, 0, 31)';
-        nameDiv.style.padding = "0px 0px 10px";
-        nameAlert.style.display = 'block';
-    }
+nameInput.addEventListener('input', function () {
+    const name = nameInput.value
+    const valid = name !== ""
+
+    nameInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    nameDiv.style.padding = valid ? "0px 0px 24px" : "0px 0px 10px";
+    nameAlert.style.display = valid ? 'none' : 'block';
 });
 
-// Initial setup
+
+// Form validation 
+
 let isValid = true;
 
 function nameValidation() {
-    let name = nameInput.value.trim();
-    if (name === "") {
-        nameInput.style.borderColor = 'rgb(255, 0, 31)';
-        nameDiv.style.padding = "0px 0px 10px";
-        nameAlert.style.display = 'block';
-        isValid = false;
-    } else {
-        nameInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-        nameDiv.style.padding = "0px 0px 24px";
-        nameAlert.style.display = 'none';
-    }
+    const name = nameInput.value;
+    const valid = name === "";
+
+    nameInput.style.borderColor = valid ? 'rgb(255, 0, 31)' : 'rgba(0, 0, 0, 0.1)'
+    nameDiv.style.padding = valid ? "0px 0px 10px" : "0px 0px 24px";
+    nameAlert.style.display = valid ? 'block' : 'none';
+    return valid
 }
 
 
 function emailValidation() {
     const emailInput = document.getElementById('sign-up-email-input');
     const emailAlert = document.getElementById('sign-up-email-alert');
-    const email = emailInput.value.trim();
 
-    if (!isEmailValid(email)) {
-        emailInput.style.borderColor = 'rgb(255, 0, 31)';
-        emailAlert.style.display = 'block';
-        isValid = false;
-    } else {
-        emailInput.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-        emailAlert.style.display = 'none';
-    }
+    const email = emailInput.value;
+    const valid = isEmailValid(email);
+
+    emailInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    emailAlert.style.display = valid ? 'none' : 'block';
+    return valid
 }
 
 
@@ -54,16 +46,13 @@ function passwordValidation() {
     const passwordDiv = document.querySelector('.sign-up-password');
     const passwordInput = document.getElementById('sign-up-password');
     const passwordAlert = document.getElementById('sign-up-password-alert');
-    const password = passwordInput.value;
 
-    if (!isPasswordValid(password)) {
-        passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-        passwordAlert.style.display = 'block';
-        isValid = false;
-    } else {
-        passwordDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-        passwordAlert.style.display = 'none';
-    }
+    const password = passwordInput.value.trim();
+    const valid = isPasswordValid(password);
+
+    passwordDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    passwordAlert.style.display = valid ? 'none' : 'block';
+    return valid
 }
 
 
@@ -71,35 +60,31 @@ function confirmPasswordValidation() {
     const confirmDiv = document.querySelector('.confirm-password');
     const confirmInput = document.getElementById('confirm-password');
     const confirmAlert = document.getElementById('confirm-password-alert');
-    const confirmPassword = confirmInput.value;
-    const password = document.getElementById('sign-up-password').value;
 
-    if (!confirmPassword || confirmPassword !== password) {
-        confirmDiv.style.borderColor = 'rgb(255, 0, 31)';
-        confirmAlert.style.display = 'block';
-        isValid = false;
-    } else {
-        confirmDiv.style.borderColor = 'rgba(0, 0, 0, 0.1)';
-        confirmAlert.style.display = 'none';
-    }
+    const confirmPassword = confirmInput.value.trim();
+    const password = document.getElementById('sign-up-password').value.trim();
+    const valid = confirmPassword !== "" && confirmPassword === password;
+
+    confirmDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    confirmAlert.style.display = valid ? 'none' : 'block';
+    return valid
 }
 
 
 function privacyPolicyValidation() {
     const checkbox = document.getElementById('accept-privacy-policy');
     const policyAlert = document.getElementById('privacy-policy-alert');
+    const valid = checkbox.checked;
 
-    if (!checkbox.checked) {
-        policyAlert.style.display = 'block';
-        isValid = false;
-    } else {
-        policyAlert.style.display = 'none';
-    }
+    policyAlert.style.display = valid ? 'none' : 'block';
+    return valid;
 }
 
 
+// This is change state of checkbox
 const checkbox = document.getElementById('accept-privacy-policy');
 const policyAlert = document.getElementById('privacy-policy-alert');
+
 checkbox.addEventListener('change', function () {
     policyAlert.style.display = this.checked ? "none" : "block";
 });
@@ -108,22 +93,24 @@ checkbox.addEventListener('change', function () {
 function submitSignUpForm(event) {
     event.preventDefault();
 
-    // Reset isValid before running validation checks
-    isValid = true;
+    let isValid = true;
 
-    // Run validations
-    nameValidation();
-    emailValidation();
-    passwordValidation();
-    confirmPasswordValidation();
-    privacyPolicyValidation();
+    // check each validation if NOT true, 
+    // then isValid = false, and sign up is stopped!
+    if (!nameValidation()) isValid = false;
+    if (!emailValidation()) isValid = false;
+    if (!passwordValidation()) isValid = false;
+    if (!confirmPasswordValidation()) isValid = false;
+    if (!privacyPolicyValidation()) isValid = false;
 
-    // If all validations pass, proceed with sign up
     if (isValid) {
+        const emailInput = document.getElementById('sign-up-email-input');
+        const passwordInput = document.getElementById('sign-up-password');
+
         const userData = {
-            name: nameInput.value.trim(),
-            email: emailInput.value.trim(),
-            password: passwordInput.value,
+            name: nameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value.trim(),
         };
         signUpUser(userData);
     } else {
