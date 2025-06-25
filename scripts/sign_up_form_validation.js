@@ -1,12 +1,11 @@
 
 // Check name input and update styles accordingly
-const nameInput = document.getElementById('name-input');
-const nameAlert = document.getElementById('name-alert');
-const nameDiv = nameInput.closest('.name');
+var nameInput = document.getElementById('name-input');
+var nameAlert = document.getElementById('name-alert');
+var nameDiv = nameInput.closest('.name');
 
 nameInput.addEventListener('input', function () {
-    const name = nameInput.value
-    const valid = name !== ""
+    let valid = nameInput.value !== ""
 
     nameInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
     nameDiv.style.padding = valid ? "0px 0px 24px" : "0px 0px 10px";
@@ -19,8 +18,7 @@ nameInput.addEventListener('input', function () {
 let isValid = true;
 
 function nameValidation() {
-    const name = nameInput.value;
-    const valid = name === "";
+    let valid = nameInput.value === "";
 
     nameInput.style.borderColor = valid ? 'rgb(255, 0, 31)' : 'rgba(0, 0, 0, 0.1)'
     nameDiv.style.padding = valid ? "0px 0px 10px" : "0px 0px 24px";
@@ -30,11 +28,7 @@ function nameValidation() {
 
 
 function emailValidation() {
-    const emailInput = document.getElementById('sign-up-email-input');
-    const emailAlert = document.getElementById('sign-up-email-alert');
-
-    const email = emailInput.value;
-    const valid = isEmailValid(email);
+    let valid = isEmailValid(emailInput.value);
 
     emailInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
     emailAlert.style.display = valid ? 'none' : 'block';
@@ -43,12 +37,7 @@ function emailValidation() {
 
 
 function passwordValidation() {
-    const passwordDiv = document.querySelector('.sign-up-password');
-    const passwordInput = document.getElementById('sign-up-password');
-    const passwordAlert = document.getElementById('sign-up-password-alert');
-
-    const password = passwordInput.value.trim();
-    const valid = isPasswordValid(password);
+    let valid = isPasswordValid(passwordInput.value.trim());
 
     passwordDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
     passwordAlert.style.display = valid ? 'none' : 'block';
@@ -57,13 +46,8 @@ function passwordValidation() {
 
 
 function confirmPasswordValidation() {
-    const confirmDiv = document.querySelector('.confirm-password');
-    const confirmInput = document.getElementById('confirm-password');
-    const confirmAlert = document.getElementById('confirm-password-alert');
-
-    const confirmPassword = confirmInput.value.trim();
-    const password = document.getElementById('sign-up-password').value.trim();
-    const valid = confirmPassword !== "" && confirmPassword === password;
+    let confirmPassword = confirmInput.value.trim();
+    let valid = confirmPassword !== "" && confirmPassword === password;
 
     confirmDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
     confirmAlert.style.display = valid ? 'none' : 'block';
@@ -72,9 +56,9 @@ function confirmPasswordValidation() {
 
 
 function privacyPolicyValidation() {
-    const checkbox = document.getElementById('accept-privacy-policy');
-    const policyAlert = document.getElementById('privacy-policy-alert');
-    const valid = checkbox.checked;
+    let checkbox = document.getElementById('accept-privacy-policy');
+    let policyAlert = document.getElementById('privacy-policy-alert');
+    let valid = checkbox.checked;
 
     policyAlert.style.display = valid ? 'none' : 'block';
     return valid;
@@ -82,8 +66,8 @@ function privacyPolicyValidation() {
 
 
 // This is change state of checkbox
-const checkbox = document.getElementById('accept-privacy-policy');
-const policyAlert = document.getElementById('privacy-policy-alert');
+let checkbox = document.getElementById('accept-privacy-policy');
+let policyAlert = document.getElementById('privacy-policy-alert');
 
 checkbox.addEventListener('change', function () {
     policyAlert.style.display = this.checked ? "none" : "block";
@@ -104,10 +88,10 @@ function submitSignUpForm(event) {
     if (!privacyPolicyValidation()) isValid = false;
 
     if (isValid) {
-        const emailInput = document.getElementById('sign-up-email-input');
-        const passwordInput = document.getElementById('sign-up-password');
+        let emailInput = document.getElementById('sign-up-email-input');
+        let passwordInput = document.getElementById('sign-up-password');
 
-        const userData = {
+        let userData = {
             name: nameInput.value,
             email: emailInput.value,
             password: passwordInput.value.trim(),
@@ -120,7 +104,7 @@ function submitSignUpForm(event) {
 
 
 async function signUpUser(userData) {
-    const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+    let BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
     try {
         let response = await fetch(`${BASE_URL}users.json`, {
             method: 'POST',
