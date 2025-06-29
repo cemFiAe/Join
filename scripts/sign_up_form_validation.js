@@ -18,11 +18,11 @@ nameInput.addEventListener('input', function () {
 let isValid = true;
 
 function nameValidation() {
-    let valid = nameInput.value === "";
+    let valid = nameInput.value !== ""; 
 
-    nameInput.style.borderColor = valid ? 'rgb(255, 0, 31)' : 'rgba(0, 0, 0, 0.1)'
-    nameDiv.style.padding = valid ? "0px 0px 10px" : "0px 0px 24px";
-    nameAlert.style.display = valid ? 'block' : 'none';
+    nameInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    nameDiv.style.padding = valid ? "0px 0px 24px" : "0px 0px 10px";
+    nameAlert.style.display = valid ? 'none' : 'block';
     return valid
 }
 
@@ -37,7 +37,8 @@ function emailValidation() {
 
 
 function passwordValidation() {
-    let valid = isPasswordValid(passwordInput.value.trim());
+    let password = passwordInput.value.trim();
+    let valid = isPasswordValid(password)
 
     passwordDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
     passwordAlert.style.display = valid ? 'none' : 'block';
@@ -46,6 +47,7 @@ function passwordValidation() {
 
 
 function confirmPasswordValidation() {
+    let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
     let valid = confirmPassword !== "" && confirmPassword === password;
 
@@ -55,23 +57,28 @@ function confirmPasswordValidation() {
 }
 
 
+let checkbox = document.getElementById('checkbox');
+let policyAlert = document.getElementById('privacy-policy-alert');
+
+let checkboxUnchecked = true;
+checkbox.src = "../assets/icons/sign_up/checkbox_unchecked.svg";
+
+// Toggle checkbox on click
+checkbox.addEventListener('click', function () {
+    checkboxUnchecked = !checkboxUnchecked;
+
+    checkbox.src = checkboxUnchecked ? "../assets/icons/sign_up/checkbox_unchecked.svg" : "../assets/icons/sign_up/checkbox_checked.svg";
+    policyAlert.style.display = checkboxUnchecked ? 'block' : 'none'
+});
+
+
 function privacyPolicyValidation() {
-    let checkbox = document.getElementById('accept-privacy-policy');
-    let policyAlert = document.getElementById('privacy-policy-alert');
-    let valid = checkbox.checked;
+    let valid = !checkboxUnchecked;
 
     policyAlert.style.display = valid ? 'none' : 'block';
     return valid;
 }
 
-
-// This is change state of checkbox
-let checkbox = document.getElementById('accept-privacy-policy');
-let policyAlert = document.getElementById('privacy-policy-alert');
-
-checkbox.addEventListener('change', function () {
-    policyAlert.style.display = this.checked ? "none" : "block";
-});
 
 
 function submitSignUpForm(event) {
