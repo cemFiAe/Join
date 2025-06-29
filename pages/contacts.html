@@ -44,7 +44,8 @@
         <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
         <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
         <div>
-          <button class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="button" onclick="event.stopPropagation(), closeAddContact()" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="button" onclick="event.stopPropagation(), closeAddContactMobile()" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg"
               alt="checkmark"></button>
         </div>
