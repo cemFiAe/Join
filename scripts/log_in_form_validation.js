@@ -59,8 +59,7 @@ logInButton.addEventListener('click', async (e) => {
             window.location.href = "../pages/summary.html";
         } else {
             passwordAlert.style.display = "block"
-            passwordAlert.innerHTML = "Invalid email or password";
-            passwordInput.style.borderColor = 'rgb(255, 0, 31)';
+            passwordAlert.innerHTML = "Invalid email or password (Unknown user)";
         }
 
     } catch (error) {
