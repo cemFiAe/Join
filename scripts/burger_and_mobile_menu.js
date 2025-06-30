@@ -1,3 +1,4 @@
+// ------------------ MOBILE MENU ------------------ //
 const menuToggle = document.getElementById("menuToggle");
 const mobileNav = document.getElementById("mobileNav");
 let menuOpen = false;
@@ -26,11 +27,12 @@ function handleClickOutside(event) {
   }
 }
 
-menuToggle.addEventListener("click", toggleMenu);
+if (menuToggle) {
+  menuToggle.addEventListener("click", toggleMenu);
+}
 
-
-
-const toggleBurger = document.getElementById('toggleBurger');
+// ------------------ DESKTOP BURGER MENU (Avatar-Trigger) ------------------ //
+const avatarTrigger = document.getElementById('board-user-avatar');
 const burger = document.getElementById('burger');
 let burgerOpen = false;
 
@@ -53,9 +55,12 @@ function toggleBurgerMenu(event) {
 }
 
 function outsideClickListener(event) {
-  if (!burger.contains(event.target) && !toggleBurger.contains(event.target)) {
+  // Schließt das Menü, wenn außerhalb des Menüs und außerhalb des Avatars geklickt wird
+  if (!burger.contains(event.target) && !avatarTrigger.contains(event.target)) {
     closeBurger();
   }
 }
 
-toggleBurger.addEventListener('click', toggleBurgerMenu);
+if (avatarTrigger) {
+  avatarTrigger.addEventListener('click', toggleBurgerMenu);
+}

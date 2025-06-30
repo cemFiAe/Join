@@ -11,72 +11,28 @@
     <link rel="stylesheet" type="text/css" href="../styles/media/board.css" />
     <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
     <link rel="stylesheet" type="text/css" href="../style.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/overlays/add_task.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/overlays/board_overlays.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/media/add_task.css" />
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
     <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
     <script src="../scripts/log_out_user.js"></script>
-
 </head>
 
 <body>
-    <div id="bg_overlay" class="bg_overlay"></div>
+<header class="header">
+    <h2 class="title">Kanban Project Management Tool</h2>
+<div class="header-icons">
+    <a href="../pages/help.html">
+        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="">
+    </a>
+    <div id="board-user-avatar" class="user-avatar"></div>
+</div>
 
-    <dialog id="add_task_overlay" class="add_task_overlay">
-        <h1 class="headline">Add Task</h1>
-        <img onclick="closeAddTaskOverlay()" class="close-x" src="../assets/icons/board/Close.svg" alt="">
+</header>
 
-        <div class="box-wrapper">
-            <div class="left-box">
-                <span>Title<sup class="sup">*</sup></span>
-                <input type="text" placeholder="Enter a Title">
-
-                <span>Description</span>
-                <input class="description-input" type="text" placeholder="Enter a Description">
-
-                <span>Due Date</span>
-                <input class="date-input" type="date" placeholder="dd/mm/yyyy">
-            </div>
-
-            <div class="box-divider"></div>
-
-            <div class="right-box">
-                <span>Priority</span>
-                <div>
-                    <button class="prio-btn">Urgent<img src="../assets/icons/board/prio/prio top.svg" alt=""></button>
-                    <button class="prio-btn">Medium<img src="../assets/icons/board/prio/prio mid.svg" alt=""></button>
-                    <button class="prio-btn">Low<img src="../assets/icons/board/prio/prio low.svg" alt=""></button>
-                </div>
-
-                <span>Assigned to</span>
-                <input class="assign-input" type="text" placeholder="Select contacts to assign">
-
-                <span>Category<sup class="sup">*</sup></span>
-                <input class="category-input" type="text" placeholder="Select task category">
-
-                <span>Subtasks</span>
-                <input class="sub-input" type="text" placeholder="Add new subtask">
-            </div>
-        </div>
-
-        <div class="bottom-wrapper">
-            <span><sup class="sup">*</sup>This field is required</span>
-            <div>
-                <button class="cancel-btn">Cancel<img src="../assets/icons/board/cancel.svg" alt=""></button>
-                <button class="create-btn">Create Task<img src="../assets/icons/board/check.svg" alt=""></button>
-            </div>
-        </div>
-    </dialog>
-
-    <header class="header">
-        <h2 class="title">Kanban Project Management Tool</h2>
-        <div class="header-icons">
-            <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
-            <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
-        </div>
-    </header>
 
     <nav id="burger" class="burger">
         <a href="./legal_notice.html">Legal Notice</a>
@@ -91,23 +47,19 @@
                 <img src="../assets/icons/frame/nav/summary.svg" alt="">
                 <p>Summary</p>
             </a>
-
             <a href="../pages/add_task.html">
                 <img src="../assets/icons/frame/nav/add_task.svg" alt="">
                 <p>Add Task</p>
             </a>
-
             <a class="current-site" href="../pages/board.html">
                 <img src="../assets/icons/frame/nav/board_active.svg" alt="">
                 <p>Board</p>
             </a>
-
             <a href="../pages/contacts.html">
                 <img src="../assets/icons/frame/nav/contacts.svg" alt="">
                 <p>Contacts</p>
             </a>
         </div>
-
         <div class="nav-bottom">
             <a href="../pages/privacy_policy.html">Privacy Policy</a>
             <a href="../pages/legal_notice.html">Legal notice</a>
@@ -130,12 +82,12 @@
         <section class="board-nav">
             <div class="board-nav-top">
                 <h1 class="board-header">Board</h1>
-                <button onclick="openAddTaskMobile()" class="addtask-btn-mobile">
+                <button onclick="openAddTaskMobile()" class="addtask-btn-mobile" title="Add Task (Mobile)">
                     <img class="plus" src="../assets/icons/board/add.svg" alt="">
                 </button>
                 <div class="find-add-div">
                     <input id="taskSearch" class="findtask" type="text" placeholder="Find Task">
-                    <button onclick="openAddTaskOverlay()" class="addtask-btn">
+                    <button onclick="openAddTaskDialog('todo')" class="addtask-btn" title="Add Task">
                         <span>Add task</span>
                         <img class="plus" src="../assets/icons/board/add.svg" alt="">
                     </button>
@@ -146,134 +98,41 @@
             </div>
         </section>
 
+        <dialog id="taskDetailDialog" class="task-detail-dialog">
+            <div class="task-detail-content">
+                <div id="taskDetailBody"></div>
+                <div class="task-detail-actions"></div>
+            </div>
+        </dialog>
 
         <section class="board-nav-bottom">
             <div class="task-container">
                 <div class="span-container">
                     <span class="category-span">To do</span>
-                    <span class="categoryplus">+</span>
+                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('todo')">+</button>
                 </div>
-
-                <div id="toDo" class="category-container">
-                    <div class="notask">
-                        No tasks To Do
-                    </div>
-                </div>
+                <div id="toDo" class="category-container"></div>
             </div>
-
             <div class="task-container">
                 <div class="span-container">
                     <span class="category-span">In Progress</span>
-                    <span class="categoryplus">+</span>
+                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('inprogress')">+</button>
                 </div>
-                <div id="inProgress" class="category-container">
-                    <div class="task">
-                        <span class="task-header tech-task">User Story</span>
-                        <h4 class="task-title">Kochwelt Page & Recipe Recommender</h4>
-                        <p class="task-info">Build start page with recipe recommendation...</p>
-                        <div class="task-bar">
-                            <div class="bar-wrapper">
-                                <div class="progress-bar">
-                                    <span class="progress-bar-fill" style="width: 50%;"></span>
-                                </div>
-                            </div>
-                            <span class="sub-task">1/2 Subtasks</span>
-                        </div>
-                        <div class="task-status">
-                            <div>
-                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                            </div>
-                            <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                        </div>
-                    </div>
-                </div>
+                <div id="inProgress" class="category-container"></div>
             </div>
-
             <div class="task-container">
                 <div class="span-container">
                     <span class="category-span">Await feedback</span>
-                    <span class="categoryplus">+</span>
+                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('awaitingfeedback')">+</button>
                 </div>
-                <div id="awaitFeedback" class="category-container">
-                    <div class="task">
-                        <span class="task-header user-task">Technical Task</span>
-                        <h4 class="task-title">HTML Base Template Creation</h4>
-                        <p class="task-info">Create reusable HTML base templates...</p>
-                        <div class="task-status">
-                            <div>
-                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                            </div>
-                            <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="task">
-                        <span class="task-header tech-task">User Story</span>
-                        <h4 class="task-title">Daily Kochwelt Recipe</h4>
-                        <p class="task-info">Implement daily recipe and portion calculator...</p>
-                        <div class="task-bar">
-                            <div class="bar-wrapper">
-                                <div class="progress-bar">
-                                    <span class="progress-bar-fill" style="width: 50%;"></span>
-                                </div>
-                            </div>
-                            <span class="sub-task">1/2 Subtasks</span>
-                        </div>
-                        <div class="task-status">
-                            <div>
-                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                            </div>
-                            <img class="prio-icon" src="../assets/icons/board/prio/prio mid.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="task">
-                        <span class="task-header user-task">Technical Task</span>
-                        <h4 class="task-title">HTML Base Template Creation</h4>
-                        <p class="task-info">Create reusable HTML base templates...</p>
-                        <div class="task-status">
-                            <div>
-                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                            </div>
-                            <img class="prio-icon" src="../assets/icons/board/prio/prio low.svg" alt="">
-                        </div>
-                    </div>
-                </div>
+                <div id="awaitFeedback" class="category-container"></div>
             </div>
-
             <div class="task-container">
                 <div class="span-container">
                     <span class="category-span">Done</span>
+                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('done')">+</button>
                 </div>
-                <div id="done" class="category-container">
-                    <div class="task">
-                        <span class="task-header user-task">Technical Task</span>
-                        <h4 class="task-title">CSS Architecture Planning</h4>
-                        <p class="task-info">Define CSS naming conventions and structure</p>
-                        <div class="task-bar">
-                            <div class="bar-wrapper">
-                                <div class="progress-bar">
-                                    <span class="progress-bar-fill" style="width: 100%;"></span>
-                                </div>
-                            </div>
-                            <span class="sub-task">2/2 Subtasks</span>
-                        </div>
-                        <div class="task-status">
-                            <div>
-                                <img class="profile-img" src="../assets/img/profile/am.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/as.png" alt="">
-                                <img class="profile-img" src="../assets/img/profile/bz.png" alt="">
-                            </div>
-                            <img class="prio-icon" src="../assets/icons/board/prio/prio top.svg" alt="">
-                        </div>
-                    </div>
-                </div>
+                <div id="done" class="category-container"></div>
             </div>
         </section>
     </section>
@@ -301,8 +160,83 @@
         </div>
     </footer>
 
+    <dialog id="deleteConfirmDialog" class="delete-confirm-dialog">
+        <div class="delete-dialog-content">
+            <p>Bist du sicher, dass du diesen Task löschen möchtest?</p>
+            <div class="delete-dialog-actions">
+                <button id="cancelDeleteBtn" class="cancel-btn">Abbrechen</button>
+                <button id="confirmDeleteBtn" class="delete-btn">Löschen</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="addTaskOverlay" class="add_task_dialog_overlay">
+  <div class="main_content">
+    <div class="headline">
+      Add Task
+      <button type="button" class="close-add-task-overlay">&times;</button>
+    </div>
+    <div class="box-wrapper">
+      <div class="left-box">
+        <label for="title">Title<span class="required">*</span></label>
+        <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Enter a Description"></textarea>
+        <label for="due">Due date<span class="required">*</span></label>
+        <div class="input-icon-date">
+          <input id="due" type="text" placeholder="dd/mm/yyyy" autocomplete="off">
+          <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon"></span>
+        </div>
+      </div>
+      <div class="box-divider"></div>
+      <div class="right-box">
+        <label>Priority</label>
+        <div class="priority-buttons">
+          <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
+          <button type="button" class="btn btn_medium active" data-priority="medium">Medium
+            <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
+            <img class="icon hover" src="../assets/icons/add_task/medium.png" alt="Medium">
+          </button>
+          <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
+        </div>
+        <label for="assigned">Assigned to</label>
+        <select id="assigned" class="option">
+          <option value="">Select contacts to assign</option>
+        </select>
+        <label for="category">Category<span class="required">*</span></label>
+        <select id="category" class="option">
+          <option value="">Select task category</option>
+        </select>
+        <label>Subtasks</label>
+        <div class="input-icon-subtask">
+          <input type="text" placeholder="Add new subtask" autocomplete="off">
+          <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
+        </div>
+        <ul id="subtask-list"></ul>
+      </div>
+    </div>
+    <div class="add_task_button">
+      <div class="required-info">
+        *This field is required
+      </div>
+      <div>
+        <button type="button" class="clear_button">Cancel</button>
+        <button type="button" class="create_task_btn">Create Task &#10003;</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Custom Scripts -->
     <script src="../scripts/burger_and_mobile_menu.js"></script>
+    <script src="../scripts/db.js"></script>
+    <script src="../scripts/board_firebase.js"></script>
     <script src="../scripts/board.js"></script>
+    <script src="../scripts/current_user.js"></script>
+    <script src="../scripts/login_guest.js"></script> 
 </body>
 
 </html>

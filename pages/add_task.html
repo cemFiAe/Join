@@ -20,13 +20,18 @@
 </head>
 
 <body>
-  <header class="header">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<header class="header">
     <h2 class="title">Kanban Project Management Tool</h2>
-    <div class="header-icons">
-      <a href="../pages/help.html"><img class="help-icon" src="../assets/icons/frame/header/help.svg" alt=""></a>
-      <a id="toggleBurger" href=""><img class="user-icon" src="../assets/icons/frame/header/user.svg" alt=""></a>
-    </div>
-  </header>
+<div class="header-icons">
+    <a href="../pages/help.html">
+        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="">
+    </a>
+    <div id="board-user-avatar" class="user-avatar"></div>
+</div>
+
+</header>
 
   <nav id="burger" class="burger">
     <a href="./legal_notice.html">Legal Notice</a>
@@ -111,42 +116,50 @@
         <div class="metrics-panel-right">
           <div class="form-group">
             <label>Priority</label>
-            <div class="priority-buttons">
-              <button type="button" class="btn">Urgent <img src="../assets/icons/add_task/urgent_small.png"
-                  alt="Urgent"></button>
-              <button type="button" class="btn btn_medium">
-                Medium
-                <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
-                <img class="icon hover" src="../assets/icons/add_task/medium.png" alt="Medium">
-              </button>
-              <button type="button" class="btn">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
-            </div>
+          <div class="priority-buttons">
+            <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
+            <button type="button" class="btn btn_medium active" data-priority="medium">
+              Medium
+              <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
+              <img class="icon hover" src="../assets/icons/add_task/medium.png" alt="Medium">
+            </button>
+            <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
+          </div>
           </div>
           <div class="form-group">
             <label for="assigned">Assigned to</label>
-            <select id="assigned" class="option">
-              <option value="">Select contacts to assign</option>
-              <option value="">contact1</option>
-              <img class="icon" src="../assets/icons/add_task/arrow_drop_down.png">
-            </select>
+              <select id="assigned" class="option">
+                <option value="">Select contacts to assign</option>
+              </select>
           </div>
           <div class="form-group">
             <label for="category">Category<span class="required">*</span></label>
             <select id="category" class="option">
               <option value="">Select task category</option>
-              <img class="icon" src="../assets/icons/add_task/arrow_drop_down.png">
             </select>
           </div>
           <div class="form-group subtask-group">
             <label>Subtasks</label>
-            <div class="input-icon-subtask">
-              <input type="text" placeholder="Add new subtask" autocomplete="off">
-              <button type="button" class="add-subtask"><span class="icon"><img
-                    src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
-            </div>
+              <div class="input-icon-subtask">
+                <input type="text" placeholder="Add new subtask" autocomplete="off">
+                <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
+              </div>
+              
           </div>
-        </div>
+          <ul id="subtask-list"></ul>
+        </div>       
       </div>
+          <div class="add_task_button">
+            <div>
+              <img src="/Join/assets/icons/add_task/required_field.png" alt="">
+            </div>
+            <div class="create-btn-container">
+              <button class="clear_button">Clear x</button>
+              <button type="button" class="create_task_btn">
+                Create Task <img src="../assets/icons/add_task/check.png" alt="">
+              </button>
+            </div>
+          </div> 
     </div>
   </div>
 
@@ -171,6 +184,10 @@
   </footer>
 
   <script src="../scripts/burger_and_mobile_menu.js"></script>
+  <script src="../scripts/db.js"></script>
+  <script src="../scripts/add_task_firebase.js"></script>
+  <script src="../scripts/current_user.js"></script>
+  <script src="../scripts/login_guest.js"></script> 
 </body>
 
 </html>
