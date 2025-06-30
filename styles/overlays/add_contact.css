@@ -1,24 +1,4 @@
-.add_contact_overlay {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    width: 90%;
-    height: 60%;
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    top: 20%;
-    left: 105%;
-    z-index: 999;
-    background-color: #2A3647;
-    border-radius: 30px;
-    border-style: solid;
-    border-color: #424B59;
-    border-width: 1px;
-    transition: ease-in 0.3s;
-}
-
-.edit_contact_overlay {
+.add_contact_overlay, .edit_contact_overlay {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -185,8 +165,8 @@
     background-repeat: no-repeat; 
 }
 
-.cancel-btn {
-    display: flex;
+.cancel-btn, .cancel-btn-mobile {
+    display: none;
     justify-content: center;
     align-items: center;
     gap: 4px;
@@ -202,7 +182,7 @@
     color: #2A3647;
 }
 
-.cancel-btn:hover {
+.cancel-btn:hover, .cancel-btn-mobile:hover {
     cursor: pointer;
     border-color: #29ABE2;
     color: #29ABE2;
@@ -216,7 +196,7 @@
     width: 24px;
 }
 
-.cancel-btn:hover img {
+.cancel-btn:hover img, .cancel-btn-mobile:hover img {
     filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
 }
 
@@ -255,7 +235,7 @@
     align-items: center;
     position: absolute;
     z-index: 999;
-    left: calc(100% - 72px);
+    left: calc(100% - 100px);
     top: 85%;
     width: 56px;
     height: 56px;
@@ -317,23 +297,19 @@
     }
 }
 
+@media (min-width: 1370px) {
+    .cancel-btn {
+        display: flex !important;
+    }
+}
+
 @media (max-width: 1370px) {
     .add_contact_overlay {
         flex-direction: column;
         align-items: center;
-        width: 95%;
-        height: 87%;
-        left: 2.5% !important;
-        top: 120%;
     }
     .edit_contact_overlay {
-    flex-direction: column;
-    width: 95%;
-    height: 87%;
-    padding: 0;
-    margin: 0;
-    top: 6.5%;
-    left: 2.5%;
+        flex-direction: column;
     }
     .overlay-logo {
         display: none;
@@ -366,8 +342,8 @@
         padding-left: 24px;
         padding-right: 24px;
     }
-    .cancel-btn {
-        display: none;
+    .cancel-btn-mobile {
+        display: flex !important;
     }
     .close-x {
         display: none;

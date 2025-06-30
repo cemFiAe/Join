@@ -1,4 +1,13 @@
-/* help area */
+
+/* .invisible-scrollbar class is so coded,
+because it's suitable for all web browsers */
+.invisible-scrollbar {
+    scrollbar-width: none;
+}
+
+.main-content {
+    height: auto !important;
+}
 
 .description {
     box-sizing: border-box;
@@ -14,10 +23,6 @@
     align-items: start;
     flex-direction: column;
     overflow-y: scroll;
-}
-
-.text-area::-webkit-scrollbar {
-    display: none;
 }
 
 .text-area>h2 {

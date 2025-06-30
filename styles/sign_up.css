@@ -45,7 +45,7 @@
     font-size: 12px;
     text-align: start;
     padding-left: 4px;
-    color: rgb(255,129,144);
+    color: rgb(255, 129, 144);
     display: none;
 }
 
@@ -148,12 +148,20 @@
     flex-direction: column;
 }
 
-.checkbox-area {
+.checkbox-and-alert {
     display: flex;
     justify-content: start;
     align-items: center;
     flex-direction: column;
     gap: 8px;
+}
+
+.checkbox-area {
+    display: flex;
+    width: 240px;
+    height: 22px;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .checkbox:hover {
@@ -185,7 +193,6 @@
     top: 0;
     height: 100vh;
     width: 100%;
-    /* max-width: 1440px; */
     background-color: rgba(0, 0, 0, 0);
     animation: fade-in 0.3s ease-out forwards;
 }

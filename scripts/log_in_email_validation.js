@@ -15,7 +15,7 @@ function isEmailValid(email) {
     let letters = (namePart.match(/[A-Za-z]/g) || []).length;
     let numbers = (namePart.match(/[0-9]/g) || []).length;
 
-    // ---> at least 6 letters and max 2 numbers! (or min. 8 letters)
+    // ---> min. 6 letters, max. 2 numbers! (or min. 8 letters)
     if (letters < 6 || numbers > 2) return false;
 
     // Domain part must be in this format: provider.domain 
