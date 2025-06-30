@@ -11,7 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 email: "guest@join.com",
                 isGuest: true
             }));
-            window.location.href = "../pages/summary.html"; // oder andere Zielseite
+                // Im Guest-Login-Code
+                localStorage.setItem("currentUserName", "Guest");
+                localStorage.setItem("currentUserType", "guest");
+                localStorage.setItem("loggedIn", "true");
+                window.location.href = "../pages/summary.html";
         });
     }
 

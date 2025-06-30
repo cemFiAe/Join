@@ -57,6 +57,8 @@ logInButton.addEventListener('click', async (e) => {
         if (user && user.password === password) {
             localStorage.setItem("loggedIn", "true");
             localStorage.setItem("userName", user.name); // <--- Name speichern!
+            localStorage.setItem("currentUserName", user.name);
+            localStorage.setItem("currentUserType", "user");
             window.location.href = "../pages/summary.html";
         } else {
             passwordAlert.style.display = "block"
