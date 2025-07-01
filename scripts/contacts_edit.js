@@ -58,3 +58,19 @@ function editMobileContact() {
         closeContactOptions();
     }
 }
+
+function deleteContactFromEdit() {
+    if (!currentlyEditingContactId) return;
+
+    deleteContact(currentlyEditingContactId);
+
+    closeEditContact();
+}
+
+function deleteContactFromEditMobile() {
+    if (!currentlyEditingContactId) return;
+    deleteContact(currentlyEditingContactId);
+    closeEditContact();
+    goBack();
+    closeContactOptions();
+}

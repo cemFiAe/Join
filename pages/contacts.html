@@ -73,8 +73,9 @@
         <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
         <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
         <div>
-          <button class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+          <button type="button" onclick="deleteContactFromEditMobile()" class="cancel-btn-mobile">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="button" onclick="deleteContactFromEdit()" class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="submit" onclick="closeEditMobileContact()" class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
         </div>
       </form>
 
