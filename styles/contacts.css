@@ -9,6 +9,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     background-color: white;
+    z-index: 9;
     margin-left: 232px;
     height: calc(100vh - 96px);
     width: 456px;

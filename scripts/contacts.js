@@ -51,6 +51,12 @@ function closeEditContact() {
     document.getElementById('bg_overlay').style.display = "none";
 }
 
+function closeEditMobileContact() {
+    document.getElementById('edit_contact_overlay').style.left = "105%";
+    document.getElementById('bg_overlay').style.display = "none";
+    goBack();
+}
+
 document.getElementById('edit_contact_overlay').addEventListener('click', function (event) {
     event.stopPropagation();
 });
