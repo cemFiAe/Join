@@ -18,11 +18,6 @@
     <link rel="stylesheet" type="text/css" href="../styles/media/log_in_sign_up.css" />
     <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
     <link rel="stylesheet" type="text/css" href="../style.css" />
-    <script src="../scripts/log_in_loading.js" defer></script>
-    <script src="../scripts/log_in_email_validation.js" defer></script>
-    <script src="../scripts/log_in_password_validation.js" defer></script>
-    <script src="../scripts/log_in_form_validation.js" defer></script>
-
 </head>
 
 <body onload="checkLoadingScreen()">
@@ -48,7 +43,7 @@
                     <div class="email">
                         <input type="text" id="log-in-email-input" class="email-input" placeholder="Email"
                             autocomplete="off">
-                        <label id="log-in-email-alert" class="email-alert">Insert correct email (min 6 letters & max 2 numbers)</label>
+                        <label id="log-in-email-alert" class="email-alert">Please insert correct email</label>
                     </div>
 
                     <div style="height: 72px;">
@@ -56,7 +51,7 @@
                             <input type="password" id="log-in-password" placeholder="Password" autocomplete="off">
                             <img src="../assets/icons/log_in/lock.svg" id="log-in-lock-icon" class="lock-icon">
                         </div>
-                        <label id="log-in-password-alert" class="password-alert">Insert correct password (min 6 letters & min 2 numbers)</label>
+                        <label id="log-in-password-alert" class="password-alert">Please insert correct password</label>
                     </div>
                 </form>
                 <div class="log-in-buttons">
@@ -74,12 +69,18 @@
         </div>
 
         <footer>
-            <a href="../pages/privacy_policy.html">Privacy policy</a>
+            <a href="../pages/privacy_policy.html">Privacy policy</a>       
             <a href="../pages/legal_notice.html">Legal notice</a>
         </footer>
     </div>
     
-<script src="../scripts/login_guest.js"></script> 
+    <!-- WICHTIG: Scripte alle nur EINMAL und am ENDE einbinden -->
+    <script src="../scripts/log_in_loading.js"></script>
+    <script src="../scripts/log_in_vars.js"></script>
+    <script src="../scripts/log_in_email_validation.js"></script>
+    <script src="../scripts/log_in_password_validation.js"></script>
+    <script src="../scripts/log_in_form_validation.js"></script>
+    <script src="../scripts/login_guest.js"></script> 
 </body>
 
 </html>

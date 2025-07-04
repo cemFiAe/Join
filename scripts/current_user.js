@@ -1,16 +1,4 @@
-function setBoardAvatar() {
-    const avatarDiv = document.getElementById('board-user-avatar');
-    const name = localStorage.getItem('userName') || 'User';
-    let initials = name
-        .split(' ')
-        .filter(n => n.length > 0)
-        .map(n => n[0])
-        .join('')
-        .slice(0,2)
-        .toUpperCase();
-
-    avatarDiv.textContent = initials;
-}
+// current_user.js
 
 function getCurrentUser() {
     return JSON.parse(localStorage.getItem('currentUser')) || {};
@@ -24,8 +12,30 @@ function isGuestUser() {
 function getUserInitials() {
     const user = getCurrentUser();
     if (!user.name) return "U";
-    return user.name.split(" ").map(n => n[0]).join("").toUpperCase();
+    // "Guest" → G, "Max Mustermann" → MM
+    return user.name
+        .split(" ")
+        .filter(Boolean)
+        .map(n => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
 }
 
+function setBoardAvatar() {
+    const avatarDiv = document.getElementById('board-user-avatar');
+    if (!avatarDiv) return;
+    avatarDiv.textContent = getUserInitials();
 
-setBoardAvatar();
+    if (isGuestUser()) {
+        avatarDiv.title = "Guest User";
+        avatarDiv.classList.add("guest-avatar");
+    } else {
+        const user = getCurrentUser();
+        avatarDiv.title = user.name || "User";
+        avatarDiv.classList.remove("guest-avatar");
+    }
+}
+
+// Kann auf allen Seiten direkt nach DOMContentLoaded ausgeführt werden
+document.addEventListener("DOMContentLoaded", setBoardAvatar);

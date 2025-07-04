@@ -1,10 +1,4 @@
 
-// Password validation for Log in page
-
-var passwordDiv = document.querySelector('.log-in-password');
-var passwordInput = document.getElementById('log-in-password');
-var iconElement = document.getElementById('log-in-lock-icon');
-var passwordAlert = document.getElementById('log-in-password-alert')
 
 // Check password input, validate it and update styles accordingly:
 passwordInput.addEventListener('input', function () {
