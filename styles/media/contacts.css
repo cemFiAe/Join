@@ -46,6 +46,9 @@
     .add_contact_btn {
         display: none !important;
     }
+    .burger_contact_btn {
+        display: none !important;
+    }
 }
 
 @media (min-width: 1370px) {
@@ -58,9 +61,13 @@
     .add_contact_overlay {
         flex-direction: column !important;
         align-items: center;
+        left: 5% !important;
+        top: 106.5%;
     }
     .edit_contact_overlay {
-        flex-direction: column;
+        flex-direction: column !important;
+        left: 5% !important;
+        top: 106.5%;
     }
     .overlay-logo {
         display: none;
@@ -86,7 +93,7 @@
     }
     .right {
         flex: 1;
-        border-top-right-radius: 0px;
+        border-top-right-radius: 0px !important;
         border-bottom-right-radius: 30px;
         border-bottom-left-radius: 30px;
         align-items: center;
@@ -100,7 +107,13 @@
         display: none;
     }
     .close-x-mobile {
-        display: block;
+        display: block !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .add_contact_overlay, .edit_contact_overlay {
+        height: 87% !important;
     }
 }
 

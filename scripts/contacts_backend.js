@@ -101,8 +101,8 @@ function getColorFromName(name) {
 }
 
 // Erstellt das HTML für den farbigen Initialen-Kreis
-function createInitialIcon(initials, color) {
-    return `<div class="contact_icon_placeholder" style="background-color: ${color};">
+function createInitialIcon(initials, color, extraClass = '', size) {
+    return `<div class="contact_icon_placeholder ${extraClass}" style="background-color: ${color}; width: ${size}px; height: ${size}px; font-size: ${size / 2.5}px;">
               ${initials.toUpperCase()}
             </div>`;
 }

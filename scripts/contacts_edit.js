@@ -31,12 +31,38 @@ function fillEditForm(data) {
     document.getElementById('edit-name-input').value = data.name;
     document.getElementById('edit-mail-input').value = data.mail;
     document.getElementById('edit-phone-input').value = data.phone;
+
+    const initials = getInitials(data.name);
+    const color = getColorFromName(data.name);
+    const circleHTML = createInitialIcon(initials, color, 'circle', 128);
+    document.getElementById('edit_initials_circle').innerHTML = circleHTML;
 }
 
 function showEditOverlay() {
+    editOverlayLogic();
+    document.getElementById('bg_overlay').style.display = "flex";
+    document.getElementById('burger_contact_btn').style.display = "none";
+    document.getElementById('add_contact_btn').style.display = "none";
+    document.getElementById('burger_contact_btn').style.zIndex = "999";
+}
+
+function editOverlayLogic() {
+    currentOpenOverlay = (window.innerWidth <= 650) ? 'edit-mobile' : 'edit-desktop';
+    if (currentOpenOverlay === 'edit-mobile') {
+        editOverlayMobile();
+    } else if (currentOpenOverlay === 'edit-desktop') {
+        editOverlayDesktop();
+    }
+}
+
+function editOverlayDesktop () {
     document.getElementById('edit_contact_overlay').style.left = "5%";
     document.getElementById('edit_contact_overlay').style.top = "20%";
-    document.getElementById('bg_overlay').style.display = "flex";
+}
+
+function editOverlayMobile () {
+    document.getElementById('edit_contact_overlay').style.left = "5%";
+    document.getElementById('edit_contact_overlay').style.top = "6.5%", "!important";
 }
 
 function collectUpdatedFormData(current) {

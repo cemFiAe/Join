@@ -7,7 +7,6 @@
     position: absolute;
     padding: 0;
     margin: 0;
-    top: 20%;
     left: 105%;
     z-index: 999;
     background-color: #2A3647;
@@ -147,22 +146,21 @@
     height: 50px;
 }
 
+.name-input, .mail-input, .phone-input {
+   background-position: 98%;
+   background-repeat: no-repeat;  
+}
+
 .name-input {
     background-image: url('../../assets/icons/contacts/name.svg') !important;
-    background-position: 98%;
-    background-repeat: no-repeat; 
 }
 
 .mail-input {
     background-image: url('../../assets/icons/contacts/mail.svg') !important;
-    background-position: 98%;
-    background-repeat: no-repeat; 
 }
 
 .phone-input {
     background-image: url('../../assets/icons/contacts/phone.svg') !important;
-    background-position: 98%;
-    background-repeat: no-repeat; 
 }
 
 .cancel-btn, .cancel-btn-mobile {
@@ -234,7 +232,7 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    z-index: 999;
+    z-index: 99;
     left: calc(100% - 100px);
     top: 85%;
     width: 56px;
@@ -250,6 +248,10 @@
     display: none;
 }
 
+.add_contact_btn {
+    z-index: 100;
+}
+
 .add_contact_btn:hover, .burger_contact_btn:hover {
     cursor: pointer;
 }
@@ -260,7 +262,7 @@
     width: 32px;
 }
 
-/* add new contact*/
+/* added new contact*/
 
 .added-contact-overlay {
     display: flex;
@@ -287,3 +289,4 @@
     border-radius: 8px;
     transition: outline 0.3s ease;
 }
+

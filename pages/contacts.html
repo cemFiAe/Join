@@ -56,16 +56,14 @@
 
   <dialog id="edit_contact_overlay" class="edit_contact_overlay">
     <div class="left">
-      <img onclick="closeEditContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
+      <img onclick="closeEditMobileContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
         alt="x-btn">
       <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
       <h1 class="side-title">Edit contact</h1>
       <div class="blue-line"></div>
     </div>
     <div class="mid">
-      <div class="circle">
-        <img class="person" src="../assets/icons/contacts/person.svg" alt="contact_icon">
-      </div>
+        <div id="edit_initials_circle"></div>
     </div>
     <div class="right">
       <form onsubmit="editContact(event)">
@@ -75,7 +73,7 @@
         <div>
           <button type="button" onclick="deleteContactFromEditMobile()" class="cancel-btn-mobile">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="deleteContactFromEdit()" class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button type="submit" onclick="closeEditMobileContact()" class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
+          <button type="submit" class="create-btn">Save<img src="../assets/icons/contacts/check.svg" alt="checkmark"></button>
         </div>
       </form>
 
