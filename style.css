@@ -230,7 +230,6 @@ body {
 .main-content {
     height: 100vh;
     max-width: 1920px;
-    overflow-y: scroll;
 }
 
 /* mobile */
@@ -354,12 +353,6 @@ body {
 }
 
 /* responsive */
-
-@media (max-width: 1000px) {
-    .main-content {
-        overflow-y: auto;
-    }
-}
 
 @media (max-width: 800px) {
     .user-avatar,

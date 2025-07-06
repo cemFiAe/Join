@@ -6,6 +6,9 @@
     padding: 24px;
     align-items: flex-start;
 }
+.contact_entry {
+    width: 100%;
+}
 .contact_overview {
     display: none;
     flex-direction: column;
@@ -40,6 +43,15 @@
 }
 }
 
+@media (max-width: 456px) {
+    .contacts {
+        padding: 0px;
+    }
+    .contact_entry {
+        scale: 0.8;
+    }
+}
+
 /* overlay */
 
 @media (min-width: 650px) {
@@ -49,9 +61,9 @@
     .burger_contact_btn {
         display: none !important;
     }
-}
-
-@media (min-width: 1370px) {
+    .cancel-btn-mobile {
+        display: none !important;
+    }
     .cancel-btn {
         display: flex !important;
     }
@@ -74,7 +86,7 @@
     }
     .left {
         height: 352px;
-        width: auto;
+        width: auto !important;
         padding-inline: 24px;
         border-top-right-radius: 30px;
         border-top-left-radius: 30px;
@@ -101,7 +113,7 @@
         padding-right: 24px;
     }
     .cancel-btn-mobile {
-        display: flex !important;
+        display: flex;
     }
     .close-x {
         display: none;
@@ -115,9 +127,24 @@
     .add_contact_overlay, .edit_contact_overlay {
         height: 87% !important;
     }
+    .left {
+        padding-inline: 16px !important;
+    }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
+    .right form {
+        width: 100% !important;
+    }
+    .right div {
+        width: 100% !important;
+    }
+    .side-title {
+        font-size: 40px !important;
+    }
+}
+
+@media (max-width: 500px) {
     .name-input {
         width: 100% !important;
     }

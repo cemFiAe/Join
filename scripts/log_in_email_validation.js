@@ -1,4 +1,24 @@
-// Email validation function for Log in page
+/**
+ * @file log_in_email_validation.js
+ * 
+ * This file includes a function to validate email input for a login page
+ * 
+ * and an event listener to update the UI based on validation results.
+ */
+
+/**
+ * Validates an email address according to custom rules.
+ *
+ * The rules are:
+ * - Must have exactly one '@' symbol.
+ * - Name part must be at least 8 characters.
+ * - Name part must contain at least 6 letters.
+ * - Name part must contain no more than 2 numbers.
+ * - Domain must be valid and from an allowed provider.
+ *
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} `true` if valid, `false` otherwise.
+ */
 
 function isEmailValid(email) {
     let emailParts = email.split('@');
@@ -24,12 +44,19 @@ function isEmailValid(email) {
     if (!validProviders.includes(provider)) return false;
 
     if (!/[A-Za-z]{2,}$/.test(domain)) return false;
+
     return true;
 }
 
-// ACHTUNG: KEINE Deklaration von emailInput/emailAlert mehr!
+// ========== UI INTERACTION ==========
+
+/**
+ * Input event listener for the email input field.
+ * Validates the email and updates the input border and alert message visibility accordingly.
+ */
+ 
 emailInput.addEventListener('input', function () {
     const isValid = isEmailValid(emailInput.value);
     emailInput.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
-    emailAlert.style.display = isValid ? "none" : "block";
+    emailAlert.style.display = isValid ? 'none' : 'block';
 });
