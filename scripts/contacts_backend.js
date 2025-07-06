@@ -163,7 +163,7 @@ function showSuccessOverlay() {
     overlay.textContent = "Contact successfully created";
     overlay.classList.add('added-contact-overlay');
     document.body.appendChild(overlay);
-    setTimeout(() => overlay.remove(), 2000);
+    /* setTimeout(() => overlay.remove(), 2000); */
 }
 
 let currentDisplayedContactId = null;
