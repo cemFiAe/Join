@@ -1,4 +1,11 @@
-// log_in_form_validation.js
+/**
+ * This function ensures Form validation in Log in page
+ * 
+ * @var emailValid - returns the value of email validation
+ * @var passwordValid - returns the value of password validation
+ * @returns - if 'true' proceed to user log in, if 'false' then stop
+ * 
+ *  */
 
 function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
@@ -7,14 +14,19 @@ function validateForm() {
     if (passwordInput.value == "") {
         iconElement.src = "../assets/icons/log_in/lock.svg";
     }
-
     updateFormStyles(emailInput, emailAlert, emailValid);
     updateFormStyles(passwordDiv, passwordAlert, passwordValid);
-
-    // Log-in-Button deaktivieren wenn Felder nicht gültig
     logInButton.disabled = !(emailValid && passwordValid);
     return emailValid && passwordValid;
 }
+
+
+/**
+ * Generall function for updating styles to email and password fields
+ * @param {string} input - User enters his datas
+ * @param {string} alert - Alert messages show up if validation is false
+ * @param {var} isValid - Returns values of email and password validations
+ */
 
 function updateFormStyles(input, alert, isValid) {
     if (isValid) {
@@ -25,29 +37,28 @@ function updateFormStyles(input, alert, isValid) {
         alert.style.display = 'block';
     }
 }
-
 emailInput.addEventListener('input', validateForm);
 passwordInput.addEventListener('input', validateForm);
 
-// Log In für registrierten User
-logInButton.addEventListener('click', async (e) => {
+
+/**
+ * This function executes only if the form is valid, i.e. if user datas are written correctly.
+ * User is logged in only if input matches the data from database.
+ * If it doesn't match
+ * @returns 
+ */
+async function userLogIn(e) {
     e.preventDefault(); // Verhindert echtes Abschicken
-
     if (!validateForm()) return;
-
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
     try {
         const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
         const response = await fetch(BASE_URL + "users.json");
         const database = await response.json();
 
-        // Passenden User anhand der Email finden
+        const email = emailInput.value;
+        const password = passwordInput.value;
         const user = Object.values(database).find(user => user.email === email);
-
         if (user && user.password === password) {
-            // User-Daten im localStorage speichern
             localStorage.setItem("loggedIn", "true");
             localStorage.setItem("currentUserName", user.name);
             localStorage.setItem("currentUserType", "user");
@@ -60,26 +71,31 @@ logInButton.addEventListener('click', async (e) => {
         } else {
             passwordAlert.style.display = "block";
             passwordAlert.innerHTML = "Invalid email or password";
-            passwordInput.style.borderColor = 'rgb(255, 0, 31)';
+            passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
+            emailInput.style.borderColor = 'rgb(255, 0, 31)';
         }
     } catch (error) {
         console.error("Login failed", error);
         passwordAlert.innerHTML = "Login failed. Try again.";
     }
-});
-
-// Gast-Login (wird in login_guest.js ausführlicher behandelt, aber hier für Fallback)
-if (guestLogInButton) {
-    guestLogInButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("currentUserName", "Guest");
-        localStorage.setItem("currentUserType", "guest");
-        localStorage.setItem("currentUser", JSON.stringify({
-            name: "Guest User",
-            email: "guest@join.com",
-            isGuest: true
-        }));
-        window.location.href = "../pages/summary.html";
-    });
 }
+logInButton.addEventListener('click', userLogIn);
+
+
+/**
+ * Gast-Login (wird in login_guest.js ausführlicher behandelt, aber hier für Fallback)
+ * 
+ */
+function guestLogIn() {
+    e.preventDefault();
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("currentUserName", "Guest");
+    localStorage.setItem("currentUserType", "guest");
+    localStorage.setItem("currentUser", JSON.stringify({
+        name: "Guest User",
+        email: "guest@join.com",
+        isGuest: true
+    }));
+    window.location.href = "../pages/summary.html";
+}
+guestLogInButton.addEventListener('click', guestLogIn);
