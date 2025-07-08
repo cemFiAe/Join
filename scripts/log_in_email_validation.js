@@ -1,20 +1,17 @@
 /**
  * Validates an email address according to custom rules.
- *
  * The rules are:
- * - Email must have just one '@' character.
- * - '@' splits 'email' into 'name part' and 'domain parts'.
- * - Name part must have at least 8 characters. 
- * - Name part must contain at least 6 letters.
- * - Name part must contain no more than 2 numbers.
- * - '.' splits domain parts into provider and domain.
- * - Provider must be valid and from the list.
- * - Domain must contain just letters and at least 2 of them
- *
+ * 1. Email must have just one '@' character.
+ * 2. '@' splits 'email' into 'name part' and 'domain parts'.
+ * 3. Name part must have at least 8 characters. 
+ * 4. Name part must contain at least 6 letters.
+ * 5. Name part must contain no more than 2 numbers.
+ * 6. '.' splits domain parts into provider and domain.
+ * 7. Provider must be valid and from the list.
+ * 8. Domain must contain just letters and at least 2 of them.
  * @param {string} email - The email address to validate.
  * @returns {boolean} 'true' if valid, 'false' otherwise.
  */
-
 function isEmailValid(email) {
     let emailParts = email.split('@');
     let namePart = emailParts[0];
@@ -40,12 +37,10 @@ function isEmailValid(email) {
 
 /**
  * This function validates the email input and updates the styles accordingly.
- * 
  * @param {boolean} isValid - Returns validation result.
  * @param {string} emailInput - Email input field.
  * @param {string} emailAlert - Alert message beneath input field.
  */
-
 function validateEmailInput() {
     const isValid = isEmailValid(emailInput.value);
     emailInput.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
