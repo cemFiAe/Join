@@ -9,7 +9,7 @@ function validateForm() {
     let passwordValid = isPasswordValid(passwordInput.value);
 
     if (passwordInput.value == "") {
-        iconElement.src = "../assets/icons/log_in/lock.svg";
+        passwordIcon.src = "../assets/icons/log_in/lock.svg";
     }
     updateFormStyles(emailInput, emailAlert, emailValid);
     updateFormStyles(passwordDiv, passwordAlert, passwordValid);

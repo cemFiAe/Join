@@ -1,36 +1,19 @@
 
-// Check name input and update styles accordingly
-var nameInput = document.getElementById('name-input');
-var nameAlert = document.getElementById('name-alert');
-var nameDiv = nameInput.closest('.name');
-
-nameInput.addEventListener('input', function () {
-    let valid = nameInput.value !== ""
-
-    nameInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
-    nameDiv.style.padding = valid ? "0px 0px 24px" : "0px 0px 10px";
-    nameAlert.style.display = valid ? 'none' : 'block';
-});
-
-
-// Form validation 
-
 let isValid = true;
 
 function nameValidation() {
-    let valid = nameInput.value !== ""; 
-
-    nameInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
-    nameDiv.style.padding = valid ? "0px 0px 24px" : "0px 0px 10px";
+    let valid = nameInput.value !== "";
+    nameDiv.style.padding = valid ? "0px 0px 25px" : "0px 0px 10px";
+    nameInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     nameAlert.style.display = valid ? 'none' : 'block';
     return valid
 }
+nameInput.addEventListener('input', nameValidation)
 
 
 function emailValidation() {
     let valid = isEmailValid(emailInput.value);
-
-    emailInput.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    emailInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     emailAlert.style.display = valid ? 'none' : 'block';
     return valid
 }
@@ -39,8 +22,7 @@ function emailValidation() {
 function passwordValidation() {
     let password = passwordInput.value.trim();
     let valid = isPasswordValid(password)
-
-    passwordDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    passwordDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     passwordAlert.style.display = valid ? 'none' : 'block';
     return valid
 }
@@ -49,36 +31,29 @@ function passwordValidation() {
 function confirmPasswordValidation() {
     let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
+    
     let valid = confirmPassword !== "" && confirmPassword === password;
-
-    confirmDiv.style.borderColor = valid ? 'rgba(0, 0, 0, 0.1)' : 'rgb(255, 0, 31)';
+    confirmDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     confirmAlert.style.display = valid ? 'none' : 'block';
     return valid
 }
 
 
-let checkbox = document.getElementById('checkbox');
-let policyAlert = document.getElementById('privacy-policy-alert');
-
 let checkboxUnchecked = true;
-checkbox.src = "../assets/icons/sign_up/checkbox_unchecked.svg";
 
-// Toggle checkbox on click
-checkbox.addEventListener('click', function () {
+function checkboxClick() {
     checkboxUnchecked = !checkboxUnchecked;
-
     checkbox.src = checkboxUnchecked ? "../assets/icons/sign_up/checkbox_unchecked.svg" : "../assets/icons/sign_up/checkbox_checked.svg";
     policyAlert.style.display = checkboxUnchecked ? 'block' : 'none'
-});
+}
+checkbox.addEventListener('click', checkboxClick);
 
 
 function privacyPolicyValidation() {
     let valid = !checkboxUnchecked;
-
     policyAlert.style.display = valid ? 'none' : 'block';
     return valid;
 }
-
 
 
 function submitSignUpForm(event) {
@@ -97,7 +72,6 @@ function submitSignUpForm(event) {
     if (isValid) {
         let emailInput = document.getElementById('sign-up-email-input');
         let passwordInput = document.getElementById('sign-up-password');
-
         let userData = {
             name: nameInput.value,
             email: emailInput.value,
