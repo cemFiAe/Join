@@ -1,8 +1,8 @@
 /**
  * This function ensures Form validation in Log in page.
- * @param {var} emailValid - returns the value of email validation.
- * @param {var} passwordValid - returns the value of password validation.
- * @returns {boolean} - if form validation is 'true' proceed with user log in, otherwise stop.
+ * @param {var} emailValid Returns the value of email validation.
+ * @param {var} passwordValid Returns the value of password validation.
+ * @returns {boolean} If form validation is 'true' proceed with user log in, otherwise stop.
  */
 function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
@@ -19,10 +19,10 @@ function validateForm() {
 
 
 /**
- * Generall function for updating styles to email and password fields.
- * @param {string} input - User enters his datas.
- * @param {string} alert - Alert messages show up if validation is false.
- * @param {boolean} isValid - Returns values of email and password validations.
+ * This is a generall function for updating styles to email and password fields.
+ * @param {string} input User enters his datas.
+ * @param {string} alert Alert messages show up if validation is false.
+ * @param {boolean} isValid Returns values of email and password validations.
  */
 function updateFormStyles(input, alert, isValid) {
     if (isValid) {
@@ -39,12 +39,12 @@ passwordInput.addEventListener('input', validateForm);
 
 /**
  * This function executes only if the form is valid, i.e. if user input datas are written correctly.
- * User will be logged in, only if his input matches data from database.
- * If not, function stops, form fields highlight red and alert message shows up.
- * @param {boolean} isGuest - turns 'false' if already signed up user logs in. 
+ * After correct input, if input matches data from database, only then user will be logged in.
+ * If input incorrect or doesn't match datas from database, function stops, form fields highlight red and alert message shows up.
+ * @param {boolean} isGuest Turns 'false' if already signed up user logs in. 
  */
 async function userLogIn(e) {
-    e.preventDefault(); // prevent the usual action, and proceed with function execution.
+    e.preventDefault();
     if (!validateForm()) return;
     try {
         const BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";

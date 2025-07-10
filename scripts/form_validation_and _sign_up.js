@@ -1,6 +1,11 @@
 
 let isValid = true;
-
+ /**
+  * @returns {boolean} If returns are valid, user will be able to successfully sign up.
+  * If not, signing up wont be possible.
+  * In each state, different styles to form parts are applied.
+  * Return statement has the same role in each and every form part.
+  */
 function nameValidation() {
     let valid = nameInput.value !== "";
     nameDiv.style.padding = valid ? "0px 0px 25px" : "0px 0px 10px";
@@ -39,6 +44,13 @@ function confirmPasswordValidation() {
 }
 
 
+function privacyPolicyValidation() {
+    let valid = !checkboxUnchecked;
+    policyAlert.style.display = valid ? 'none' : 'block';
+    return valid;
+}
+
+
 let checkboxUnchecked = true;
 
 function checkboxClick() {
@@ -49,20 +61,16 @@ function checkboxClick() {
 checkbox.addEventListener('click', checkboxClick);
 
 
-function privacyPolicyValidation() {
-    let valid = !checkboxUnchecked;
-    policyAlert.style.display = valid ? 'none' : 'block';
-    return valid;
-}
-
-
+/**
+ * @param {event} event This event means automatic submiting. 
+ * In this case event is disabled, because before user submits(sing up), each and every form part must be validated.
+ * @param {boolean} isValid Only after every validation is true, signUpUser function is called, and user successfully signs up. 
+ * Otherwise, if just one validation is false, user can't sign up.
+ */
 function submitSignUpForm(event) {
     event.preventDefault();
-
     let isValid = true;
 
-    // check each validation if NOT true, 
-    // then isValid = false, and sign up is stopped!
     if (!nameValidation()) isValid = false;
     if (!emailValidation()) isValid = false;
     if (!passwordValidation()) isValid = false;
@@ -84,6 +92,11 @@ function submitSignUpForm(event) {
 }
 
 
+/**
+ * This function is used to send user datas to a server, and to inform user of successfully signing up.
+ * After 1 second user is forwarded to main page, where he can log in as a registered user.
+ * @param {string} userData User enters his data, which will be stored on server.
+ */
 async function signUpUser(userData) {
     let BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
     try {
@@ -99,7 +112,6 @@ async function signUpUser(userData) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Show signed-up screen and redirect after 1 second
         document.getElementById('signed-up-screen').style.display = "block";
         setTimeout(() => {
             document.getElementById('signed-up-screen').style.display = "none";

@@ -37,9 +37,10 @@ function isEmailValid(email) {
 
 /**
  * This function validates the email input and updates the styles accordingly.
- * @param {boolean} isValid - Returns validation result.
- * @param {string} emailInput - Email input field.
- * @param {string} emailAlert - Alert message beneath input field.
+ * @param {boolean} isValid Returns validation result.
+ * @param {string} emailInput Email input field.
+ * @param {string} emailAlert Alert message beneath input field.
+ * @param {boolean} isValid If 'true' email is written correctly.
  */
 function validateEmailInput() {
     const isValid = isEmailValid(emailInput.value);

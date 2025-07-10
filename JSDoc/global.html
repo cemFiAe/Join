@@ -192,199 +192,6 @@
     
 
     
-    <h4 class="name" id="confirmInputListener"><span class="type-signature"></span>confirmInputListener<span class="signature">(password, confirmPassword, isMatch)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    This function checks if there is any input in confirm-password field.If input is true, it checks if the confirm-password input matches the password input.Based on these checkings, the styling of confirm password field changes.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User enters his password.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>confirmPassword</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User confirms his password.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isMatch</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">This is the main condition user must fulfill to sign in.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="confirm_password_validation.js.html">confirm_password_validation.js</a>, <a href="confirm_password_validation.js.html#line18">line 18</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - 'false' if confirm-password input is empty, alert messages appears, lock-icon and red highlight.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="confirmLockIcon"><span class="type-signature"></span>confirmLockIcon<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -393,7 +200,7 @@
 
 
 <div class="description">
-    It checks if user clicks on the lock-icon which is located in the confirm password field.If the lock-icon is clicked, confirmPasswordVisibility() function is called.If somewhere else in page is clicked, but not on lock-icon, it ensures that the password is no longer visible,and shows back the lock-icon.
+    It checks if user clicks on the lock-icon which is located in the confirm-password field.If the lock-icon is clicked, confirmPasswordVisibility() function is called.If somewhere else in page is clicked, but not on lock-icon, it ensures that the password is no longer visible,and shows back the lock-icon.
 </div>
 
 
@@ -532,7 +339,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="confirm_password_validation.js.html">confirm_password_validation.js</a>, <a href="confirm_password_validation.js.html#line44">line 44</a>
+        <a href="password_confirm_and_visibility.js.html">password_confirm_and_visibility.js</a>, <a href="password_confirm_and_visibility.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -568,7 +375,7 @@
     
 
     
-    <h4 class="name" id="confirmPasswordVisibility"><span class="type-signature"></span>confirmPasswordVisibility<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="doPasswordsMatch"><span class="type-signature"></span>doPasswordsMatch<span class="signature">(password, confirmPassword, isMatch)</span><span class="type-signature"></span></h4>
     
 
     
@@ -576,7 +383,7 @@
 
 
 <div class="description">
-    This function determines confirm password visibility based on input type.
+    This function checks first if there is any input in confirm-password field.If input is true, it checks if the confirm-password matches the password.Based on these checks, the styling of confirm-password field changes.
 </div>
 
 
@@ -612,7 +419,7 @@
 
         <tr>
             
-                <td class="name"><code>input.type</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
@@ -628,20 +435,20 @@
 
             
 
-            <td class="description last">Based on input type, input can be visible or not visible.</td>
+            <td class="description last">User enters his password.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>icon.src</code></td>
+                <td class="name"><code>confirmPassword</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">icon</span>
+<span class="param-type">string</span>
 
 
             
@@ -651,7 +458,30 @@
 
             
 
-            <td class="description last">URL of matching icon for each input type.</td>
+            <td class="description last">User confirms his password.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isMatch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This is the main condition user must fulfill to sign in.</td>
         </tr>
 
     
@@ -692,7 +522,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="confirm_password_validation.js.html">confirm_password_validation.js</a>, <a href="confirm_password_validation.js.html#line60">line 60</a>
+        <a href="password_confirm_and_visibility.js.html">password_confirm_and_visibility.js</a>, <a href="password_confirm_and_visibility.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -717,6 +547,16 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    It is 'false' if confirm-password input is empty, then alert message, lock-icon and red highlight appears.
+</div>
+
+
+
+    
 
 
 
@@ -780,7 +620,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_form_validation.js.html">log_in_form_validation.js</a>, <a href="log_in_form_validation.js.html#line84">line 84</a>
+        <a href="form_validation_and_log_in.js.html">form_validation_and_log_in.js</a>, <a href="form_validation_and_log_in.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -917,7 +757,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_email_validation.js.html">log_in_email_validation.js</a>, <a href="log_in_email_validation.js.html#line15">line 15</a>
+        <a href="email_validation.js.html">email_validation.js</a>, <a href="email_validation.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -975,7 +815,7 @@
     
 
     
-    <h4 class="name" id="isPasswordValid"><span class="type-signature"></span>isPasswordValid<span class="signature">(value)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="isPasswordValid"><span class="type-signature"></span>isPasswordValid<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -1035,7 +875,7 @@
 
             
 
-            <td class="description last">checks value of user's input; just letters and numbers allowed.</td>
+            <td class="description last">It checks value of users input; just letters and numbers allowed.</td>
         </tr>
 
     
@@ -1076,7 +916,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_password_validation.js.html">log_in_password_validation.js</a>, <a href="log_in_password_validation.js.html#line25">line 25</a>
+        <a href="password_validation_and_visibility.js.html">password_validation_and_visibility.js</a>, <a href="password_validation_and_visibility.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -1105,10 +945,22 @@
 
         
 <div class="param-desc">
-    - if conditions are fulfilled, validation is true
+    If conditions are fulfilled, validation is true.
 </div>
 
 
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -1122,7 +974,7 @@
     
 
     
-    <h4 class="name" id="logInLockIcon"><span class="type-signature"></span>logInLockIcon<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="logOutUser"><span class="type-signature"></span>logOutUser<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1130,7 +982,201 @@
 
 
 <div class="description">
-    It checks if user clicks on the lock-icon which is located in the password field.If the lock-icon is clicked, logInVisibility function is called.If somewhere else clicked, the password is no longer visible and the lock-icon shows up again.
+    Logs out user and redirects him to Log in page
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="log_out_user.js.html">log_out_user.js</a>, <a href="log_out_user.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="nameValidation"><span class="type-signature"></span>nameValidation<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form_validation_and%20_sign_up.js.html">form_validation_and _sign_up.js</a>, <a href="form_validation_and%20_sign_up.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If returns are valid, user will be able to successfully sign up.If not, signing up wont be possible.In each state, different styles to form parts are applied.Return statement has the same role in each and every form part.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="passwordLockIcon"><span class="type-signature"></span>passwordLockIcon<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    It checks if user clicks on the lock-icon which is located in the password field.If the lock-icon is clicked, passwordVisibility() function is called.If somewhere else clicked, the password is no longer visible and the lock-icon shows up again.
 </div>
 
 
@@ -1205,174 +1251,14 @@
 
             
 
-            <td class="description last">If type is 'password', then the password is not visible, if type is 'text' then it's visible.</td>
+            <td class="description last">If type is "password", then the password is not visible, if type is "text" then it's visible.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>iconElement.src</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">icon</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">URL of icon.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_password_validation.js.html">log_in_password_validation.js</a>, <a href="log_in_password_validation.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="logInVisibility"><span class="type-signature"></span>logInVisibility<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    This function determines log-in-password visibility based on input type.It is called by clicking on lock-icon, and with further clicking on it, input type changes and so does visibility.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>passwordInput.type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Based on input type, password can be visible or not visible.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>iconElement.src</code></td>
+                <td class="name"><code>passwordIcon.src</code></td>
             
 
             <td class="type">
@@ -1429,7 +1315,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_password_validation.js.html">log_in_password_validation.js</a>, <a href="log_in_password_validation.js.html#line56">line 56</a>
+        <a href="password_validation_and_visibility.js.html">password_validation_and_visibility.js</a>, <a href="password_validation_and_visibility.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -1465,7 +1351,7 @@
     
 
     
-    <h4 class="name" id="logOutUser"><span class="type-signature"></span>logOutUser<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="passwordVisibility"><span class="type-signature"></span>passwordVisibility<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1473,7 +1359,7 @@
 
 
 <div class="description">
-    Logs out user and redirects him to Log in page
+    This function determines password visibility based on input type.It is called by clicking on lock-icon, and with further clicking on it, input type changes and so does visibility.
 </div>
 
 
@@ -1482,6 +1368,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input.type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Based on input type, input can be visible or not visible.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>icon.src</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL of matching icon for each input type.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1517,7 +1475,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_out_user.js.html">log_out_user.js</a>, <a href="log_out_user.js.html#line4">line 4</a>
+        <a href="password_validation_and_visibility.js.html">password_validation_and_visibility.js</a>, <a href="password_validation_and_visibility.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -1729,6 +1687,299 @@
     
 
     
+    <h4 class="name" id="signUpUser"><span class="type-signature">(async) </span>signUpUser<span class="signature">(userData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function is used to send user datas to a server, and to inform user of successfully signing up.After 1 second user is forwarded to main page, where he can log in as a registered user.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User enters his data, which will be stored on server.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form_validation_and%20_sign_up.js.html">form_validation_and _sign_up.js</a>, <a href="form_validation_and%20_sign_up.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="submitSignUpForm"><span class="type-signature"></span>submitSignUpForm<span class="signature">(event, isValid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This event means automatic submiting. In this case event is disabled, because before user submits(sing up), each and every form part must be validated.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Only after every validation is true, signUpUser function is called, and user successfully signs up. Otherwise, if just one validation is false, user can't sign up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form_validation_and%20_sign_up.js.html">form_validation_and _sign_up.js</a>, <a href="form_validation_and%20_sign_up.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="updateFormStyles"><span class="type-signature"></span>updateFormStyles<span class="signature">(input, alert, isValid)</span><span class="type-signature"></span></h4>
     
 
@@ -1737,7 +1988,7 @@
 
 
 <div class="description">
-    Generall function for updating styles to email and password fields.
+    This is a generall function for updating styles to email and password fields.
 </div>
 
 
@@ -1876,7 +2127,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_form_validation.js.html">log_in_form_validation.js</a>, <a href="log_in_form_validation.js.html#line27">line 27</a>
+        <a href="form_validation_and_log_in.js.html">form_validation_and_log_in.js</a>, <a href="form_validation_and_log_in.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -1920,7 +2171,7 @@
 
 
 <div class="description">
-    This function executes only if the form is valid, i.e. if user input datas are written correctly.User will be logged in, only if his input matches data from database.If not, function stops, form fields highlight red and alert message shows up.
+    This function executes only if the form is valid, i.e. if user input datas are written correctly.After correct input, if input matches data from database, only then user will be logged in.If input incorrect or doesn't match datas from database, function stops, form fields highlight red and alert message shows up.
 </div>
 
 
@@ -1972,7 +2223,7 @@
 
             
 
-            <td class="description last">turns 'false' if already signed up user logs in.</td>
+            <td class="description last">Turns 'false' if already signed up user logs in.</td>
         </tr>
 
     
@@ -2013,7 +2264,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_form_validation.js.html">log_in_form_validation.js</a>, <a href="log_in_form_validation.js.html#line46">line 46</a>
+        <a href="form_validation_and_log_in.js.html">form_validation_and_log_in.js</a>, <a href="form_validation_and_log_in.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -2049,7 +2300,7 @@
     
 
     
-    <h4 class="name" id="validateEmailInput"><span class="type-signature"></span>validateEmailInput<span class="signature">(isValid, emailInput, emailAlert)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="validateEmailInput"><span class="type-signature"></span>validateEmailInput<span class="signature">(isValid, emailInput, emailAlert, isValid)</span><span class="type-signature"></span></h4>
     
 
     
@@ -2159,6 +2410,29 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If 'true' email is written correctly.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2196,7 +2470,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_email_validation.js.html">log_in_email_validation.js</a>, <a href="log_in_email_validation.js.html#line44">line 44</a>
+        <a href="email_validation.js.html">email_validation.js</a>, <a href="email_validation.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -2292,7 +2566,7 @@
 
             
 
-            <td class="description last">returns the value of email validation.</td>
+            <td class="description last">Returns the value of email validation.</td>
         </tr>
 
     
@@ -2315,7 +2589,7 @@
 
             
 
-            <td class="description last">returns the value of password validation.</td>
+            <td class="description last">Returns the value of password validation.</td>
         </tr>
 
     
@@ -2356,7 +2630,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_form_validation.js.html">log_in_form_validation.js</a>, <a href="log_in_form_validation.js.html#line7">line 7</a>
+        <a href="form_validation_and_log_in.js.html">form_validation_and_log_in.js</a>, <a href="form_validation_and_log_in.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -2385,7 +2659,7 @@
 
         
 <div class="param-desc">
-    - if form validation is 'true' proceed with user log in, otherwise stop.
+    If form validation is 'true' proceed with user log in, otherwise stop.
 </div>
 
 
@@ -2414,7 +2688,7 @@
     
 
     
-    <h4 class="name" id="validatePasswordInput"><span class="type-signature"></span>validatePasswordInput<span class="signature">(isValid)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="validatePassword"><span class="type-signature"></span>validatePassword<span class="signature">(isValid)</span><span class="type-signature"></span></h4>
     
 
     
@@ -2422,7 +2696,7 @@
 
 
 <div class="description">
-    This function checks password input, validates it and update styles accordingly:
+    This function checks password input, validates it and update defined styles.
 </div>
 
 
@@ -2474,7 +2748,7 @@
 
             
 
-            <td class="description last">according to state of this boolean styles are applied.</td>
+            <td class="description last">According to state of this boolean, styles are applied.</td>
         </tr>
 
     
@@ -2515,7 +2789,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="log_in_password_validation.js.html">log_in_password_validation.js</a>, <a href="log_in_password_validation.js.html#line6">line 6</a>
+        <a href="password_validation_and_visibility.js.html">password_validation_and_visibility.js</a>, <a href="password_validation_and_visibility.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -2544,7 +2818,7 @@
 
         
 <div class="param-desc">
-    - 'false' if input is empty, otherwise 'true' and proceeds with validation.
+    It is 'false' if input is empty, otherwise 'true' and proceeds with validation.
 </div>
 
 
@@ -2571,13 +2845,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#confirmInputListener">confirmInputListener</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#confirmPasswordVisibility">confirmPasswordVisibility</a></li><li><a href="global.html#guestLogIn">guestLogIn</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#logInLockIcon">logInLockIcon</a></li><li><a href="global.html#logInVisibility">logInVisibility</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#redirectUser">redirectUser</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePasswordInput">validatePasswordInput</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#guestLogIn">guestLogIn</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#redirectUser">redirectUser</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Jul 08 2025 17:09:21 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Jul 10 2025 14:21:03 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>
