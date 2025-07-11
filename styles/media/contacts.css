@@ -130,6 +130,12 @@
     .left {
         padding-inline: 16px !important;
     }
+    .added-contact-overlay {
+        top: auto !important;
+        bottom: 300px !important;
+        left: 50% !important;
+        transform: translateX(-50%);
+    }
 }
 
 @media (max-width: 500px) {

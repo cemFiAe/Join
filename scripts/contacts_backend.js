@@ -68,7 +68,7 @@ function getContactTemplateByData(data, id) {
     const bgColor = getColorFromName(data.name);
     const icon = createInitialIcon(initials, bgColor);
 
-    return `<div onclick="handleContactClick('${id}')" class="contact_entry">
+    return `<div id="contact-${id}" onclick="handleContactClick('${id}')" class="contact_entry">
           ${icon}
           <div>
             <h4 class="contact_name">${data.name}</h4>
@@ -79,9 +79,17 @@ function getContactTemplateByData(data, id) {
 
 // führt entsprechend entwerder openContactOverview oder showDetails aus
 function handleContactClick(id) {
-    if (window.innerWidth <= 650) {
-        openContactOverview();
+    const target = document.getElementById(`contact-${id}`);
+    const isSameContact = currentDisplayedContactId === id;
+
+    if (isSameContact) {
+        highlightAndScrollTo(target, true);
+        hideContactDetails(document.getElementById('contact_information'));
+        return;
     }
+
+    highlightAndScrollTo(target);
+    if (window.innerWidth <= 650) openContactOverview();
     showDetails(id);
 }
 
@@ -159,11 +167,28 @@ function rerenderContactList() {
 
 // successful overlay
 function showSuccessOverlay() {
+    setTimeout(() => {
+        const overlay = createSuccessOverlay();
+        document.body.appendChild(overlay);
+        animateOverlayOut(overlay);
+    }, 600);
+}
+
+function createSuccessOverlay() {
     const overlay = document.createElement('div');
     overlay.textContent = "Contact successfully created";
     overlay.classList.add('added-contact-overlay');
-    document.body.appendChild(overlay);
-    /* setTimeout(() => overlay.remove(), 2000); */
+    const anim = window.innerWidth < 650 ? 'newSlideInBottom' : 'newSlideInRight';
+    overlay.style.animation = `${anim} 0.3s ease-out forwards`;
+    return overlay;
+}
+
+function animateOverlayOut(overlay) {
+    const anim = window.innerWidth < 650 ? 'newSlideOutBottom' : 'newSlideOutRight';
+    setTimeout(() => {
+        overlay.style.animation = `${anim} 0.8s ease-in forwards`;
+        overlay.addEventListener('animationend', e => e.animationName === anim && overlay.remove());
+    }, 1200);
 }
 
 let currentDisplayedContactId = null;

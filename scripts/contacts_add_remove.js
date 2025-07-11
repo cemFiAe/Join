@@ -9,7 +9,11 @@ async function addNewContact(event) {
     closeAddContactMobile();
     rerenderContactList();
     showSuccessOverlay();
-    focusOnNewContact(newContactData);
+    focusOnNewContact(newId);
+
+    if (window.innerWidth <= 650) {
+        openContactOverview();
+    }
 }
 
 // returnt die form Daten
@@ -42,11 +46,14 @@ function addContactLocally(id, data) {
 }
 
 // neuen Kontakt focusen
-function focusOnNewContact(data) {
-    setTimeout(() => {
-        const target = findContactElement(data);
-        if (target) highlightAndScrollTo(target);
-    }, 100);
+function focusOnNewContact(id) {
+    requestAnimationFrame(() => {
+        const target = document.getElementById(`contact-${id}`);
+        if (target) {
+            highlightAndScrollTo(target);
+            showDetails(id);
+        }
+    });
 }
 
 // neuen Kontakt finden
@@ -60,10 +67,21 @@ function findContactElement(data) {
 }
 
 // zum neuen Kontakt scrollen
-function highlightAndScrollTo(element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+function highlightAndScrollTo(element, removeOnly = false) {
+    const container = document.getElementById('contacts');
+    if (!container || !element) return;
+
+    document.querySelectorAll('.contact_entry.highlight-contact').forEach(el => el.classList.remove('highlight-contact'));
+
+    if (removeOnly) return;
+
+    const elementTop = element.offsetTop;
+    container.scrollTo({
+        top: elementTop - container.offsetHeight / 2 + element.offsetHeight / 2,
+        behavior: 'smooth'
+    });
+
     element.classList.add('highlight-contact');
-    setTimeout(() => element.classList.remove('highlight-contact'), 2000);
 }
 
 // Kontakt löschen

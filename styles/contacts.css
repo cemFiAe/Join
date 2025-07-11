@@ -87,6 +87,7 @@ body {
   width: 42px;
   height: 42px;
   border-radius: 50%;
+  border: 1px solid white;
   color: white;
   font-weight: 200;
   font-size: 14px;

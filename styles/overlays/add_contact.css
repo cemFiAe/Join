@@ -293,11 +293,62 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     font-weight: 400;
     font-size: 20px;
-    transition: ease-in-out 0.8s;
+    transform: translate(-50%, 0);
+}
+
+@keyframes newSlideInRight {
+    from {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes newSlideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+}
+
+@keyframes newSlideInBottom {
+    from {
+        transform: translate(-50%, 100vh);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 100;
+    }
+}
+
+@keyframes newSlideOutBottom {
+    from {
+        transform: translate(-50%, 0);
+        opacity: 100;
+    }
+    to {
+        transform: translate(-50%, 100vh);
+        opacity: 0;
+    }
 }
 
 .highlight-contact {
-    background-color: #4CAF50;
-    border-radius: 8px;
-    transition: outline 0.3s ease;
+    background-color: #2A3647;
+    border-radius: 12px;
+}
+
+.highlight-contact:hover {
+    background-color: #2A3647 !important;
+}
+
+.highlight-contact h4 {
+    color: white !important;
 }

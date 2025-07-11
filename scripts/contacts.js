@@ -104,12 +104,18 @@ function outsideClickListener(event) {
 }
 
 function goBack() {
+    resetContactOverview();
+    document.querySelectorAll('.contact_entry.highlight-contact')
+        .forEach(el => el.classList.remove('highlight-contact'));
+    document.getElementById('contact_information').innerHTML = '';
+    currentDisplayedContactId = null;
+}
+
+function resetContactOverview() {
     document.getElementById('contacts').style.display = "flex";
     document.getElementById('contact-overview').style.display = "none";
     document.getElementById('contact_information').style.left = "750px";
     document.getElementById('add_contact_btn').style.display = "flex";
     document.getElementById('burger_contact_btn').style.display = "none";
     document.getElementById('back_contact_btn').style.display = "none";
-    document.getElementById('contact_information').innerHTML = '';
-    currentDisplayedContactId = null;
 }
