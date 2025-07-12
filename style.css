@@ -186,6 +186,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
 }
 
 .nav-top a:hover {
@@ -228,7 +229,7 @@ body {
 /* main content*/
 
 .main-content {
-    height: 100vh;
+    height: calc(100vh - 96px);
     max-width: 1920px;
 }
 

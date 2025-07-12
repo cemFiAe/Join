@@ -1,92 +1,31 @@
-
-* { 
-    box-sizing: border-box; margin: 0; padding: 0; 
-}
-
-body { 
-    font-family: Arial, sans-serif; color: #374151; background: #f9fafb; 
-}
-
-.container { 
-    display: flex; height: 100vh; 
-}
-.sidebar { 
-    padding-top: 64px; padding-bottom: 64px; width: 232px; height: 100vh; background: rgb(42, 54, 71); color: #fff; 
-    display: flex; flex-direction: column; justify-content: center; align-items: center; justify-content: space-between;
-    position: absolute; z-index: 1;
-}
-.logo_join { 
-    display: flex; align-items: center; margin-top: 64px; padding-bottom: 64px; width: 100.03px; height: 121.97px; cursor: pointer;
-}
-.nav { 
-    flex: 1; width: 232px; height: 229px; gap: 15px; 
-}
-.nav a { 
-    display: flex; height: 46px; 
-}
-.nav a:hover { 
-    background: rgb(9, 25, 49); transition: color 0.2s;
-}
-.sidebar-footer { 
-    display: flex; flex-direction: column;
-     font-size: 16px; color: rgb(168, 168, 168); 
-}
-.sidebar-footer a { 
-    display: flex; justify-content: center; align-items: center; transition: color 0.2s; width: 121px; height: 35px;
-}
-.sidebar-footer a:hover { 
-    color: #fff; 
-}
-.main { 
-    flex: 1; display: flex; flex-direction: column;
-}
-.header { 
-    display: flex; align-items: center; background-color: white; height: 96px; width: 100%; justify-content: space-between;
-    padding-top: 20px; padding-left: 348px; padding-right: 40px; padding-bottom: 20px; position: absolute; box-shadow: 0px 0px 6px 1px #37415131;
-}
-.header span {display: none;}
-.header h1 { 
-    font-size: 20px; color: #4b5563; 
-}
-.header_right {display: flex; align-items: center; gap: 16px;
-}
-.header_right .help {
-    width: 32px; height: 32px;
-}
 .avatar { 
     width: 56px; height: 56px; background: #e5e7eb; border-radius: 559px; display: flex; align-items: center; justify-content: center; color: #4b5563; font-size: 0.875rem; 
 }
-.main-content{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.main_content{
-    display: flex; margin-top: 406px; padding-left: 328px; width: 100%; height: 100%;
-    flex-direction: column; gap: 30px;  
+.content_wrapper{
+    display: flex; flex-direction: column; gap: 30px; padding-left: 328px; padding-top: 110px;
 }
 .title { 
     display: flex; justify-content: center; align-items: center; width: 625px; height: 73px;
     gap: 30px;
 }
 .title h2 { 
-    color: rgb(0, 0, 0, 1); font-size: 61px; font-weight: 700; width: 264px;
+    color: rgb(0, 0, 0, 1); font-size: 61px; font-weight: 700; width: 264px; white-space: nowrap;
 }
 .divider_middle {
     height: 59px; width: 3px; background-color: rgba(41, 171, 226, 1);
+}
+.divider_mobile {
+    display: none;
 }
 .title span { 
     display: flex; align-items: center;
     color: rgba(42, 54, 71, 1); font-size: 27px; font-weight: 400; height: 32px; width: 301px;
 }
-.divider{
-    display: none;
-}
 .content { 
     display: flex; justify-content: space-evenly; gap: 60px;
 }
 .icon {
-    display: flex; justify-content: center; align-items: center;
+    display: flex; justify-content: center; align-items: center; height: 69px; width: 69px; background-color: #2A3647; border-radius: 50%;
 }
 .metrics-panel { 
     display: flex; flex-direction: column;
@@ -97,13 +36,55 @@ body {
 }
 .card { 
     width: 264px; height: 168px; gap: 18px; background: #fff; border: 1px solid #e5e7eb; border-radius: 30px; 
-    display: flex; align-items: center; justify-content: center; padding: 1rem; text-align: center; 
+    display: flex; align-items: center; justify-content: center; padding: 1rem; text-align: center; filter: drop-shadow(0px 0px 0px rgba(0, 0, 4px, 0.1)); 
 }
-.card:hover {
-    box-shadow: 0px 0px 20px 0px; transition: 0.2s;
+.card:hover, .urgent:hover {
+    cursor: pointer;
+    background-color: #2A3647;
+    color: white;
+    .label {
+        color: white;
+    }
+    .small {
+        color: white;
+    }
+    .deadline {
+        color: white;
+    }
+}
+.to-do:hover {
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: left;
+}
+.to-do:hover .icon, .done:hover .icon {
+    background-color: white;
+}
+.to-do:hover img, .done:hover img{
+     filter: brightness(0) saturate(100%) invert(21%) sepia(16%) saturate(1581%) hue-rotate(174deg) brightness(96%) contrast(92%);
+}
+.done:hover {
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: right;
+}
+.all-tasks:hover {
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: left;
+}
+.in-progress:hover {
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: center;
+}
+.await-fb:hover {
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: right;
 }
 .card .icon img { 
-    width: 69px; height: 69px; margin-bottom: 0; 
+ object-fit: cover;
 }
 .card .value { 
     font-size: 64px; font-weight: 600; 
@@ -119,7 +100,9 @@ body {
     width: 560px; height: 168px; background: #fff; padding-top: 28px; padding-bottom: 28px; padding-left: 48px; padding-right: 48px;
 }
 .urgent:hover {
-    box-shadow: 0px 0px 20px 0px; transition: 0.2s;
+    transform: scale(104%);
+    transition: 0.1s ease;
+    transform-origin: top left;
 }
 .urgent-left { 
     display: flex; align-items: center; gap: 18px;

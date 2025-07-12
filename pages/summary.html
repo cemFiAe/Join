@@ -84,24 +84,24 @@
   </nav>
 
  <section class="main-content">
-    <div class="main_content">
+    <div class="content_wrapper">
       <div class="title">
         <h2>Join 360</h2>
         <div class="divider_middle"></div>
         <span>Key Metrics at a Glance</span>
-        <div class="divider"></div>
+        <div class="divider_mobile"></div>
       </div>
       <div class="content">
         <div class="metrics-panel">
           <div class="cards">
-            <div class="card">
+            <div class="card to-do">
               <div class="icon"><img src="../assets/icons/summary/edit.svg" alt=""></div>
               <div>
                 <div class="value" id="summary-todo">0</div>
                 <div class="label">To-do</div>
               </div>
             </div>
-            <div class="card">
+            <div class="card done">
               <div class="icon"><img src="../assets/icons/summary/check.svg" alt=""></div>
               <div>
                 <div class="value" id="summary-done">0</div>
@@ -119,20 +119,20 @@
             </div>
             <div class="separator"></div>
             <div class="urgent-right">
-              <div id="summary-next-deadline">-</div>
-              <small>Upcoming Deadline</small>
+              <div class="deadline" id="summary-next-deadline">-</div>
+              <small class="small">Upcoming Deadline</small>
             </div>
           </div>
           <div class="card_count_container">
-            <div class="card card_count">
+            <div class="card card_count all-tasks">
               <div class="value" id="summary-all">0</div>
               <div class="label">Tasks in Board</div>
             </div>
-            <div class="card card_count">
+            <div class="card card_count in-progress">
               <div class="value" id="summary-inprogress">0</div>
               <div class="label">Tasks In Progress</div>
             </div>
-            <div class="card card_count">
+            <div class="card card_count await-fb">
               <div class="value" id="summary-feedback">0</div>
               <div class="label">Awaiting Feedback</div>
             </div>
