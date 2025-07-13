@@ -1,6 +1,7 @@
 // ------------------ MOBILE MENU ------------------ //
 const menuToggle = document.getElementById("menuToggle");
 const mobileNav = document.getElementById("mobileNav");
+const mobileAvatar = document.getElementById("mobile-user-avatar"); // <-- Avatar im Mobile-Header
 let menuOpen = false;
 
 function openMenu() {
@@ -22,13 +23,21 @@ function toggleMenu(event) {
 }
 
 function handleClickOutside(event) {
-  if (!mobileNav.contains(event.target) && event.target !== menuToggle) {
+  // Schließt Menü, wenn außerhalb von mobileNav, mobileAvatar und menuToggle geklickt wird
+  if (
+    !mobileNav.contains(event.target) &&
+    event.target !== menuToggle &&
+    event.target !== mobileAvatar
+  ) {
     closeMenu();
   }
 }
 
 if (menuToggle) {
   menuToggle.addEventListener("click", toggleMenu);
+}
+if (mobileAvatar) {
+  mobileAvatar.addEventListener("click", toggleMenu);
 }
 
 // ------------------ DESKTOP BURGER MENU (Avatar-Trigger) ------------------ //
