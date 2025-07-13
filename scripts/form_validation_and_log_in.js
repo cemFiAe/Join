@@ -47,7 +47,7 @@ async function userLogIn(e) {
     e.preventDefault();
     if (!validateForm()) return;
     try {
-        const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app";
+        const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
         const response = await fetch(BASE_URL + "users.json");
         const database = await response.json();
 
