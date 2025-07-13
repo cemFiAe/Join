@@ -98,7 +98,7 @@ function submitSignUpForm(event) {
  * @param {string} userData User enters his data, which will be stored on server.
  */
 async function signUpUser(userData) {
-    let BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+    let BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     try {
         let response = await fetch(`${BASE_URL}users.json`, {
             method: 'POST',

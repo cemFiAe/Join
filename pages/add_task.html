@@ -69,12 +69,10 @@
     </div>
   </nav>
 
-  <nav class="mobile-header">
-    <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
-    <!-- Avatar wie am Desktop, aber mobile: -->
-    <div id="mobile-user-avatar" class="user-avatar"></div>
-  </nav>
-
+<nav class="mobile-header">
+  <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
+  <div id="mobile-user-avatar" class="user-avatar"></div>
+</nav>
 
   <nav id="mobileNav" class="mobile-nav">
     <a href="./help.html">Help</a>
@@ -156,7 +154,7 @@
               <img src="/Join/assets/icons/add_task/required_field.png" alt="">
             </div>
             <div class="create-btn-container">
-              <button class="clear_button">Clear x</button>
+              <button class="clear_button" id="clearTaskButton" type="button">Clear x</button>
               <button type="button" class="create_task_btn">
                 Create Task <img src="../assets/icons/add_task/check.png" alt="">
               </button>
@@ -189,7 +187,34 @@
   <script src="../scripts/db.js"></script>
   <script src="../scripts/add_task_firebase.js"></script>
   <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/login_guest.js"></script> 
+  <script src="../scripts/log_in_guest.js"></script> 
+
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('clearTaskButton').addEventListener('click', function () {
+        // Eingabefelder leeren
+        document.getElementById('title').value = "";
+        document.getElementById('description').value = "";
+        document.getElementById('due').value = "";
+
+        // DropDowns zurücksetzen
+        document.getElementById('assigned').selectedIndex = 0;
+        document.getElementById('category').selectedIndex = 0;
+
+        // Subtasks leeren
+        let subtaskList = document.getElementById('subtask-list');
+        if (subtaskList) subtaskList.innerHTML = "";
+
+        // Priority zurücksetzen: Falls du per Klasse auswählst
+        let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
+        priorityBtns.forEach(btn => btn.classList.remove('active'));
+        // Standard "Medium" aktivieren (wenn gewünscht)
+        let defaultBtn = document.querySelector('.btn.btn_medium');
+        if (defaultBtn) defaultBtn.classList.add('active');
+    });
+});
+</script>
+
 </body>
 
 </html>
