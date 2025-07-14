@@ -1,8 +1,6 @@
 
 let overlay = document.getElementById('overlay')
 let mainWindow = document.getElementById('main-window')
-
-
 /**
  * This function ensures that overlay with message shows up 0.5s
  * when the user successfully signs up.

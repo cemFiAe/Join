@@ -10,12 +10,11 @@
 function doPasswordsMatch() {
     let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
-    
     if (confirmPassword === "") {
         confirmDiv.style.borderColor = 'rgb(255, 0, 31)';
         confirmIcon.src = "../assets/icons/sign_up/confirm_lock.svg";
         confirmAlert.style.display = 'block';
-        return;
+        return
     }
     const isMatch = confirmPassword === password;
     confirmDiv.style.borderColor = isMatch ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';

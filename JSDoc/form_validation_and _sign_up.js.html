@@ -64,7 +64,7 @@ function passwordValidation() {
 function confirmPasswordValidation() {
     let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
-    
+
     let valid = confirmPassword !== "" &amp;&amp; confirmPassword === password;
     confirmDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     confirmAlert.style.display = valid ? 'none' : 'block';
@@ -98,62 +98,54 @@ checkbox.addEventListener('click', checkboxClick);
 function submitSignUpForm(event) {
     event.preventDefault();
     let isValid = true;
-
     if (!nameValidation()) isValid = false;
     if (!emailValidation()) isValid = false;
     if (!passwordValidation()) isValid = false;
     if (!confirmPasswordValidation()) isValid = false;
     if (!privacyPolicyValidation()) isValid = false;
-
     if (isValid) {
-        let emailInput = document.getElementById('sign-up-email-input');
-        let passwordInput = document.getElementById('sign-up-password');
         let userData = {
             name: nameInput.value,
             email: emailInput.value,
             password: passwordInput.value.trim(),
         };
         signUpUser(userData);
-    } else {
-        console.log("Validation failed!");
-    }
+    } else { console.log("Validation failed!") }
 }
 
 
 /**
  * This function is used to send user datas to a server, and to inform user of successfully signing up.
- * After 1 second user is forwarded to main page, where he can log in as a registered user.
  * @param {string} userData User enters his data, which will be stored on server.
  */
 async function signUpUser(userData) {
-    let BASE_URL = "https://join-sign-up-log-in-default-rtdb.europe-west1.firebasedatabase.app/";
+    const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     try {
         let response = await fetch(`${BASE_URL}users.json`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
         });
-
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`)
         }
-
-        document.getElementById('signed-up-screen').style.display = "block";
-        setTimeout(() => {
-            document.getElementById('signed-up-screen').style.display = "none";
-            sessionStorage.setItem('cameFromSignUp', 'true');
-            window.location.href = "../pages/index.html";
-        }, 1000);
+        showOverlay()
     } catch (error) {
         console.error("Failed to save user:", error.message);
     }
 }
 
-
-
-</code></pre>
+/**
+ * After 1 second user is forwarded to main page, where he can log in as a registered user.
+ */
+function showOverlay() {
+    document.getElementById('signed-up-screen').style.display = "block";
+    setTimeout(() => {
+        document.getElementById('signed-up-screen').style.display = "none";
+        sessionStorage.setItem('cameFromSignUp', 'true');
+        window.location.href = "../pages/index.html";
+    }, 1000);
+}</code></pre>
         </article>
     </section>
 
@@ -163,13 +155,13 @@ async function signUpUser(userData) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#guestLogIn">guestLogIn</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#redirectUser">redirectUser</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#redirectUser">redirectUser</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Jul 10 2025 14:21:03 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Jul 14 2025 20:42:22 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>

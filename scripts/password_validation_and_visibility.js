@@ -4,13 +4,12 @@
  * @returns It is 'false' if input is empty, otherwise 'true' and proceeds with validation.
  */
 function validatePassword() {
-       if (passwordInput.value === "") {
+    if (passwordInput.value === "") {
         passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
         passwordIcon.src = "../assets/icons/sign_up/lock.svg";
         passwordAlert.style.display = 'block';
-        return;
+        return
     }
-
     const isValid = isPasswordValid(passwordInput.value);
     passwordDiv.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     passwordAlert.style.display = isValid ? 'none' : 'block';

@@ -36,7 +36,7 @@ function passwordValidation() {
 function confirmPasswordValidation() {
     let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
-    
+
     let valid = confirmPassword !== "" && confirmPassword === password;
     confirmDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     confirmAlert.style.display = valid ? 'none' : 'block';
@@ -70,58 +70,51 @@ checkbox.addEventListener('click', checkboxClick);
 function submitSignUpForm(event) {
     event.preventDefault();
     let isValid = true;
-
     if (!nameValidation()) isValid = false;
     if (!emailValidation()) isValid = false;
     if (!passwordValidation()) isValid = false;
     if (!confirmPasswordValidation()) isValid = false;
     if (!privacyPolicyValidation()) isValid = false;
-
     if (isValid) {
-        let emailInput = document.getElementById('sign-up-email-input');
-        let passwordInput = document.getElementById('sign-up-password');
         let userData = {
             name: nameInput.value,
             email: emailInput.value,
             password: passwordInput.value.trim(),
         };
         signUpUser(userData);
-    } else {
-        console.log("Validation failed!");
-    }
+    } else { console.log("Validation failed!") }
 }
 
 
 /**
  * This function is used to send user datas to a server, and to inform user of successfully signing up.
- * After 1 second user is forwarded to main page, where he can log in as a registered user.
  * @param {string} userData User enters his data, which will be stored on server.
  */
 async function signUpUser(userData) {
-    let BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
+    const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     try {
         let response = await fetch(`${BASE_URL}users.json`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
         });
-
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`)
         }
-
-        document.getElementById('signed-up-screen').style.display = "block";
-        setTimeout(() => {
-            document.getElementById('signed-up-screen').style.display = "none";
-            sessionStorage.setItem('cameFromSignUp', 'true');
-            window.location.href = "../pages/index.html";
-        }, 1000);
+        showOverlay()
     } catch (error) {
         console.error("Failed to save user:", error.message);
     }
 }
 
-
-
+/**
+ * After 1 second user is forwarded to main page, where he can log in as a registered user.
+ */
+function showOverlay() {
+    document.getElementById('signed-up-screen').style.display = "block";
+    setTimeout(() => {
+        document.getElementById('signed-up-screen').style.display = "none";
+        sessionStorage.setItem('cameFromSignUp', 'true');
+        window.location.href = "../pages/index.html";
+    }, 1000);
+}
