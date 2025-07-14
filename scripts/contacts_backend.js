@@ -1,9 +1,9 @@
-const BASE_URL = "https://join-18def-default-rtdb.europe-west1.firebasedatabase.app/"
+const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/"
 
 let contacts = [];
 
 // contacts Array füllen und auslesen
-async function onloadFunction() {
+async function onloadFunction() { 
     let contactResponse = await loadData("/contacts");
     let contactsArray = Object.keys(contactResponse);
     
@@ -16,9 +16,15 @@ async function onloadFunction() {
         )
     }
     
-    console.log(contacts);
     renderAllContacts();
 }
+
+// initial Function to create the first contact
+
+/* async function onloadFunction() {
+    postData("/contacts", {"mail": "test@mail.de", "name": "Max Muster", "phone": "+49 1234 567 89 0"});    
+    renderAllContacts();
+} */
 
 // HILFSFUNKTIONEN
 
