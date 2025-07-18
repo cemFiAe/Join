@@ -16,13 +16,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
   <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
-  <script src="../scripts/log_out_user.js"></script>
-  <script src="../scripts/auth_guard.js" defer></script>
 
     <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 </head>
 
 <body>
@@ -171,12 +168,13 @@
     </div>
   </footer>
   
-  <script src="../scripts/burger_and_mobile_menu.js"></script>
+  <script src="../scripts/burgerAndMobileMenu.js"></script>
   <script src="../scripts/db.js"></script>
-  <script src="../scripts/summary_firebase.js"></script>
-  <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/log_in_guest.js"></script> 
-
+  <script src="../scripts/summaryFirebase.js"></script>
+  <script src="../scripts/currentUser.js"></script>
+  <script src="../scripts/logInGuest.js"></script>
+  <script src="../scripts/logOutUser.js"></script>
+  <script src="../scripts/authGuard.js"></script> 
   <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Namen aus localStorage holen (wie beim Avatar)

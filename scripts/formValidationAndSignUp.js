@@ -115,6 +115,6 @@ function showOverlay() {
     setTimeout(() => {
         document.getElementById('signed-up-screen').style.display = "none";
         sessionStorage.setItem('cameFromSignUp', 'true');
-        window.location.href = "../pages/index.html";
+        window.location.href = "../index.html";
     }, 1000);
 }

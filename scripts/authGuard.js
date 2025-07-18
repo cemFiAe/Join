@@ -6,7 +6,7 @@
  */
 function redirectUser() {
     if (!localStorage.getItem("loggedIn")) {
-        window.location.replace("../pages/index.html");
+        window.location.replace("../index.html");
     } else {
         window.history.forward(); 
     }

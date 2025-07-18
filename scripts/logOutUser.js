@@ -3,7 +3,7 @@
  */
 function logOutUser() {
     localStorage.removeItem("loggedIn");  
-    window.location.replace("../pages/index.html"); 
+    window.location.replace("../index.html"); 
 }
 
 
