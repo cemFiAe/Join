@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: log_out_user.js</title>
+    <title>JSDoc: Source: auth_guard.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: log_out_user.js</h1>
+    <h1 class="page-title">Source: auth_guard.js</h1>
 
     
 
@@ -27,13 +27,19 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Logs out user and redirects him to Log in page
+ * Redirection comes from important pages which demand user log in!
+ * If user is not logged in, redirect to Log in page.
+ * Else, it prevents going back to the previous page.
+ * redirectUser is called on page load to check if the user is logged in or not.
  */
-function logOutUser() {
-    localStorage.removeItem("loggedIn");  
-    window.location.replace("../pages/index.html"); 
+function redirectUser() {
+    if (!localStorage.getItem("loggedIn")) {
+        window.location.replace("../pages/index.html");
+    } else {
+        window.history.forward(); 
+    }
 }
-
+window.addEventListener('load', redirectUser);
 
 </code></pre>
         </article>
