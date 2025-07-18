@@ -7,31 +7,31 @@
     <title>Join</title>
     <meta name="description" content="Join, dein Kanban Management Tool" />
     <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../Join/assets/icons/fav/android-chrome-192x192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../Join/assets/icons/fav/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../Join/assets/icons/fav/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../Join/assets/icons/fav/favicon-16x16.png" />
-    <link rel="manifest" href="../Join/assets/icons/fav/site.webmanifest" />
-    <link rel="stylesheet" type="text/css" href="../Join/styles/log_in.css" />
-    <link rel="stylesheet" type="text/css" href="../Join/styles/log_in_sign_up.css" />
-    <link rel="stylesheet" type="text/css" href="../Join/styles/media/log_in.css" />
-    <link rel="stylesheet" type="text/css" href="../Join/styles/media/log_in_sign_up.css" />
-    <link rel="stylesheet" type="text/css" href="../Join/styles/standard.css" />
-    <link rel="stylesheet" type="text/css" href="../Join/style.css" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+    <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+    <link rel="stylesheet" type="text/css" href="../styles/log_in.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/log_in_sign_up.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/media/log_in.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/media/log_in_sign_up.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+    <link rel="stylesheet" type="text/css" href="../style.css" />
 </head>
 
 <body onload="checkLoadingScreen()">
     <div id="overlay" class="loading-overlay">
-        <img class="log-in-logo" src="../Join/assets/img/logo/join_logo_big.svg">
-        <img class="mobile-log-in-logo" src="../Join/assets/img/logo/logo_nav.svg">
+        <img class="log-in-logo" src="../assets/img/logo/join_logo_big.svg">
+        <img class="mobile-log-in-logo" src="../assets/img/logo/logo_nav.svg">
     </div>
 
     <div id="main-window" style="display: none;">
         <header>
-            <img class="header-logo" src="../Join/assets/img/logo/logo_log_in.svg">
+            <img class="header-logo" src="../assets/img/logo/logo_log_in.svg">
             <div class="sign-up-shortcut">
                 <label>Not a Join user?</label>
-                <a href="../Join/pages/sign_up.html" class="buttons">Sign up</a>
+                <a href="../pages/sign_up.html" class="buttons">Sign up</a>
             </div>
         </header>
 
@@ -39,7 +39,7 @@
             <div class="log-in-window">
                 <h1>Log in</h1>
                 <div class="blue-line"></div>
-                <form id="log-in-form" class="log-in-form" action="../Join/pages/summary.html">
+                <form id="log-in-form" class="log-in-form" action="../pages/summary.html">
                     <div class="email">
                         <input type="text" id="log-in-email-input" class="email-input" placeholder="Email" autocomplete="off">
                         <label id="log-in-email-alert" class="email-alert">Please insert correct email</label>
@@ -48,7 +48,7 @@
                     <div style="height: 72px;">
                         <div class="log-in-password">
                             <input type="password" id="log-in-password" placeholder="Password" autocomplete="off">
-                            <img src="../Join/assets/icons/log_in/lock.svg" id="lock-icon" class="lock-icon">
+                            <img src="../assets/icons/log_in/lock.svg" id="lock-icon" class="lock-icon">
                         </div>
                         <label id="log-in-password-alert" class="password-alert">Please insert correct password</label>
                     </div>
@@ -62,21 +62,21 @@
 
         <div class="sign-up-shortcut-footer">
             <label>Not a Join user?</label>
-            <a href="../Join/pages/sign_up.html" class="buttons">Sign up</a>
+            <a href="../pages/sign_up.html" class="buttons">Sign up</a>
         </div>
 
         <footer>
-            <a href="../Join/pages/privacy_policy.html">Privacy policy</a>
-            <a href="../Join/pages/legal_notice.html">Legal notice</a>
+            <a href="../pages/privacy_policy.html">Privacy policy</a>
+            <a href="../pages/legal_notice.html">Legal notice</a>
         </footer>
     </div>
 
-    <script src="../Join/scripts/logInLoading.js"></script>
-    <script src="../Join/scripts/logInVariables.js"></script>
-    <script src="../Join/scripts/emailValidation.js"></script>
-    <script src="../Join/scripts/passwordValidationAndVisibility.js"></script>
-    <script src="../Join/scripts/formValidationAndLogIn.js"></script>
-    <script src="../Join/scripts/logInGuest.js"></script> 
+    <script src="../scripts/logInLoading.js"></script>
+    <script src="../scripts/logInVariables.js"></script>
+    <script src="../scripts/emailValidation.js"></script>
+    <script src="../scripts/passwordValidationAndVisibility.js"></script>
+    <script src="../scripts/formValidationAndLogIn.js"></script>
+    <script src="../scripts/logInGuest.js"></script> 
 </body>
 
 </html>
