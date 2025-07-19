@@ -92,10 +92,10 @@ function addSubtask() {
       <span class="subtask-title">${value}</span>
       <span class="subtask-actions" style="display:none;">
         <button type="button" class="subtask-edit-btn" title="Bearbeiten">
-          <img src="../assets/icons/add_task/edit.svg" alt="Edit" style="width:16px;height:16px;">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
         </button>
         <button type="button" class="subtask-delete-btn" title="Löschen">
-          <img src="../assets/icons/add_task/delete.svg" alt="Delete" style="width:16px;height:16px;">
+          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
         </button>
       </span>
     `;

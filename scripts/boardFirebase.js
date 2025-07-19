@@ -86,11 +86,15 @@ function createTaskCard(task) {
   let subtasksDone = 0;
   let subtasksTotal = 0;
   if (Array.isArray(task.subtasks)) {
-    subtasksTotal = task.subtasks.length;
-    subtasksDone = task.subtasks.filter(st => st && typeof st === 'object' && st.done).length;
+    // Filtere kaputte/ungültige raus
+    const validSubtasks = task.subtasks.filter(st => st && typeof st === "object" && typeof st.title === "string" && st.title.trim() !== "");
+    subtasksTotal = validSubtasks.length;
+    subtasksDone = validSubtasks.filter(st => st.done).length;
   } else if (task.subtasks && typeof task.subtasks === "object") {
-    subtasksTotal = Object.keys(task.subtasks).length;
-    subtasksDone = Object.values(task.subtasks).filter(st => st && st.done).length;
+    // Für seltene Fälle, falls mal als Objekt gespeichert
+    const values = Object.values(task.subtasks).filter(st => st && typeof st === "object" && typeof st.title === "string" && st.title.trim() !== "");
+    subtasksTotal = values.length;
+    subtasksDone = values.filter(st => st.done).length;
   }
 
   // Priority Icon
@@ -390,21 +394,17 @@ function openTaskDetail(task) {
   }
 }
 
-
-
 function saveEdits() {
   const newTitle = document.getElementById('editTitle').value.trim();
   const newDesc = document.getElementById('editDescription').value.trim();
+  const newDueDate = document.getElementById('editDueDate') ? document.getElementById('editDueDate').value.trim() : task.dueDate;
+  const newPriority = document.getElementById('editPriority') ? document.getElementById('editPriority').value : task.priority;
+  const newAssigned = document.getElementById('editAssignedTo') ? document.getElementById('editAssignedTo').value : task.assignedTo;
 
-  // Subtask-Titel aktualisieren (falls bearbeitet)
-  body.querySelectorAll('input[data-stedit]').forEach(input => {
-    const idx = input.dataset.stedit;
-    if (typeof task.subtasks[idx] === "string") {
-      task.subtasks[idx] = { title: input.value, done: false };
-    } else if (task.subtasks[idx] && typeof task.subtasks[idx] === "object") {
-      task.subtasks[idx].title = input.value;
-    }
-  });
+  // Subtasks immer bereinigen
+  let cleanSubtasks = (task.subtasks || [])
+    .filter(st => st && typeof st === "object" && st.title && st.title.trim() !== "")
+    .map(st => ({ title: st.title.trim(), done: !!st.done }));
 
   firebase.database().ref("tasks/" + task.id).update({
     title: newTitle,
@@ -412,7 +412,7 @@ function saveEdits() {
     dueDate: newDueDate,
     priority: newPriority,
     assignedTo: newAssigned,
-    subtasks: task.subtasks // alle Änderungen inkl. Edit und Delete
+    subtasks: cleanSubtasks // nur gültige Subtasks!
     // Kategorie wird nicht angefasst!
   }).then(() => {
     isEditing = false;

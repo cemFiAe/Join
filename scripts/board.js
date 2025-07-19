@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // ---------- Overlay-Handling ----------
 
   window.testDialog = function() {
-  document.getElementById('addTaskOverlay').showModal();
-};
-
+    document.getElementById('addTaskOverlay').showModal();
+  };
 
   // Overlay öffnen (Button onclick)
   window.openAddTaskDialog = function(status = "todo") {
@@ -46,7 +45,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const subtaskInput = document.querySelector('.input-icon-subtask input');
   const subtaskAddBtn = document.querySelector('.add-subtask');
   const subtaskList = document.getElementById('subtask-list');
-  subtaskAddBtn.addEventListener('click', function() {
+  subtaskAddBtn.addEventListener('click', addSubtaskToList);
+
+  subtaskInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      addSubtaskToList();
+      e.preventDefault();
+    }
+  });
+
+  function addSubtaskToList() {
     const value = subtaskInput.value.trim();
     if (value) {
       window.boardSubtasks.push({ title: value, done: false });
@@ -55,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
       subtaskList.appendChild(li);
       subtaskInput.value = '';
     }
-  });
+  }
 
   // Task speichern (Overlay)
   document.querySelector('.create_task_btn').addEventListener('click', function() {
@@ -74,6 +82,11 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
+    // --- SUBTASKS KORREKT FILTERN UND FORMEN ---
+    let cleanSubtasks = (window.boardSubtasks || [])
+      .filter(st => st && typeof st === "object" && st.title && st.title.trim() !== "")
+      .map(st => ({ title: st.title.trim(), done: !!st.done }));
+
     const taskObj = {
       title,
       description,
@@ -81,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
       priority,
       assignedTo,
       category,
-      subtasks: window.boardSubtasks,
+      subtasks: cleanSubtasks,  // <-- Nur noch korrekte Subtasks!
       status,
       createdAt: Date.now()
     };
