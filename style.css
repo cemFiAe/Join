@@ -76,20 +76,6 @@ body {
     color: #fff;
 }
 
-
-/* Wenn du noch das Icon brauchst: */
-.user-icon {
-    display: none; /* Nicht mehr anzeigen! */
-    height: 56px;
-    width: 56px;
-    border: 3px solid;
-    border-color: #2A3647;
-    border-radius: 50%;
-}
-.user-icon:hover {
-    background-color: #E1E5EC;
-}
-
 /* burger */
 
 .burger {
