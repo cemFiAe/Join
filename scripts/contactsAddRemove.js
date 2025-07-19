@@ -9,6 +9,7 @@ async function addNewContact(event) {
 
     const newId = await saveContactToFirebase(newContactData);
     addContactLocally(newId, newContactData);
+    document.getElementById('add-contact-form').reset();
     closeAddContactMobile();
     rerenderContactList();
     showSuccessOverlay();
@@ -31,7 +32,11 @@ function getFormData() {
 }
 
 /**
- * this function is used to validate all input fields are filled before creating a new contact
+ * this function is used to validate all input fields are filled before creating a new contact. 
+ * it also validates if one of the inputs exists already (if another contact contains the same name, mail or phone)
+ * @param {string} name - name of a contact
+ * @param {string} mail - mail of a contact
+ * @param {string} phone - phone of a contact
  */
 function validateContactData({ name, mail, phone }) {
     if (!name || !mail || !phone) {

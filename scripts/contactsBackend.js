@@ -153,10 +153,12 @@ function getColorFromName(name) {
  * this function is used to create the base icon of a contact
  * @param {string} initials - the initials of a contact, f.e "Tom Taylor" => "TT"
  * @param {string} color - a hsl hash, f.e "hsl(210, 70%, 60%)"
+ * @param {string} extraClass - additional class for the edit overlay, so that the icon is styled accordingly
+ * @param {number} size - size used for the proportions of the icon in the edit overlay and the font size inside the icon
  * @returns {HTMLDivElement} - template for the base icon of a contact
  */
-function createInitialIcon(initials, color) {
-    return `<div class="contact_icon_placeholder" style="background-color: ${color};">
+function createInitialIcon(initials, color, extraClass = '', size) {
+    return `<div class="contact_icon_placeholder ${extraClass}" style="background-color: ${color}; width: ${size}px; height: ${size}px; font-size: ${size / 2.5}px;">
               ${initials.toUpperCase()}
             </div>`;
 }
