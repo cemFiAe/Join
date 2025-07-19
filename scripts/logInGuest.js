@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }));
 
             // Weiterleitung zur Summary-Seite
-            window.location.href = "../pages/summary.html";
+            window.location.href = "./pages/summary.html";
         });
     }
 });

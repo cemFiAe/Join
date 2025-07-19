@@ -8,7 +8,7 @@ function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
     if (passwordInput.value == "") {
-        passwordIcon.src = "../assets/icons/log_in/lock.svg";
+        passwordIcon.src = "./assets/icons/log_in/lock.svg";
     }
     updateFormStyles(emailInput, emailAlert, emailValid);
     updateFormStyles(passwordDiv, passwordAlert, passwordValid);
@@ -45,7 +45,7 @@ async function userLogIn(e) {
     try {
         let success = await saveAsUser();
         if (success) {
-            window.location.href = "../pages/summary.html";
+            window.location.href = "./pages/summary.html";
         }
     } catch (error) {
         console.error("Login failed", error);
@@ -94,7 +94,7 @@ function alertFormStyle() {
 function guestLogIn(e) {
     e.preventDefault();
     saveAsGuest()
-    window.location.href = "../pages/summary.html";
+    window.location.href = "./pages/summary.html";
 }
 guestLogInButton.addEventListener('click', guestLogIn);
 
