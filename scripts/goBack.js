@@ -4,7 +4,7 @@
 
         if (referrer) {
             window.location.href = referrer + '.html';}
-        //      else {
-        //     window.location.href = 'summary.html'; // Fallback page
-        // }
+             else {
+            window.location.href = 'summary.html'; // Fallback page
+        }
     }
