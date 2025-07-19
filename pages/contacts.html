@@ -17,8 +17,6 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
   <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
-  <script src="../scripts/log_out_user.js"></script>
-
 </head>
 
 <body onload="onloadFunction()">
@@ -39,7 +37,7 @@
       </div>
     </div>
     <div class="right">
-      <form onsubmit="addNewContact(event)">
+      <form id="add-contact-form" onsubmit="addNewContact(event)">
         <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
         <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
         <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
@@ -87,7 +85,7 @@
     <h2 class="title">Kanban Project Management Tool</h2>
 <div class="header-icons">
     <a href="../pages/help.html">
-        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="">
+        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="Help" onclick="window.location.href='help.html?ref=contacts'">
     </a>
     <div id="board-user-avatar" class="user-avatar"></div>
 </div>
@@ -200,13 +198,15 @@
     </div>
   </footer>
 
-  <script src="../scripts/burger_and_mobile_menu.js"></script>
+  <script src="../script.js"></script>
   <script src="../scripts/contacts.js"></script>
-  <script src="../scripts/contacts_backend.js"></script>
-  <script src="../scripts/contacts_add_remove.js"></script>
-  <script src="../scripts/contacts_edit.js"></script>
-  <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/log_in_guest.js"></script> 
+  <script src="../scripts/contactsBackend.js"></script>
+  <script src="../scripts/contactsAddRemove.js"></script>
+  <script src="../scripts/contactsEdit.js"></script>
+  <script src="../scripts/currentUser.js"></script>
+  <script src="../scripts/logInGuest.js"></script>
+  <script src="../scripts/logOutUser.js"></script>
+  <script src="../scripts/authGuard.js"></script> 
 </body>
 
 </html>

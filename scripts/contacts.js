@@ -20,8 +20,9 @@ document.getElementById('bg_overlay').addEventListener('click', function () {
     currentOpenOverlay = null;
 });
 
-// add contact overlay
-
+/**
+ * this function is used to open the add contact overlay
+ */
 function openAddContact() {
     currentOpenOverlay = 'add-desktop';
     document.getElementById('add_contact_overlay').style.left = "5%";
@@ -29,11 +30,17 @@ function openAddContact() {
     document.getElementById('bg_overlay').style.display = "flex";
 }
 
+/**
+ * this function is used to close the add contact overlay
+ */
 function closeAddContact() {
     document.getElementById('add_contact_overlay').style.left = "105%";
     document.getElementById('bg_overlay').style.display = "none";
 }
 
+/**
+ * this function is used to open the add contact mobile overlay
+ */
 function openAddContactMobile() {
     currentOpenOverlay = 'add-mobile';
     document.getElementById('add_contact_btn').style.display = "none";
@@ -42,7 +49,10 @@ function openAddContactMobile() {
     document.getElementById('bg_overlay').style.display = "flex";
 }
 
-async function closeAddContactMobile() {
+/**
+ * this function is used to close the add contact mobile overlay
+ */
+function closeAddContactMobile() {
     document.getElementById('add_contact_overlay').style.top = "106.5%";
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('add_contact_btn').style.display = "flex";
@@ -53,14 +63,18 @@ document.getElementById('add_contact_overlay').addEventListener('click', functio
     event.stopPropagation();
 });
 
-// edit contact overlay
-
+/**
+ * this function is used to open the edit contact overlay
+ */
 function closeEditContact() {
     document.getElementById('edit_contact_overlay').style.left = "105%";
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('burger_contact_btn').style.zIndex = "99";
 }
 
+/**
+ * this function is used to close the edit contact mobile overlay
+ */
 function closeEditMobileContact() {
     document.getElementById('edit_contact_overlay').style.top = "106.5%", "!important";
     document.getElementById('bg_overlay').style.display = "none";
@@ -72,8 +86,10 @@ document.getElementById('edit_contact_overlay').addEventListener('click', functi
     event.stopPropagation();
 });
 
-// contact overview mobile
-
+/**
+ * this function is used to open contact details, showing them next to the contact column.
+ * this is intended for display sizes of 650px and higher.
+ */
 function openContactOverview() {
     document.getElementById('contacts').style.display = "none";
     document.getElementById('contact-overview').style.display = "flex";
@@ -84,6 +100,9 @@ function openContactOverview() {
     document.getElementById('back_contact_btn').style.display = "flex";
 }
 
+/**
+ * this function is used to open a small burgermenu 
+ */
 function openContactOptions() {
     document.getElementById('contact-options').style.left = 'calc(100% - 132px)';
     setTimeout(() => {
@@ -91,6 +110,9 @@ function openContactOptions() {
     }, 0); 
 }
 
+/**
+ * this function is used to close a small burgermenu
+ */
 function closeContactOptions() {
     document.getElementById('contact-options').style.left = '120%';
     document.removeEventListener("click", outsideClickListener);
@@ -103,6 +125,9 @@ function outsideClickListener(event) {
     }
 }
 
+/**
+ * this function is used to close the contact detail screen and return to the contact column 
+ */
 function goBack() {
     resetContactOverview();
     document.querySelectorAll('.contact_entry.highlight-contact')
@@ -111,6 +136,10 @@ function goBack() {
     currentDisplayedContactId = null;
 }
 
+/**
+ * this function is used to switch the content that is being shown on the contact page.
+ * the function hides the contact details and rerenders the contact list.
+ */
 function resetContactOverview() {
     document.getElementById('contacts').style.display = "flex";
     document.getElementById('contact-overview').style.display = "none";

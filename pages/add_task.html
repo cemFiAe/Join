@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Join</title>
-  <meta name="description" content="Join, dein Kanban Management Tool" />
+  <meta name="descripation" content="Join, dein Kanban Management Tool" />
   <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
   <link rel="stylesheet" type="text/css" href="../styles/add_task.css" />
   <link rel="stylesheet" type="text/css" href="../styles/media/add_task.css" />
@@ -16,7 +16,6 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
   <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
-  <script src="../scripts/log_out_user.js"></script>
 </head>
 
 <body>
@@ -24,13 +23,14 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <header class="header">
     <h2 class="title">Kanban Project Management Tool</h2>
-    <div class="header-icons">
-      <a href="../pages/help.html">
-        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="">
-      </a>
-      <div id="board-user-avatar" class="user-avatar"></div>
-    </div>
-  </header>
+<div class="header-icons">
+    <a href="../pages/help.html">
+        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="Help" onclick="window.location.href='help.html?ref=add_task'">
+    </a>
+    <div id="board-user-avatar" class="user-avatar"></div>
+</div>
+
+</header>
 
   <nav id="burger" class="burger">
     <a href="./legal_notice.html">Legal Notice</a>
@@ -179,11 +179,39 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
-
-  <script src="../scripts/burger_and_mobile_menu.js"></script>
+  
+  <script src="../script.js"></script>
   <script src="../scripts/db.js"></script>
-  <script src="../scripts/add_task_firebase.js"></script>
-  <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/log_in_guest.js"></script>
+  <script src="../scripts/addTaskFirebase.js"></script>
+  <script src="../scripts/currentUser.js"></script>
+  <script src="../scripts/logInGuest.js"></script>
+  <script src="../scripts/logOutUser.js"></script>
+  <script src="../scripts/authGuard.js"></script> 
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('clearTaskButton').addEventListener('click', function () {
+        // Eingabefelder leeren
+        document.getElementById('title').value = "";
+        document.getElementById('description').value = "";
+        document.getElementById('due').value = "";
+
+        // DropDowns zurücksetzen
+        document.getElementById('assigned').selectedIndex = 0;
+        document.getElementById('category').selectedIndex = 0;
+
+        // Subtasks leeren
+        let subtaskList = document.getElementById('subtask-list');
+        if (subtaskList) subtaskList.innerHTML = "";
+
+        // Priority zurücksetzen: Falls du per Klasse auswählst
+        let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
+        priorityBtns.forEach(btn => btn.classList.remove('active'));
+        // Standard "Medium" aktivieren (wenn gewünscht)
+        let defaultBtn = document.querySelector('.btn.btn_medium');
+        if (defaultBtn) defaultBtn.classList.add('active');
+    });
+});
+</script>
+
 </body>
 </html>
