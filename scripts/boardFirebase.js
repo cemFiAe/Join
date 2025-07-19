@@ -364,22 +364,37 @@ function openTaskDetail(task) {
   if (isEditing) {
     renderSubtasksEdit(document.getElementById('edit-detail-subtasks'), task);
   } else {
-    // Lesemodus: Checkbox-Änderungen speichern
-    body.querySelectorAll('.subtask-checkbox').forEach(cb => {
-      cb.addEventListener('change', function() {
-        const subIdx = this.dataset.subidx;
-        const checked = this.checked;
-        // Defensive Kopie (damit kein Fehler bei reinen Strings):
-        if (typeof task.subtasks[subIdx] === "string") {
-          task.subtasks[subIdx] = { title: task.subtasks[subIdx], done: checked };
-        } else if (task.subtasks[subIdx] && typeof task.subtasks[subIdx] === "object") {
-          task.subtasks[subIdx].done = checked;
-        }
-        // Save subtasks nach Firebase:
-        firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
-      });
-    });
+  // Subtasks im Lesemodus anzeigen
+  const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+  const container = document.getElementById('edit-detail-subtasks');
+  if (subtasks.length > 0) {
+    container.innerHTML = subtasks.map((st, i) => {
+      let checked = !!st.done;
+      let label = typeof st.title === "string" ? st.title : "";
+      return `<label style="display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${checked ? "checked" : ""}>
+        <span>${label}</span>
+      </label>`;
+    }).join('');
+  } else {
+    container.innerHTML = "<i>No subtasks.</i>";
   }
+
+  // Checkbox-Änderungen speichern (wie gehabt)
+  container.querySelectorAll('.subtask-checkbox').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const subIdx = this.dataset.subidx;
+      const checked = this.checked;
+      if (typeof task.subtasks[subIdx] === "string") {
+        task.subtasks[subIdx] = { title: task.subtasks[subIdx], done: checked };
+      } else if (task.subtasks[subIdx] && typeof task.subtasks[subIdx] === "object") {
+        task.subtasks[subIdx].done = checked;
+      }
+      firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
+    });
+  });
+}
+
 
   // Close Handler
   document.getElementById('closeTaskDetail').onclick = () => dialog.close();
