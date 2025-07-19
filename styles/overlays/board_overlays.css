@@ -91,7 +91,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: background 0.17s;
+  transition: background 0.75s;
 }
 .add_task_dialog_overlay .btn.active {
   background: #ffb400;
@@ -125,7 +125,7 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 6px;
-  transition: background 0.12s;
+  transition: background 0.75s;
 }
 .add_task_dialog_overlay .add-subtask:hover {
   background: #eee;
@@ -164,7 +164,7 @@
   padding: 9px 24px;
   cursor: pointer;
   margin-right: 10px;
-  transition: border-color 0.18s, color 0.18s;
+  transition: border-color 0.75s, color 0.75s;
 }
 .add_task_dialog_overlay .clear_button:hover,
 .add_task_dialog_overlay .cancel-btn:hover {
@@ -181,7 +181,7 @@
   font-weight: 600;
   padding: 10px 32px;
   cursor: pointer;
-  transition: background 0.18s;
+  transition: background 0.75s;
 }
 .add_task_dialog_overlay .create_task_btn:hover {
   background: #29ABE2;
@@ -196,7 +196,7 @@
   border: none;
   color: #555;
   cursor: pointer;
-  transition: color 0.17s;
+  transition: color 0.75s;
 }
 .add_task_dialog_overlay .close-add-task-overlay:hover {
   color: #222;
@@ -341,7 +341,7 @@
     gap: 5px;
     cursor: pointer;
     font-weight: 500;
-    transition: color 0.2s;
+    transition: color 0.75s;
 }
 .delete-btn:hover { color: #F22; }
 .edit-btn:hover { color: #29ABE2; }

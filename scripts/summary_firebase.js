@@ -50,3 +50,47 @@ firebase.database().ref('tasks').once('value').then(snapshot => {
 
 // ---- Optional: Username setzen (hier evtl. aus Firebase User/Session holen) ----
 document.getElementById('summary-username').textContent = "Sofia Müller";
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Namen aus localStorage holen (wie beim Avatar)
+    let name = localStorage.getItem("currentUserName");
+    if (!name) name = "Guest"; // Fallback
+
+    // Farbig den Nachnamen (wie auf deinem Screenshot)
+    let html = "";
+    let nameParts = name.split(" ");
+    if (nameParts.length > 1) {
+        html = nameParts[0] + ' <span style="color:#29ABE2;font-weight:800;">' + nameParts.slice(1).join(" ") + '</span>';
+    } else {
+        html = '<span style="color:#29ABE2;font-weight:800;">' + name + '</span>';
+    }
+    document.getElementById("summary-username").innerHTML = html;
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Tageszeit-basiertes Greeting
+    function getGreeting() {
+        const hour = new Date().getHours();
+        if (hour < 5) return "Good night,";
+        if (hour < 12) return "Good morning,";
+        if (hour < 18) return "Good afternoon,";
+        return "Good evening,";
+    }
+
+    // Namen aus localStorage holen (wie beim Avatar)
+    let name = localStorage.getItem("currentUserName");
+    if (!name) name = "Guest"; // Fallback
+
+    // Nachnamen farbig, wie gehabt
+    let html = "";
+    let nameParts = name.split(" ");
+    if (nameParts.length > 1) {
+        html = nameParts[0] + ' <span style="color:#29ABE2;font-weight:800;">' + nameParts.slice(1).join(" ") + '</span>';
+    } else {
+        html = '<span style="color:#29ABE2;font-weight:800;">' + name + '</span>';
+    }
+
+    // Begrüßung anzeigen
+    document.getElementById("greeting-message").innerText = getGreeting();
+    document.getElementById("summary-username").innerHTML = html;
+});

@@ -66,7 +66,7 @@
     color: white;
     font-size: 21px;
     font-weight: 700;
-    transition: background 0.2s;
+    transition: background 0.75s;
     cursor: pointer;
 }
 .addtask-btn-mobile {
@@ -100,7 +100,7 @@
     color: #42526E;
     background: #fff;
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, background 0.15s;
+    transition: border-color 0.75s, color 0.75s, background 0.75s;
     outline: none;
     border-style: solid;
     box-shadow: none;
@@ -183,7 +183,7 @@
     padding: 16px;
     gap: 10px;
     filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.08));
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.75s;
     cursor: grab;
 }
 .task.dragging {
@@ -194,7 +194,7 @@
 .category-container.drop-target {
     background: #e5f3fa;
     outline: 2px dashed #29ABE2;
-    transition: background 0.2s;
+    transition: background 0.75s;
 }
 
 /* ----- CARD HEADER & CATEGORY BADGE ----- */
@@ -212,6 +212,9 @@
 }
 .tech-task { background: #0038FF; }
 .user-task { background: #1FD7C1; }
+.bug-task { background: #ff0000; } /* oder dein Blau */
+.research-task { background: #A259FF; } /* z.B. Lila */
+
 
 .task-title {
     font-size: 16px;
@@ -280,7 +283,7 @@
     border: 2px solid #fff;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.75s;
     z-index: 1;
     position: relative;
 }
@@ -289,7 +292,7 @@
 .profile-badge:nth-child(3) { z-index: 1; }
 .profile-badge:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.567);
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.75s;
 }
 
 .prio-icon {
@@ -299,3 +302,36 @@
     object-fit: cover;
 }
 
+/* Tooltip für Subtasks */
+.subtask-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 99;
+  background: #fff;
+  border: 1px solid #29ABE2;
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: #2A3647;
+  font-size: 15px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Verhindert "Rauslaufen" von Subtask-Text */
+.sub-task {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Verhindert "Rauslaufen" von Task-Info (Beschreibung), aber erlaubt Zeilenumbruch + ... */
+.task-info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* max. 2 Zeilen */
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  white-space: normal;
+}

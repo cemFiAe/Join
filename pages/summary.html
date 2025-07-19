@@ -142,7 +142,7 @@
         </div>
         <div class="greeting">
           <div>
-            <p>Good morning,</p>
+            <p id="greeting-message"></p>
             <h3 id="summary-username"></h3>
           </div>
         </div>
@@ -175,22 +175,6 @@
   <script src="../scripts/current_user.js"></script>
   <script src="../scripts/log_in_guest.js"></script> 
 
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Namen aus localStorage holen (wie beim Avatar)
-    let name = localStorage.getItem("currentUserName");
-    if (!name) name = "Guest"; // Fallback
 
-    // Farbig den Nachnamen (wie auf deinem Screenshot)
-    let html = "";
-    let nameParts = name.split(" ");
-    if (nameParts.length > 1) {
-        html = nameParts[0] + ' <span style="color:#29ABE2;font-weight:800;">' + nameParts.slice(1).join(" ") + '</span>';
-    } else {
-        html = '<span style="color:#29ABE2;font-weight:800;">' + name + '</span>';
-    }
-    document.getElementById("summary-username").innerHTML = html;
-});
-</script>
 
 </body>

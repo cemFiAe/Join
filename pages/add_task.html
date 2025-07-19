@@ -22,16 +22,15 @@
 <body>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<header class="header">
+  <header class="header">
     <h2 class="title">Kanban Project Management Tool</h2>
-<div class="header-icons">
-    <a href="../pages/help.html">
+    <div class="header-icons">
+      <a href="../pages/help.html">
         <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="">
-    </a>
-    <div id="board-user-avatar" class="user-avatar"></div>
-</div>
-
-</header>
+      </a>
+      <div id="board-user-avatar" class="user-avatar"></div>
+    </div>
+  </header>
 
   <nav id="burger" class="burger">
     <a href="./legal_notice.html">Legal Notice</a>
@@ -46,33 +45,29 @@
         <img src="../assets/icons/frame/nav/summary.svg" alt="">
         <p>Summary</p>
       </a>
-
       <a class="current-site" href="../pages/add_task.html">
         <img src="../assets/icons/frame/nav/add_task_active.svg" alt="">
         <p>Add Task</p>
       </a>
-
       <a href="../pages/board.html">
         <img src="../assets/icons/frame/nav/board.svg" alt="">
         <p>Board</p>
       </a>
-
       <a href="../pages/contacts.html">
         <img src="../assets/icons/frame/nav/contacts.svg" alt="">
         <p>Contacts</p>
       </a>
     </div>
-
     <div class="nav-bottom">
       <a href="../pages/privacy_policy.html">Privacy Policy</a>
       <a href="../pages/legal_notice.html">Legal notice</a>
     </div>
   </nav>
 
-<nav class="mobile-header">
-  <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
-  <div id="mobile-user-avatar" class="user-avatar"></div>
-</nav>
+  <nav class="mobile-header">
+    <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
+    <div id="mobile-user-avatar" class="user-avatar"></div>
+  </nav>
 
   <nav id="mobileNav" class="mobile-nav">
     <a href="./help.html">Help</a>
@@ -89,17 +84,15 @@
 
       <div class="content">
         <!-- linke Spalte -->
-        <form class="metrics-panel-left">
+        <form class="metrics-panel-left" onsubmit="return false;">
           <div class="form-group title_input">
             <label for="title">Title<span class="required">*</span></label>
             <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
           </div>
-
           <div class="form-group description_input">
             <label for="description">Description</label>
             <textarea id="description" placeholder="Enter a Description"></textarea>
           </div>
-
           <div class="form-group date_input">
             <label for="due">Due date<span class="required">*</span></label>
             <div class="input-icon-date">
@@ -116,21 +109,25 @@
         <div class="metrics-panel-right">
           <div class="form-group">
             <label>Priority</label>
-          <div class="priority-buttons">
-            <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
-            <button type="button" class="btn btn_medium active" data-priority="medium">
-              Medium
-              <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
-              <img class="icon hover" src="../assets/icons/add_task/medium.png" alt="Medium">
-            </button>
-            <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
-          </div>
+            <div class="priority-buttons">
+              <button type="button" class="btn" data-priority="urgent">
+                Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
+              </button>
+              <button type="button" class="btn btn_medium" data-priority="medium">
+                Medium
+                <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
+                <img class="icon selected" src="../assets/icons/add_task/medium_white.png" alt="Medium" style="display:none;">
+              </button>
+              <button type="button" class="btn" data-priority="low">
+                Low <img src="../assets/icons/add_task/low.png" alt="Low">
+              </button>
+            </div>
           </div>
           <div class="form-group">
             <label for="assigned">Assigned to</label>
-              <select id="assigned" class="option">
-                <option value="">Select contacts to assign</option>
-              </select>
+            <select id="assigned" class="option">
+              <option value="">Select contacts to assign</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="category">Category<span class="required">*</span></label>
@@ -140,26 +137,26 @@
           </div>
           <div class="form-group subtask-group">
             <label>Subtasks</label>
-              <div class="input-icon-subtask">
-                <input type="text" placeholder="Add new subtask" autocomplete="off">
-                <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
-              </div>
-              
+            <div class="input-icon-subtask">
+              <input type="text" placeholder="Add new subtask" autocomplete="off">
+              <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
+              <button type="button" class="clear-subtask-input" tabindex="-1" aria-label="Clear subtask input" style="display:none;">&#10005;</button>
+            </div>
           </div>
           <ul id="subtask-list"></ul>
-        </div>       
+        </div>
       </div>
-          <div class="add_task_button">
-            <div>
-              <img src="/Join/assets/icons/add_task/required_field.png" alt="">
-            </div>
-            <div class="create-btn-container">
-              <button class="clear_button" id="clearTaskButton" type="button">Clear x</button>
-              <button type="button" class="create_task_btn">
-                Create Task <img src="../assets/icons/add_task/check.png" alt="">
-              </button>
-            </div>
-          </div> 
+      <div class="add_task_button">
+        <div>
+          <img src="/Join/assets/icons/add_task/required_field.png" alt="">
+        </div>
+        <div class="create-btn-container">
+          <button class="clear_button" id="clearTaskButton" type="button">Clear x</button>
+          <button type="button" class="create_task_btn">
+            Create Task <img src="../assets/icons/add_task/check.png" alt="">
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -182,39 +179,11 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
-  
+
   <script src="../scripts/burger_and_mobile_menu.js"></script>
   <script src="../scripts/db.js"></script>
   <script src="../scripts/add_task_firebase.js"></script>
   <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/log_in_guest.js"></script> 
-
-  <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('clearTaskButton').addEventListener('click', function () {
-        // Eingabefelder leeren
-        document.getElementById('title').value = "";
-        document.getElementById('description').value = "";
-        document.getElementById('due').value = "";
-
-        // DropDowns zurücksetzen
-        document.getElementById('assigned').selectedIndex = 0;
-        document.getElementById('category').selectedIndex = 0;
-
-        // Subtasks leeren
-        let subtaskList = document.getElementById('subtask-list');
-        if (subtaskList) subtaskList.innerHTML = "";
-
-        // Priority zurücksetzen: Falls du per Klasse auswählst
-        let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
-        priorityBtns.forEach(btn => btn.classList.remove('active'));
-        // Standard "Medium" aktivieren (wenn gewünscht)
-        let defaultBtn = document.querySelector('.btn.btn_medium');
-        if (defaultBtn) defaultBtn.classList.add('active');
-    });
-});
-</script>
-
+  <script src="../scripts/log_in_guest.js"></script>
 </body>
-
 </html>

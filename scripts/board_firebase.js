@@ -99,9 +99,14 @@ function createTaskCard(task) {
   else if (task.priority === "low") prioIcon = "../assets/icons/board/prio/prio low.svg";
 
   // Category Tag
-  let categoryClass = "task-header";
-  if (task.category && task.category.toLowerCase().includes("technical")) categoryClass += " user-task";
-  else if (task.category && task.category.toLowerCase().includes("user")) categoryClass += " tech-task";
+let categoryClass = "task-header";
+if (task.category) {
+  if (task.category.toLowerCase().includes("technical")) categoryClass += " user-task";
+  else if (task.category.toLowerCase().includes("user")) categoryClass += " tech-task";
+  else if (task.category.toLowerCase().includes("bug")) categoryClass += " bug-task";
+  else if (task.category.toLowerCase().includes("research")) categoryClass += " research-task";
+}
+
 
   // Kontakte/Avatare (Initialen-Badges)
   let contactBadges = '';
@@ -110,20 +115,20 @@ function createTaskCard(task) {
     contactBadges = assignedArr.map(uid => getProfileBadge(uid)).join('');
   }
 
-  // Subtasks-Anzeige
-  let subtaskBar = '';
-  if (subtasksTotal > 0) {
-    const percent = Math.round((subtasksDone / subtasksTotal) * 100);
-    subtaskBar = `
-      <div class="task-bar">
-        <div class="bar-wrapper">
-          <div class="progress-bar">
-            <span class="progress-bar-fill" style="width: ${percent}%;"></span>
-          </div>
+// Subtasks-Anzeige
+let subtaskBar = '';
+if (subtasksTotal > 0) {
+  const percent = Math.round((subtasksDone / subtasksTotal) * 100);
+  subtaskBar = `
+    <div class="task-bar" style="cursor:pointer;">
+      <div class="bar-wrapper">
+        <div class="progress-bar">
+          <span class="progress-bar-fill" style="width: ${percent}%;"></span>
         </div>
-        <span class="sub-task">${subtasksDone}/${subtasksTotal} Subtasks</span>
-      </div>`;
-  }
+      </div>
+      <span class="sub-task">${subtasksDone}/${subtasksTotal} Subtasks</span>
+    </div>`;
+}
 
   // Task Card Element bauen
   const card = document.createElement("div");
@@ -241,54 +246,121 @@ function openTaskDetail(task) {
 
   renderDetail();
 
-  function renderDetail() {
-    body.innerHTML = `
-      <button id="closeTaskDetail" class="close-task-detail" title="Close">&times;</button>
-      <span class="task-detail-badge ${task.category && task.category.toLowerCase().includes('tech') ? 'task-badge-tech' : 'task-badge-user'}">${task.category || ""}</span>
-      ${isEditing
-        ? `<input id="editTitle" value="${task.title || ""}" class="edit-input" style="width:100%;margin-bottom:10px;font-size:1.5rem;font-weight:bold;">`
-        : `<h2>${task.title || ""}</h2>`}
-      ${isEditing
-        ? `<textarea id="editDescription" class="edit-textarea" style="width:100%;height:64px;margin-bottom:10px;">${task.description || ""}</textarea>`
-        : `<div>${task.description || ""}</div>`}
-      <div class="task-detail-label"><b>Due date:</b> ${task.dueDate || ""}</div>
-      <div class="task-detail-label"><b>Priority:</b> ${task.priority || ""}</div>
-      <div class="task-detail-label"><b>Assigned To:</b></div>
-      <div class="task-detail-contacts">${Array.isArray(task.assignedTo) ? task.assignedTo.map(uid => getProfileBadge(uid) + (users[uid]?.name || "")).join('<br>') : (task.assignedTo ? getProfileBadge(task.assignedTo) + (users[task.assignedTo]?.name || "") : "")}</div>
-      <div class="task-detail-label"><b>Subtasks</b></div>
-      <div class="task-detail-subtasks">
-  ${
-    Array.isArray(task.subtasks)
-      ? task.subtasks.map((st, i) => {
-          let checked = false, label = "";
-          if (typeof st === "string") {
-            label = st;
-          } else if (st && typeof st === "object") {
-            checked = !!st.done;
-            label = st.title || "";
-          }
-          return `<label>
-            <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${checked ? "checked" : ""}>
-            ${isEditing
-              ? `<input value="${label}" data-stedit="${i}" style="width:75%;">`
-              : label}
-          </label>`;
-        }).join('')
-      : "<i>No subtasks.</i>"
+  function renderSubtasksEdit(container, task) {
+  container.innerHTML = '';
+  if (!Array.isArray(task.subtasks) || task.subtasks.length === 0) {
+    container.innerHTML = "<i>No subtasks.</i>";
+    return;
   }
-</div>
+  // Liste editierbar bauen
+  task.subtasks.forEach((st, i) => {
+    let checked = !!(typeof st === "object" && st.done);
+    let label = typeof st === "object" ? (st.title || "") : st;
 
-      <div class="task-detail-actions">
-        ${isEditing
-          ? `<button id="saveTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Speichern</button>
-             <button id="cancelEditBtn" class="cancel-btn">Abbrechen</button>`
-          : `<button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png" alt=""> Löschen</button>
-             <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Bearbeiten</button>`
-        }
-      </div>
-    `;
+    const wrapper = document.createElement('div');
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.gap = "8px";
 
-    // Checkbox-Änderungen speichern
+    // Checkbox
+    const cb = document.createElement('input');
+    cb.type = "checkbox";
+    cb.checked = checked;
+    cb.onchange = function () {
+      if (typeof task.subtasks[i] === "string") {
+        task.subtasks[i] = { title: label, done: cb.checked };
+      } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
+        task.subtasks[i].done = cb.checked;
+      }
+    };
+    wrapper.appendChild(cb);
+
+    // Titel-Input
+    const input = document.createElement('input');
+    input.type = "text";
+    input.value = label;
+    input.style.width = "70%";
+    input.oninput = function () {
+      if (typeof task.subtasks[i] === "string") {
+        task.subtasks[i] = { title: input.value, done: cb.checked };
+      } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
+        task.subtasks[i].title = input.value;
+      }
+    };
+    wrapper.appendChild(input);
+
+    // Delete-Button
+    const del = document.createElement('button');
+    del.type = "button";
+    del.textContent = "🗑️";
+    del.title = "Delete subtask";
+    del.style.border = "none";
+    del.style.background = "none";
+    del.style.cursor = "pointer";
+    del.onclick = function () {
+      task.subtasks.splice(i, 1);
+      renderSubtasksEdit(container, task); // neu rendern!
+    };
+    wrapper.appendChild(del);
+
+    container.appendChild(wrapper);
+  });
+}
+
+
+ function renderDetail() {
+  body.innerHTML = `
+    <button id="closeTaskDetail" class="close-task-detail" title="Close">&times;</button>
+    <span class="task-detail-badge ${task.category && task.category.toLowerCase().includes('tech') ? 'task-badge-tech' : 'task-badge-user'}">${task.category || ""}</span>
+    ${isEditing
+      ? `<input id="editTitle" value="${task.title || ""}" class="edit-input" style="width:100%;margin-bottom:10px;font-size:1.5rem;font-weight:bold;">`
+      : `<h2>${task.title || ""}</h2>`}
+    ${isEditing
+      ? `<textarea id="editDescription" class="edit-textarea" style="width:100%;height:64px;margin-bottom:10px;">${task.description || ""}</textarea>`
+      : `<div>${task.description || ""}</div>`}
+    <div class="task-detail-label"><b>Due date:</b> ${
+      isEditing
+        ? `<input id="editDueDate" type="text" value="${task.dueDate || ''}" style="margin-left:8px;">`
+        : (task.dueDate || "")
+    }</div>
+    <div class="task-detail-label"><b>Priority:</b> ${
+      isEditing
+        ? `<select id="editPriority" style="margin-left:8px;">
+            <option value="urgent" ${task.priority === 'urgent' ? 'selected' : ''}>Urgent</option>
+            <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
+           </select>`
+        : (task.priority || "")
+    }</div>
+    <div class="task-detail-label"><b>Assigned To:</b></div>
+    <div class="task-detail-contacts">${
+      isEditing
+        ? `<select id="editAssignedTo">
+            <option value="">Select contacts to assign</option>
+            ${Object.entries(users).map(([uid, u]) =>
+              `<option value="${uid}" ${task.assignedTo == uid ? 'selected' : ''}>${u.name}</option>`).join('')}
+           </select>`
+        : (Array.isArray(task.assignedTo)
+            ? task.assignedTo.map(uid => getProfileBadge(uid) + (users[uid]?.name || "")).join('<br>')
+            : (task.assignedTo ? getProfileBadge(task.assignedTo) + (users[task.assignedTo]?.name || "") : ""))
+    }</div>
+    <div class="task-detail-label"><b>Subtasks</b></div>
+    <div class="task-detail-subtasks" id="edit-detail-subtasks"></div>
+    <div class="task-detail-actions">
+      ${isEditing
+        ? `<button id="saveTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Speichern</button>
+           <button id="cancelEditBtn" class="cancel-btn">Abbrechen</button>`
+        : `<button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png" alt=""> Löschen</button>
+           <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Bearbeiten</button>`
+      }
+    </div>
+  `;
+
+  // Subtasks editierbar machen im Edit-Mode
+  if (isEditing) {
+    renderSubtasksEdit(document.getElementById('edit-detail-subtasks'), task);
+  } else {
+    // Lesemodus: Checkbox-Änderungen speichern
     body.querySelectorAll('.subtask-checkbox').forEach(cb => {
       cb.addEventListener('change', function() {
         const subIdx = this.dataset.subidx;
@@ -301,22 +373,24 @@ function openTaskDetail(task) {
         }
         // Save subtasks nach Firebase:
         firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
-        // Optional: Du kannst hier auch das Board neu rendern, wenn du möchtest!
       });
     });
-
-    // Close Handler
-    document.getElementById('closeTaskDetail').onclick = () => dialog.close();
-
-    // Edit-Mode wechseln
-    if (!isEditing) {
-      document.getElementById('editTaskBtn').onclick = () => { isEditing = true; renderDetail(); };
-      document.getElementById('deleteTaskBtn').onclick = () => showDeleteConfirmDialog(task.id, dialog);
-    } else {
-      document.getElementById('saveTaskBtn').onclick = saveEdits;
-      document.getElementById('cancelEditBtn').onclick = () => { isEditing = false; renderDetail(); };
-    }
   }
+
+  // Close Handler
+  document.getElementById('closeTaskDetail').onclick = () => dialog.close();
+
+  // Edit-Mode wechseln
+  if (!isEditing) {
+    document.getElementById('editTaskBtn').onclick = () => { isEditing = true; renderDetail(); };
+    document.getElementById('deleteTaskBtn').onclick = () => showDeleteConfirmDialog(task.id, dialog);
+  } else {
+    document.getElementById('saveTaskBtn').onclick = saveEdits;
+    document.getElementById('cancelEditBtn').onclick = () => { isEditing = false; renderDetail(); };
+  }
+}
+
+
 
 function saveEdits() {
   const newTitle = document.getElementById('editTitle').value.trim();
@@ -335,14 +409,16 @@ function saveEdits() {
   firebase.database().ref("tasks/" + task.id).update({
     title: newTitle,
     description: newDesc,
-    subtasks: task.subtasks // <--- Hier speichern!
+    dueDate: newDueDate,
+    priority: newPriority,
+    assignedTo: newAssigned,
+    subtasks: task.subtasks // alle Änderungen inkl. Edit und Delete
+    // Kategorie wird nicht angefasst!
   }).then(() => {
     isEditing = false;
     renderDetail();
   });
 }
-
-
   dialog.showModal();
 }
 

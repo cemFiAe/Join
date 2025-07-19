@@ -94,11 +94,11 @@ a {
 
   .priority-buttons {display: flex; justify-content: space-between;}
 
-  .priority-buttons .btn.active {
-    background: rgba(255, 168, 0, 1);
-    border-color: rgba(255, 168, 0, 1);
-    color: #ffffff;
-  }
+.priority-buttons .btn.active {
+  background: rgba(255, 168, 0, 1);
+  border-color: rgba(255, 168, 0, 1);
+  color: #ffffff;
+}
 
 
   #subtask-list {
@@ -106,20 +106,37 @@ a {
     margin-top: 8px;
     color: #4b5563;
     font-size: 16px;
+    max-height: 60px;
+    overflow-y: scroll;
   }
-  #subtask-list li {
-    margin-bottom: 4px;
-  }
+#subtask-list li {
+  margin-bottom: 4px;
+  white-space: nowrap;       /* Keine Zeilenumbrüche */
+  overflow: hidden;          /* Alles, was zu lang ist, wird nicht angezeigt */
+  text-overflow: ellipsis;   /* ... am Ende, wenn zu lang */
+  max-width: 100%;           /* Wichtig für Flex-Layouts */
+}
 
 
-  .btn { 
-    width: 136px; height: 56px; 
-    border: 1px solid #d1d5db; border-radius: 8px; 
-    padding: 10px; 
-    font-family: inherit; font-size: 20px; 
-    gap: 8px; color: #111827; background: #fff; 
-    line-height: normal; text-align: center; outline: none;
-  }
+
+.btn {
+  width: 136px;
+  height: 56px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 20px;
+  gap: 8px;
+  color: #111827;
+  background: #fff;
+  line-height: normal;
+  text-align: center;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
   .btn:hover {filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); cursor: pointer;}
 
@@ -148,25 +165,53 @@ a {
     height: 20px;
   }
 
+  .form-group select,
+#assigned, #category {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.form-group select option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px; /* je nach Design */
+}
+
+.form-group label,
+.title h2,
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+
   .input-icon-subtask { position: relative; }
   .input-icon-subtask input { padding-right: 40px; height: 48px;}
   .input-icon-subtask .add-subtask { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
   .input-icon-subtask .add-subtask img { width: 20px; height: 20px; }
 
-  .clear_button{
-    height: 56px;
-    width: 110px;
-    border-radius: 12px;
-    font-weight: 400;
-    font-size: 20px;
-    border-color: rgba(42, 54, 71, 1);
-    border: 1px solid;
-    background-color: #F6F7F8;
-  }
-  .clear_button:hover {
-    background-color: #c4c6c9a2;
-    cursor: pointer;
-  }
+/* Medium-Button Icon: Orange (default) wird nur angezeigt, wenn NICHT aktiv */
+.btn_medium .icon.selected { display: none; }
+.btn_medium.active .icon.default { display: none; }
+.btn_medium.active .icon.selected { display: inline; }
+
+.clear_button{
+  height: 56px;
+  width: 110px;
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 20px;
+  border-color: rgba(42, 54, 71, 1);
+  border: 1px solid;
+  background-color: #F6F7F8;
+}
+.clear_button:hover {
+  background-color: #c4c6c9a2;
+  cursor: pointer;
+}
 
   .add_task_button {
     display: flex; 
@@ -202,3 +247,61 @@ a {
   .bottom-nav {
     display: none;
   }
+
+  .input-icon-subtask {
+  position: relative;
+}
+.input-icon-subtask .clear-subtask-input {
+  position: absolute;
+  top: 50%;
+  right: 38px; /* Ggf. anpassen, damit das X rechts neben dem Eingabefeld und Add-Button sitzt */
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #B9B9B9;
+  cursor: pointer;
+  display: none;
+}
+
+#subtask-list {
+  padding: 0;
+  margin: 0;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  position: relative;
+}
+
+.subtask-title {
+  flex: 1;
+  padding-left: 4px;
+}
+
+.subtask-actions {
+  display: none;
+  gap: 4px;
+}
+
+.subtask-item:hover .subtask-actions {
+  display: inline-block !important;
+}
+
+.subtask-edit-btn, .subtask-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  margin: 0 2px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.subtask-edit-btn:hover,
+.subtask-delete-btn:hover {
+  opacity: 1;
+}

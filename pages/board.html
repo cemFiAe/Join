@@ -30,16 +30,13 @@
     </a>
     <div id="board-user-avatar" class="user-avatar"></div>
 </div>
-
 </header>
-
 
     <nav id="burger" class="burger">
         <a href="./legal_notice.html">Legal Notice</a>
         <a href="./privacy_policy.html">Privacy Policy</a>
         <a href="#" onclick="logOutUser()">Log out</a>
     </nav>
-
     <nav class="nav">
         <div class="nav-top">
             <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
@@ -65,12 +62,10 @@
             <a href="../pages/legal_notice.html">Legal notice</a>
         </div>
     </nav>
-
 <nav class="mobile-header">
   <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
   <div id="mobile-user-avatar" class="user-avatar"></div>
 </nav>
-
 
     <nav id="mobileNav" class="mobile-nav">
         <a href="./help.html">Help</a>
@@ -78,7 +73,6 @@
         <a href="./privacy_policy.html">Privacy Policy</a>
         <a href="#" onclick="logOutUser()">Log out</a>
     </nav>
-
     <section class="main-content">
         <section class="board-nav">
             <div class="board-nav-top">
@@ -105,7 +99,6 @@
                 <div class="task-detail-actions"></div>
             </div>
         </dialog>
-
         <section class="board-nav-bottom">
             <div class="task-container">
                 <div class="span-container">
@@ -228,17 +221,67 @@
   </div>
 </dialog>
 
+    <!-- Tooltip für Subtask-Fortschritt -->
+    <div id="subtask-tooltip" class="subtask-tooltip"></div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <!-- Custom Scripts -->
-     
     <script src="../scripts/burger_and_mobile_menu.js"></script>
     <script src="../scripts/db.js"></script>
     <script src="../scripts/board_firebase.js"></script>
     <script src="../scripts/board.js"></script>
     <script src="../scripts/current_user.js"></script>
-  <script src="../scripts/log_in_guest.js"></script> 
-</body>
+    <script src="../scripts/log_in_guest.js"></script>
 
+    <!-- Tooltip-JS: Subtasks-Progress Info -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const tooltip = document.getElementById('subtask-tooltip');
+
+        document.body.addEventListener('mouseenter', function (e) {
+          if (e.target.classList.contains('task-bar')) {
+            const bar = e.target;
+            const subtaskText = bar.querySelector('.sub-task')?.innerText || "";
+            if (subtaskText && subtaskText.includes("/")) {
+              const [done, total] = subtaskText.split("/").map(x => parseInt(x));
+              tooltip.innerText = `${done} von ${total} Subtasks erledigt`;
+              tooltip.style.display = 'block';
+              positionTooltip(e);
+            }
+          }
+        }, true);
+        document.body.addEventListener('mousemove', function (e) {
+          if (tooltip.style.display === 'block') {
+            positionTooltip(e);
+          }
+        });
+        document.body.addEventListener('mouseleave', function (e) {
+          if (e.target.classList.contains('task-bar')) {
+            tooltip.style.display = 'none';
+          }
+        }, true);
+        // Auch Klick
+        document.body.addEventListener('click', function (e) {
+          if (e.target.classList.contains('task-bar')) {
+            const bar = e.target;
+            const subtaskText = bar.querySelector('.sub-task')?.innerText || "";
+            if (subtaskText && subtaskText.includes("/")) {
+              const [done, total] = subtaskText.split("/").map(x => parseInt(x));
+              tooltip.innerText = `${done} von ${total} Subtasks erledigt`;
+              tooltip.style.display = 'block';
+              positionTooltip(e);
+              setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
+            }
+          }
+        });
+
+        function positionTooltip(e) {
+          tooltip.style.left = (e.pageX + 16) + 'px';
+          tooltip.style.top = (e.pageY + 8) + 'px';
+        }
+      });
+    </script>
+</body>
 </html>
