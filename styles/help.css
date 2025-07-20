@@ -50,7 +50,6 @@ because it's suitable for all web browsers */
 
 .arrow-left {
     height: 22px;
-    width: 22px;
     object-fit: cover;
     position: fixed;
     top: 225px;
@@ -61,7 +60,7 @@ because it's suitable for all web browsers */
     cursor: pointer;
     background-color: rgb(240, 240, 240);
     border-radius: 50%;
-    scale: 140%;
+    scale: 130%;
     padding: 2px;
 }
 

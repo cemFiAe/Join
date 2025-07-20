@@ -6,4 +6,3 @@ function logOutUser() {
     window.location.replace("../index.html"); 
 }
 
-

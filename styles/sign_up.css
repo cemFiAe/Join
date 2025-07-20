@@ -112,7 +112,6 @@
 
 .arrow-left {
     height: 22px;
-    width: 22px;
     object-fit: cover;
     position: static;
 }
@@ -121,7 +120,7 @@
     cursor: pointer;
     background-color: rgb(240, 240, 240);
     border-radius: 50%;
-    scale: 140%;
+    scale: 130%;
     padding: 2px;
 }
 
