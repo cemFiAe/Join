@@ -1,4 +1,4 @@
-// db.js
+// realtimeDatabase.js
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJ9O4WkUOiBOjPuC6z22W9nagK4yP7P4k",

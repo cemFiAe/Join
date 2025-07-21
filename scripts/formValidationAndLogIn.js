@@ -111,3 +111,16 @@ function saveAsGuest() {
 }
 
 
+/**
+ * Redirect to summary if already logged in
+ */
+if (localStorage.getItem("loggedIn") === "true") {
+    window.location.replace("./pages/summary.html");
+}
+
+
+/**
+ Prevent going back to login page after logging in
+ */
+window.history.forward();
+
