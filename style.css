@@ -48,6 +48,7 @@ body {
 
 .help-icon:hover {
     scale: 110%;
+    transition: ease-in 0.075s;
 }
 
 /* ---- AVATAR-STYLE ---- */
@@ -74,6 +75,7 @@ body {
 .user-avatar:hover {
     background: #29ABE2;
     color: #fff;
+    transition: ease-in 0.075s;
 }
 
 /* burger */
@@ -109,6 +111,7 @@ body {
 .burger a:hover {
     background-color: #2A3D59;
     cursor: pointer;
+    transition: ease-in 0.075s;
 }
 
 .d_flex {
@@ -178,6 +181,7 @@ body {
 .nav-top a:hover {
     background-color: #2A3D59;
     cursor: pointer;
+    transition: ease-in 0.075s;
 }
 
 .nav-top a {
@@ -210,6 +214,7 @@ body {
 .nav-bottom a:hover {
     color: #29ABE2 !important;
     font-size: 110%;
+    transition: ease-in 0.075s;
 }
 
 /* main content*/
@@ -265,6 +270,7 @@ body {
 
 .mobile-nav a:hover {
     background-color: #2A3D59;
+    transition: ease-in 0.075s;
 }
 
 .mobile-logo {
@@ -298,6 +304,7 @@ body {
 .addtask-btn-mobile:hover {
     background-color: #29ABE2;
     cursor: pointer;
+    transition: ease-in 0.075s;
 }
 
 .mobile-footer {
