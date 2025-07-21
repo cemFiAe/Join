@@ -54,7 +54,6 @@
 }
 .to-do:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: left;
 }
 .to-do:hover .icon, .done:hover .icon {
@@ -65,22 +64,18 @@
 }
 .done:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: right;
 }
 .all-tasks:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: left;
 }
 .in-progress:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: center;
 }
 .await-fb:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: right;
 }
 .card .icon img { 
@@ -101,7 +96,6 @@
 }
 .urgent:hover {
     transform: scale(104%);
-    transition: 0.75s ease;
     transform-origin: top left;
 }
 .urgent-left { 

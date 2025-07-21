@@ -11,8 +11,8 @@ body {
     background-color: white;
     z-index: 9;
     margin-left: 232px;
-    height: calc(100vh - 96px);
     width: 456px;
+    height: calc(100vh - 96px);
     min-width: 456px;
     padding-block: 32px;
     padding-inline: 24px;
@@ -61,7 +61,8 @@ body {
 }
 
 .contact_devider {
-    height: 1px;
+    height: 1px !important;
+    min-height: 1px;
     width: 352px;
     margin-block: 4px;
     background-color: #EEEEEE;
@@ -75,6 +76,8 @@ body {
     gap: 35px;
     padding-block: 15px;
     padding-inline: 24px;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .contact_entry:hover {
@@ -226,7 +229,9 @@ body {
     align-items: center;
     object-fit: cover;
     height: 120px;
+    min-height: 120px;
     width: 120px;
+    min-width: 120px;
     font-size: 47px;
     font-weight: 500;
     color: white;
@@ -239,6 +244,8 @@ body {
 .ci-name {
     font-size: 47px;
     font-weight: 500;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .ci-edit a{
@@ -273,6 +280,8 @@ body {
 
 .ci-mail {
     color: #007CEE;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* overlay and mobile-specials */

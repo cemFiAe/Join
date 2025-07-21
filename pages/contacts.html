@@ -38,9 +38,9 @@
     </div>
     <div class="right">
       <form id="add-contact-form" onsubmit="addNewContact(event)">
-        <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
-        <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email">
-        <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone">
+        <input required id="add-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
+        <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
+        <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
         <div>
           <button type="button" onclick="event.stopPropagation(), closeAddContact()" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="event.stopPropagation(), closeAddContactMobile()" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
@@ -65,9 +65,9 @@
     </div>
     <div class="right">
       <form onsubmit="editContact(event)">
-        <input id="edit-name-input" class="name-input" type="text" placeholder="Name">
-        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email">
-        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone">
+        <input id="edit-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
+        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
+        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
         <div>
           <button type="button" onclick="deleteContactFromEditMobile()" class="cancel-btn-mobile">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="deleteContactFromEdit()" class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>

@@ -10,7 +10,9 @@ a {
 
 .main_content{
   display: flex; flex-direction: column;
-    padding-top: 110px; padding-left: 328px; width: 100%;
+  padding-top: 110px; padding-left: 328px; 
+  width: 100%; max-width: 1920px; height: calc(100vh - 96px);
+  overflow-y: auto;
 }
 .title { 
     display: flex; align-items: center;  height: 73px;
@@ -21,6 +23,10 @@ a {
 }
 .content { 
     display: flex;  gap: 60px; 
+}
+.content input:focus, .content textarea:focus, .content select:focus {
+  outline: none !important;
+  border:1px solid #29ABE2;
 }
 .metrics-panel-left {
     display: flex;
@@ -209,19 +215,30 @@ a {
   background-color: #F6F7F8;
 }
 .clear_button:hover {
-  background-color: #c4c6c9a2;
   cursor: pointer;
+  border-color: #29ABE2;
+  color: #29ABE2;
+  filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
+  scale: 102%;
 }
 
   .add_task_button {
     display: flex; 
-    justify-content: space-between;
-    width: 90.5%;
+    justify-content: flex-start;
+    width: 100%;
     margin-top: 60px;
+    margin-bottom: 16px;
+    gap: 525px;
+  }
+
+  .req-img {
+    object-fit: cover;
+    width: 165px;
   }
 
   .create-btn-container{
     display: flex;
+    width: 310px;
     gap: 16px;
   }
   .create_task_btn{
@@ -237,10 +254,12 @@ a {
     color: white;
     font-weight: 700;
     font-size: 21px;
+    
   }
   .create_task_btn:hover{
-    background-color: #4b5563;
     cursor: pointer;
+    filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
+    background-color: #29ABE2;
   }
 
 

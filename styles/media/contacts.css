@@ -5,8 +5,12 @@
     width: 100%;
     padding: 24px;
     align-items: flex-start;
+    min-width: fit-content;
 }
 .contact_entry {
+    width: 100%;
+}
+.contact-group {
     width: 100%;
 }
 .contact_overview {
@@ -28,7 +32,7 @@
     width: 100%;
 }
 .contact_devider {
-    width: 90%;
+    width: 100%;
 }
 .ci-edit {
     display: none;
@@ -45,10 +49,15 @@
 
 @media (max-width: 456px) {
     .contacts {
-        padding: 0px;
+        padding: 16px;
+    }
+    .contact_letter {
+        padding-inline: 24px;
     }
     .contact_entry {
-        scale: 0.8;
+        transform:scale(0.8);
+        transform-origin: left;
+        width: 125%;
     }
 }
 
@@ -168,5 +177,8 @@
     }
     .span {
     font-size: 17px;
+    }
+    .contact_name, .contact_mail {
+        font-size: 18px;
     }
 }
