@@ -66,7 +66,8 @@ async function saveAsUser() {
     const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     const response = await fetch(BASE_URL + "users.json");
     const database = await response.json();
-    
+
+    // Suche nach User inkl. ID
     let userId = null;
     let userObj = null;
     for (const [id, user] of Object.entries(database)) {
@@ -76,8 +77,9 @@ async function saveAsUser() {
             break;
         }
     }
+
     if (userObj && userObj.password === passwordInput.value.trim()) {
-        setCurrentUser(userId, userObj.email);
+        // User gefunden, Login-Daten speichern
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("currentUserName", userObj.name);
         localStorage.setItem("currentUserType", "user");
@@ -86,18 +88,50 @@ async function saveAsUser() {
             email: userObj.email,
             isGuest: false
         }));
-        // Füge User ggf. als Kontakt hinzu (asynchron, aber Redirect geht schon)
-        addUserToContactsIfMissing(userObj.name, userObj.email, userObj.phone || "");
-        // Jetzt sicher kurz warten, dann redirect:
-        setTimeout(() => {
-            window.location.href = "./pages/summary.html";
-        }, 80); // 80–100ms reicht völlig!
+
+        // Jetzt Kontakt anlegen, falls noch nicht vorhanden!
+        try {
+            const contactsResponse = await fetch(BASE_URL + "contacts.json");
+            const contactsDb = await contactsResponse.json();
+            let alreadyContact = false;
+            if (contactsDb) {
+                for (const c of Object.values(contactsDb)) {
+                    // Stelle sicher, dass der Feldname stimmt: mail oder email?
+                    if (c.mail === userObj.email) {
+                        alreadyContact = true;
+                        break;
+                    }
+                }
+            }
+            if (!alreadyContact) {
+                const addContactRes = await fetch(BASE_URL + "contacts.json", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: userObj.name,
+                        mail: userObj.email,
+                        phone: userObj.phone || ""
+                    })
+                });
+                if (!addContactRes.ok) {
+                    throw new Error('Contact could not be saved!');
+                }
+                // Optional: console.log("Contact added!");
+            } else {
+                // Optional: console.log("Contact already exists");
+            }
+        } catch (err) {
+            console.error('Fehler beim Speichern des Kontakts:', err);
+            // Zeige dem User einen Fehler, wenn du möchtest
+        }
+
         return true;
     } else {
         alertFormStyle();
         return false;
     }
 }
+
 
 // 2. User in Kontakte eintragen, falls noch nicht drin:
 async function addUserToContactsIfMissing(name, email, phone) {
