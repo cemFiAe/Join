@@ -11,14 +11,14 @@ window.addEventListener('DOMContentLoaded', function() {
         !window.location.pathname.endsWith("/index.html") &&
         !window.location.pathname.endsWith("index.html")
     ) {
-        window.location.href = "./index.html";
+        window.location.href = "../index.html";
     }
 });
 
 // 2. (Optional) Deine bisherige Logik – kannst du auch rausnehmen:
 function redirectUser() {
     if (!localStorage.getItem("loggedIn")) {
-        window.location.replace("./index.html");
+        window.location.replace("../index.html");
     }
 }
 window.addEventListener('load', redirectUser);

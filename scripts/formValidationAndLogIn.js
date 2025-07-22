@@ -1,23 +1,15 @@
- /**
- * Redirect to summary if already logged in
- */
-if (localStorage.getItem("loggedIn") === "true") {
-    window.location.replace("../pages/summary.html");
-}
-
 
 /**
  Prevent going back to login page after logging in
  */
 window.history.forward();
 
- 
- /**
- * This function ensures Form validation in Log in page.
- * @param {var} emailValid Returns the value of email validation.
- * @param {var} passwordValid Returns the value of password validation.
- * @returns {boolean} If form validation is 'true' proceed with user log in, otherwise stop.
- */
+/**
+* This function ensures Form validation in Log in page.
+* @param {var} emailValid Returns the value of email validation.
+* @param {var} passwordValid Returns the value of password validation.
+* @returns {boolean} If form validation is 'true' proceed with user log in, otherwise stop.
+*/
 function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
@@ -59,7 +51,9 @@ async function userLogIn(e) {
     try {
         let success = await saveAsUser();
         if (success) {
-            window.location.replace("../pages/summary.html");
+            if (localStorage.getItem("loggedIn") === "true") {
+                window.location.replace("./pages/summary.html");
+            }
         }
     } catch (error) {
         console.error("Login failed", error);
@@ -147,6 +141,14 @@ async function saveAsUser() {
 }
 
 
+function alertFormStyle() {
+    passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
+    passwordAlert.style.display = "block";
+    passwordAlert.innerHTML = "Invalid email or password";
+    emailInput.style.borderColor = 'rgb(255, 0, 31)';
+}
+
+
 // 2. User in Kontakte eintragen, falls noch nicht drin:
 async function addUserToContactsIfMissing(name, email, phone) {
     const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -174,21 +176,6 @@ async function addUserToContactsIfMissing(name, email, phone) {
     }
 }
 
-function alertFormStyle() {
-    passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-    passwordAlert.style.display = "block";
-    passwordAlert.innerHTML = "Invalid email or password";
-    emailInput.style.borderColor = 'rgb(255, 0, 31)';
-}
-
-
-function guestLogIn(e) {
-    e.preventDefault();
-    saveAsGuest()
-    window.location.replace("../pages/summary.html");
-}
-guestLogInButton.addEventListener('click', guestLogIn);
-
 
 function saveAsGuest() {
     localStorage.setItem("loggedIn", "true");
@@ -201,4 +188,13 @@ function saveAsGuest() {
     }));
 }
 
+
+function guestLogIn(e) {
+    e.preventDefault();
+    saveAsGuest()
+    if (localStorage.getItem("loggedIn") === "true") {
+        window.location.replace("./pages/summary.html");
+    }
+}
+guestLogInButton.addEventListener('click', guestLogIn);
 
