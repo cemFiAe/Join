@@ -6,12 +6,11 @@
 // 1. Neue, robuste Umleitungslogik ganz oben!
 
 window.addEventListener('DOMContentLoaded', function() {
-    if (
-        !localStorage.getItem("loggedIn") &&
+    if (!localStorage.getItem("loggedIn") &&
         !window.location.pathname.endsWith("/index.html") &&
         !window.location.pathname.endsWith("index.html")
     ) {
-        window.location.href = "../index.html";
+        window.location.replace("../index.html"); // Replace current page, no history left to go back to
     }
 });
 

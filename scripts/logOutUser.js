@@ -1,8 +1,8 @@
 /**
- * Logs out user and redirects him to Log in page
+ * Logs out user and redirects them to the login page.
+ * Ensures no back navigation after logout.
  */
 function logOutUser() {
-    localStorage.removeItem("loggedIn");  
+    localStorage.removeItem("loggedIn");
     window.location.replace("../index.html"); 
 }
-
