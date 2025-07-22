@@ -41,6 +41,7 @@
 .card:hover, .urgent:hover {
     cursor: pointer;
     background-color: #2A3647;
+    transition: ease-in 0.075s;
     color: white;
     .label {
         color: white;

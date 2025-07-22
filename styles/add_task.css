@@ -218,6 +218,7 @@ a {
   cursor: pointer;
   border-color: #29ABE2;
   color: #29ABE2;
+  transition: ease-in 0.075s;
   filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
   scale: 102%;
 }
@@ -260,6 +261,7 @@ a {
     cursor: pointer;
     filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
     background-color: #29ABE2;
+    transition: ease-in 0.075s;
   }
 
 

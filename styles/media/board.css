@@ -32,9 +32,10 @@
         padding: 0;
     }
     .board-nav-bottom {
-        margin-top: 26px;
+        margin-top: 16px;
         margin-inline: 16px;
         margin-bottom: 16px;
+        height: calc(100vh - 400px);
     }
     .findtaskMobile {
         margin-inline: 0px;

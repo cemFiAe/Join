@@ -41,10 +41,12 @@
     cursor: pointer;
     background-color: #EEEEEE;
     border-radius: 50%;
+    transition: ease-in 0.075s;
 }
 
 .close-x-mobile:hover {
     cursor: pointer;
+    transition: ease-in 0.075s;
 }
 
 .overlay-logo {
@@ -198,6 +200,7 @@
     color: #29ABE2;
     filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
     scale: 102%;
+    transition: ease-in 0.075s;
 }
 
 .cancel-btn img {
@@ -207,6 +210,7 @@
 }
 
 .cancel-btn:hover img, .cancel-btn-mobile:hover img {
+    transition: ease-in 0.075s;
     filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
 }
 
@@ -230,6 +234,7 @@
     cursor: pointer;
     filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
     background-color: #29ABE2;
+    transition: ease-in 0.075s;
 }
 
 .create-btn img {

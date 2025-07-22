@@ -45,7 +45,7 @@ async function userLogIn(e) {
     try {
         let success = await saveAsUser();
         if (success) {
-            window.location.href = "./pages/summary.html";
+            window.location.replace("./pages/summary.html");
         }
     } catch (error) {
         console.error("Login failed", error);
@@ -137,7 +137,7 @@ function alertFormStyle() {
 function guestLogIn(e) {
     e.preventDefault();
     saveAsGuest()
-    window.location.href = "./pages/summary.html";
+    window.location.replace("./pages/summary.html");
 }
 guestLogInButton.addEventListener('click', guestLogIn);
 
@@ -153,4 +153,17 @@ function saveAsGuest() {
     }));
 }
 
+
+/**
+ * Redirect to summary if already logged in
+ */
+if (localStorage.getItem("loggedIn") === "true") {
+    window.location.replace("./pages/summary.html");
+}
+
+
+/**
+ Prevent going back to login page after logging in
+ */
+window.history.forward();
 

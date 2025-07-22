@@ -63,4 +63,20 @@
   .metrics-panel-right {
     width: 100%;
   }
+  .priority-buttons {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+  .btn {
+    height: 41px;
+    width: 122px;
+  }
+}
+
+@media (max-width: 396px) {
+  .priority-buttons {
+    transform: scale(0.8);
+    transform-origin: left;
+  }
+
 }

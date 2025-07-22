@@ -46,7 +46,8 @@ body {
 .new_contact_btn:hover {
     background-color: #29ABE2;
     border-color: #29ABE2;
-    cursor: pointer;   
+    cursor: pointer;
+    transition: ease-in 0.075s;
 }
 
 .contact_letter {
@@ -84,6 +85,7 @@ body {
     background-color: #F6F7F8;
     cursor: pointer;
     border-radius: 12px;
+    transition: ease-in 0.075s;
 }
 
 .contact_icon_placeholder {
@@ -257,10 +259,12 @@ body {
 
 .ci-edit a:hover {
     color: #29ABE2;
+    transition: ease-in 0.075s;
 }
 
 .ci-edit a:hover img {
     filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
+    transition: ease-in 0.075s;
 }
 
 .ci-edit img{
@@ -343,8 +347,10 @@ body {
 
 .contact-options a:hover {
     color: #29ABE2;
+    transition: ease-in 0.075s;
 }
 
 .contact-options a:hover img {
+    transition: ease-in 0.075s;
     filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
 }
