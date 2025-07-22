@@ -8,7 +8,7 @@ function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
     if (passwordInput.value == "") {
-        passwordIcon.src = "../assets/icons/log_in/lock.svg";
+        passwordIcon.src = "./assets/icons/log_in/lock.svg";
     }
     updateFormStyles(emailInput, emailAlert, emailValid);
     updateFormStyles(passwordDiv, passwordAlert, passwordValid);
