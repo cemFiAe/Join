@@ -55,7 +55,7 @@ let checkboxUnchecked = true;
 
 function checkboxClick() {
     checkboxUnchecked = !checkboxUnchecked;
-    checkbox.src = checkboxUnchecked ? "../assets/icons/sign_up/checkbox_unchecked.svg" : "../assets/icons/sign_up/checkbox_checked.svg";
+    checkbox.src = checkboxUnchecked ? "./assets/icons/sign_up/checkbox_unchecked.svg" : "./assets/icons/sign_up/checkbox_checked.svg";
     policyAlert.style.display = checkboxUnchecked ? 'block' : 'none'
 }
 checkbox.addEventListener('click', checkboxClick);
