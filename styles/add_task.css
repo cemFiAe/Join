@@ -324,3 +324,12 @@ a {
 .subtask-delete-btn:hover {
   opacity: 1;
 }
+
+select[multiple] {
+  min-height: 40px;
+  width: 100%;
+  padding: 4px;
+  font-size: 1rem;
+  /* optional: */
+  border-radius: 6px;
+}

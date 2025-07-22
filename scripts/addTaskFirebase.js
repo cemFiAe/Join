@@ -6,14 +6,52 @@ categories.forEach(cat => {
   categorySelect.innerHTML += `<option value="${cat}">${cat}</option>`;
 });
 
-// Kontakte aus Firebase laden
+// Kontakte aus Firebase laden (NEU: aus /contacts! und /user)
 const assignedSelect = document.getElementById('assigned');
-firebase.database().ref('users').once('value').then(snapshot => {
-  const users = snapshot.val();
-  assignedSelect.innerHTML = '<option value="">Select contacts to assign</option>';
-  for (const userId in users) {
-    const user = users[userId];
-    assignedSelect.innerHTML += `<option value="${userId}">${user.name}</option>`;
+assignedSelect.innerHTML = ''; // Leeren
+
+Promise.all([
+  fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
+  fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
+]).then(([users, contacts]) => {
+  // 1. Registrierte User zuerst:
+  if (users) {
+    const groupUsers = document.createElement('optgroup');
+    groupUsers.label = "Registered Users";
+    Object.entries(users).forEach(([userId, userData]) => {
+      const opt = document.createElement('option');
+      opt.value = userId;
+      opt.textContent = userData.name || userData.email || userId;
+      groupUsers.appendChild(opt);
+    });
+    assignedSelect.appendChild(groupUsers);
+  }
+
+  // 2. Kontakte darunter:
+  if (contacts) {
+    const groupContacts = document.createElement('optgroup');
+    groupContacts.label = "Contacts";
+    Object.entries(contacts).forEach(([userId, userData]) => {
+      const opt = document.createElement('option');
+      opt.value = userId;
+      opt.textContent = userData.name;
+      groupContacts.appendChild(opt);
+    });
+    assignedSelect.appendChild(groupContacts);
+  }
+
+  // Choices.js neu initialisieren (wenn nötig)
+  if (window.Choices && assignedSelect) {
+    if (window.assignedChoices) {
+      window.assignedChoices.destroy();
+    }
+    window.assignedChoices = new Choices(assignedSelect, {
+      removeItemButton: true,
+      searchEnabled: true,
+      shouldSort: false,
+      placeholder: true,
+      placeholderValue: 'Select contacts to assign',
+    });
   }
 });
 
@@ -136,7 +174,6 @@ subtaskInput.addEventListener('keydown', function(event) {
   }
 });
 
-
 // Task speichern (Create Task Button)
 document.querySelector('.create_task_btn').addEventListener('click', function (e) {
   e.preventDefault();
@@ -145,7 +182,10 @@ document.querySelector('.create_task_btn').addEventListener('click', function (e
   const description = document.getElementById('description').value.trim();
   const dueDate = document.getElementById('due').value.trim();
   const category = document.getElementById('category').value;
-  const assignedTo = document.getElementById('assigned').value;
+  const assignedSelect = document.getElementById('assigned');
+  const assignedTo = Array.from(assignedSelect.selectedOptions).map(opt => opt.value);
+  // assignedTo ist jetzt ein Array!
+
 
   // Priority auslesen: KEINE Vorauswahl, erst wenn gewählt
   let priority = null;
@@ -207,6 +247,7 @@ function clearForm() {
   });
   subtasks = [];
   subtaskList.innerHTML = '';
+  if (window.assignedChoices) window.assignedChoices.removeActiveItems();
 }
 
 document.querySelector('.clear_button').addEventListener('click', function (e) {

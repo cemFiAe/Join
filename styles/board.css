@@ -217,15 +217,26 @@
 
 
 .task-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #212121;
+  font-size: 16px;
+  font-weight: bold;
+  color: #212121;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 210px; /* Passe ggf. die Breite an deine Card an */
+  display: block;
 }
 
 .task-info {
-    color: #B9B9B9;
-    font-size: 14px;
-    margin-bottom: 6px;
+  color: #B9B9B9;
+  font-size: 14px;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;  /* Maximal 2 Zeilen anzeigen */
+  -webkit-box-orient: vertical;
+  max-width: 210px; /* Passe ggf. die Breite an deine Card an */
 }
 
 /* ----- Subtask Fortschritt ----- */
@@ -334,4 +345,72 @@
   -webkit-box-orient: vertical;
   line-clamp: 2;
   white-space: normal;
+}
+
+.task-detail-dialog h2,
+.task-detail-badge + h2,
+#editTitle {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.task-detail-dialog .edit-input {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-detail-dialog div,
+.task-detail-dialog .edit-textarea {
+  max-width: 360px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  /* für maximal 3 Zeilen */
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+select[multiple] {
+  min-height: 40px;
+  width: 100%;
+  padding: 4px;
+  font-size: 1rem;
+  /* optional: */
+  border-radius: 6px;
+}
+
+.modal-hidden {
+  display: none;
+}
+.modal-visible {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 99999;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18); /* leichter Overlay-Hintergrund */
+  animation: fadein 0.25s;
+}
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+#custom-warning-modal {
+  pointer-events: none;
+}
+#custom-warning-content {
+  pointer-events: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 36px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+  color: #d32f2f;
+  font-weight: 500;
+  font-size: 1.1rem;
+  min-width: 240px;
+  max-width: 80vw;
 }

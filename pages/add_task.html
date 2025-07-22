@@ -16,6 +16,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
   <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 </head>
 
 <body>
@@ -96,7 +97,7 @@
           <div class="form-group date_input">
             <label for="due">Due date<span class="required">*</span></label>
             <div class="input-icon-date">
-              <input id="due" type="text" placeholder="dd/mm/yyyy" autocomplete="off">
+              <input type="date" id="due" required>
               <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon"></span>
             </div>
           </div>
@@ -125,9 +126,7 @@
           </div>
           <div class="form-group">
             <label for="assigned">Assigned to</label>
-            <select id="assigned" class="option">
-              <option value="">Select contacts to assign</option>
-            </select>
+            <select id="assigned" name="assigned" multiple style="min-height:38px; width:100%;"></select>
           </div>
           <div class="form-group">
             <label for="category">Category<span class="required">*</span></label>
@@ -179,39 +178,38 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
-  
+
   <script src="../script.js"></script>
   <script src="../scripts/db.js"></script>
   <script src="../scripts/addTaskFirebase.js"></script>
   <script src="../scripts/currentUser.js"></script>
+  <script src="../scripts/contactsOwnProfile.js"></script>
   <script src="../scripts/logInGuest.js"></script>
   <script src="../scripts/logOutUser.js"></script>
   <script src="../scripts/authGuard.js"></script> 
   <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('clearTaskButton').addEventListener('click', function () {
-        // Eingabefelder leeren
-        document.getElementById('title').value = "";
-        document.getElementById('description').value = "";
-        document.getElementById('due').value = "";
+  document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('clearTaskButton').addEventListener('click', function () {
+          // Eingabefelder leeren
+          document.getElementById('title').value = "";
+          document.getElementById('description').value = "";
+          document.getElementById('due').value = "";
 
-        // DropDowns zurücksetzen
-        document.getElementById('assigned').selectedIndex = 0;
-        document.getElementById('category').selectedIndex = 0;
+          // DropDowns zurücksetzen
+          document.getElementById('assigned').selectedIndex = 0;
+          document.getElementById('category').selectedIndex = 0;
 
-        // Subtasks leeren
-        let subtaskList = document.getElementById('subtask-list');
-        if (subtaskList) subtaskList.innerHTML = "";
+          // Subtasks leeren
+          let subtaskList = document.getElementById('subtask-list');
+          if (subtaskList) subtaskList.innerHTML = "";
 
-        // Priority zurücksetzen: Falls du per Klasse auswählst
-        let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
-        priorityBtns.forEach(btn => btn.classList.remove('active'));
-        // Standard "Medium" aktivieren (wenn gewünscht)
-        let defaultBtn = document.querySelector('.btn.btn_medium');
-        if (defaultBtn) defaultBtn.classList.add('active');
-    });
-});
-</script>
+          // Priority zurücksetzen: Falls du per Klasse auswählst
+          let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
+          priorityBtns.forEach(btn => btn.classList.remove('active'));
+      });
+  });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 </body>
 </html>

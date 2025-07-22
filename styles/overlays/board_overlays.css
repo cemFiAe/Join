@@ -310,6 +310,7 @@
 .task-detail-contacts {
     margin: 0.6em 0 1.1em 0;
     display: flex;
+    align-items: flex-start;
     flex-direction: column;
     gap: 8px;
 }
@@ -403,4 +404,34 @@
   border-color: #29ABE2;
 }
 
-
+.assigned-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+.assigned-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.assigned-user-name {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #222;
+}
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50%;
+  color: #fff;
+}
+.profile-badge:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.567);
+    transition: box-shadow 0.75s;
+}

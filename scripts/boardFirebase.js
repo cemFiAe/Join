@@ -17,15 +17,27 @@ function getInitialsColor(nameOrId) {
 // =========================
 let tasks = [];
 let users = {};
+let contacts = {};
 
 // =========================
 // Kontakte/Users laden
 // =========================
+// Registrierte User laden
 firebase.database().ref("users").once("value").then(snap => {
   users = snap.val() || {};
   window.allUsers = users;
-  loadAllTasks();
+  // Kontakte laden, dann Tasks laden!
+  firebase.database().ref("contacts").once("value").then(csnap => {
+    contacts = csnap.val() || {};
+    window.allContacts = contacts;
+    loadAllTasks();
+  });
 });
+
+function getPersonData(id) {
+  return users[id] || contacts[id] || null;
+}
+
 
 // =========================
 // Tasks laden & rendern
@@ -42,7 +54,7 @@ function loadAllTasks() {
 // Task-Avatare/Initialen
 // =========================
 function getProfileBadge(userId) {
-  const user = users[userId];
+  const user = getPersonData(userId);
   if (!user) return '';
   const name = user.name || '';
   const initials = name
@@ -103,14 +115,13 @@ function createTaskCard(task) {
   else if (task.priority === "low") prioIcon = "../assets/icons/board/prio/prio low.svg";
 
   // Category Tag
-let categoryClass = "task-header";
-if (task.category) {
-  if (task.category.toLowerCase().includes("technical")) categoryClass += " user-task";
-  else if (task.category.toLowerCase().includes("user")) categoryClass += " tech-task";
-  else if (task.category.toLowerCase().includes("bug")) categoryClass += " bug-task";
-  else if (task.category.toLowerCase().includes("research")) categoryClass += " research-task";
-}
-
+  let categoryClass = "task-header";
+  if (task.category) {
+    if (task.category.toLowerCase().includes("technical")) categoryClass += " user-task";
+    else if (task.category.toLowerCase().includes("user")) categoryClass += " tech-task";
+    else if (task.category.toLowerCase().includes("bug")) categoryClass += " bug-task";
+    else if (task.category.toLowerCase().includes("research")) categoryClass += " research-task";
+  }
 
   // Kontakte/Avatare (Initialen-Badges)
   let contactBadges = '';
@@ -119,20 +130,20 @@ if (task.category) {
     contactBadges = assignedArr.map(uid => getProfileBadge(uid)).join('');
   }
 
-// Subtasks-Anzeige
-let subtaskBar = '';
-if (subtasksTotal > 0) {
-  const percent = Math.round((subtasksDone / subtasksTotal) * 100);
-  subtaskBar = `
-    <div class="task-bar" style="cursor:pointer;">
-      <div class="bar-wrapper">
-        <div class="progress-bar">
-          <span class="progress-bar-fill" style="width: ${percent}%;"></span>
+  // Subtasks-Anzeige
+  let subtaskBar = '';
+  if (subtasksTotal > 0) {
+    const percent = Math.round((subtasksDone / subtasksTotal) * 100);
+    subtaskBar = `
+      <div class="task-bar" style="cursor:pointer;">
+        <div class="bar-wrapper">
+          <div class="progress-bar">
+            <span class="progress-bar-fill" style="width: ${percent}%;"></span>
+          </div>
         </div>
-      </div>
-      <span class="sub-task">${subtasksDone}/${subtasksTotal} Subtasks</span>
-    </div>`;
-}
+        <span class="sub-task">${subtasksDone}/${subtasksTotal} Subtasks</span>
+      </div>`;
+  }
 
   // Task Card Element bauen
   const card = document.createElement("div");
@@ -251,68 +262,67 @@ function openTaskDetail(task) {
   renderDetail();
 
   function renderSubtasksEdit(container, task) {
-  container.innerHTML = '';
-  if (!Array.isArray(task.subtasks) || task.subtasks.length === 0) {
-    container.innerHTML = "<i>No subtasks.</i>";
-    return;
+    container.innerHTML = '';
+    if (!Array.isArray(task.subtasks) || task.subtasks.length === 0) {
+      container.innerHTML = "<i>No subtasks.</i>";
+      return;
+    }
+    // Liste editierbar bauen
+    task.subtasks.forEach((st, i) => {
+      let checked = !!(typeof st === "object" && st.done);
+      let label = typeof st === "object" ? (st.title || "") : st;
+
+      const wrapper = document.createElement('div');
+      wrapper.style.display = "flex";
+      wrapper.style.alignItems = "center";
+      wrapper.style.gap = "8px";
+
+      // Checkbox
+      const cb = document.createElement('input');
+      cb.type = "checkbox";
+      cb.checked = checked;
+      cb.onchange = function () {
+        if (typeof task.subtasks[i] === "string") {
+          task.subtasks[i] = { title: label, done: cb.checked };
+        } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
+          task.subtasks[i].done = cb.checked;
+        }
+      };
+      wrapper.appendChild(cb);
+
+      // Titel-Input
+      const input = document.createElement('input');
+      input.type = "text";
+      input.value = label;
+      input.style.width = "70%";
+      input.oninput = function () {
+        if (typeof task.subtasks[i] === "string") {
+          task.subtasks[i] = { title: input.value, done: cb.checked };
+        } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
+          task.subtasks[i].title = input.value;
+        }
+      };
+      wrapper.appendChild(input);
+
+      // Delete-Button
+      const del = document.createElement('button');
+      del.type = "button";
+      del.textContent = "🗑️";
+      del.title = "Delete subtask";
+      del.style.border = "none";
+      del.style.background = "none";
+      del.style.cursor = "pointer";
+      del.onclick = function () {
+        task.subtasks.splice(i, 1);
+        renderSubtasksEdit(container, task); // neu rendern!
+      };
+      wrapper.appendChild(del);
+
+      container.appendChild(wrapper);
+    });
   }
-  // Liste editierbar bauen
-  task.subtasks.forEach((st, i) => {
-    let checked = !!(typeof st === "object" && st.done);
-    let label = typeof st === "object" ? (st.title || "") : st;
 
-    const wrapper = document.createElement('div');
-    wrapper.style.display = "flex";
-    wrapper.style.alignItems = "center";
-    wrapper.style.gap = "8px";
-
-    // Checkbox
-    const cb = document.createElement('input');
-    cb.type = "checkbox";
-    cb.checked = checked;
-    cb.onchange = function () {
-      if (typeof task.subtasks[i] === "string") {
-        task.subtasks[i] = { title: label, done: cb.checked };
-      } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
-        task.subtasks[i].done = cb.checked;
-      }
-    };
-    wrapper.appendChild(cb);
-
-    // Titel-Input
-    const input = document.createElement('input');
-    input.type = "text";
-    input.value = label;
-    input.style.width = "70%";
-    input.oninput = function () {
-      if (typeof task.subtasks[i] === "string") {
-        task.subtasks[i] = { title: input.value, done: cb.checked };
-      } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
-        task.subtasks[i].title = input.value;
-      }
-    };
-    wrapper.appendChild(input);
-
-    // Delete-Button
-    const del = document.createElement('button');
-    del.type = "button";
-    del.textContent = "🗑️";
-    del.title = "Delete subtask";
-    del.style.border = "none";
-    del.style.background = "none";
-    del.style.cursor = "pointer";
-    del.onclick = function () {
-      task.subtasks.splice(i, 1);
-      renderSubtasksEdit(container, task); // neu rendern!
-    };
-    wrapper.appendChild(del);
-
-    container.appendChild(wrapper);
-  });
-}
-
-
- function renderDetail() {
+function renderDetail() {
   body.innerHTML = `
     <button id="closeTaskDetail" class="close-task-detail" title="Close">&times;</button>
     <span class="task-detail-badge ${task.category && task.category.toLowerCase().includes('tech') ? 'task-badge-tech' : 'task-badge-user'}">${task.category || ""}</span>
@@ -324,8 +334,8 @@ function openTaskDetail(task) {
       : `<div>${task.description || ""}</div>`}
     <div class="task-detail-label"><b>Due date:</b> ${
       isEditing
-        ? `<input id="editDueDate" type="text" value="${task.dueDate || ''}" style="margin-left:8px;">`
-        : (task.dueDate || "")
+        ? `<input id="editDueDate" type="date" value="${task.dueDate || ""}" style="margin-left:8px;">`
+        : formatDueDate(task.dueDate)
     }</div>
     <div class="task-detail-label"><b>Priority:</b> ${
       isEditing
@@ -337,17 +347,28 @@ function openTaskDetail(task) {
         : (task.priority || "")
     }</div>
     <div class="task-detail-label"><b>Assigned To:</b></div>
-    <div class="task-detail-contacts">${
-      isEditing
-        ? `<select id="editAssignedTo">
-            <option value="">Select contacts to assign</option>
-            ${Object.entries(users).map(([uid, u]) =>
-              `<option value="${uid}" ${task.assignedTo == uid ? 'selected' : ''}>${u.name}</option>`).join('')}
-           </select>`
-        : (Array.isArray(task.assignedTo)
-            ? task.assignedTo.map(uid => getProfileBadge(uid) + (users[uid]?.name || "")).join('<br>')
-            : (task.assignedTo ? getProfileBadge(task.assignedTo) + (users[task.assignedTo]?.name || "") : ""))
-    }</div>
+  <div class="task-detail-contacts">
+    ${isEditing
+      ? `<select id="editAssignedTo" multiple style="width:100%;min-height:38px"></select>`
+: (Array.isArray(task.assignedTo) && task.assignedTo.length
+    ? `<div class="assigned-users-list">` +
+        task.assignedTo.map(uid =>
+            `<div class="assigned-user">
+                ${getProfileBadge(uid)}
+                <span class="assigned-user-name">${getPersonData(uid)?.name || ""}</span>
+            </div>`
+        ).join('') +
+      `</div>`
+    : (task.assignedTo
+        ? `<div class="assigned-users-list">
+                <div class="assigned-user">
+                    ${getProfileBadge(task.assignedTo)}
+                    <span class="assigned-user-name">${getPersonData(task.assignedTo)?.name || ""}</span>
+                </div>
+           </div>`
+        : ""))
+    }
+  </div>
     <div class="task-detail-label"><b>Subtasks</b></div>
     <div class="task-detail-subtasks" id="edit-detail-subtasks"></div>
     <div class="task-detail-actions">
@@ -360,41 +381,103 @@ function openTaskDetail(task) {
     </div>
   `;
 
+  // AssignedTo Multi-Select mit Registered Users + Contacts (nur im Edit-Mode)
+if (isEditing) {
+  const assignedSelect = document.getElementById('editAssignedTo');
+  assignedSelect.innerHTML = '';
+
+  Promise.all([
+    firebase.database().ref("users").once("value").then(r => r.val()),
+    firebase.database().ref("contacts").once("value").then(r => r.val())
+  ]).then(([allUsers, allContacts]) => {
+    // KEIN selected setzen!
+    if (allUsers) {
+      const groupUsers = document.createElement('optgroup');
+      groupUsers.label = "Registered Users";
+      Object.entries(allUsers).forEach(([userId, userData]) => {
+        const opt = document.createElement('option');
+        opt.value = userId;
+        opt.textContent = userData.name || userData.email || userId;
+        groupUsers.appendChild(opt);
+      });
+      assignedSelect.appendChild(groupUsers);
+    }
+    if (allContacts) {
+      const groupContacts = document.createElement('optgroup');
+      groupContacts.label = "Contacts";
+      Object.entries(allContacts).forEach(([userId, userData]) => {
+        const opt = document.createElement('option');
+        opt.value = userId;
+        opt.textContent = userData.name;
+        groupContacts.appendChild(opt);
+      });
+      assignedSelect.appendChild(groupContacts);
+    }
+
+    // Alte Choices-Instanz killen!
+    if (window.editAssignedChoices) window.editAssignedChoices.destroy();
+
+    // Nach dem Bauen aller Optionen:
+    Array.from(assignedSelect.options).forEach(opt => opt.selected = false);
+
+
+    // Choices NEU initialisieren!
+    if (window.editAssignedChoices) window.editAssignedChoices.destroy();
+    window.editAssignedChoices = new Choices(assignedSelect, {
+      removeItemButton: true,
+      searchEnabled: true,
+      shouldSort: false,
+      placeholder: true,
+      placeholderValue: 'Select contacts to assign'
+    });
+
+
+window.editAssignedChoices.removeActiveItems(); // alles leeren
+
+const assignedIds = Array.isArray(task.assignedTo) ? task.assignedTo : (task.assignedTo ? [task.assignedTo] : []);
+assignedIds.forEach(id => {
+  // Existiert die Option?
+  const opt = assignedSelect.querySelector(`option[value="${id}"]`);
+  if (opt) window.editAssignedChoices.setChoiceByValue(id);
+});
+
+  });
+}
+
   // Subtasks editierbar machen im Edit-Mode
   if (isEditing) {
     renderSubtasksEdit(document.getElementById('edit-detail-subtasks'), task);
   } else {
-  // Subtasks im Lesemodus anzeigen
-  const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
-  const container = document.getElementById('edit-detail-subtasks');
-  if (subtasks.length > 0) {
-    container.innerHTML = subtasks.map((st, i) => {
-      let checked = !!st.done;
-      let label = typeof st.title === "string" ? st.title : "";
-      return `<label style="display:flex;align-items:center;gap:6px;">
-        <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${checked ? "checked" : ""}>
-        <span>${label}</span>
-      </label>`;
-    }).join('');
-  } else {
-    container.innerHTML = "<i>No subtasks.</i>";
-  }
+    // Subtasks im Lesemodus anzeigen
+    const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+    const container = document.getElementById('edit-detail-subtasks');
+    if (subtasks.length > 0) {
+      container.innerHTML = subtasks.map((st, i) => {
+        let checked = !!st.done;
+        let label = typeof st.title === "string" ? st.title : "";
+        return `<label style="display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${checked ? "checked" : ""}>
+          <span>${label}</span>
+        </label>`;
+      }).join('');
+    } else {
+      container.innerHTML = "<i>No subtasks.</i>";
+    }
 
-  // Checkbox-Änderungen speichern (wie gehabt)
-  container.querySelectorAll('.subtask-checkbox').forEach(cb => {
-    cb.addEventListener('change', function() {
-      const subIdx = this.dataset.subidx;
-      const checked = this.checked;
-      if (typeof task.subtasks[subIdx] === "string") {
-        task.subtasks[subIdx] = { title: task.subtasks[subIdx], done: checked };
-      } else if (task.subtasks[subIdx] && typeof task.subtasks[subIdx] === "object") {
-        task.subtasks[subIdx].done = checked;
-      }
-      firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
+    // Checkbox-Änderungen speichern (wie gehabt)
+    container.querySelectorAll('.subtask-checkbox').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const subIdx = this.dataset.subidx;
+        const checked = this.checked;
+        if (typeof task.subtasks[subIdx] === "string") {
+          task.subtasks[subIdx] = { title: task.subtasks[subIdx], done: checked };
+        } else if (task.subtasks[subIdx] && typeof task.subtasks[subIdx] === "object") {
+          task.subtasks[subIdx].done = checked;
+        }
+        firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
+      });
     });
-  });
-}
-
+  }
 
   // Close Handler
   document.getElementById('closeTaskDetail').onclick = () => dialog.close();
@@ -407,36 +490,37 @@ function openTaskDetail(task) {
     document.getElementById('saveTaskBtn').onclick = saveEdits;
     document.getElementById('cancelEditBtn').onclick = () => { isEditing = false; renderDetail(); };
   }
-}
 
-function saveEdits() {
-  const newTitle = document.getElementById('editTitle').value.trim();
-  const newDesc = document.getElementById('editDescription').value.trim();
-  const newDueDate = document.getElementById('editDueDate') ? document.getElementById('editDueDate').value.trim() : task.dueDate;
-  const newPriority = document.getElementById('editPriority') ? document.getElementById('editPriority').value : task.priority;
-  const newAssigned = document.getElementById('editAssignedTo') ? document.getElementById('editAssignedTo').value : task.assignedTo;
+  // Speichern-Funktion innerhalb von renderDetail!
+  function saveEdits() {
+    const newTitle = document.getElementById('editTitle').value.trim();
+    const newDesc = document.getElementById('editDescription').value.trim();
+    const newDueDate = document.getElementById('editDueDate') ? document.getElementById('editDueDate').value.trim() : task.dueDate;
+    const newPriority = document.getElementById('editPriority') ? document.getElementById('editPriority').value : task.priority;
+    const assignedSelect = document.getElementById('editAssignedTo');
+    const newAssigned = Array.from(assignedSelect.selectedOptions).map(opt => opt.value);
 
-  // Subtasks immer bereinigen
-  let cleanSubtasks = (task.subtasks || [])
-    .filter(st => st && typeof st === "object" && st.title && st.title.trim() !== "")
-    .map(st => ({ title: st.title.trim(), done: !!st.done }));
+    // Subtasks immer bereinigen
+    let cleanSubtasks = (task.subtasks || [])
+      .filter(st => st && typeof st === "object" && st.title && st.title.trim() !== "")
+      .map(st => ({ title: st.title.trim(), done: !!st.done }));
 
-  firebase.database().ref("tasks/" + task.id).update({
-    title: newTitle,
-    description: newDesc,
-    dueDate: newDueDate,
-    priority: newPriority,
-    assignedTo: newAssigned,
-    subtasks: cleanSubtasks // nur gültige Subtasks!
-    // Kategorie wird nicht angefasst!
-  }).then(() => {
-    isEditing = false;
-    renderDetail();
-  });
+    firebase.database().ref("tasks/" + task.id).update({
+      title: newTitle,
+      description: newDesc,
+      dueDate: newDueDate,
+      priority: newPriority,
+      assignedTo: newAssigned,
+      subtasks: cleanSubtasks // nur gültige Subtasks!
+      // Kategorie wird nicht angefasst!
+    }).then(() => {
+      isEditing = false;
+      renderDetail();
+    });
+  }
 }
   dialog.showModal();
 }
-
 
 // Farbe aus String (Backup, falls gebraucht)
 function stringToColor(str) {
@@ -502,4 +586,20 @@ function showDeleteConfirmDialog(taskId, parentDialog) {
   cancelBtn.onclick = () => {
     deleteDialog.close();
   };
+}
+
+// Formatierung für Due Date
+function formatDueDate(dueDate) {
+  if (!dueDate) return '';
+  let dateObj = null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) { // yyyy-mm-dd
+    dateObj = new Date(dueDate);
+  } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dueDate)) { // dd/mm/yyyy
+    const [day, month, year] = dueDate.split("/");
+    dateObj = new Date(`${year}-${month}-${day}`);
+  }
+  if (dateObj && !isNaN(dateObj)) {
+    return dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
+  }
+  return dueDate; // Fallback: ungeparstes Feld
 }

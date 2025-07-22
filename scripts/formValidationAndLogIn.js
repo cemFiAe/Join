@@ -61,27 +61,70 @@ logInButton.addEventListener('click', userLogIn);
  * @returns If 'true' - user datas are saved and user is redirected to summary page, and
  * if 'false' - user remains on log in page and alertFormStyles function is called.
  */
+// 1. Login-Logik: Nur Authentifizierung!
 async function saveAsUser() {
     const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     const response = await fetch(BASE_URL + "users.json");
     const database = await response.json();
-    const user = Object.values(database).find(user => user.email === emailInput.value);
-    if (user && user.password === passwordInput.value.trim()) {
+    
+    let userId = null;
+    let userObj = null;
+    for (const [id, user] of Object.entries(database)) {
+        if (user.email === emailInput.value) {
+            userId = id;
+            userObj = user;
+            break;
+        }
+    }
+    if (userObj && userObj.password === passwordInput.value.trim()) {
+        setCurrentUser(userId, userObj.email);
         localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("currentUserName", user.name);
+        localStorage.setItem("currentUserName", userObj.name);
         localStorage.setItem("currentUserType", "user");
         localStorage.setItem("currentUser", JSON.stringify({
-            name: user.name,
-            email: user.email,
+            name: userObj.name,
+            email: userObj.email,
             isGuest: false
         }));
-        return true
+        // Füge User ggf. als Kontakt hinzu (asynchron, aber Redirect geht schon)
+        addUserToContactsIfMissing(userObj.name, userObj.email, userObj.phone || "");
+        // Jetzt sicher kurz warten, dann redirect:
+        setTimeout(() => {
+            window.location.href = "./pages/summary.html";
+        }, 80); // 80–100ms reicht völlig!
+        return true;
     } else {
         alertFormStyle();
-        return false
+        return false;
     }
 }
 
+// 2. User in Kontakte eintragen, falls noch nicht drin:
+async function addUserToContactsIfMissing(name, email, phone) {
+    const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
+    const contactsResponse = await fetch(BASE_URL + "contacts.json");
+    const contactsDb = await contactsResponse.json();
+    let alreadyContact = false;
+    if (contactsDb) {
+        for (const c of Object.values(contactsDb)) {
+            if (c.mail === email) {
+                alreadyContact = true;
+                break;
+            }
+        }
+    }
+    if (!alreadyContact) {
+        await fetch(BASE_URL + "contacts.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: name,
+                mail: email,
+                phone: phone
+            })
+        });
+    }
+}
 
 function alertFormStyle() {
     passwordDiv.style.borderColor = 'rgb(255, 0, 31)';

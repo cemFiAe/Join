@@ -1,6 +1,6 @@
 /**
- * this function is used to add a contact to firebase / locally
- * @param {event} event - is necessary to prevent the refresh of the page on submit
+ * Fügt einen neuen Kontakt zu Firebase und lokal hinzu
+ * @param {event} event - verhindert das automatische Neuladen des Formulars
  */
 async function addNewContact(event) {
     event.preventDefault();
@@ -21,7 +21,7 @@ async function addNewContact(event) {
 }
 
 /**
- * this function is used to gather the information from the input fields of the overlay form
+ * Holt die Daten aus den Input-Feldern des Kontaktformulars
  */
 function getFormData() {
     return {
@@ -32,11 +32,7 @@ function getFormData() {
 }
 
 /**
- * this function is used to validate all input fields are filled before creating a new contact. 
- * it also validates if one of the inputs exists already (if another contact contains the same name, mail or phone)
- * @param {string} name - name of a contact
- * @param {string} mail - mail of a contact
- * @param {string} phone - phone of a contact
+ * Prüft, ob alle Felder ausgefüllt wurden
  */
 function validateContactData({ name, mail, phone }) {
     if (!name || !mail || !phone) {
@@ -47,25 +43,22 @@ function validateContactData({ name, mail, phone }) {
 }
 
 /**
- * this function is used to save a contact into the firebase db
+ * Speichert den neuen Kontakt in Firebase
  */
 async function saveContactToFirebase(data) {
     const response = await postData("/contacts", data);
-    return response.name;
+    return response.name; // Die neue ID von Firebase
 }
 
 /**
- * this function is used to add a contact locally into the contacts array
- * @param {string} id - the id the contact was created with from firebase
- * @param {Object} data - contact information like name, mail and phone
+ * Fügt Kontakt lokal in das contacts-Array ein
  */
 function addContactLocally(id, data) {
     contacts.push({ id, data });
 }
 
 /**
- * this function is used to focus the newly created contact by scrolling and animating it
- * @param {*} id 
+ * Hebt neu erstellten Kontakt hervor
  */
 function focusOnNewContact(id) {
     requestAnimationFrame(() => {
@@ -78,9 +71,7 @@ function focusOnNewContact(id) {
 }
 
 /**
- * this function is used to highlight and scroll to a newly added contact
- * @param {HTMLElement} element - the contact element that was created
- * @param {boolean} removeOnly - default: false, if true removes highlight only; if false, scrolls and highlights the contact
+ * Scrollt zu einem Kontakt und hebt ihn hervor
  */
 function highlightAndScrollTo(element, removeOnly = false) {
     const container = document.getElementById('contacts');
@@ -100,34 +91,73 @@ function highlightAndScrollTo(element, removeOnly = false) {
 }
 
 /**
- * this function is used to delete a contact from firebase and locally from contacts array
- * @param {string} id - the id of the contact
+ * Löscht einen Kontakt, entfernt ihn aus allen Aufgaben und der Datenbank
+ * @param {string} id - die ID des Kontakts
  */
 async function deleteContact(id) {
+    // 1. Tasks laden
+    let tasksResponse = await fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
+    let tasks = await tasksResponse.json();
+    let updates = {};
+
+// tasks: das geladene Task-Objekt (aus der Firebase-DB)
+for (let taskId in tasks) {
+    let t = tasks[taskId];
+    if (Array.isArray(t.assignedTo)) {
+        if (t.assignedTo.includes(id)) {
+            const newAssigned = t.assignedTo.filter(uid => uid !== id);
+            await fetch(`https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/assignedTo.json`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newAssigned)
+            });
+        }
+    } else if (typeof t.assignedTo === "string" && t.assignedTo === id) {
+        await fetch(`https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/assignedTo.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([])
+        });
+    }
+}
+
+    // 2. Kontakt aus contacts löschen
     await deleteContactFromFirebase(id);
     removeContactFromLocalArray(id);
     document.getElementById('contact_information').innerHTML = '';
     rerenderContactList();
+
+    if (window.loadAllTasks) window.loadAllTasks();
 }
 
+
+
+
 /**
- * this function is used to delete the contact from the firebase database
- * @param {string} id - the id of the contact
+ * Löscht einen Kontakt aus der Firebase-Datenbank
  */
 async function deleteContactFromFirebase(id) {
-    await deleteData(`/contacts/${id}`);
+    try {
+        const url = `https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts/${id}.json`;
+        const response = await fetch(url, { method: "DELETE" });
+        if (!response.ok) {
+            throw new Error("Fehler beim Löschen aus Firebase: " + response.status);
+        }
+    } catch (err) {
+        console.error("DELETE Kontakt-Fehler:", err);
+        throw err;
+    }
 }
 
 /**
- * this function is used to remove the contact locally from the contacts array
- * @param {*} id - the id of the contact
+ * Entfernt Kontakt lokal aus dem Array
  */
 function removeContactFromLocalArray(id) {
     contacts = contacts.filter(contact => contact.id !== id);
 }
 
 /**
- * this function is used to delete a contact from firebase and locally from contacts array. it is executed on displays of <650 px width.
+ * Spezielles Löschen für Mobilgeräte (< 650px)
  */
 function deleteMobileContact() {
     event.preventDefault();

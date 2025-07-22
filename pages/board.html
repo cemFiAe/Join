@@ -1,169 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join</title>
-    <meta name="description" content="Join, dein Kanban Management Tool" />
-    <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
-    <link rel="stylesheet" type="text/css" href="../styles/board.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/media/board.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
-    <link rel="stylesheet" type="text/css" href="../style.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/overlays/board_overlays.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/media/add_task.css" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
-    <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+  <meta name="description" content="Join, dein Kanban Management Tool" />
+  <meta name="keywords" content="Join, join, Kanban, kanban, project, projects, mangement, tool" />
+  <link rel="stylesheet" type="text/css" href="../styles/board.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/media/board.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
+  <link rel="stylesheet" type="text/css" href="../style.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/overlays/board_overlays.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/media/add_task.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
+  <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 </head>
-
 <body>
 <header class="header">
     <h2 class="title">Kanban Project Management Tool</h2>
-<div class="header-icons">
-    <a href="../pages/help.html">
+    <div class="header-icons">
+      <a href="../pages/help.html">
         <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="Help">
-    </a>
-    <div id="board-user-avatar" class="user-avatar"></div>
-</div>
+      </a>
+      <div id="board-user-avatar" class="user-avatar"></div>
+    </div>
 </header>
-
-    <nav id="burger" class="burger">
-        <a href="./legal_notice.html">Legal Notice</a>
-        <a href="./privacy_policy.html">Privacy Policy</a>
-        <a href="#" onclick="logOutUser()">Log out</a>
-    </nav>
-    <nav class="nav">
-        <div class="nav-top">
-            <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
-            <a href="../pages/summary.html">
-                <img src="../assets/icons/frame/nav/summary.svg" alt="">
-                <p>Summary</p>
-            </a>
-            <a href="../pages/add_task.html">
-                <img src="../assets/icons/frame/nav/add_task.svg" alt="">
-                <p>Add Task</p>
-            </a>
-            <a class="current-site" href="../pages/board.html">
-                <img src="../assets/icons/frame/nav/board_active.svg" alt="">
-                <p>Board</p>
-            </a>
-            <a href="../pages/contacts.html">
-                <img src="../assets/icons/frame/nav/contacts.svg" alt="">
-                <p>Contacts</p>
-            </a>
-        </div>
-        <div class="nav-bottom">
-            <a href="../pages/privacy_policy.html">Privacy Policy</a>
-            <a href="../pages/legal_notice.html">Legal notice</a>
-        </div>
-    </nav>
+<nav id="burger" class="burger">
+    <a href="./legal_notice.html">Legal Notice</a>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
+</nav>
+<nav class="nav">
+  <div class="nav-top">
+    <img class="nav-logo" src="../assets/img/logo/logo_nav.svg" alt="">
+    <a href="../pages/summary.html">
+      <img src="../assets/icons/frame/nav/summary.svg" alt="">
+      <p>Summary</p>
+    </a>
+    <a href="../pages/add_task.html">
+      <img src="../assets/icons/frame/nav/add_task.svg" alt="">
+      <p>Add Task</p>
+    </a>
+    <a class="current-site" href="../pages/board.html">
+      <img src="../assets/icons/frame/nav/board_active.svg" alt="">
+      <p>Board</p>
+    </a>
+    <a href="../pages/contacts.html">
+      <img src="../assets/icons/frame/nav/contacts.svg" alt="">
+      <p>Contacts</p>
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <a href="../pages/privacy_policy.html">Privacy Policy</a>
+    <a href="../pages/legal_notice.html">Legal notice</a>
+  </div>
+</nav>
 <nav class="mobile-header">
   <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
   <div id="mobile-user-avatar" class="user-avatar"></div>
 </nav>
+<nav id="mobileNav" class="mobile-nav">
+    <a href="./help.html">Help</a>
+    <a href="./legal_notice.html">Legal Notice</a>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="#" onclick="logOutUser()">Log out</a>
+</nav>
+<section class="main-content">
+  <section class="board-nav">
+    <div class="board-nav-top">
+      <h1 class="board-header">Board</h1>
+      <button onclick="openAddTaskMobile()" class="addtask-btn-mobile" title="Add Task (Mobile)">
+        <img class="plus" src="../assets/icons/board/add.svg" alt="">
+      </button>
+      <div class="find-add-div">
+        <input id="taskSearch" class="findtask" type="text" placeholder="Find Task">
+        <button onclick="openAddTaskDialog('todo')" class="addtask-btn" title="Add Task">
+          <span>Add task</span>
+          <img class="plus" src="../assets/icons/board/add.svg" alt="">
+        </button>
+      </div>
+    </div>
+    <div>
+      <input id="taskSearchMobile" class="findtaskMobile" type="text" placeholder="Find Task">
+    </div>
+  </section>
 
-    <nav id="mobileNav" class="mobile-nav">
-        <a href="./help.html">Help</a>
-        <a href="./legal_notice.html">Legal Notice</a>
-        <a href="./privacy_policy.html">Privacy Policy</a>
-        <a href="#" onclick="logOutUser()">Log out</a>
-    </nav>
-    <section class="main-content">
-        <section class="board-nav">
-            <div class="board-nav-top">
-                <h1 class="board-header">Board</h1>
-                <button onclick="openAddTaskMobile()" class="addtask-btn-mobile" title="Add Task (Mobile)">
-                    <img class="plus" src="../assets/icons/board/add.svg" alt="">
-                </button>
-                <div class="find-add-div">
-                    <input id="taskSearch" class="findtask" type="text" placeholder="Find Task">
-                    <button onclick="openAddTaskDialog('todo')" class="addtask-btn" title="Add Task">
-                        <span>Add task</span>
-                        <img class="plus" src="../assets/icons/board/add.svg" alt="">
-                    </button>
-                </div>
-            </div>
-            <div>
-                <input id="taskSearchMobile" class="findtaskMobile" type="text" placeholder="Find Task">
-            </div>
-        </section>
-
-        <dialog id="taskDetailDialog" class="task-detail-dialog">
-            <div class="task-detail-content">
-                <div id="taskDetailBody"></div>
-                <div class="task-detail-actions"></div>
-            </div>
-        </dialog>
-        <section class="board-nav-bottom">
-            <div class="task-container">
-                <div class="span-container">
-                    <span class="category-span">To do</span>
-                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('todo')">+</button>
-                </div>
-                <div id="toDo" class="category-container"></div>
-            </div>
-            <div class="task-container">
-                <div class="span-container">
-                    <span class="category-span">In Progress</span>
-                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('inprogress')">+</button>
-                </div>
-                <div id="inProgress" class="category-container"></div>
-            </div>
-            <div class="task-container">
-                <div class="span-container">
-                    <span class="category-span">Await feedback</span>
-                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('awaitingfeedback')">+</button>
-                </div>
-                <div id="awaitFeedback" class="category-container"></div>
-            </div>
-            <div class="task-container">
-                <div class="span-container">
-                    <span class="category-span">Done</span>
-                    <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('done')">+</button>
-                </div>
-                <div id="done" class="category-container"></div>
-            </div>
-        </section>
-    </section>
-
-    <footer class="mobile-footer">
-        <div class="footer-btn">
-            <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg"
-                    alt=""></a>
-            <span class="footer-span">Summary</span>
-        </div>
-        <div class="footer-btn">
-            <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg"
-                    alt=""></a>
-            <span class="footer-span">Add Task</span>
-        </div>
-        <div class="footer-btn footer-active">
-            <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board_active.svg"
-                    alt=""></a>
-            <span class="footer-span">Board</span>
-        </div>
-        <div class="footer-btn">
-            <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts.svg"
-                    alt=""></a>
-            <span class="footer-span">Contacts</span>
-        </div>
-    </footer>
-
-    <dialog id="deleteConfirmDialog" class="delete-confirm-dialog">
-        <div class="delete-dialog-content">
-            <p>Bist du sicher, dass du diesen Task löschen möchtest?</p>
-            <div class="delete-dialog-actions">
-                <button id="cancelDeleteBtn" class="cancel-btn">Abbrechen</button>
-                <button id="confirmDeleteBtn" class="delete-btn">Löschen</button>
-            </div>
-        </div>
-    </dialog>
-
-    <dialog id="addTaskOverlay" class="add_task_dialog_overlay">
+  <dialog id="taskDetailDialog" class="task-detail-dialog">
+      <div class="task-detail-content">
+          <div id="taskDetailBody"></div>
+          <div class="task-detail-actions"></div>
+      </div>
+  </dialog>
+  <section class="board-nav-bottom">
+    <div class="task-container">
+      <div class="span-container">
+        <span class="category-span">To do</span>
+        <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('todo')">+</button>
+      </div>
+      <div id="toDo" class="category-container"></div>
+    </div>
+    <div class="task-container">
+      <div class="span-container">
+        <span class="category-span">In Progress</span>
+        <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('inprogress')">+</button>
+      </div>
+      <div id="inProgress" class="category-container"></div>
+    </div>
+    <div class="task-container">
+      <div class="span-container">
+        <span class="category-span">Await feedback</span>
+        <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('awaitingfeedback')">+</button>
+      </div>
+      <div id="awaitFeedback" class="category-container"></div>
+    </div>
+    <div class="task-container">
+      <div class="span-container">
+        <span class="category-span">Done</span>
+        <button class="categoryplus" title="Task hinzufügen" onclick="openAddTaskDialog('done')">+</button>
+      </div>
+      <div id="done" class="category-container"></div>
+    </div>
+  </section>
+</section>
+<footer class="mobile-footer">
+    <div class="footer-btn">
+        <a class="footer-icon" href="../pages/summary.html"><img src="../assets/icons/frame/nav/summary.svg"
+                alt=""></a>
+        <span class="footer-span">Summary</span>
+    </div>
+    <div class="footer-btn">
+        <a class="footer-icon" href="../pages/add_task.html"><img src="../assets/icons/frame/nav/add_task.svg"
+                alt=""></a>
+        <span class="footer-span">Add Task</span>
+    </div>
+    <div class="footer-btn footer-active">
+        <a class="footer-icon" href="../pages/board.html"><img src="../assets/icons/frame/nav/board_active.svg"
+                alt=""></a>
+        <span class="footer-span">Board</span>
+    </div>
+    <div class="footer-btn">
+        <a class="footer-icon" href="../pages/contacts.html"><img src="../assets/icons/frame/nav/contacts.svg"
+                alt=""></a>
+        <span class="footer-span">Contacts</span>
+    </div>
+</footer>
+<dialog id="deleteConfirmDialog" class="delete-confirm-dialog">
+  <div class="delete-dialog-content">
+      <p>Bist du sicher, dass du diesen Task löschen möchtest?</p>
+      <div class="delete-dialog-actions">
+          <button id="cancelDeleteBtn" class="cancel-btn">Abbrechen</button>
+          <button id="confirmDeleteBtn" class="delete-btn">Löschen</button>
+      </div>
+  </div>
+</dialog>
+<dialog id="addTaskOverlay" class="add_task_dialog_overlay">
   <div class="main_content">
     <div class="headline">
       Add Task
@@ -177,7 +171,7 @@
         <textarea id="description" placeholder="Enter a Description"></textarea>
         <label for="due">Due date<span class="required">*</span></label>
         <div class="input-icon-date">
-          <input id="due" type="text" placeholder="dd/mm/yyyy" autocomplete="off">
+          <input type="date" id="task-due-date" required>
           <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon"></span>
         </div>
       </div>
@@ -185,16 +179,15 @@
       <div class="right-box">
         <label>Priority</label>
         <div class="priority-buttons">
-          <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
-          <button type="button" class="btn btn_medium active" data-priority="medium">Medium
+          <button type="button" class="btn" data-value="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
+          <button type="button" class="btn btn_medium" data-value="medium">Medium
             <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
             <img class="icon hover" src="../assets/icons/add_task/medium_white.png" alt="Medium">
           </button>
-          <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
+          <button type="button" class="btn" data-value="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
         </div>
         <label for="assigned">Assigned to</label>
-        <select id="assigned" class="option">
-          <option value="">Select contacts to assign</option>
+        <select id="assigned" class="option" multiple style="min-height:38px; width:100%;">
         </select>
         <label for="category">Category<span class="required">*</span></label>
         <select id="category" class="option">
@@ -219,72 +212,21 @@
     </div>
   </div>
 </dialog>
-
-    <!-- Tooltip für Subtask-Fortschritt -->
-    <div id="subtask-tooltip" class="subtask-tooltip"></div>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <!-- Custom Scripts -->
-     
-    <script src="../script.js"></script>
-    <script src="../scripts/db.js"></script>
-    <script src="../scripts/boardFirebase.js"></script>
-    <script src="../scripts/board.js"></script>
-    <script src="../scripts/currentUser.js"></script>
-    <script src="../scripts/logInGuest.js"></script>
-    <script src="../scripts/logOutUser.js"></script>
-    <script src="../scripts/authGuard.js"></script> 
-</body>
-
-    <!-- Tooltip-JS: Subtasks-Progress Info -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const tooltip = document.getElementById('subtask-tooltip');
-
-        document.body.addEventListener('mouseenter', function (e) {
-          if (e.target.classList.contains('task-bar')) {
-            const bar = e.target;
-            const subtaskText = bar.querySelector('.sub-task')?.innerText || "";
-            if (subtaskText && subtaskText.includes("/")) {
-              const [done, total] = subtaskText.split("/").map(x => parseInt(x));
-              tooltip.innerText = `${done} von ${total} Subtasks erledigt`;
-              tooltip.style.display = 'block';
-              positionTooltip(e);
-            }
-          }
-        }, true);
-        document.body.addEventListener('mousemove', function (e) {
-          if (tooltip.style.display === 'block') {
-            positionTooltip(e);
-          }
-        });
-        document.body.addEventListener('mouseleave', function (e) {
-          if (e.target.classList.contains('task-bar')) {
-            tooltip.style.display = 'none';
-          }
-        }, true);
-        // Auch Klick
-        document.body.addEventListener('click', function (e) {
-          if (e.target.classList.contains('task-bar')) {
-            const bar = e.target;
-            const subtaskText = bar.querySelector('.sub-task')?.innerText || "";
-            if (subtaskText && subtaskText.includes("/")) {
-              const [done, total] = subtaskText.split("/").map(x => parseInt(x));
-              tooltip.innerText = `${done} von ${total} Subtasks erledigt`;
-              tooltip.style.display = 'block';
-              positionTooltip(e);
-              setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
-            }
-          }
-        });
-
-        function positionTooltip(e) {
-          tooltip.style.left = (e.pageX + 16) + 'px';
-          tooltip.style.top = (e.pageY + 8) + 'px';
-        }
-      });
-    </script>
+<div id="subtask-tooltip" class="subtask-tooltip"></div>
+<div id="custom-warning-modal" class="modal-hidden" style="position:fixed;z-index:9999;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;box-shadow:0 6px 32px #0002;padding:32px 24px;font-size:18px;min-width:260px;max-width:95vw;text-align:center;display:none;">
+    <div id="custom-warning-content"></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="../script.js"></script>
+<script src="../scripts/db.js"></script>
+<script src="../scripts/boardFirebase.js"></script>
+<script src="../scripts/board.js"></script>
+<script src="../scripts/currentUser.js"></script>
+<script src="../scripts/contactsOwnProfile.js"></script>
+<script src="../scripts/logInGuest.js"></script>
+<script src="../scripts/logOutUser.js"></script>
+<script src="../scripts/authGuard.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </body>
 </html>
