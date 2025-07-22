@@ -6,7 +6,7 @@
 function validatePassword() {
     if (passwordInput.value === "") {
         passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
-        passwordIcon.src = "./assets/icons/sign_up/lock.svg";
+        passwordIcon.src = "../assets/icons/sign_up/lock.svg";
         passwordAlert.style.display = 'block';
         return
     }
