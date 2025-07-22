@@ -12,7 +12,7 @@ function doPasswordsMatch() {
     let confirmPassword = confirmInput.value.trim();
     if (confirmPassword === "") {
         confirmDiv.style.borderColor = 'rgb(255, 0, 31)';
-        confirmIcon.src = "./assets/icons/sign_up/confirm_lock.svg";
+        confirmIcon.src = "../assets/icons/sign_up/confirm_lock.svg";
         confirmAlert.style.display = 'block';
         return
     }
@@ -37,7 +37,7 @@ function confirmLockIcon(e) {
         passwordVisibility(confirmInput, e.target);
     } else if (!confirmDiv.contains(e.target)) {
         confirmInput.type = "password";
-        confirmIcon.src = "./assets/icons/sign_up/confirm_lock.svg";
+        confirmIcon.src = "../assets/icons/sign_up/confirm_lock.svg";
     }
 }
 document.addEventListener('click', confirmLockIcon);
