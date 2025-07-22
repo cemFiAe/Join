@@ -42,7 +42,7 @@ function passwordLockIcon(e) {
         passwordVisibility(passwordInput, e.target);
     } else if (!passwordDiv.contains(e.target)) {
         passwordInput.type = "password";
-        passwordIcon.src = "./assets/icons/sign_up/lock.svg";
+        passwordIcon.src = "../assets/icons/sign_up/lock.svg";
     }
 }
 document.addEventListener('click', passwordLockIcon);
@@ -57,9 +57,9 @@ document.addEventListener('click', passwordLockIcon);
 function passwordVisibility(input, icon) {
     if (input.type === "password") {
         input.type = "text";
-        icon.src = "./assets/icons/sign_up/visibility.svg";
+        icon.src = "../assets/icons/sign_up/visibility.svg";
     } else {
         input.type = "password";
-        icon.src = "./assets/icons/sign_up/visibility_off.svg";
+        icon.src = "../assets/icons/sign_up/visibility_off.svg";
     }
 }
