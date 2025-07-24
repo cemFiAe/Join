@@ -1,9 +1,34 @@
- /**
- * This function ensures Form validation in Log in page.
- * @param {var} emailValid Returns the value of email validation.
- * @param {var} passwordValid Returns the value of password validation.
- * @returns {boolean} If form validation is 'true' proceed with user log in, otherwise stop.
+// Prevent going back to the login page after login
+if (localStorage.getItem("loggedIn") === "true") {
+    // If user is logged in, redirect to summary page
+    window.location.replace("./pages/summary.html");
+}
+
+// Prevent going back to the login page after logging in (using the history object)
+window.history.pushState(null, "", window.location.href); // Push current page into history stack
+window.onpopstate = function() {
+    window.history.pushState(null, "", window.location.href); // Prevent back navigation
+};
+
+// Check login status on page load
+if (localStorage.getItem("loggedIn") === "true") {
+    // If the user is logged in, redirect to the summary page
+    if (window.location.pathname === '/login.html') {  // Adjust to your login page URL
+        window.location.replace("./pages/summary.html"); // Replace the current history state
+    }
+}
+
+/**
+ * This function prevents going back to the login page after successful login.
  */
+window.history.forward();
+
+/**
+* This function ensures Form validation in Log in page.
+* @param {var} emailValid Returns the value of email validation.
+* @param {var} passwordValid Returns the value of password validation.
+* @returns {boolean} If form validation is 'true' proceed with user log in, otherwise stop.
+*/
 function validateForm() {
     let emailValid = isEmailValid(emailInput.value);
     let passwordValid = isPasswordValid(passwordInput.value);
@@ -16,10 +41,9 @@ function validateForm() {
     return emailValid && passwordValid;
 }
 
-
 /**
- * This is a generall function for updating styles to email and password fields.
- * @param {string} input User enters his datas.
+ * This is a general function for updating styles to email and password fields.
+ * @param {string} input User enters their data.
  * @param {string} alert Alert messages show up if validation is false.
  * @param {boolean} isValid Returns values of email and password validations.
  */
@@ -32,12 +56,13 @@ function updateFormStyles(input, alert, isValid) {
         alert.style.display = 'block';
     }
 }
+
 emailInput.addEventListener('input', validateForm);
 passwordInput.addEventListener('input', validateForm);
 
 
 /**
- * This function executes only if the form is valid, i.e. if user input datas are written correctly.
+ * This function executes only if the form is valid, i.e., if user input data is written correctly.
  */
 async function userLogIn(e) {
     e.preventDefault();
@@ -45,7 +70,9 @@ async function userLogIn(e) {
     try {
         let success = await saveAsUser();
         if (success) {
-            window.location.replace("./pages/summary.html");
+            // After successful login, set loggedIn to true and redirect
+            localStorage.setItem("loggedIn", "true");
+            window.location.replace("./pages/summary.html"); // Replace to avoid going back
         }
     } catch (error) {
         console.error("Login failed", error);
@@ -58,16 +85,15 @@ logInButton.addEventListener('click', userLogIn);
 /**
  * After correct input, if input matches data from database, only then user will be logged in.
  * @param {boolean} isGuest Turns 'false' if already signed-up-user logs in. 
- * @returns If 'true' - user datas are saved and user is redirected to summary page, and
- * if 'false' - user remains on log in page and alertFormStyles function is called.
+ * @returns If 'true' - user data is saved and user is redirected to summary page, and
+ * if 'false' - user remains on login page and alertFormStyles function is called.
  */
-// 1. Login-Logik: Nur Authentifizierung!
 async function saveAsUser() {
     const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
     const response = await fetch(BASE_URL + "users.json");
     const database = await response.json();
 
-    // Suche nach User inkl. ID
+    // Search for the user with matching email
     let userId = null;
     let userObj = null;
     for (const [id, user] of Object.entries(database)) {
@@ -79,7 +105,7 @@ async function saveAsUser() {
     }
 
     if (userObj && userObj.password === passwordInput.value.trim()) {
-        // User gefunden, Login-Daten speichern
+        // User found, save login data
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("currentUserName", userObj.name);
         localStorage.setItem("currentUserType", "user");
@@ -89,14 +115,13 @@ async function saveAsUser() {
             isGuest: false
         }));
 
-        // Jetzt Kontakt anlegen, falls noch nicht vorhanden!
+        // Add user to contacts if not already present
         try {
             const contactsResponse = await fetch(BASE_URL + "contacts.json");
             const contactsDb = await contactsResponse.json();
             let alreadyContact = false;
             if (contactsDb) {
                 for (const c of Object.values(contactsDb)) {
-                    // Stelle sicher, dass der Feldname stimmt: mail oder email?
                     if (c.mail === userObj.email) {
                         alreadyContact = true;
                         break;
@@ -116,47 +141,15 @@ async function saveAsUser() {
                 if (!addContactRes.ok) {
                     throw new Error('Contact could not be saved!');
                 }
-                // Optional: console.log("Contact added!");
-            } else {
-                // Optional: console.log("Contact already exists");
             }
         } catch (err) {
-            console.error('Fehler beim Speichern des Kontakts:', err);
-            // Zeige dem User einen Fehler, wenn du möchtest
+            console.error('Error saving contact:', err);
         }
 
         return true;
     } else {
         alertFormStyle();
         return false;
-    }
-}
-
-
-// 2. User in Kontakte eintragen, falls noch nicht drin:
-async function addUserToContactsIfMissing(name, email, phone) {
-    const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
-    const contactsResponse = await fetch(BASE_URL + "contacts.json");
-    const contactsDb = await contactsResponse.json();
-    let alreadyContact = false;
-    if (contactsDb) {
-        for (const c of Object.values(contactsDb)) {
-            if (c.mail === email) {
-                alreadyContact = true;
-                break;
-            }
-        }
-    }
-    if (!alreadyContact) {
-        await fetch(BASE_URL + "contacts.json", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name: name,
-                mail: email,
-                phone: phone
-            })
-        });
     }
 }
 
@@ -167,15 +160,7 @@ function alertFormStyle() {
     emailInput.style.borderColor = 'rgb(255, 0, 31)';
 }
 
-
-function guestLogIn(e) {
-    e.preventDefault();
-    saveAsGuest()
-    window.location.replace("./pages/summary.html");
-}
-guestLogInButton.addEventListener('click', guestLogIn);
-
-
+// Guest Login
 function saveAsGuest() {
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem("currentUserName", "Guest");
@@ -187,17 +172,11 @@ function saveAsGuest() {
     }));
 }
 
-
-/**
- * Redirect to summary if already logged in
- */
-if (localStorage.getItem("loggedIn") === "true") {
-    window.location.replace("./pages/summary.html");
+function guestLogIn(e) {
+    e.preventDefault();
+    saveAsGuest();
+    if (localStorage.getItem("loggedIn") === "true") {
+        window.location.replace("./pages/summary.html"); // Replace to avoid going back
+    }
 }
-
-
-/**
- Prevent going back to login page after logging in
- */
-window.history.forward();
-
+guestLogInButton.addEventListener('click', guestLogIn);
