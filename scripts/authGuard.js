@@ -8,8 +8,8 @@
 window.addEventListener('DOMContentLoaded', function() {
     if (
         !localStorage.getItem("loggedIn") &&
-        !window.location.pathname.endsWith("/index.html") &&
-        !window.location.pathname.endsWith("index.html")
+        !window.location.pathname.endsWith("../index.html") &&
+        !window.location.pathname.endsWith("../index.html")
     ) {
         window.location.href = "../index.html";
     }
