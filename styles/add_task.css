@@ -1,4 +1,3 @@
-
 a { 
     text-decoration: none; color: inherit; 
 }
@@ -100,12 +99,57 @@ a {
 
   .priority-buttons {display: flex; justify-content: space-between;}
 
-.priority-buttons .btn.active {
-  background: rgba(255, 168, 0, 1);
-  border-color: rgba(255, 168, 0, 1);
-  color: #ffffff;
-}
+  /* Priority Button Farb- und Icon-Logik */
+  .btn {
+    width: 136px;
+    height: 56px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 20px;
+    gap: 8px;
+    color: #111827;
+    background: #fff;
+    line-height: normal;
+    text-align: center;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .btn:hover { filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); cursor: pointer; }
 
+  /* WICHTIG: Aktivierte Priority-Buttons */
+  .priority-buttons .btn[data-priority="urgent"].active {
+      background: #e74c3c !important;  /* rot */
+      border-color: #e74c3c !important;
+      color: #fff !important;
+  }
+  .priority-buttons .btn[data-priority="medium"].active {
+      background: #ffab19 !important;  /* orange */
+      border-color: #ffab19 !important;
+      color: #fff !important;
+  }
+  .priority-buttons .btn[data-priority="low"].active {
+      background: #21bb40 !important;  /* grün */
+      border-color: #21bb40 !important;
+      color: #fff !important;
+  }
+
+  /* ICON LOGIK: Default immer, weißes Icon wenn active */
+  .btn .icon.white, .btn .icon.selected { display: none; }
+  .priority-buttons .btn[data-priority="urgent"].active .icon.default { display: none; }
+  .priority-buttons .btn[data-priority="urgent"].active .icon.white { display: inline; }
+  .priority-buttons .btn[data-priority="medium"].active .icon.default { display: none; }
+  .priority-buttons .btn[data-priority="medium"].active .icon.white { display: inline; }
+  .priority-buttons .btn[data-priority="low"].active .icon.default { display: none; }
+  .priority-buttons .btn[data-priority="low"].active .icon.white { display: inline; }
+
+  /* Wenn nicht aktiv: Nur das Default-Icon */
+  .btn .icon.default { display: inline; }
+  .btn.active .icon.white { display: inline; }
 
   #subtask-list {
     list-style: disc inside;
@@ -123,33 +167,6 @@ a {
   max-width: 100%;           /* Wichtig für Flex-Layouts */
 }
 
-
-
-.btn {
-  width: 136px;
-  height: 56px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 10px;
-  font-family: inherit;
-  font-size: 20px;
-  gap: 8px;
-  color: #111827;
-  background: #fff;
-  line-height: normal;
-  text-align: center;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-  .btn:hover {filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); cursor: pointer;}
-
-  .btn_medium .icon.hover {
-    display: none;
-  }
-  
   .form-group select {
     border: 1px solid #d1d5db; 
     border-radius: 8px; 
@@ -193,16 +210,95 @@ a {
   max-width: 100%;
 }
 
+.choices__inner {
+    background: #fff !important;
+    border-radius: 8px !important;
+    border: 1px solid #d1d5db !important;
+    font-size: 1rem !important;
+    min-height: 48px !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    padding: 10px 16px !important;
+    transition: border-color .2s;
+}
 
+.choices__inner:focus,
+.choices__inner.is-focused {
+    border-color: #29abe2;
+    outline: none;
+    box-shadow: 0 0 0 2px #29abe233;
+}
+
+.choices__list--multiple .choices__item {
+    background: #29abe2;
+    color: #fff;
+    border-radius: 14px;
+    margin: 2px 3px 2px 0;
+    padding: 3px 12px;
+    font-weight: 500;
+    border: none;
+}
+
+.choices__list--dropdown, 
+.choices__list[aria-expanded] {
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #dee1e6;
+    box-shadow: 0 4px 24px #0001;
+    font-size: 17px;
+}
+
+.choices__item--selectable.is-highlighted {
+    background: #29abe2;
+    color: #fff;
+}
+
+.choices__button {
+    background: none;
+    border: none;
+    color: #fff;
+    opacity: 0.7;
+    font-size: 18px;
+    margin-left: 5px;
+    transition: opacity 0.2s;
+}
+
+.choices[data-type*=select-one] .choices__inner {
+    padding-bottom: 0;
+}
+
+.choices__input {
+    background: transparent !important;
+    color: #111827 !important;
+    font-size: 1rem !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+    height: 28px !important;
+}
+
+.choices[data-type*=select-multiple] .choices__input {
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+}
+
+/* Entferne maximalbreiten, setze auf 100% */
+.choices[data-type*=select-multiple] .choices__input,
+.choices__inner {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.choices__input::placeholder {
+    color: #000000 !important;
+    opacity: 1;
+}
   .input-icon-subtask { position: relative; }
   .input-icon-subtask input { padding-right: 40px; height: 48px;}
   .input-icon-subtask .add-subtask { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
   .input-icon-subtask .add-subtask img { width: 20px; height: 20px; }
-
-/* Medium-Button Icon: Orange (default) wird nur angezeigt, wenn NICHT aktiv */
-.btn_medium .icon.selected { display: none; }
-.btn_medium.active .icon.default { display: none; }
-.btn_medium.active .icon.selected { display: inline; }
 
 .clear_button{
   height: 56px;
@@ -226,6 +322,7 @@ a {
   .add_task_button {
     display: flex; 
     justify-content: flex-start;
+    align-items: center;
     width: 100%;
     margin-top: 60px;
     margin-bottom: 16px;
@@ -270,7 +367,7 @@ a {
   }
 
   .input-icon-subtask {
-  position: relative;
+  position: relative; 
 }
 .input-icon-subtask .clear-subtask-input {
   position: absolute;
@@ -334,4 +431,258 @@ select[multiple] {
   font-size: 1rem;
   /* optional: */
   border-radius: 6px;
+}
+
+#addTaskOverlay .choices__inner,
+.add_task_dialog_overlay .choices__inner {
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #d1d5db;
+    font-size: 1rem;
+    min-height: 48px;
+    color: #23272f;
+    box-shadow: none;
+    padding: 10px 16px;
+    transition: border-color .2s;
+    display: flex;
+    align-items: center;
+}
+#addTaskOverlay .choices__list--multiple .choices__item,
+.add_task_dialog_overlay .choices__list--multiple .choices__item {
+    background: #29abe2;
+    color: #fff;
+    border-radius: 14px;
+    margin: 2px 3px 2px 0;
+    padding: 3px 12px;
+    font-weight: 500;
+    border: none;
+}
+#addTaskOverlay .choices__list--dropdown,
+.add_task_dialog_overlay .choices__list--dropdown {
+    border-radius: 8px;
+    font-size: 1rem;
+}
+#addTaskOverlay .choices__inner:focus,
+#addTaskOverlay .choices__inner.is-focused,
+.add_task_dialog_overlay .choices__inner:focus,
+.add_task_dialog_overlay .choices__inner.is-focused {
+    border-color: #29abe2;
+    outline: none;
+    box-shadow: 0 0 0 2px #29abe233;
+}
+
+/* ... dein kompletter vorheriger Code bleibt bestehen ... */
+
+/* Avatar Badge unter dem Select */
+.assigned-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.avatar-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  background-color: #29abe2;
+  user-select: none;
+}
+
+/* Dropdown-Stil: Custom-Listeneintrag mit Checkbox + Name + Avatar */
+.choices__list--dropdown .custom-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.choices__list--dropdown .custom-option:hover {
+  background-color: #f3f4f6;
+}
+
+.custom-option-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #29abe2;
+}
+
+.custom-option-label {
+  flex: 1;
+  font-size: 16px;
+  color: #111827;
+}
+
+.custom-option-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-option-checkbox.checked {
+  background-color: #29abe2;
+  border-color: #29abe2;
+}
+
+.custom-option-checkbox.checked::after {
+  content: '✓';
+  color: white;
+  font-size: 13px;
+}
+
+/* Button in Dropdown verstecken (Choices generiert Buttons in Multi-Selects) */
+.choices__item .choices__button {
+  display: none;
+}
+
+.assigned-to-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.assigned-select-box {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.imgDropdown {
+  width: 7.21px;
+  height: 4.6px;
+}
+
+.assigned-dropdown {
+  position: absolute;
+  z-index: 100;
+  background-color: white;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+.custom-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.custom-option:hover {
+  background: #f3f4f6;
+}
+
+.custom-option-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.custom-option-label {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-option-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.custom-option-checkbox.checked {
+  background: url('../assets/icons/check_white.svg') center center no-repeat #29abe2;
+  background-size: 14px;
+  border-color: #29abe2;
+}
+
+.assigned-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.avatar-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-toast {
+  position: fixed;
+  top: 100px;
+  right: -400px; /* Startposition außerhalb des Bildschirms */
+  background-color: #2A3647;
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 12px 24px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: right 0.4s ease, opacity 0.4s ease;
+}
+
+.task-toast.show {
+  right: 50%;
+  transform: translateX(50%); /* Mitte optisch erreicht */
+  opacity: 1;
+}
+
+
+.task-toast img {
+  width: 326px;
+  height: 74px;
 }

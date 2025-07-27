@@ -98,7 +98,7 @@
             <label for="due">Due date<span class="required">*</span></label>
             <div class="input-icon-date">
               <input type="date" id="due" required>
-              <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon"></span>
+              <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon" style="display: none;"></span>
             </div>
           </div>
         </form>
@@ -112,21 +112,31 @@
             <label>Priority</label>
             <div class="priority-buttons">
               <button type="button" class="btn" data-priority="urgent">
-                Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
+                  Urgent
+                  <img class="icon default" src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
+                  <img class="icon white" src="../assets/icons/add_task/urgent_white.png" alt="Urgent" width="21px">
               </button>
               <button type="button" class="btn btn_medium" data-priority="medium">
-                Medium
-                <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
-                <img class="icon selected" src="../assets/icons/add_task/medium_white.png" alt="Medium" style="display:none;">
+                  Medium
+                  <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
+                  <img class="icon white" src="../assets/icons/add_task/medium_white.png" alt="Medium">
               </button>
               <button type="button" class="btn" data-priority="low">
-                Low <img src="../assets/icons/add_task/low.png" alt="Low">
+                  Low
+                  <img class="icon default" src="../assets/icons/add_task/low.png" alt="Low">
+                  <img class="icon white" src="../assets/icons/add_task/low_white.png" alt="Low">
               </button>
             </div>
           </div>
           <div class="form-group">
             <label for="assigned">Assigned to</label>
-            <select id="assigned" name="assigned" multiple style="min-height:38px; width:100%;"></select>
+            <div class="assigned-to-wrapper">
+              <div id="assignedSelectBox" class="assigned-select-box">
+                <span>Select contacts to assign</span><img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
+              </div>
+              <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
+              <div id="assignedBadges" class="assigned-badges"></div>
+            </div>
           </div>
           <div class="form-group">
             <label for="category">Category<span class="required">*</span></label>
@@ -147,7 +157,7 @@
       </div>
       <div class="add_task_button">
         <div>
-          <img class="req-img" src="/assets/icons/add_task/required_field.png" alt="">
+          <img class="req-img" src="../assets/icons/add_task/required_field.png" alt="">
         </div>
         <div class="create-btn-container">
           <button class="clear_button" id="clearTaskButton" type="button">Clear x</button>
@@ -178,6 +188,11 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
+
+  <div id="taskToast" class="task-toast hidden">
+  <img src="../assets/icons/add_task/board_white.png" alt="Board icon">
+</div>
+
 
   <script src="../script.js"></script>
   <script src="../scripts/realtimeDatabase.js"></script>
