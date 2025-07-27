@@ -211,3 +211,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+let currentTaskId = null;
+
+function openTaskOverlay(task) {
+  currentTaskId = task.id;
+  document.getElementById('task-overlay').classList.remove('hidden');
+
+  document.getElementById('overlay-title').textContent = task.title;
+  document.getElementById('overlay-description').textContent = task.description || '';
+  document.getElementById('overlay-date').textContent = formatDate(task.dueDate);
+  document.getElementById('overlay-category').textContent = task.category;
+  document.getElementById('overlay-category').className = 'task-category ' + categoryToClass(task.category);
+
+  document.getElementById('overlay-priority').innerHTML =
+    `${capitalize(task.priority)} <img id="overlay-priority-icon" src="../assets/icons/add_task/${task.priority}.png" class="priority-icon">`;
+
+  const assignedBox = document.getElementById('overlay-assigned');
+  assignedBox.innerHTML = '';
+  task.assignedTo.forEach(id => {
+    const user = allUsers[id];
+    assignedBox.innerHTML += `
+      <div class="assigned-user">
+        <div class="avatar" style="background-color:${generateColorFromString(user.name)}">${getInitials(user.name)}</div>
+        ${user.name}
+      </div>`;
+  });
+
+  const subtasksBox = document.getElementById('overlay-subtasks');
+  subtasksBox.innerHTML = '';
+  if (task.subtasks && task.subtasks.length > 0) {
+    task.subtasks.forEach(st => {
+      subtasksBox.innerHTML += `
+        <div class="subtask-item">
+          <input type="checkbox" ${st.done ? 'checked' : ''} disabled>
+          <label>${st.title}</label>
+        </div>`;
+    });
+  } else {
+    subtasksBox.innerHTML = '<i>No subtasks.</i>';
+  }
+}
+
+function closeTaskOverlay() {
+  document.getElementById('task-overlay').classList.add('hidden');
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-GB');
+}
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function categoryToClass(cat) {
+  const c = (cat || '').toLowerCase();
+  if (c === 'bug') return 'bug';
+  if (c === 'user story') return 'user-story';
+  if (c === 'technical task') return 'technical';
+  if (c === 'research') return 'research';
+  return '';
+}
+
+function getInitials(name) {
+  return name.split(' ').map(p => p[0]?.toUpperCase()).join('').substring(0, 2);
+}
+
+function generateColorFromString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  const hue = hash % 360;
+  return `hsl(${hue}, 70%, 50%)`;
+}

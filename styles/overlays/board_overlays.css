@@ -537,3 +537,139 @@
     color: #000000 !important;
     opacity: 1;
 }
+
+.task-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.task-overlay.hidden {
+  display: none;
+}
+
+.task-overlay-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  width: 420px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  font-family: 'Inter', sans-serif;
+}
+
+.task-category {
+  display: inline-block;
+  font-size: 14px;
+  padding: 4px 12px;
+  background: #2979ff;
+  color: #fff;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.close-overlay {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.task-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.task-description {
+  font-size: 16px;
+  margin-bottom: 24px;
+  color: #444;
+}
+
+.task-detail {
+  margin-bottom: 16px;
+}
+
+.detail-label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priority-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.assigned-users {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.assigned-users .assigned-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.assigned-users .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ccc;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subtask-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.overlay-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.overlay-actions .btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2A3647;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
