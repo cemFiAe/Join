@@ -1,27 +1,9 @@
-// Prevent going back to the login page after login
-if (localStorage.getItem("loggedIn") === "true") {
-    // If user is logged in, redirect to summary page
+/**
+ * Redirect to summary if user is already logged in and currently on the login page
+ */
+if (window.location.pathname.endsWith("index.html") && localStorage.getItem("loggedIn") === "true") {
     window.location.replace("./pages/summary.html");
 }
-
-// Prevent going back to the login page after logging in (using the history object)
-window.history.pushState(null, "", window.location.href); // Push current page into history stack
-window.onpopstate = function() {
-    window.history.pushState(null, "", window.location.href); // Prevent back navigation
-};
-
-// Check login status on page load
-if (localStorage.getItem("loggedIn") === "true") {
-    // If the user is logged in, redirect to the summary page
-    if (window.location.pathname === '/login.html') {  // Adjust to your login page URL
-        window.location.replace("./pages/summary.html"); // Replace the current history state
-    }
-}
-
-/**
- * This function prevents going back to the login page after successful login.
- */
-window.history.forward();
 
 /**
 * This function ensures Form validation in Log in page.
