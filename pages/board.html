@@ -73,7 +73,7 @@
   <section class="board-nav">
     <div class="board-nav-top">
       <h1 class="board-header">Board</h1>
-      <button onclick="openAddTaskMobile()" class="addtask-btn-mobile" title="Add Task (Mobile)">
+      <button onclick="openAddTaskDialog()" class="addtask-btn-mobile" title="Add Task (Mobile)">
         <img class="plus" src="../assets/icons/board/add.svg" alt="">
       </button>
       <div class="find-add-div">
@@ -157,61 +157,58 @@
       </div>
   </div>
 </dialog>
+
 <dialog id="addTaskOverlay" class="add_task_dialog_overlay">
-  <div class="main_content">
-    <div class="headline">
-      Add Task
-      <button type="button" class="close-add-task-overlay">&times;</button>
-    </div>
-    <div class="box-wrapper">
-      <div class="left-box">
-        <label for="title">Title<span class="required">*</span></label>
-        <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
-        <label for="description">Description</label>
-        <textarea id="description" placeholder="Enter a Description"></textarea>
-        <label for="due">Due date<span class="required">*</span></label>
-        <div class="input-icon-date">
-          <input type="date" id="task-due-date" required>
-          <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Kalender Icon"></span>
+    <div class="main_content">
+      <div class="headline">
+        <h1>Add Task</h1>
+        <button type="button" class="close-add-task-overlay">&times;</button>
+      </div>
+      <div class="box-wrapper">
+        <div class="left-box">
+          <label for="title">Title<span class="required">*</span></label>
+          <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Enter a Description"></textarea>
+          <label for="due">Due date<span class="required">*</span></label>
+          <div class="input-icon-date">
+            <input type="date" id="task-due-date" required>
+            <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Calendar"></span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="right-box">
+          <label>Priority</label>
+          <div class="priority-buttons">
+            <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
+            <button type="button" class="btn" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt="Medium"></button>
+            <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
+          </div>
+          <label for="assigned">Assigned to</label>
+          <select id="assigned" class="option" multiple style="min-height:38px; width:100%;"></select>
+          <label for="category">Category<span class="required">*</span></label>
+          <select id="category" class="option">
+            <option value="">Select task category</option>
+          </select>
+          <label>Subtasks</label>
+          <div class="input-icon-subtask">
+            <input type="text" placeholder="Add new subtask" autocomplete="off">
+            <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
+          </div>
+          <ul id="subtask-list"></ul>
         </div>
       </div>
-      <div class="box-divider"></div>
-      <div class="right-box">
-        <label>Priority</label>
-        <div class="priority-buttons">
-          <button type="button" class="btn" data-value="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
-          <button type="button" class="btn btn_medium" data-value="medium">Medium
-            <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
-            <img class="icon hover" src="../assets/icons/add_task/medium_white.png" alt="Medium">
-          </button>
-          <button type="button" class="btn" data-value="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
+      <div class="add_task_button">
+          <img class="req-img" src="../assets/icons/board/required_field.png" alt="">
+        <div>
+          <button type="button" class="clear_button">Cancel x</button>
+          <button type="button" class="create_task_btn">Create Task &#10003;</button>
         </div>
-        <label for="assigned">Assigned to</label>
-        <select id="assigned" class="option" multiple style="min-height:38px; width:100%;">
-        </select>
-        <label for="category">Category<span class="required">*</span></label>
-        <select id="category" class="option">
-          <option value="">Select task category</option>
-        </select>
-        <label>Subtasks</label>
-        <div class="input-icon-subtask">
-          <input type="text" placeholder="Add new subtask" autocomplete="off">
-          <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
-        </div>
-        <ul id="subtask-list"></ul>
       </div>
     </div>
-    <div class="add_task_button">
-      <div class="required-info">
-        *This field is required
-      </div>
-      <div>
-        <button type="button" class="clear_button">Cancel</button>
-        <button type="button" class="create_task_btn">Create Task &#10003;</button>
-      </div>
-    </div>
-  </div>
-</dialog>
+  </dialog>
+
+  
 <div id="subtask-tooltip" class="subtask-tooltip"></div>
 <div id="custom-warning-modal" class="modal-hidden" style="position:fixed;z-index:9999;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;box-shadow:0 6px 32px #0002;padding:32px 24px;font-size:18px;min-width:260px;max-width:95vw;text-align:center;display:none;">
     <div id="custom-warning-content"></div>

@@ -5,10 +5,6 @@
   .main_content {
     padding-top: 60px;
   }
-  .divider {
-    width: 440px;
-    height: 1px;
-  }
   .add_task_button {
     flex-direction: column;
     justify-content: flex-start;
