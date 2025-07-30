@@ -1,32 +1,40 @@
-// =========================
-// Farbpalette für Initialen
-// =========================
+// =======================
+// Farbpalette & Helpers
+// =======================
 const BADGE_COLORS = [
   "#FFA800", "#FF5EB3", "#6E52FF", "#9327FF", "#00BEE8",
-  "#1FD7C1", "#FF745E", "#FFBB2B", "#424242", "#FF7A00"
+  "#1FD7C1", "#FF745E", "#FFBB2B", "#424242", "#FF7A00",
+  "#EB5D5D", "#009788", "#7B61FF", "#5A9FFF", "#1E90FF", "#F96D00", "#43B581", "#FF6C6C"
 ];
+let tasks = [], users = {}, contacts = {};
 
-function getInitialsColor(nameOrId) {
+function getInitialsColor(str) {
   let hash = 0;
-  for (let i = 0; i < nameOrId.length; i++) hash = nameOrId.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
   return BADGE_COLORS[Math.abs(hash) % BADGE_COLORS.length];
 }
 
-// =========================
-// Globale Variablen
-// =========================
-let tasks = [];
-let users = {};
-let contacts = {};
+const getPersonData = id => users[id] || contacts[id] || null;
 
-// =========================
-// Kontakte/Users laden
-// =========================
-// Registrierte User laden
+function getProfileBadge(userId) {
+  const user = getPersonData(userId);
+  if (!user) return '';
+  const name = user.name || '';
+  // Initialen mit max. 2 Buchstaben
+  const initials = name
+    ? name.split(" ").slice(0,2).map(n => n[0]).join("").toUpperCase()
+    : userId.slice(0,2).toUpperCase();
+  const color = getInitialsColor(name || userId);
+  return `<span class="profile-badge" style="background:${color};">${initials}</span>`;
+}
+
+
+// =======================
+// Daten laden
+// =======================
 firebase.database().ref("users").once("value").then(snap => {
   users = snap.val() || {};
   window.allUsers = users;
-  // Kontakte laden, dann Tasks laden!
   firebase.database().ref("contacts").once("value").then(csnap => {
     contacts = csnap.val() || {};
     window.allContacts = contacts;
@@ -34,547 +42,293 @@ firebase.database().ref("users").once("value").then(snap => {
   });
 });
 
-function getPersonData(id) {
-  return users[id] || contacts[id] || null;
-}
-
-
-// =========================
-// Tasks laden & rendern
-// =========================
 function loadAllTasks() {
-  firebase.database().ref("tasks").on("value", snapshot => {
-    const tasksObj = snapshot.val() || {};
-    tasks = Object.values(tasksObj);
+  firebase.database().ref("tasks").on("value", s => {
+    tasks = Object.values(s.val() || {});
     renderBoard(tasks);
   });
 }
 
-// =========================
-// Task-Avatare/Initialen
-// =========================
-function getProfileBadge(userId) {
-  const user = getPersonData(userId);
-  if (!user) return '';
-  const name = user.name || '';
-  const initials = name
-    ? name.split(" ").map(n => n[0]).join("").toUpperCase()
-    : userId.slice(0,2).toUpperCase();
-  const color = getInitialsColor(userId);
-  return `<span class="profile-badge" style="background:${color};">${initials}</span>`;
-}
-
-// =========================
-// Board Rendering
-// =========================
-function renderBoard(tasksArr) {
-  const toDo = document.getElementById("toDo");
-  const inProgress = document.getElementById("inProgress");
-  const awaitFeedback = document.getElementById("awaitFeedback");
-  const done = document.getElementById("done");
-  [toDo, inProgress, awaitFeedback, done].forEach(c => c.innerHTML = "");
-
-  if (!tasksArr.some(t => t.status === "todo")) toDo.innerHTML = `<div class="notask">No tasks To Do</div>`;
-  if (!tasksArr.some(t => t.status === "inprogress")) inProgress.innerHTML = `<div class="notask">No tasks In Progress</div>`;
-  if (!tasksArr.some(t => t.status === "awaitingfeedback")) awaitFeedback.innerHTML = `<div class="notask">No tasks Awaiting Feedback</div>`;
-  if (!tasksArr.some(t => t.status === "done")) done.innerHTML = `<div class="notask">No tasks Done</div>`;
-
-  tasksArr.forEach(task => {
-    let col = null;
-    if (task.status === "todo") col = toDo;
-    else if (task.status === "inprogress") col = inProgress;
-    else if (task.status === "awaitingfeedback") col = awaitFeedback;
-    else if (task.status === "done") col = done;
+// =======================
+// Task-Board & Karten
+// =======================
+function renderBoard(arr) {
+  const cols = { todo: "toDo", inprogress: "inProgress", awaitingfeedback: "awaitFeedback", done: "done" };
+  Object.values(cols).forEach(id => document.getElementById(id).innerHTML = "");
+  arr.forEach(task => {
+    let col = cols[task.status];
     if (!col) return;
-    col.appendChild(createTaskCard(task));
+    document.getElementById(col).appendChild(createTaskCard(task));
+  });
+  Object.entries(cols).forEach(([st, id]) => {
+    if (!arr.some(t => t.status === st)) document.getElementById(id).innerHTML = `<div class="notask">No tasks ${st.replace(/^\w/, c => c.toUpperCase())}</div>`;
   });
 }
 
-// =========================
-// Task Card Renderer
-// =========================
 function createTaskCard(task) {
-  // Subtasks Fortschritt
-  let subtasksDone = 0;
-  let subtasksTotal = 0;
-  if (Array.isArray(task.subtasks)) {
-    // Filtere kaputte/ungültige raus
-    const validSubtasks = task.subtasks.filter(st => st && typeof st === "object" && typeof st.title === "string" && st.title.trim() !== "");
-    subtasksTotal = validSubtasks.length;
-    subtasksDone = validSubtasks.filter(st => st.done).length;
-  } else if (task.subtasks && typeof task.subtasks === "object") {
-    // Für seltene Fälle, falls mal als Objekt gespeichert
-    const values = Object.values(task.subtasks).filter(st => st && typeof st === "object" && typeof st.title === "string" && st.title.trim() !== "");
-    subtasksTotal = values.length;
-    subtasksDone = values.filter(st => st.done).length;
-  }
-
-  // Priority Icon
-  let prioIcon = "../assets/icons/board/prio/prio mid.svg";
-  if (task.priority === "urgent") prioIcon = "../assets/icons/board/prio/prio top.svg";
-  else if (task.priority === "low") prioIcon = "../assets/icons/board/prio/prio low.svg";
-
-  // Category Tag
-  let categoryClass = "task-header";
-  if (task.category) {
-    if (task.category.toLowerCase().includes("technical")) categoryClass += " user-task";
-    else if (task.category.toLowerCase().includes("user")) categoryClass += " tech-task";
-    else if (task.category.toLowerCase().includes("bug")) categoryClass += " bug-task";
-    else if (task.category.toLowerCase().includes("research")) categoryClass += " research-task";
-  }
-
-  // Kontakte/Avatare (Initialen-Badges)
-  let contactBadges = '';
-  if (task.assignedTo) {
-    const assignedArr = Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo];
-    contactBadges = assignedArr.map(uid => getProfileBadge(uid)).join('');
-  }
-
-  // Subtasks-Anzeige
-  let subtaskBar = '';
-  if (subtasksTotal > 0) {
-    const percent = Math.round((subtasksDone / subtasksTotal) * 100);
-    subtaskBar = `
-      <div class="task-bar" style="cursor:pointer;">
-        <div class="bar-wrapper">
-          <div class="progress-bar">
-            <span class="progress-bar-fill" style="width: ${percent}%;"></span>
-          </div>
-        </div>
-        <span class="sub-task">${subtasksDone}/${subtasksTotal} Subtasks</span>
-      </div>`;
-  }
-
-  // Task Card Element bauen
+  const done = Array.isArray(task.subtasks) ? task.subtasks.filter(st => st.done).length : 0;
+  const total = Array.isArray(task.subtasks) ? task.subtasks.length : 0;
+  const prioIcon = { urgent: "prio_top", medium: "prio_mid", low: "prio_low" }[task.priority] || "prio_mid";
+  const categoryClass = "task-header"
+    + (task.category?.toLowerCase().includes("bug") ? " bug-task"
+    : task.category?.toLowerCase().includes("user") ? " tech-task"
+    : task.category?.toLowerCase().includes("tech") ? " user-task" : "");
+  const badgeHtml = (Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo])
+    .filter(Boolean).map(getProfileBadge).join('');
+  const subBar = total ? `<div class="task-bar"><div class="bar-wrapper"><div class="progress-bar"><span class="progress-bar-fill" style="width:${Math.round(done / total * 100)}%"></span></div></div><span class="sub-task">${done}/${total} Subtasks</span></div>` : "";
   const card = document.createElement("div");
   card.className = "task";
-  card.innerHTML = `
-      <span class="${categoryClass}">${task.category || ""}</span>
-      <h4 class="task-title">${task.title || ""}</h4>
-      <p class="task-info">${task.description || ""}</p>
-      ${subtaskBar}
-      <div class="task-status">
-        <div>
-          ${contactBadges}
-        </div>
-        <img class="prio-icon" src="${prioIcon}" alt="">
-      </div>
-  `;
-
-  // === DRAG & DROP ===
+  card.innerHTML = `<span class="${categoryClass}">${task.category || ""}</span>
+    <h4 class="task-title">${task.title || ""}</h4>
+    <p class="task-info">${task.description || ""}</p>${subBar}
+    <div class="task-status"><div>${badgeHtml}</div><img class="prio-icon" src="../assets/icons/board/prio/${prioIcon}.svg"></div>`;
   card.setAttribute("draggable", "true");
   card.dataset.taskId = task.id;
   card.addEventListener("dragstart", dragStartHandler);
   card.addEventListener("dragend", dragEndHandler);
   card.addEventListener("click", () => openTaskDetail(task));
-
   return card;
 }
 
-// --- DRAG & DROP HANDLING ---
+// =======================
+// Drag & Drop
+// =======================
 let draggedTaskId = null;
-["toDo", "inProgress", "awaitFeedback", "done"].forEach(colId => {
-  const col = document.getElementById(colId);
-  if (!col) return;
-  col.addEventListener("dragover", dragOverHandler);
-  col.addEventListener("drop", dropHandler);
-  col.addEventListener("dragenter", dragEnterHandler);
-  col.addEventListener("dragleave", dragLeaveHandler);
-});
-
-function dragStartHandler(e) {
-  draggedTaskId = this.dataset.taskId;
-  setTimeout(() => this.classList.add('dragging'), 0);
-}
-function dragEndHandler(e) {
-  draggedTaskId = null;
-  this.classList.remove('dragging');
-}
-function dragOverHandler(e) { e.preventDefault(); }
-function dragEnterHandler(e) { this.classList.add('drop-target'); }
-function dragLeaveHandler(e) { this.classList.remove('drop-target'); }
-function dropHandler(e) {
-  e.preventDefault();
-  this.classList.remove('drop-target');
-  if (!draggedTaskId) return;
-  const colMap = {
-    toDo: "todo",
-    inProgress: "inprogress",
-    awaitFeedback: "awaitingfeedback",
-    done: "done"
-  };
-  const newStatus = colMap[this.id];
-  if (!newStatus) return;
-  firebase.database().ref("tasks/" + draggedTaskId + "/status").set(newStatus);
-}
-
-// =========================
-// Suche: Tasks filtern
-// =========================
-document.getElementById('taskSearch').addEventListener('input', function () {
-  const value = this.value.trim().toLowerCase();
-  if (!value) {
-    renderBoard(tasks);
-    return;
-  }
-  const filtered = tasks.filter(t =>
-    (t.title && t.title.toLowerCase().includes(value)) ||
-    (t.description && t.description.toLowerCase().includes(value))
-  );
-  renderBoard(filtered);
-});
-const mobileSearch = document.getElementById('taskSearchMobile');
-if (mobileSearch) {
-  mobileSearch.addEventListener('input', function () {
-    const value = this.value.trim().toLowerCase();
-    if (!value) {
-      renderBoard(tasks);
-      return;
-    }
-    const filtered = tasks.filter(t =>
-      (t.title && t.title.toLowerCase().includes(value)) ||
-      (t.description && t.description.toLowerCase().includes(value))
-    );
-    renderBoard(filtered);
+["toDo", "inProgress", "awaitFeedback", "done"].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("dragover", e => e.preventDefault());
+  el.addEventListener("drop", function (e) {
+    e.preventDefault(); this.classList.remove('drop-target');
+    if (!draggedTaskId) return;
+    const map = { toDo: "todo", inProgress: "inprogress", awaitFeedback: "awaitingfeedback", done: "done" };
+    firebase.database().ref("tasks/" + draggedTaskId + "/status").set(map[this.id]);
   });
+  el.addEventListener("dragenter", function () { this.classList.add('drop-target'); });
+  el.addEventListener("dragleave", function () { this.classList.remove('drop-target'); });
+});
+function dragStartHandler() { draggedTaskId = this.dataset.taskId; setTimeout(() => this.classList.add('dragging'), 0); }
+function dragEndHandler() { draggedTaskId = null; this.classList.remove('dragging'); }
+
+// =======================
+// Suche
+// =======================
+function searchTasks(value) {
+  value = value.trim().toLowerCase();
+  renderBoard(value ? tasks.filter(t =>
+    (t.title?.toLowerCase().includes(value) || t.description?.toLowerCase().includes(value))) : tasks
+  );
 }
+document.getElementById('taskSearch').addEventListener('input', e => searchTasks(e.target.value));
+const mobileSearch = document.getElementById('taskSearchMobile');
+if (mobileSearch) mobileSearch.addEventListener('input', e => searchTasks(e.target.value));
 
-// =========================
-// Dummy Overlay-Functions (später implementieren)
-// =========================
-window.openAddTaskOverlay = function () {
-  alert("Add Task Overlay wird noch nicht unterstützt.");
-};
-window.openAddTaskMobile = function () {
-  alert("Add Task Overlay für Mobile kommt bald.");
-};
-
-// =========================
-// Öffnet das Task-Detail-Overlay MIT SUBTASKS LIVE!
-// =========================
+// =======================
+// Task-Detail & Edit Dialog
+// =======================
 function openTaskDetail(task) {
   const dialog = document.getElementById("taskDetailDialog");
   const body = document.getElementById("taskDetailBody");
-
-  // Edit-Status: Start als "readonly"
   let isEditing = false;
-
   renderDetail();
 
-  function renderSubtasksEdit(container, task) {
-    container.innerHTML = '';
-    if (!Array.isArray(task.subtasks) || task.subtasks.length === 0) {
-      container.innerHTML = "<i>No subtasks.</i>";
-      return;
-    }
-    // Liste editierbar bauen
-    task.subtasks.forEach((st, i) => {
-      let checked = !!(typeof st === "object" && st.done);
-      let label = typeof st === "object" ? (st.title || "") : st;
-
-      const wrapper = document.createElement('div');
-      wrapper.style.display = "flex";
-      wrapper.style.alignItems = "center";
-      wrapper.style.gap = "8px";
-
-      // Checkbox
-      const cb = document.createElement('input');
-      cb.type = "checkbox";
-      cb.checked = checked;
-      cb.onchange = function () {
-        if (typeof task.subtasks[i] === "string") {
-          task.subtasks[i] = { title: label, done: cb.checked };
-        } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
-          task.subtasks[i].done = cb.checked;
+  function renderDetail() {
+    if (!isEditing) {
+      body.innerHTML = `
+        <button id="closeTaskDetail" class="close-task-detail">&times;</button>
+        <span class="task-detail-badge">${task.category || ""}</span>
+        <h2 class="task-detail-title">${task.title || ""}</h2>
+        <div class="task-detail-description">${task.description || ""}</div>
+        <div class="task-detail-row"><span class="task-detail-label">Due date:</span> <span>${formatDueDate(task.dueDate)}</span></div>
+        <div class="task-detail-row"><span class="task-detail-label">Priority:</span> <span class="task-detail-prio task-prio-${task.priority}">${task.priority || ""}</span></div>
+        <div class="task-detail-row"><span class="task-detail-label">Assigned To:</span></div>
+        <div class="task-detail-contacts">${
+          (Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo])
+            .filter(Boolean).map(uid => `<div class="assigned-user">${getProfileBadge(uid)}<span class="assigned-user-name">${getPersonData(uid)?.name || ""}</span></div>`).join('')
+        }</div>
+        <div class="task-detail-row"><span class="task-detail-label">Subtasks</span></div>
+        <div class="task-detail-subtasks">${
+          Array.isArray(task.subtasks) && task.subtasks.length
+            ? task.subtasks.map((st, i) => `<label><input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${st.done ? "checked" : ""}><span>${st.title}</span></label>`).join("")
+            : "<i>No subtasks.</i>"
+        }</div>
+        <div class="task-detail-actions">
+          <button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png"> Löschen</button>
+          <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png"> Bearbeiten</button>
+        </div>`;
+      body.querySelectorAll('.subtask-checkbox').forEach(cb => {
+        cb.onchange = function () {
+          task.subtasks[this.dataset.subidx].done = this.checked;
+          firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
         }
-      };
-      wrapper.appendChild(cb);
-
-      // Titel-Input
-      const input = document.createElement('input');
-      input.type = "text";
-      input.value = label;
-      input.style.width = "70%";
-      input.oninput = function () {
-        if (typeof task.subtasks[i] === "string") {
-          task.subtasks[i] = { title: input.value, done: cb.checked };
-        } else if (task.subtasks[i] && typeof task.subtasks[i] === "object") {
-          task.subtasks[i].title = input.value;
-        }
-      };
-      wrapper.appendChild(input);
-
-      // Delete-Button
-      const del = document.createElement('button');
-      del.type = "button";
-      del.textContent = "🗑️";
-      del.title = "Delete subtask";
-      del.style.border = "none";
-      del.style.background = "none";
-      del.style.cursor = "pointer";
-      del.onclick = function () {
-        task.subtasks.splice(i, 1);
-        renderSubtasksEdit(container, task); // neu rendern!
-      };
-      wrapper.appendChild(del);
-
-      container.appendChild(wrapper);
-    });
-  }
-
-function renderDetail() {
-  body.innerHTML = `
-    <button id="closeTaskDetail" class="close-task-detail" title="Close">&times;</button>
-    <span class="task-detail-badge ${task.category && task.category.toLowerCase().includes('tech') ? 'task-badge-tech' : 'task-badge-user'}">${task.category || ""}</span>
-    ${isEditing
-      ? `<input id="editTitle" value="${task.title || ""}" class="edit-input" style="width:100%;margin-bottom:10px;font-size:1.5rem;font-weight:bold;">`
-      : `<h2>${task.title || ""}</h2>`}
-    ${isEditing
-      ? `<textarea id="editDescription" class="edit-textarea" style="width:100%;height:64px;margin-bottom:10px;">${task.description || ""}</textarea>`
-      : `<div>${task.description || ""}</div>`}
-    <div class="task-detail-label"><b>Due date:</b> ${
-      isEditing
-        ? `<input id="editDueDate" type="date" value="${task.dueDate || ""}" style="margin-left:8px;">`
-        : formatDueDate(task.dueDate)
-    }</div>
-    <div class="task-detail-label"><b>Priority:</b> ${
-      isEditing
-        ? `<select id="editPriority" style="margin-left:8px;">
-            <option value="urgent" ${task.priority === 'urgent' ? 'selected' : ''}>Urgent</option>
-            <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
-            <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
-           </select>`
-        : (task.priority || "")
-    }</div>
-    <div class="task-detail-label"><b>Assigned To:</b></div>
-  <div class="task-detail-contacts">
-    ${isEditing
-      ? `<select id="editAssignedTo" multiple style="width:100%;min-height:38px"></select>`
-: (Array.isArray(task.assignedTo) && task.assignedTo.length
-    ? `<div class="assigned-users-list">` +
-        task.assignedTo.map(uid =>
-            `<div class="assigned-user">
-                ${getProfileBadge(uid)}
-                <span class="assigned-user-name">${getPersonData(uid)?.name || ""}</span>
-            </div>`
-        ).join('') +
-      `</div>`
-    : (task.assignedTo
-        ? `<div class="assigned-users-list">
-                <div class="assigned-user">
-                    ${getProfileBadge(task.assignedTo)}
-                    <span class="assigned-user-name">${getPersonData(task.assignedTo)?.name || ""}</span>
-                </div>
-           </div>`
-        : ""))
-    }
-  </div>
-    <div class="task-detail-label"><b>Subtasks</b></div>
-    <div class="task-detail-subtasks" id="edit-detail-subtasks"></div>
-    <div class="task-detail-actions">
-      ${isEditing
-        ? `<button id="saveTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Speichern</button>
-           <button id="cancelEditBtn" class="cancel-btn">Abbrechen</button>`
-        : `<button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png" alt=""> Löschen</button>
-           <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png" alt=""> Bearbeiten</button>`
-      }
-    </div>
-  `;
-
-  // AssignedTo Multi-Select mit Registered Users + Contacts (nur im Edit-Mode)
-if (isEditing) {
-  const assignedSelect = document.getElementById('editAssignedTo');
-  assignedSelect.innerHTML = '';
-
-  Promise.all([
-    firebase.database().ref("users").once("value").then(r => r.val()),
-    firebase.database().ref("contacts").once("value").then(r => r.val())
-  ]).then(([allUsers, allContacts]) => {
-    // KEIN selected setzen!
-    if (allUsers) {
-      const groupUsers = document.createElement('optgroup');
-      groupUsers.label = "Registered Users";
-      Object.entries(allUsers).forEach(([userId, userData]) => {
-        const opt = document.createElement('option');
-        opt.value = userId;
-        opt.textContent = userData.name || userData.email || userId;
-        groupUsers.appendChild(opt);
       });
-      assignedSelect.appendChild(groupUsers);
-    }
-    if (allContacts) {
-      const groupContacts = document.createElement('optgroup');
-      groupContacts.label = "Contacts";
-      Object.entries(allContacts).forEach(([userId, userData]) => {
-        const opt = document.createElement('option');
-        opt.value = userId;
-        opt.textContent = userData.name;
-        groupContacts.appendChild(opt);
-      });
-      assignedSelect.appendChild(groupContacts);
-    }
-
-    // Alte Choices-Instanz killen!
-    if (window.editAssignedChoices) window.editAssignedChoices.destroy();
-
-    // Nach dem Bauen aller Optionen:
-    Array.from(assignedSelect.options).forEach(opt => opt.selected = false);
-
-
-    // Choices NEU initialisieren!
-    if (window.editAssignedChoices) window.editAssignedChoices.destroy();
-    window.editAssignedChoices = new Choices(assignedSelect, {
-      removeItemButton: true,
-      searchEnabled: true,
-      shouldSort: false,
-      placeholder: true,
-      placeholderValue: 'Select contacts to assign'
-    });
-
-
-window.editAssignedChoices.removeActiveItems(); // alles leeren
-
-const assignedIds = Array.isArray(task.assignedTo) ? task.assignedTo : (task.assignedTo ? [task.assignedTo] : []);
-assignedIds.forEach(id => {
-  // Existiert die Option?
-  const opt = assignedSelect.querySelector(`option[value="${id}"]`);
-  if (opt) window.editAssignedChoices.setChoiceByValue(id);
-});
-
-  });
-}
-
-  // Subtasks editierbar machen im Edit-Mode
-  if (isEditing) {
-    renderSubtasksEdit(document.getElementById('edit-detail-subtasks'), task);
-  } else {
-    // Subtasks im Lesemodus anzeigen
-    const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
-    const container = document.getElementById('edit-detail-subtasks');
-    if (subtasks.length > 0) {
-      container.innerHTML = subtasks.map((st, i) => {
-        let checked = !!st.done;
-        let label = typeof st.title === "string" ? st.title : "";
-        return `<label style="display:flex;align-items:center;gap:6px;">
-          <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${checked ? "checked" : ""}>
-          <span>${label}</span>
-        </label>`;
-      }).join('');
+      body.querySelector('#editTaskBtn').onclick = () => { isEditing = true; renderDetail(); };
+      body.querySelector('#deleteTaskBtn').onclick = () => showDeleteConfirmDialog(task.id, dialog);
+      body.querySelector('#closeTaskDetail').onclick = () => dialog.close();
     } else {
-      container.innerHTML = "<i>No subtasks.</i>";
-    }
-
-    // Checkbox-Änderungen speichern (wie gehabt)
-    container.querySelectorAll('.subtask-checkbox').forEach(cb => {
-      cb.addEventListener('change', function() {
-        const subIdx = this.dataset.subidx;
-        const checked = this.checked;
-        if (typeof task.subtasks[subIdx] === "string") {
-          task.subtasks[subIdx] = { title: task.subtasks[subIdx], done: checked };
-        } else if (task.subtasks[subIdx] && typeof task.subtasks[subIdx] === "object") {
-          task.subtasks[subIdx].done = checked;
+      body.innerHTML = `
+        <button id="closeTaskDetail" class="close-task-detail">&times;</button>
+        <span class="task-detail-badge">${task.category || ""}</span>
+        <form id="editTaskForm" style="display:flex;flex-direction:column;gap:14px;">
+          <label for="editTitle">Title</label>
+          <input id="editTitle" type="text" value="${task.title || ""}" required>
+          <label for="editDescription">Description</label>
+          <textarea id="editDescription" required>${task.description || ""}</textarea>
+          <label for="editDueDate">Due date</label>
+          <div class="input-icon-date">
+            <input type="date" id="editDueDate" value="${task.dueDate || ""}" required>
+          </div>
+          <label>Priority</label>
+          <div class="priority-buttons">
+            <button type="button" class="btn${task.priority === "urgent" ? " active" : ""}" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png"></button>
+            <button type="button" class="btn${task.priority === "medium" ? " active" : ""}" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png"></button>
+            <button type="button" class="btn${task.priority === "low" ? " active" : ""}" data-priority="low">Low <img src="../assets/icons/add_task/low.png"></button>
+          </div>
+          <label>Assigned to</label>
+          <select id="editAssignedTo" multiple></select>
+          <div id="editAssignedAvatars" style="display:flex;gap:7px;"></div>
+          <label for="edit-detail-subtasks">Subtasks</label>
+          <div id="edit-detail-subtasks"></div>
+          <div style="display:flex;justify-content:flex-end;gap:14px;">
+            <button id="saveTaskBtn" class="create_task_btn" type="submit">Ok &#10003;</button>
+          </div>
+        </form>`;
+      // Priority
+      let editPrio = task.priority || "medium";
+      body.querySelectorAll('.priority-buttons .btn').forEach(btn => {
+        btn.onclick = function (e) {
+          e.preventDefault();
+          body.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          editPrio = this.dataset.priority;
         }
-        firebase.database().ref("tasks/" + task.id + "/subtasks").set(task.subtasks);
       });
-    });
+      // Assigned
+      const assignedSelect = body.querySelector('#editAssignedTo');
+      assignedSelect.innerHTML = '';
+      if (window.allUsers) {
+        const groupUsers = document.createElement('optgroup'); groupUsers.label = "Registered Users";
+        Object.entries(window.allUsers).forEach(([uid, u]) => {
+          const opt = document.createElement('option');
+          opt.value = uid; opt.textContent = u.name || u.email || uid; groupUsers.appendChild(opt);
+        }); assignedSelect.appendChild(groupUsers);
+      }
+      if (window.allContacts) {
+        const groupContacts = document.createElement('optgroup'); groupContacts.label = "Contacts";
+        Object.entries(window.allContacts).forEach(([uid, u]) => {
+          const opt = document.createElement('option');
+          opt.value = uid; opt.textContent = u.name; groupContacts.appendChild(opt);
+        }); assignedSelect.appendChild(groupContacts);
+      }
+      // Choices.js
+      if (window.editAssignedChoices) window.editAssignedChoices.destroy();
+      window.editAssignedChoices = new Choices(assignedSelect, { removeItemButton: true, searchEnabled: true, shouldSort: false, placeholder: true, placeholderValue: 'Select contacts to assign' });
+      const assignedIds = Array.isArray(task.assignedTo) ? task.assignedTo : (task.assignedTo ? [task.assignedTo] : []);
+      window.editAssignedChoices.removeActiveItems(); assignedIds.forEach(id => window.editAssignedChoices.setChoiceByValue(id));
+      function updateAssignedAvatars() {
+        const avatarDiv = body.querySelector('#editAssignedAvatars');
+        avatarDiv.innerHTML = Array.from(assignedSelect.selectedOptions).map(opt => getProfileBadge(opt.value)).join('');
+      }
+      updateAssignedAvatars(); assignedSelect.addEventListener('change', updateAssignedAvatars);
+      // Subtasks Edit
+      renderSubtasksEdit(body.querySelector('#edit-detail-subtasks'), task);
+      // Cancel/Ok
+      body.querySelector('#closeTaskDetail').onclick = () => dialog.close();
+      body.querySelector('#editTaskForm').onsubmit = function (e) {
+        e.preventDefault();
+        const newTitle = body.querySelector('#editTitle').value.trim(),
+          newDesc = body.querySelector('#editDescription').value.trim(),
+          newDueDate = body.querySelector('#editDueDate').value.trim(),
+          assignedSel = body.querySelector('#editAssignedTo'),
+          newAssigned = Array.from(assignedSel.selectedOptions).map(opt => opt.value);
+        let cleanSubtasks = (task.subtasks || []).filter(st => st && st.title && st.title.trim()).map(st => ({ title: st.title.trim(), done: !!st.done }));
+        firebase.database().ref("tasks/" + task.id).update({
+          title: newTitle, description: newDesc, dueDate: newDueDate,
+          priority: editPrio, assignedTo: newAssigned, subtasks: cleanSubtasks
+        }).then(() => { isEditing = false; renderDetail(); });
+      }
+    }
+    dialog.showModal();
   }
-
-  // Close Handler
-  document.getElementById('closeTaskDetail').onclick = () => dialog.close();
-
-  // Edit-Mode wechseln
-  if (!isEditing) {
-    document.getElementById('editTaskBtn').onclick = () => { isEditing = true; renderDetail(); };
-    document.getElementById('deleteTaskBtn').onclick = () => showDeleteConfirmDialog(task.id, dialog);
-  } else {
-    document.getElementById('saveTaskBtn').onclick = saveEdits;
-    document.getElementById('cancelEditBtn').onclick = () => { isEditing = false; renderDetail(); };
-  }
-
-  // Speichern-Funktion innerhalb von renderDetail!
-  function saveEdits() {
-    const newTitle = document.getElementById('editTitle').value.trim();
-    const newDesc = document.getElementById('editDescription').value.trim();
-    const newDueDate = document.getElementById('editDueDate') ? document.getElementById('editDueDate').value.trim() : task.dueDate;
-    const newPriority = document.getElementById('editPriority') ? document.getElementById('editPriority').value : task.priority;
-    const assignedSelect = document.getElementById('editAssignedTo');
-    const newAssigned = Array.from(assignedSelect.selectedOptions).map(opt => opt.value);
-
-    // Subtasks immer bereinigen
-    let cleanSubtasks = (task.subtasks || [])
-      .filter(st => st && typeof st === "object" && st.title && st.title.trim() !== "")
-      .map(st => ({ title: st.title.trim(), done: !!st.done }));
-
-    firebase.database().ref("tasks/" + task.id).update({
-      title: newTitle,
-      description: newDesc,
-      dueDate: newDueDate,
-      priority: newPriority,
-      assignedTo: newAssigned,
-      subtasks: cleanSubtasks // nur gültige Subtasks!
-      // Kategorie wird nicht angefasst!
-    }).then(() => {
-      isEditing = false;
-      renderDetail();
-    });
-  }
-}
-  dialog.showModal();
 }
 
-// Farbe aus String (Backup, falls gebraucht)
-function stringToColor(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
-  return "#" + "00000".substring(0, 6 - c.length) + c;
-}
+function renderSubtasksEdit(container, task) {
+  container.innerHTML = '';
 
-// === TASK LÖSCHEN ===
-function deleteTask(taskId) {
-  if (!confirm('Do you really want to delete this task?')) return;
-  firebase.database().ref("tasks/" + taskId).remove()
-    .then(() => {
-      // Optional: Modal automatisch schließen
-      const dialog = document.getElementById("taskDetailDialog");
-      if (dialog) dialog.close();
-    })
-    .catch(err => alert("Error deleting task: " + err.message));
-}
+  // Eingabefeld + Plus-Button (oben)
+  const inputWrap = document.createElement('div');
+  inputWrap.style.display = "flex";
+  inputWrap.style.gap = "8px";
+  inputWrap.style.marginBottom = "8px";
+  
+  const subtaskInput = document.createElement('input');
+  subtaskInput.type = "text";
+  subtaskInput.placeholder = "Add subtask";
+  subtaskInput.className = "edit-subtask-input";
+  subtaskInput.style.flex = "1";
+  
+  const addBtn = document.createElement('button');
+  addBtn.type = "button";
+  addBtn.innerHTML = '<img src="../assets/icons/add_task/subtask_icon.png" style="width:20px;">';
+  addBtn.className = "add-subtask-btn";
+  addBtn.onclick = addSubtask;
+  
+  inputWrap.appendChild(subtaskInput);
+  inputWrap.appendChild(addBtn);
+  container.appendChild(inputWrap);
 
-// === TASK EDITIEREN ===
-function editTask(taskId) {
-  // 1. Task finden
-  const task = tasks.find(t => t.id === taskId);
-  if (!task) return;
-
-  // 2. Einfache Prompt-Dialoge für Demo
-  const newTitle = prompt("Edit Title:", task.title);
-  if (newTitle === null) return; // Abbrechen
-
-  const newDesc = prompt("Edit Description:", task.description || "");
-  if (newDesc === null) return; // Abbrechen
-
-  // 3. (Optional: Prio etc. auch editierbar machen)
-  // ...
-
-  // 4. DB aktualisieren
-  firebase.database().ref("tasks/" + taskId).update({
-    title: newTitle,
-    description: newDesc
-    // Hier kannst du weitere Felder ergänzen!
-  }).then(() => {
-    // Modal aktualisieren (optional: einfach schließen und neu öffnen)
-    const dialog = document.getElementById("taskDetailDialog");
-    if (dialog) dialog.close();
+  // Getrennte Subtask-Liste (ul)
+  const listWrap = document.createElement('div');
+  listWrap.className = "subtask-list-wrap";
+  const list = document.createElement('ul');
+  list.style.listStyle = "none";
+  list.style.padding = "0";
+  list.style.margin = "0";
+  (Array.isArray(task.subtasks) ? task.subtasks : []).forEach((st, idx) => {
+    if (!st.title) return;
+    const li = document.createElement('li');
+    li.style.display = "flex";
+    li.style.alignItems = "center";
+    li.style.gap = "7px";
+    li.style.marginBottom = "4px";
+    li.innerHTML = `
+      <input type="checkbox" ${st.done ? "checked" : ""} style="margin:0;">
+      <span style="flex:1;">${st.title}</span>
+      <button type="button" style="background:none;border:none;cursor:pointer;" title="Delete">
+        <img src="../assets/icons/board/delete.png" style="width:17px;">
+      </button>
+    `;
+    li.querySelector('input[type=checkbox]').onchange = function () {
+      task.subtasks[idx].done = this.checked;
+    };
+    li.querySelector('button').onclick = function () {
+      task.subtasks.splice(idx, 1);
+      renderSubtasksEdit(container, task);
+    };
+    list.appendChild(li);
   });
+  listWrap.appendChild(list);
+  container.appendChild(listWrap);
+
+  function addSubtask() {
+    const val = subtaskInput.value.trim();
+    if (val) {
+      if (!Array.isArray(task.subtasks)) task.subtasks = [];
+      task.subtasks.push({ title: val, done: false });
+      subtaskInput.value = '';
+      renderSubtasksEdit(container, task);
+    }
+  }
+  subtaskInput.addEventListener("keydown", e => { if (e.key === "Enter") { addSubtask(); } });
 }
 
+
+// =======================
+// Delete Dialog & Date Helper
+// =======================
 function showDeleteConfirmDialog(taskId, parentDialog) {
   const deleteDialog = document.getElementById('deleteConfirmDialog');
   deleteDialog.showModal();
-
-  // Entferne vorherige Event-Listener!
   const confirmBtn = document.getElementById('confirmDeleteBtn');
   const cancelBtn = document.getElementById('cancelDeleteBtn');
   confirmBtn.onclick = () => {
@@ -583,23 +337,65 @@ function showDeleteConfirmDialog(taskId, parentDialog) {
       if (parentDialog) parentDialog.close();
     });
   };
-  cancelBtn.onclick = () => {
-    deleteDialog.close();
-  };
+  cancelBtn.onclick = () => deleteDialog.close();
 }
-
-// Formatierung für Due Date
 function formatDueDate(dueDate) {
   if (!dueDate) return '';
   let dateObj = null;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) { // yyyy-mm-dd
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
     dateObj = new Date(dueDate);
-  } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dueDate)) { // dd/mm/yyyy
+  } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dueDate)) {
     const [day, month, year] = dueDate.split("/");
     dateObj = new Date(`${year}-${month}-${day}`);
   }
   if (dateObj && !isNaN(dateObj)) {
     return dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
   }
-  return dueDate; // Fallback: ungeparstes Feld
+  return dueDate;
+}
+
+function renderAssignedDropdown() {
+  assignedDropdown.innerHTML = '';
+  Object.entries(assignedUsers).forEach(([id, user]) => {
+    const option = document.createElement('div');
+    option.className = 'custom-option';
+    option.dataset.userId = id;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'custom-option-avatar';
+    avatar.style.backgroundColor = generateColorFromString(user.name);
+    avatar.textContent = user.initials;
+
+    const label = document.createElement('div');
+    label.className = 'custom-option-label';
+    label.textContent = user.name + (user.email === currentUserEmail ? ' (You)' : '');
+
+    const checkbox = document.createElement('div');
+    checkbox.className = 'custom-option-checkbox';
+    if (user.selected) checkbox.classList.add('checked');
+
+    option.appendChild(avatar);
+    option.appendChild(label);
+    option.appendChild(checkbox);
+    assignedDropdown.appendChild(option);
+
+    option.addEventListener('click', () => {
+      assignedUsers[id].selected = !assignedUsers[id].selected;
+      renderAssignedDropdown();
+      renderAssignedBadges();
+    });
+  });
+}
+
+function renderAssignedBadges() {
+  assignedBadges.innerHTML = '';
+  Object.entries(assignedUsers).forEach(([id, user]) => {
+    if (user.selected) {
+      const badge = document.createElement('div');
+      badge.className = 'avatar-badge';
+      badge.textContent = user.initials;
+      badge.style.backgroundColor = generateColorFromString(user.name);
+      assignedBadges.appendChild(badge);
+    }
+  });
 }

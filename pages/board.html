@@ -159,54 +159,176 @@
 </dialog>
 
 <dialog id="addTaskOverlay" class="add_task_dialog_overlay">
-    <div class="main_content">
-      <div class="headline">
-        <h1>Add Task</h1>
-        <button type="button" class="close-add-task-overlay">&times;</button>
-      </div>
-      <div class="box-wrapper">
-        <div class="left-box">
-          <label for="title">Title<span class="required">*</span></label>
-          <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
-          <label for="description">Description</label>
-          <textarea id="description" placeholder="Enter a Description"></textarea>
-          <label for="due">Due date<span class="required">*</span></label>
-          <div class="input-icon-date">
-            <input type="date" id="task-due-date" required>
-            <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Calendar"></span>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="right-box">
-          <label>Priority</label>
-          <div class="priority-buttons">
-            <button type="button" class="btn" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent"></button>
-            <button type="button" class="btn" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt="Medium"></button>
-            <button type="button" class="btn" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt="Low"></button>
-          </div>
-          <label for="assigned">Assigned to</label>
-          <select id="assigned" class="option" multiple style="min-height:38px; width:100%;"></select>
-          <label for="category">Category<span class="required">*</span></label>
-          <select id="category" class="option">
-            <option value="">Select task category</option>
-          </select>
-          <label>Subtasks</label>
-          <div class="input-icon-subtask">
-            <input type="text" placeholder="Add new subtask" autocomplete="off">
-            <button type="button" class="add-subtask"><span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt="Add"></span></button>
-          </div>
-          <ul id="subtask-list"></ul>
+<div class="main_content">
+  <div class="headline">
+    <h1>Add Task</h1>
+    <button type="button" class="close-add-task-overlay">&times;</button>
+  </div>
+
+  <form class="task-form">
+    <div class="box-wrapper">
+      <!-- LEFT BOX -->
+      <div class="left-box">
+        <label for="title">Title<span class="required">*</span></label>
+        <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
+
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Enter a description"></textarea>
+
+        <label for="due">Due date<span class="required">*</span></label>
+        <div class="input-icon">
+          <input type="date" id="task-due-date" required>
         </div>
       </div>
-      <div class="add_task_button">
-          <img class="req-img" src="../assets/icons/board/required_field.png" alt="">
-        <div>
-          <button type="button" class="clear_button">Cancel x</button>
-          <button type="button" class="create_task_btn">Create Task &#10003;</button>
+
+      <div class="divider"></div>
+
+      <!-- RIGHT BOX -->
+      <div class="right-box">
+        <label>Priority</label>
+        <div class="priority-buttons">
+          <button type="button" class="btn" data-priority="urgent"> Urgent
+            <img src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
+          </button>
+          <button type="button" class="btn" data-priority="medium">Medium
+            <img src="../assets/icons/add_task/medium_orange.png" alt="Medium"> 
+          </button>
+          <button type="button" class="btn" data-priority="low">Low
+            <img src="../assets/icons/add_task/low.png" alt="Low"> 
+          </button>
         </div>
+
+        <label for="assigned">Assigned to</label>
+        <select id="assigned" class="option" multiple></select>
+        <div id="assignedDropdown" class="choices__list choices__list--dropdown"></div>
+        <div class="assigned-badges" id="assignedBadges"></div>
+
+        <label for="category">Category<span class="required">*</span></label>
+        <select id="category" class="option">
+          <option value="">Select task category</option>
+        </select>
+
+        <label>Subtasks</label>
+        <div class="input-icon-subtask">
+          <input type="text" placeholder="Add new subtask" autocomplete="off">
+          <button type="button" class="add-subtask">
+            <img src="../assets/icons/add_task/subtask_icon.png" alt="Add">
+          </button>
+        </div>
+        <ul id="subtask-list"></ul>
       </div>
     </div>
+
+    <div class="add_task_button">
+      <img class="req-img" src="../assets/icons/board/required_field.png" alt="">
+      <div>
+        <button type="button" class="clear_button">Cancel x</button>
+        <button type="button" class="create_task_btn">Create Task ✔</button>
+      </div>
+    </div>
+  </form>
+</div>
   </dialog>
+
+<dialog id="editTaskDialog" class="add_task_dialog_overlay">
+  <div class="main_content">
+    <!-- Kopfzeile -->
+    <div class="headline">
+      <h1>Edit Task</h1>
+      <button type="button" class="close-add-task-overlay" id="cancelEditBtn">&times;</button>
+    </div>
+
+    <!-- Inhalt (vertikal) -->
+    <div class="box-wrapper" style="flex-direction: column; gap: 24px; padding: 0 40px;">
+      <!-- Title -->
+      <div class="form-section">
+        <label for="editTitle">Title<span class="required">*</span></label>
+        <input id="editTitle" type="text" placeholder="Enter a title" required>
+      </div>
+
+      <!-- Description -->
+      <div class="form-section">
+        <label for="editDescription">Description</label>
+        <textarea id="editDescription" placeholder="Enter a description"></textarea>
+      </div>
+
+      <!-- Due date -->
+      <div class="form-section">
+        <label for="editDueDate">Due date<span class="required">*</span></label>
+        <div class="input-icon-date">
+          <input id="editDueDate" type="date" required>
+          <span class="icon"><img src="../assets/icons/add_task/event.png" alt="Calendar"></span>
+        </div>
+      </div>
+
+      <!-- Priority -->
+      <div class="form-section">
+        <label>Priority</label>
+        <div class="priority-buttons">
+          <button type="button" class="btn" data-priority="urgent">
+            Urgent
+            <img class="icon default" src="../assets/icons/add_task/urgent_small.png" alt="">
+            <img class="icon white" src="../assets/icons/add_task/urgent_white.png" alt="">
+          </button>
+          <button type="button" class="btn" data-priority="medium">
+            Medium
+            <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="">
+            <img class="icon white" src="../assets/icons/add_task/medium_white.png" alt="">
+          </button>
+          <button type="button" class="btn" data-priority="low">
+            Low
+            <img class="icon default" src="../assets/icons/add_task/low.png" alt="">
+            <img class="icon white" src="../assets/icons/add_task/low_white.png" alt="">
+          </button>
+        </div>
+      </div>
+
+<!-- Assigned to -->
+<div class="form-section">
+  <label>Assigned to</label>
+  <div class="assigned-to-wrapper">
+    <!-- Trigger-Box -->
+    <div id="assignedSelectBox" class="assigned-select-box">
+      <span>Select contacts to assign</span>
+      <button type="button" class="assigned-toggle-btn">▾</button>
+    </div>
+    <!-- Dropdown-Liste -->
+    <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
+    <!-- Ausgewählte Badges -->
+    <div id="assignedBadges" class="assigned-badges"></div>
+  </div>
+</div>
+
+
+      <!-- Category (readonly) -->
+      <div class="form-section">
+        <label for="editCategory">Category<span class="required">*</span></label>
+        <select id="editCategory" disabled>
+          <option value="">(unchangeable)</option>
+        </select>
+      </div>
+
+      <!-- Subtasks -->
+      <div class="form-section">
+  <div style="font-weight:600; margin-bottom: 4px;">Subtasks</div>
+        <div class="input-icon-subtask">
+          <input id="editSubtaskInput" type="text" placeholder="Add new subtask" autocomplete="off">
+          <button type="button" class="add-subtask" id="addEditSubtaskBtn">
+            <span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt=""></span>
+          </button>
+        </div>
+        <ul id="editSubtasksList"></ul>
+      </div>
+    </div>
+
+    <!-- Buttons unten -->
+    <div class="add_task_button" style="padding: 28px 40px; justify-content: flex-end;">
+      <button type="button" class="clear_button" id="cancelEditBtnBottom">Cancel x</button>
+      <button type="submit" form="editTaskForm" class="create_task_btn">Save ✓</button>
+    </div>
+  </div>
+</dialog>
+
 
   
 <div id="subtask-tooltip" class="subtask-tooltip"></div>

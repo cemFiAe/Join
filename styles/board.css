@@ -297,7 +297,7 @@
     color: #fff;
     font-weight: 400;
     font-size: 16px;
-    margin-left: -12px;
+    margin-left: -10px;
     border: 2px solid #fff;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -305,9 +305,10 @@
     z-index: 1;
     position: relative;
 }
-.profile-badge:first-child { margin-left: 0; z-index: 3; }
+.profile-badge:first-child { margin-left: 0; z-index: 1; }
 .profile-badge:nth-child(2) { z-index: 2; }
-.profile-badge:nth-child(3) { z-index: 1; }
+.profile-badge:nth-child(3) { z-index: 3; }
+.profile-badge:nth-child(4) { z-index: 4; }
 .profile-badge:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.567);
     transition: box-shadow 0.75s;
@@ -362,6 +363,58 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+}
+#editTitle{
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111827;
+    background: #fff;
+    line-height: normal;
+    text-align: start;
+    outline: none;
+}
+#editDescription{
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111827;
+    background: #fff;
+    line-height: normal;
+    text-align: start;
+    outline: none;
+}
+#editDueDate{
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111827;
+    background: #fff;
+    line-height: normal;
+    text-align: start;
+    outline: none;
+}
+#edit-subtask-input{
+        width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #111827;
+    background: #fff;
+    line-height: normal;
+    text-align: start;
+    outline: none;
 }
 
 .task-detail-dialog .edit-input {
