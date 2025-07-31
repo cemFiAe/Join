@@ -354,16 +354,6 @@
   line-clamp: 2;
   white-space: normal;
 }
-
-.task-detail-dialog h2,
-.task-detail-badge + h2,
-#editTitle {
-  max-width: 360px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-}
 #editTitle{
     width: 100%;
     border: 1px solid #d1d5db;

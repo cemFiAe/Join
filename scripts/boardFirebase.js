@@ -20,14 +20,12 @@ function getProfileBadge(userId) {
   const user = getPersonData(userId);
   if (!user) return '';
   const name = user.name || '';
-  // Initialen mit max. 2 Buchstaben
   const initials = name
     ? name.split(" ").slice(0,2).map(n => n[0]).join("").toUpperCase()
     : userId.slice(0,2).toUpperCase();
   const color = getInitialsColor(name || userId);
   return `<span class="profile-badge" style="background:${color};">${initials}</span>`;
 }
-
 
 // =======================
 // Daten laden
@@ -130,32 +128,67 @@ function openTaskDetail(task) {
   const dialog = document.getElementById("taskDetailDialog");
   const body = document.getElementById("taskDetailBody");
   let isEditing = false;
+
+  // Mapping für Kategorie-Farben (optional anpassen)
+  const catClass = (task.category || '').toLowerCase().replace(/\s/g, '');
+  const prioIcons = {
+    urgent: "prio_top.svg",
+    medium: "prio_mid.svg",
+    low: "prio_low.svg"
+  };
+  const prioIcon = prioIcons[task.priority] || prioIcons["medium"];
+  const prioLabel = (task.priority || "").charAt(0).toUpperCase() + (task.priority || "").slice(1);
+
   renderDetail();
 
   function renderDetail() {
     if (!isEditing) {
       body.innerHTML = `
         <button id="closeTaskDetail" class="close-task-detail">&times;</button>
-        <span class="task-detail-badge">${task.category || ""}</span>
+        <span class="task-detail-badge cat-${catClass}">${task.category ? task.category : ""}</span>
         <h2 class="task-detail-title">${task.title || ""}</h2>
         <div class="task-detail-description">${task.description || ""}</div>
-        <div class="task-detail-row"><span class="task-detail-label">Due date:</span> <span>${formatDueDate(task.dueDate)}</span></div>
-        <div class="task-detail-row"><span class="task-detail-label">Priority:</span> <span class="task-detail-prio task-prio-${task.priority}">${task.priority || ""}</span></div>
-        <div class="task-detail-row"><span class="task-detail-label">Assigned To:</span></div>
-        <div class="task-detail-contacts">${
-          (Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo])
-            .filter(Boolean).map(uid => `<div class="assigned-user">${getProfileBadge(uid)}<span class="assigned-user-name">${getPersonData(uid)?.name || ""}</span></div>`).join('')
-        }</div>
-        <div class="task-detail-row"><span class="task-detail-label">Subtasks</span></div>
-        <div class="task-detail-subtasks">${
-          Array.isArray(task.subtasks) && task.subtasks.length
-            ? task.subtasks.map((st, i) => `<label><input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${st.done ? "checked" : ""}><span>${st.title}</span></label>`).join("")
-            : "<i>No subtasks.</i>"
-        }</div>
+        <div class="task-detail-row">
+          <span class="task-detail-label">Due date:</span>
+          <span>${formatDueDate(task.dueDate)}</span>
+        </div>
+        <div class="task-detail-row">
+          <span class="task-detail-label">Priority:</span>
+          <span style="display:flex;align-items:center;gap:8px;">
+            <span style="color:#222;">${prioLabel}</span>
+            <img src="../assets/icons/board/prio/${prioIcon}" alt="Priority" style="height:10px;">
+          </span>
+        </div>
+        <div class="task-detail-row">
+          <span class="task-detail-label">Assigned To:</span>
+        </div>
+        <div class="task-detail-contacts">
+          ${(Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo])
+            .filter(Boolean)
+            .map(uid =>
+              `<div class="assigned-user">${getProfileBadge(uid)}<span class="assigned-user-name">${getPersonData(uid)?.name || ""}</span></div>`
+            ).join('')}
+        </div>
+        <div class="task-detail-row" style="margin-bottom:5px;">
+          <span class="task-detail-label">Subtasks</span>
+        </div>
+        <div class="task-detail-subtasks">
+          ${
+            Array.isArray(task.subtasks) && task.subtasks.length
+              ? task.subtasks.map((st, i) =>
+                  `<label style="display:flex;align-items:center;gap:9px;font-size:1rem;">
+                    <input type="checkbox" class="subtask-checkbox" data-subidx="${i}" ${st.done ? "checked" : ""}>
+                    <span>${st.title}</span>
+                  </label>`
+                ).join("")
+              : "<i>No subtasks.</i>"
+          }
+        </div>
         <div class="task-detail-actions">
           <button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png"> Löschen</button>
           <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png"> Bearbeiten</button>
-        </div>`;
+        </div>
+      `;
       body.querySelectorAll('.subtask-checkbox').forEach(cb => {
         cb.onchange = function () {
           task.subtasks[this.dataset.subidx].done = this.checked;
@@ -166,9 +199,10 @@ function openTaskDetail(task) {
       body.querySelector('#deleteTaskBtn').onclick = () => showDeleteConfirmDialog(task.id, dialog);
       body.querySelector('#closeTaskDetail').onclick = () => dialog.close();
     } else {
+      // ... hier bleibt dein Edit-Formular wie bisher, ggf. anpassen!
       body.innerHTML = `
         <button id="closeTaskDetail" class="close-task-detail">&times;</button>
-        <span class="task-detail-badge">${task.category || ""}</span>
+        <span class="task-detail-badge cat-${catClass}">${task.category || ""}</span>
         <form id="editTaskForm" style="display:flex;flex-direction:column;gap:14px;">
           <label for="editTitle">Title</label>
           <input id="editTitle" type="text" value="${task.title || ""}" required>
@@ -193,7 +227,7 @@ function openTaskDetail(task) {
             <button id="saveTaskBtn" class="create_task_btn" type="submit">Ok &#10003;</button>
           </div>
         </form>`;
-      // Priority
+      // Priority Buttons Handling...
       let editPrio = task.priority || "medium";
       body.querySelectorAll('.priority-buttons .btn').forEach(btn => {
         btn.onclick = function (e) {
@@ -230,9 +264,8 @@ function openTaskDetail(task) {
         avatarDiv.innerHTML = Array.from(assignedSelect.selectedOptions).map(opt => getProfileBadge(opt.value)).join('');
       }
       updateAssignedAvatars(); assignedSelect.addEventListener('change', updateAssignedAvatars);
-      // Subtasks Edit
       renderSubtasksEdit(body.querySelector('#edit-detail-subtasks'), task);
-      // Cancel/Ok
+
       body.querySelector('#closeTaskDetail').onclick = () => dialog.close();
       body.querySelector('#editTaskForm').onsubmit = function (e) {
         e.preventDefault();
@@ -252,59 +285,77 @@ function openTaskDetail(task) {
   }
 }
 
+
+// === NEUE SUBTASK-EDIT-FUNKTION MIT HOVER-EDIT/DELETE ===
 function renderSubtasksEdit(container, task) {
   container.innerHTML = '';
 
-  // Eingabefeld + Plus-Button (oben)
+  // Eingabefeld + Plus-Button
   const inputWrap = document.createElement('div');
-  inputWrap.style.display = "flex";
-  inputWrap.style.gap = "8px";
-  inputWrap.style.marginBottom = "8px";
-  
+  inputWrap.className = 'subtask-input-row';
   const subtaskInput = document.createElement('input');
   subtaskInput.type = "text";
   subtaskInput.placeholder = "Add subtask";
   subtaskInput.className = "edit-subtask-input";
   subtaskInput.style.flex = "1";
-  
   const addBtn = document.createElement('button');
   addBtn.type = "button";
   addBtn.innerHTML = '<img src="../assets/icons/add_task/subtask_icon.png" style="width:20px;">';
   addBtn.className = "add-subtask-btn";
   addBtn.onclick = addSubtask;
-  
   inputWrap.appendChild(subtaskInput);
   inputWrap.appendChild(addBtn);
   container.appendChild(inputWrap);
 
-  // Getrennte Subtask-Liste (ul)
+  // Subtask-Liste
   const listWrap = document.createElement('div');
   listWrap.className = "subtask-list-wrap";
   const list = document.createElement('ul');
   list.style.listStyle = "none";
   list.style.padding = "0";
   list.style.margin = "0";
+
   (Array.isArray(task.subtasks) ? task.subtasks : []).forEach((st, idx) => {
     if (!st.title) return;
     const li = document.createElement('li');
+    li.className = 'subtask-item';
     li.style.display = "flex";
     li.style.alignItems = "center";
     li.style.gap = "7px";
     li.style.marginBottom = "4px";
+
     li.innerHTML = `
       <input type="checkbox" ${st.done ? "checked" : ""} style="margin:0;">
-      <span style="flex:1;">${st.title}</span>
-      <button type="button" style="background:none;border:none;cursor:pointer;" title="Delete">
-        <img src="../assets/icons/board/delete.png" style="width:17px;">
-      </button>
+      <span class="subtask-title" style="flex:1;">${st.title}</span>
+      <span class="subtask-actions" style="display:none;">
+        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;">
+        </button>
+        <button type="button" class="subtask-delete-btn" title="Löschen">
+          <img src="../assets/icons/board/delete.png" alt="Delete" style="width:17px;">
+        </button>
+      </span>
     `;
+    // Checkbox
     li.querySelector('input[type=checkbox]').onchange = function () {
       task.subtasks[idx].done = this.checked;
     };
-    li.querySelector('button').onclick = function () {
+    // Hover-Logik: Edit + Delete nur beim Hover
+    li.addEventListener('mouseenter', () => {
+      li.querySelector('.subtask-actions').style.display = 'inline-flex';
+    });
+    li.addEventListener('mouseleave', () => {
+      li.querySelector('.subtask-actions').style.display = 'none';
+    });
+    // Edit
+    li.querySelector('.subtask-edit-btn').addEventListener('click', function () {
+      editSubtaskInline(li, idx, task);
+    });
+    // Delete
+    li.querySelector('.subtask-delete-btn').addEventListener('click', function () {
       task.subtasks.splice(idx, 1);
       renderSubtasksEdit(container, task);
-    };
+    });
     list.appendChild(li);
   });
   listWrap.appendChild(list);
@@ -322,6 +373,41 @@ function renderSubtasksEdit(container, task) {
   subtaskInput.addEventListener("keydown", e => { if (e.key === "Enter") { addSubtask(); } });
 }
 
+function editSubtaskInline(li, idx, task) {
+  const span = li.querySelector('.subtask-title');
+  const actions = li.querySelector('.subtask-actions');
+  const oldValue = span.textContent;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = oldValue;
+  input.style.width = '70%';
+  span.replaceWith(input);
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') cancel();
+  });
+  input.addEventListener('blur', save);
+
+  function save() {
+    task.subtasks[idx].title = input.value.trim() || oldValue;
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = task.subtasks[idx].title;
+    newSpan.style.flex = "1";
+    input.replaceWith(newSpan);
+    actions.style.display = 'none';
+  }
+  function cancel() {
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = oldValue;
+    newSpan.style.flex = "1";
+    input.replaceWith(newSpan);
+    actions.style.display = 'none';
+  }
+  input.focus();
+}
 
 // =======================
 // Delete Dialog & Date Helper
