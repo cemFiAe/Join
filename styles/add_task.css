@@ -150,10 +150,6 @@ a {
   .priority-buttons .btn[data-priority="low"].active .icon.default { display: none; }
   .priority-buttons .btn[data-priority="low"].active .icon.white { display: inline; }
 
-  .rotate {
-    transform: rotate(180deg);
-  }
-
   /* Wenn nicht aktiv: Nur das Default-Icon */
   .btn .icon.default { display: inline; }
   .btn.active .icon.white { display: inline; }
