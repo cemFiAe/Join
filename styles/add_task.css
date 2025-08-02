@@ -633,7 +633,6 @@ select[multiple] {
 }
 
 .custom-option-checkbox.checked {
-  background: url('../assets/icons/check_white.svg') center center no-repeat #29abe2;
   background-size: 14px;
   border-color: #29abe2;
 }
@@ -654,35 +653,4 @@ select[multiple] {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.task-toast {
-  position: fixed;
-  top: 100px;
-  right: -400px; /* Startposition außerhalb des Bildschirms */
-  background-color: #2A3647;
-  color: white;
-  font-size: 18px;
-  font-weight: 400;
-  padding: 12px 24px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 9999;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: right 0.4s ease, opacity 0.4s ease;
-}
-
-.task-toast.show {
-  right: 50%;
-  transform: translateX(50%); /* Mitte optisch erreicht */
-  opacity: 1;
-}
-
-
-.task-toast img {
-  width: 326px;
-  height: 74px;
 }

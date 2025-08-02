@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // <<< BOARD-TOAST-FUNKTION >>>  
+  function showBoardToast() {
+    const toast = document.getElementById('taskToast');
+    if (!toast) return;
+    toast.classList.add('show');
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.classList.add('hidden');
+    }, 3000);
+  }
+
+  if (localStorage.getItem('showBoardToast')) {
+    showBoardToast();
+    localStorage.removeItem('showBoardToast');
+  }
+  
   // --- Add Task Overlay ---
   window.openAddTaskDialog = function(status = "todo") {
     clearAddTaskForm();
@@ -220,5 +237,5 @@ function initAssignedDropdown() {
         `)
       };
     }
-  });
+  });  
 }

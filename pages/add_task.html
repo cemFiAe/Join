@@ -77,12 +77,11 @@
     <a href="#" onclick="logOutUser()">Log out</a>
   </nav>
 
-  <div class="container">
+    <div class="container">
     <div class="main_content">
       <div class="title">
         <h2>Add Task</h2>
       </div>
-
       <div class="content">
         <!-- linke Spalte -->
         <form class="metrics-panel-left" onsubmit="return false;">
@@ -103,7 +102,6 @@
           </div>
         </form>
 
-        <!-- Trennlinie -->
         <div class="divider"></div>
 
         <!-- rechte Spalte -->
@@ -112,19 +110,19 @@
             <label>Priority</label>
             <div class="priority-buttons">
               <button type="button" class="btn" data-priority="urgent">
-                  Urgent
-                  <img class="icon default" src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
-                  <img class="icon white" src="../assets/icons/add_task/urgent_white.png" alt="Urgent" width="21px">
+                Urgent
+                <img class="icon default" src="../assets/icons/add_task/urgent_small.png" alt="Urgent">
+                <img class="icon white" src="../assets/icons/add_task/urgent_white.png" alt="Urgent" width="21px">
               </button>
               <button type="button" class="btn btn_medium" data-priority="medium">
-                  Medium
-                  <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
-                  <img class="icon white" src="../assets/icons/add_task/medium_white.png" alt="Medium">
+                Medium
+                <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="Medium">
+                <img class="icon white" src="../assets/icons/add_task/medium_white.png" alt="Medium">
               </button>
               <button type="button" class="btn" data-priority="low">
-                  Low
-                  <img class="icon default" src="../assets/icons/add_task/low.png" alt="Low">
-                  <img class="icon white" src="../assets/icons/add_task/low_white.png" alt="Low">
+                Low
+                <img class="icon default" src="../assets/icons/add_task/low.png" alt="Low">
+                <img class="icon white" src="../assets/icons/add_task/low_white.png" alt="Low">
               </button>
             </div>
           </div>
@@ -147,8 +145,8 @@
           <div class="form-group subtask-group">
             <label>Subtasks</label>
             <div class="input-icon-subtask">
-              <input type="text" placeholder="Add subtask" autocomplete="off">
-              <button type="button" class="add-subtask">
+              <input id="subtaskInput" type="text" placeholder="Add subtask" autocomplete="off">
+              <button type="button" id="addSubtaskBtn" class="add-subtask">
                 <img src="../assets/icons/add_task/subtask_icon.png" alt="Add">
               </button>
             </div>
@@ -189,11 +187,6 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
-
-  <div id="taskToast" class="task-toast hidden">
-  <img src="../assets/icons/add_task/board_white.png" alt="Board icon">
-</div>
-
 
   <script src="../script.js"></script>
   <script src="../scripts/realtimeDatabase.js"></script>

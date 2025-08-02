@@ -70,7 +70,8 @@ function createTaskCard(task) {
   const categoryClass = "task-header"
     + (task.category?.toLowerCase().includes("bug") ? " bug-task"
     : task.category?.toLowerCase().includes("user") ? " tech-task"
-    : task.category?.toLowerCase().includes("tech") ? " user-task" : "");
+    : task.category?.toLowerCase().includes("tech") ? " user-task"
+    : task.category?.toLowerCase().includes("research") ? " research-task" : "");
   const badgeHtml = (Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo])
     .filter(Boolean).map(getProfileBadge).join('');
   const subBar = total ? `<div class="task-bar"><div class="bar-wrapper"><div class="progress-bar"><span class="progress-bar-fill" style="width:${Math.round(done / total * 100)}%"></span></div></div><span class="sub-task">${done}/${total} Subtasks</span></div>` : "";
@@ -431,14 +432,19 @@ function formatDueDate(dueDate) {
   if (/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
     dateObj = new Date(dueDate);
   } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dueDate)) {
-    const [day, month, year] = dueDate.split("/");
-    dateObj = new Date(`${year}-${month}-${day}`);
+    // Schon korrektes Format
+    return dueDate;
   }
   if (dateObj && !isNaN(dateObj)) {
-    return dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
+    // MM/DD/YYYY
+    const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const dd = String(dateObj.getDate()).padStart(2, '0');
+    const yyyy = dateObj.getFullYear();
+    return `${mm}/${dd}/${yyyy}`;
   }
   return dueDate;
 }
+
 
 function renderAssignedDropdown() {
   assignedDropdown.innerHTML = '';

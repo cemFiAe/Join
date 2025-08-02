@@ -9,19 +9,39 @@ let currentDisplayedContactId = null;
  */
 async function onloadFunction() { 
     let contactResponse = await loadData("/contacts");
-    let contactsArray = Object.keys(contactResponse);
-    
-    for (let index = 0; index < contactsArray.length; index++) {
-        contacts.push(
-            {
+    let userResponse = await loadData("/users");
+
+    contacts = [];
+
+    // Lade alle Kontakte
+    if (contactResponse) {
+        let contactsArray = Object.keys(contactResponse);
+        for (let index = 0; index < contactsArray.length; index++) {
+            contacts.push({
                 id: contactsArray[index],
                 data: contactResponse[contactsArray[index]],
-            }
-        )
+            });
+        }
     }
-    
+
+    // Lade alle User (die NICHT schon als Kontakt existieren!)
+    if (userResponse) {
+        let userArray = Object.keys(userResponse);
+        for (let index = 0; index < userArray.length; index++) {
+            // User nur hinzufügen, wenn die ID nicht schon als Kontakt existiert
+            if (!contacts.find(c => c.id === userArray[index])) {
+                contacts.push({
+                    id: userArray[index],
+                    data: userResponse[userArray[index]],
+                });
+            }
+        }
+    }
+
     renderAllContacts();
 }
+
+
 
 // initial Function to create the first contact
 
@@ -102,7 +122,7 @@ function getContactTemplateByData(data, id) {
           ${icon}
           <div>
             <h4 class="contact_name">${data.name}</h4>
-            <span class="contact_mail">${data.mail}</span>
+            <span class="contact_mail">${data.mail || data.email || ""}</span>
           </div>
         </div>`;
 }
@@ -366,10 +386,11 @@ function getContactDetailsTemplate(id, data, initials, bgColor) {
     </div>
     <span class="ci-head">Contact Information</span>
     <h3 class="ci-text">Email</h3>
-    <span class="ci-mail ci-text">${data.mail}</span>
+    <span class="ci-mail ci-text">${data.mail || data.email || "–"}</span>
     <h3 class="ci-text">Phone</h3>
-    <span class="ci-text">${data.phone}</span>`;
+    <span class="ci-text">${data.phone || "–"}</span>`;
 }
+
 
 /**
  * this function is used to update the contact array's data
