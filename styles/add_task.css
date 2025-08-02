@@ -154,6 +154,10 @@ a {
   .btn .icon.default { display: inline; }
   .btn.active .icon.white { display: inline; }
 
+  .rotate {
+    rotate: 180deg;
+  }
+
   #subtask-list {
     list-style: disc inside;
     margin-top: 8px;
