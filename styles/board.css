@@ -72,10 +72,6 @@
 .addtask-btn-mobile {
     display: none;
 }
-@media (max-width: 900px) {
-    .addtask-btn-mobile { display: flex; }
-    .addtask-btn { display: none; }
-}
 
 .addtask-btn:hover, .addtask-btn-mobile:hover {
     background-color: #29ABE2;

@@ -74,12 +74,15 @@ a {
   .description_input textarea {
     height: 136px;
     resize: none;       /* verhindert Größenänderung per Drag */
+    background-image: url(../assets/icons/board/corner.svg);
+    background-repeat: no-repeat;
+    background-position: bottom 4px right 4px;
   }
   .date_input .input-icon-date {
     position: relative;
   }
   .date_input .input-icon-date input {
-    padding-right: 40px;  /* Platz für Icon */
+    padding-right: 10px;  /* Platz für Icon */
   }
   .date_input .input-icon-date .icon {
     position: absolute;
@@ -117,7 +120,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    transition: background 0.075s, color 0.075s, border-color 0.075s;
   }
   .btn:hover { filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.1)); cursor: pointer; }
 
@@ -146,6 +149,10 @@ a {
   .priority-buttons .btn[data-priority="medium"].active .icon.white { display: inline; }
   .priority-buttons .btn[data-priority="low"].active .icon.default { display: none; }
   .priority-buttons .btn[data-priority="low"].active .icon.white { display: inline; }
+
+  .rotate {
+    transform: rotate(180deg);
+  }
 
   /* Wenn nicht aktiv: Nur das Default-Icon */
   .btn .icon.default { display: inline; }
@@ -219,7 +226,7 @@ a {
     color: #111827 !important;
     box-shadow: none !important;
     padding: 10px 16px !important;
-    transition: border-color .2s;
+    transition: border-color 0.075s;
 }
 
 .choices__inner:focus,
@@ -260,7 +267,7 @@ a {
     opacity: 0.7;
     font-size: 18px;
     margin-left: 5px;
-    transition: opacity 0.2s;
+    transition: opacity 0.075s;
 }
 
 .choices[data-type*=select-one] .choices__inner {
@@ -296,9 +303,9 @@ a {
     opacity: 1;
 }
   .input-icon-subtask { position: relative; }
-  .input-icon-subtask input { padding-right: 40px; height: 48px;}
-  .input-icon-subtask .add-subtask { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
-  .input-icon-subtask .add-subtask img { width: 20px; height: 20px; }
+  .input-icon-subtask input { padding-right: 10px; height: 48px;}
+  .input-icon-subtask .add-subtask { position: absolute; padding-inline: 0; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
+  .input-icon-subtask .add-subtask img { width: 20px; height: 20px; object-fit: cover;}
 
 .clear_button{
   height: 56px;
@@ -416,7 +423,7 @@ a {
   padding: 2px;
   margin: 0 2px;
   opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: opacity 0.075s;
 }
 
 .subtask-edit-btn:hover,
@@ -443,7 +450,7 @@ select[multiple] {
     color: #23272f;
     box-shadow: none;
     padding: 10px 16px;
-    transition: border-color .2s;
+    transition: border-color .075s;
     display: flex;
     align-items: center;
 }

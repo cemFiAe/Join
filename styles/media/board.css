@@ -9,17 +9,26 @@
 }
 
 @media (max-width: 1050px) {
-    .find-add-div {
+    .find-add-div input {
         display: none;
-    }
-    .addtask-btn-mobile {
-        display: flex !important;
     }
     .findtaskMobile {
         display: flex !important;
     }
     .board-nav-bottom {
         margin-top: 26px;
+    }
+}
+
+@media (max-width: 750px) {
+    .addtask-btn-mobile {
+        display: flex !important;
+    }
+    .addtask-btn {
+        display: none;
+    }
+    .find-add-div {
+        display: none;
     }
 }
 

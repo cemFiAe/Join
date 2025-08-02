@@ -11,7 +11,6 @@
   <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
   <link rel="stylesheet" type="text/css" href="../style.css" />
   <link rel="stylesheet" type="text/css" href="../styles/overlays/board_overlays.css" />
-  <link rel="stylesheet" type="text/css" href="../styles/media/add_task.css" />
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
@@ -78,9 +77,11 @@
   <section class="board-nav">
     <div class="board-nav-top">
       <h1 class="board-header">Board</h1>
-      <button onclick="openAddTaskDialog()" class="addtask-btn-mobile" title="Add Task (Mobile)">
-        <img class="plus" src="../assets/icons/board/add.svg" alt="">
-      </button>
+      <a href="./add_task.html">
+        <button class="addtask-btn-mobile" title="Add Task (Mobile)">
+         <img class="plus" src="../assets/icons/board/add.svg" alt="">
+        </button>
+      </a>
       <div class="find-add-div">
         <input id="taskSearch" class="findtask" type="text" placeholder="Find Task">
         <button onclick="openAddTaskDialog('todo')" class="addtask-btn" title="Add Task">
@@ -180,7 +181,7 @@
         <label for="description">Description</label>
         <textarea id="description" placeholder="Enter a description"></textarea>
 
-        <label for="due">Due date<span class="required">*</span></label>
+        <label for="task-due-date">Due date<span class="required">*</span></label>
         <div class="input-icon">
           <input type="date" id="task-due-date" required>
         </div>
@@ -215,7 +216,7 @@
 
         <label>Subtasks</label>
         <div class="input-icon-subtask">
-          <input type="text" placeholder="Add new subtask" autocomplete="off">
+          <input class="subtask-input" type="text" placeholder="Add new subtask" autocomplete="off">
           <button type="button" class="add-subtask">
             <img src="../assets/icons/add_task/subtask_icon.png" alt="Add">
           </button>
@@ -225,12 +226,16 @@
     </div>
 
     <div class="add_task_button">
-      <img class="req-img" src="../assets/icons/board/required_field.png" alt="">
-      <div>
-        <button type="button" class="clear_button">Cancel x</button>
-        <button type="button" class="create_task_btn">Create Task ✔</button>
+        <div class="req-img-container">
+          <img class="req-img" src="../assets/icons/add_task/required_field.png" alt="">
+        </div>
+        <div class="create-btn-container">
+          <button class="clear_button" id="clearTaskButton" type="button">Clear x</button>
+          <button type="button" class="create_task_btn">
+            Create Task <img src="../assets/icons/add_task/check.png" alt="">
+          </button>
+        </div>
       </div>
-    </div>
   </form>
 </div>
   </dialog>

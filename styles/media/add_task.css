@@ -8,6 +8,7 @@
   .add_task_button {
     flex-direction: column;
     justify-content: flex-start;
+    align-items: flex-start;
     gap: 8px;
     margin-top: 30px;
   } 
@@ -38,7 +39,7 @@
   .content {
     width: 100%;
     transform: scale(1.0);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
   .add_task_button {
     margin-top: 8px;
@@ -74,5 +75,15 @@
     transform: scale(0.8);
     transform-origin: left;
   }
+  .create-btn-container {
+    left: 16px;
+  }
+}
 
+@media (max-width: 342px) {
+  .create-btn-container {
+    transform: scale(0.95);
+    transform-origin: left;
+    left: 10px;
+  }
 }
