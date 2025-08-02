@@ -93,9 +93,12 @@
   outline: none !important;
 }
 .add_task_dialog_overlay textarea {
-  min-height: 70px;
+  min-height: 140px;
   max-height: 140px;
   resize: none;
+  background-image: url(../../assets/icons/board/corner.svg);
+  background-repeat: no-repeat;
+  background-position: bottom 4px right 4px;
 }
 #editDueDate{
   width: 100%;
@@ -395,6 +398,15 @@
   }
 }
 
+@media (max-width: 400px) {
+  #taskDetailBody {
+    padding: 16px 0px 16px 0px !important;
+  }
+  .add-subtask-btn {
+    right: 10px;
+  }
+}
+
 /* ===================== */
 /* Task Detail Dialog */
 /* ===================== */
@@ -424,14 +436,17 @@
 }
 .close-task-detail {
   position: absolute;
-  top: 18px;
+  height: 32px;
+  width: 32px;
+  top: 40px;
   right: 24px;
-  font-size: 2rem;
+  padding: 0 0 4px 0;
+  font-size: 24px;
+  text-align: center;
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: 8px;
-  padding: 3px 7px;
+  border-radius: 50%;
 }
 .close-task-detail:hover {
   background: #F4F4F4;

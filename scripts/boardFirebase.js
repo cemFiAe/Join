@@ -185,8 +185,8 @@ function openTaskDetail(task) {
           }
         </div>
         <div class="task-detail-actions">
-          <button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png"> Löschen</button>
-          <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png"> Bearbeiten</button>
+          <button id="deleteTaskBtn" class="delete-btn"><img src="../assets/icons/board/delete.png"> Delete</button>
+          <button id="editTaskBtn" class="edit-btn"><img src="../assets/icons/board/edit.png"> Edit</button>
         </div>
       `;
       body.querySelectorAll('.subtask-checkbox').forEach(cb => {

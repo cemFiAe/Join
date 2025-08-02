@@ -74,6 +74,9 @@ a {
   .description_input textarea {
     height: 136px;
     resize: none;       /* verhindert Größenänderung per Drag */
+    background-image: url(../assets/icons/board/corner.svg);
+    background-repeat: no-repeat;
+    background-position: bottom 4px right 4px;
   }
   .date_input .input-icon-date {
     position: relative;
