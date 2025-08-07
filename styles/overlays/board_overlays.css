@@ -550,6 +550,11 @@
 .delete-btn:hover { color: rgb(255, 0, 0); background: #F8F6F7; }
 .edit-btn:hover   { color: #29ABE2; background: #F5F7FA; }
 
+  .form-group, .assigned-to-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
   .form-group label {
     font-size: 20px;
@@ -805,12 +810,40 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  color: #fff;
   font-size: 14px;
+  color: #fff;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.profile-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #29ABE2;
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    margin-left: -10px;
+    border: 2px solid #fff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: box-shadow 0.75s;
+    z-index: 1;
+    position: relative;
+}
+.profile-badge:first-child { margin-left: 0; z-index: 1; }
+.profile-badge:nth-child(2) { z-index: 2; }
+.profile-badge:nth-child(3) { z-index: 3; }
+.profile-badge:nth-child(4) { z-index: 4; }
+.profile-badge:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.567);
+    transition: box-shadow 0.75s;
 }
 
 @keyframes slideInRight {
