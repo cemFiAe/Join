@@ -560,3 +560,16 @@ select[multiple] {
 }
 
 
+#assignedAvatarsBox .profile-badge {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  margin-right: 4px;
+  font-size: 1rem;
+  background: #888;
+}

@@ -36,9 +36,14 @@ firebase.database().ref("users").once("value").then(snap => {
   firebase.database().ref("contacts").once("value").then(csnap => {
     contacts = csnap.val() || {};
     window.allContacts = contacts;
+    // === WICHTIG: Jetzt erst das Dropdown initialisieren! ===
+    if (typeof initAssignedDropdown === "function") {
+      initAssignedDropdown();
+    }
     loadAllTasks();
   });
 });
+
 
 function loadAllTasks() {
   firebase.database().ref("tasks").on("value", s => {

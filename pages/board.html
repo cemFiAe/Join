@@ -204,10 +204,16 @@
           </button>
         </div>
 
-        <label for="assigned">Assigned to</label>
-        <select id="assigned" class="option" multiple></select>
-        <div id="assignedDropdown" class="choices__list choices__list--dropdown"></div>
-        <div class="assigned-badges" id="assignedBadges"></div>
+          <div class="form-group">
+            <label for="assigned">Assigned to</label>
+            <div class="assigned-to-wrapper">
+              <div id="assignedSelectBox" class="assigned-select-box">
+                <span>Select contacts to assign</span><img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
+              </div>
+              <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
+              <div id="assignedBadges" class="assigned-badges"></div>
+            </div>
+          </div>
 
         <label for="category">Category<span class="required">*</span></label>
         <select id="category" class="option">
@@ -293,21 +299,16 @@
         </div>
       </div>
 
-<!-- Assigned to -->
-<div class="form-section">
-  <label>Assigned to</label>
-  <div class="assigned-to-wrapper">
-    <!-- Trigger-Box -->
-    <div id="assignedSelectBox" class="assigned-select-box">
-      <span>Select contacts to assign</span>
-      <button type="button" class="assigned-toggle-btn">▾</button>
-    </div>
-    <!-- Dropdown-Liste -->
-    <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
-    <!-- Ausgewählte Badges -->
-    <div id="assignedBadges" class="assigned-badges"></div>
-  </div>
-</div>
+          <div class="form-group">
+            <label for="assigned">Assigned to</label>
+            <div class="assigned-to-wrapper">
+              <div id="assignedSelectBox" class="assigned-select-box">
+                <span>Select contacts to assign</span><img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
+              </div>
+              <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
+              <div id="assignedBadges" class="assigned-badges"></div>
+            </div>
+          </div>
 
 
       <!-- Category (readonly) -->

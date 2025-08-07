@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // <<< BOARD-TOAST-FUNKTION >>>  
+  // <<< BOARD-TOAST-FUNKTION >>>
   function showBoardToast() {
     const toast = document.getElementById('taskToast');
     if (!toast) return;
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showBoardToast();
     localStorage.removeItem('showBoardToast');
   }
-  
+
   // --- Add Task Overlay ---
   window.openAddTaskDialog = function(status = "todo") {
     clearAddTaskForm();
@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Close overlay via X or Cancel
   const dialog = document.getElementById('addTaskOverlay');
   document.querySelector('.close-add-task-overlay').onclick =
-  document.querySelector('.clear_button').onclick = function() {
-    dialog.close();
-    clearAddTaskForm();
-  };
+    document.querySelector('.clear_button').onclick = function() {
+      dialog.close();
+      clearAddTaskForm();
+    };
 
   // Reset all form fields
   function clearAddTaskForm() {
@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('task-due-date').value = '';
     document.getElementById('category').selectedIndex = 0;
 
-    // reset Assigned Choices.js tags
-    if (window.assignedChoices) {
-      window.assignedChoices.removeActiveItems();
-    }
+    // Assigned User Reset
+    Object.values(assignedUsers).forEach(user => user.selected = false);
+    renderAssignedDropdown();
+    renderAssignedBadges();
 
     // reset priority buttons
     document.querySelectorAll('.priority-buttons .btn').forEach(btn =>
@@ -99,15 +99,153 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // --- Categories (wie Add Task) ---
+  const categories = ["Technical Task", "User Story", "Bug", "Research"];
+  const catSelect  = document.getElementById('category');
+  catSelect.innerHTML = '<option value="">Select task category</option>';
+  categories.forEach(c => {
+    const o = document.createElement('option');
+    o.value       = c;
+    o.textContent = c;
+    catSelect.appendChild(o);
+  });
+
+  // --- Custom Warning ---
+  window.showCustomWarning = msg => {
+    const modal = document.getElementById('custom-warning-modal');
+    modal.querySelector('#custom-warning-content').innerText = msg;
+    modal.classList.replace('modal-hidden', 'modal-visible');
+    setTimeout(() => {
+      modal.classList.replace('modal-visible', 'modal-hidden');
+    }, 2500);
+  };
+
+  // --- Assigned User Dropdown wie Add Task (custom) ---
+  const assignedDropdown = document.getElementById('assignedDropdown');
+  const assignedBadges = document.getElementById('assignedBadges');
+  const assignedSelectBox = document.getElementById('assignedSelectBox');
+  let assignedUsers = {}; // userId → { name, initials, selected }
+  let currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
+
+  function getInitials(name) {
+    return name.split(" ").slice(0, 2).map(n => n[0]?.toUpperCase()).join('');
+  }
+
+  // Lade Users + Contacts
+  Promise.all([
+    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
+    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
+  ]).then(([users, contacts]) => {
+    if (users) {
+      Object.entries(users).forEach(([id, data]) => {
+        assignedUsers[id] = {
+          name: data.name || data.email || id,
+          email: data.email,
+          initials: getInitials(data.name || data.email || id),
+          selected: false
+        };
+      });
+    }
+    if (contacts) {
+      Object.entries(contacts).forEach(([id, data]) => {
+        if (!assignedUsers[id]) {
+          assignedUsers[id] = {
+            name: data.name || id,
+            email: '',
+            initials: getInitials(data.name || id),
+            selected: false
+          };
+        }
+      });
+    }
+    renderAssignedDropdown();
+    renderAssignedBadges();
+  });
+
+  function generateColorFromString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+  }
+
+  function renderAssignedDropdown() {
+    if (!assignedDropdown) return;
+    assignedDropdown.innerHTML = '';
+    Object.entries(assignedUsers).forEach(([id, user]) => {
+      const option = document.createElement('div');
+      option.className = 'custom-option';
+      option.dataset.userId = id;
+
+      const avatar = document.createElement('div');
+      avatar.className = 'custom-option-avatar';
+      avatar.style.backgroundColor = generateColorFromString(user.name);
+      avatar.textContent = user.initials;
+
+      const label = document.createElement('div');
+      label.className = 'custom-option-label';
+      label.textContent = user.name + (
+        user.email && user.email.trim().toLowerCase() === currentUserEmail
+          ? ' (You)'
+          : ''
+      );
+
+      const checkbox = document.createElement('div');
+      checkbox.className = 'custom-option-checkbox';
+      if (user.selected) checkbox.classList.add('checked');
+
+      option.appendChild(avatar);
+      option.appendChild(label);
+      option.appendChild(checkbox);
+      assignedDropdown.appendChild(option);
+
+      option.addEventListener('click', () => {
+        assignedUsers[id].selected = !assignedUsers[id].selected;
+        renderAssignedDropdown();
+        renderAssignedBadges();
+      });
+    });
+  }
+
+  function renderAssignedBadges() {
+    if (!assignedBadges) return;
+    assignedBadges.innerHTML = '';
+    Object.entries(assignedUsers).forEach(([id, user]) => {
+      if (user.selected) {
+        const badge = document.createElement('div');
+        badge.className = 'avatar-badge';
+        badge.textContent = user.initials;
+        badge.style.backgroundColor = generateColorFromString(user.name);
+        assignedBadges.appendChild(badge);
+      }
+    });
+  }
+
+  // Dropdown öffnen/schließen
+  if (assignedSelectBox && assignedDropdown) {
+    assignedSelectBox.addEventListener('click', () => {
+      assignedDropdown.classList.toggle('hidden');
+    });
+  }
+  // Klick außerhalb schließt Dropdown
+  document.addEventListener('click', (e) => {
+    const wrapper = document.querySelector('.assigned-to-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      if (assignedDropdown) assignedDropdown.classList.add('hidden');
+    }
+  });
+
   // --- Save Task ---
   document.querySelector('.create_task_btn').addEventListener('click', () => {
     const title       = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
     const dueDate     = document.getElementById('task-due-date').value.trim();
     const category    = document.getElementById('category').value;
-    const assignedTo  = Array.from(
-      document.getElementById('assigned').selectedOptions
-    ).map(opt => opt.value);
+
+    // NEU: Assigned User aus Custom-Dropdown
+    const assignedTo = Object.entries(assignedUsers)
+      .filter(([_, u]) => u.selected)
+      .map(([id]) => id);
 
     const activeBtn = document.querySelector('.priority-buttons .btn.active');
     const priority  = activeBtn ? activeBtn.dataset.priority : null;
@@ -147,95 +285,10 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(() => {
         dialog.close();
         clearAddTaskForm();
+        // Optional: Toast anzeigen
+        showBoardToast();
       })
       .catch(err => showCustomWarning("Fehler: " + err.message));
   });
 
-  // --- Load Categories ---
-  const categories = ["Technical Task", "User Story", "Bug", "Research"];
-  const catSelect  = document.getElementById('category');
-  catSelect.innerHTML = '<option value="">Select task category</option>';
-  categories.forEach(c => {
-    const o = document.createElement('option');
-    o.value       = c;
-    o.textContent = c;
-    catSelect.appendChild(o);
-  });
-
-  // --- Init Assigned Dropdown with Choices.js ---
-  initAssignedDropdown();
-
-  // --- Custom Warning ---
-  window.showCustomWarning = msg => {
-    const modal = document.getElementById('custom-warning-modal');
-    modal.querySelector('#custom-warning-content').innerText = msg;
-    modal.classList.replace('modal-hidden', 'modal-visible');
-    setTimeout(() => {
-      modal.classList.replace('modal-visible', 'modal-hidden');
-    }, 2500);
-  };
 });
-
-/**
- * Initialisiert das Assigned‑Dropdown mit Choices.js
- * und zeigt die Profil‑Badges. 
- * Nutzer/Contacts werden aus den globalen Variablen (users, contacts) genutzt,
- * die von boardFirebase.js bereitgestellt werden.
- */
-function initAssignedDropdown() {
-  const select = document.getElementById('assigned');
-  if (!select || typeof Choices === 'undefined') return;
-
-  select.innerHTML = '';
-
-  if (window.allUsers) {
-    const groupUsers = document.createElement('optgroup');
-    groupUsers.label = 'Registered Users';
-    Object.entries(window.allUsers).forEach(([id, u]) => {
-      const opt = document.createElement('option');
-      opt.value = id;
-      opt.textContent = u.name || u.email || id;
-      groupUsers.appendChild(opt);
-    });
-    select.appendChild(groupUsers);
-  }
-  if (window.allContacts) {
-    const groupContacts = document.createElement('optgroup');
-    groupContacts.label = 'Contacts';
-    Object.entries(window.allContacts).forEach(([id, c]) => {
-      const opt = document.createElement('option');
-      opt.value = id;
-      opt.textContent = c.name;
-      groupContacts.appendChild(opt);
-    });
-    select.appendChild(groupContacts);
-  }
-
-  if (window.assignedChoices) window.assignedChoices.destroy();
-
-  window.assignedChoices = new Choices(select, {
-    removeItemButton: true,
-    searchEnabled: true,
-    shouldSort: false,
-    placeholderValue: 'Select contacts to assign',
-    callbackOnCreateTemplates: function(template) {
-      return {
-        item: (classNames, data) => template(`
-          <div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : ''}"
-               data-item data-id="${data.id}" data-value="${data.value}"
-               ${data.active ? 'aria-selected="true"' : ''}
-               ${data.disabled ? 'aria-disabled="true"' : ''}>
-            ${getProfileBadge(data.value)}
-          </div>
-        `),
-        choice: (classNames, data) => template(`
-          <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}"
-               data-select-text="${this.config.itemSelectText}"
-               data-choice data-id="${data.id}" data-value="${data.value}">
-            ${getProfileBadge(data.value)}
-          </div>
-        `)
-      };
-    }
-  });  
-}
