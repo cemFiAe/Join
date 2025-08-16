@@ -199,11 +199,16 @@ document.addEventListener('DOMContentLoaded', function() {
       option.appendChild(checkbox);
       assignedDropdown.appendChild(option);
 
-      option.addEventListener('click', () => {
-        assignedUsers[id].selected = !assignedUsers[id].selected;
-        renderAssignedDropdown();
-        renderAssignedBadges();
-      });
+// Schließt NICHT – bleibt offen
+option.addEventListener('pointerdown', (ev) => {
+  ev.preventDefault();            // verhindert Fokuswechsel
+  ev.stopPropagation();           // blockt Outside-Handler
+  assignedUsers[id].selected = !assignedUsers[id].selected;
+  renderAssignedDropdown();       // UI aktualisieren
+  renderAssignedBadges();         // Badges aktualisieren
+  // WICHTIG: NICHT schließen
+});
+
     });
   }
 

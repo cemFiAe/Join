@@ -243,6 +243,7 @@ function openTaskDetail(task) {
           editPrio = this.dataset.priority;
         }
       });
+      
       // Assigned
       const assignedSelect = body.querySelector('#editAssignedTo');
       assignedSelect.innerHTML = '';
