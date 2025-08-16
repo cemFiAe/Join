@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contactsAddRemove.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contactsAddRemove.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Fügt einen neuen Kontakt zu Firebase und lokal hinzu
+ * @param {event} event - verhindert das automatische Neuladen des Formulars
+ */
+async function addNewContact(event) {
+    event.preventDefault();
+    const newContactData = getFormData();
+    if (!validateContactData(newContactData)) return;
+
+    const newId = await saveContactToFirebase(newContactData);
+    addContactLocally(newId, newContactData);
+    document.getElementById('add-contact-form').reset();
+    closeAddContactMobile();
+    rerenderContactList();
+    showSuccessOverlay();
+    focusOnNewContact(newId);
+
+    if (window.innerWidth &lt;= 650) {
+        openContactOverview();
+    }
+}
+
+/**
+ * Holt die Daten aus den Input-Feldern des Kontaktformulars
+ */
+function getFormData() {
+    return {
+        name: document.getElementById('add-name-input').value.trim(),
+        mail: document.getElementById('add-mail-input').value.trim(),
+        phone: document.getElementById('add-phone-input').value.trim()
+    };
+}
+
+/**
+ * Prüft, ob alle Felder ausgefüllt wurden
+ */
+function validateContactData({ name, mail, phone }) {
+    if (!name || !mail || !phone) {
+        alert("Bitte alle Felder ausfüllen.");
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Speichert den neuen Kontakt in Firebase
+ */
+async function saveContactToFirebase(data) {
+    const response = await postData("/contacts", data);
+    return response.name; // Die neue ID von Firebase
+}
+
+/**
+ * Fügt Kontakt lokal in das contacts-Array ein
+ */
+function addContactLocally(id, data) {
+    contacts.push({ id, data });
+}
+
+/**
+ * Hebt neu erstellten Kontakt hervor
+ */
+function focusOnNewContact(id) {
+    requestAnimationFrame(() => {
+        const target = document.getElementById(`contact-${id}`);
+        if (target) {
+            highlightAndScrollTo(target);
+            showDetails(id);
+        }
+    });
+}
+
+/**
+ * Scrollt zu einem Kontakt und hebt ihn hervor
+ */
+function highlightAndScrollTo(element, removeOnly = false) {
+    const container = document.getElementById('contacts');
+    if (!container || !element) return;
+
+    document.querySelectorAll('.contact_entry.highlight-contact').forEach(el => el.classList.remove('highlight-contact'));
+
+    if (removeOnly) return;
+
+    const elementTop = element.offsetTop;
+    container.scrollTo({
+        top: elementTop - container.offsetHeight / 2 + element.offsetHeight / 2,
+        behavior: 'smooth'
+    });
+
+    element.classList.add('highlight-contact');
+}
+
+/**
+ * Löscht einen Kontakt, entfernt ihn aus allen Aufgaben und der Datenbank
+ * @param {string} id - die ID des Kontakts
+ */
+async function deleteContact(id) {
+    // 1. Tasks laden
+    let tasksResponse = await fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
+    let tasks = await tasksResponse.json();
+    let updates = {};
+
+// tasks: das geladene Task-Objekt (aus der Firebase-DB)
+for (let taskId in tasks) {
+    let t = tasks[taskId];
+    if (Array.isArray(t.assignedTo)) {
+        if (t.assignedTo.includes(id)) {
+            const newAssigned = t.assignedTo.filter(uid => uid !== id);
+            await fetch(`https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/assignedTo.json`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newAssigned)
+            });
+        }
+    } else if (typeof t.assignedTo === "string" &amp;&amp; t.assignedTo === id) {
+        await fetch(`https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/assignedTo.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([])
+        });
+    }
+}
+
+    // 2. Kontakt aus contacts löschen
+    await deleteContactFromFirebase(id);
+    removeContactFromLocalArray(id);
+    document.getElementById('contact_information').innerHTML = '';
+    rerenderContactList();
+
+    if (window.loadAllTasks) window.loadAllTasks();
+}
+
+
+
+
+/**
+ * Löscht einen Kontakt aus der Firebase-Datenbank
+ */
+async function deleteContactFromFirebase(id) {
+    try {
+        const url = `https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts/${id}.json`;
+        const response = await fetch(url, { method: "DELETE" });
+        if (!response.ok) {
+            throw new Error("Fehler beim Löschen aus Firebase: " + response.status);
+        }
+    } catch (err) {
+        console.error("DELETE Kontakt-Fehler:", err);
+        throw err;
+    }
+}
+
+/**
+ * Entfernt Kontakt lokal aus dem Array
+ */
+function removeContactFromLocalArray(id) {
+    contacts = contacts.filter(contact => contact.id !== id);
+}
+
+/**
+ * Spezielles Löschen für Mobilgeräte (&lt; 650px)
+ */
+function deleteMobileContact() {
+    event.preventDefault();
+    if (currentDisplayedContactId) {
+        deleteContact(currentDisplayedContactId);
+    }
+    goBack();
+    closeContactOptions();
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#closeAddContact">closeAddContact</a></li><li><a href="global.html#closeAddContactMobile">closeAddContactMobile</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeEditContact">closeEditContact</a></li><li><a href="global.html#closeEditMobileContact">closeEditMobileContact</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openAddContact">openAddContact</a></li><li><a href="global.html#openAddContactMobile">openAddContactMobile</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openEditContact">openEditContact</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showEditOverlay">showEditOverlay</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateContactData">validateContactData</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Aug 16 2025 15:13:23 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

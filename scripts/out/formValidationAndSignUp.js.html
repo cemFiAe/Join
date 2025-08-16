@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: formValidationAndSignUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: formValidationAndSignUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+let isValid = true;
+ /**
+  * @returns {boolean} If returns are valid, user will be able to successfully sign up.
+  * If not, signing up wont be possible.
+  * In each state, different styles to form parts are applied.
+  * Return statement has the same role in each and every form part.
+  */
+function nameValidation() {
+    let valid = nameInput.value !== "";
+    nameDiv.style.padding = valid ? "0px 0px 25px" : "0px 0px 10px";
+    nameInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    nameAlert.style.display = valid ? 'none' : 'block';
+    return valid
+}
+nameInput.addEventListener('input', nameValidation)
+
+
+function emailValidation() {
+    let valid = isEmailValid(emailInput.value);
+    emailInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    emailAlert.style.display = valid ? 'none' : 'block';
+    return valid
+}
+
+
+function passwordValidation() {
+    let password = passwordInput.value.trim();
+    let valid = isPasswordValid(password)
+    passwordDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    passwordAlert.style.display = valid ? 'none' : 'block';
+    return valid
+}
+
+
+function confirmPasswordValidation() {
+    let password = passwordInput.value.trim();
+    let confirmPassword = confirmInput.value.trim();
+
+    let valid = confirmPassword !== "" &amp;&amp; confirmPassword === password;
+    confirmDiv.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
+    confirmAlert.style.display = valid ? 'none' : 'block';
+    return valid
+}
+
+
+function privacyPolicyValidation() {
+    let valid = !checkboxUnchecked;
+    policyAlert.style.display = valid ? 'none' : 'block';
+    return valid;
+}
+
+
+let checkboxUnchecked = true;
+
+function checkboxClick() {
+    checkboxUnchecked = !checkboxUnchecked;
+    checkbox.src = checkboxUnchecked ? "./assets/icons/sign_up/checkbox_unchecked.svg" : "./assets/icons/sign_up/checkbox_checked.svg";
+    policyAlert.style.display = checkboxUnchecked ? 'block' : 'none'
+}
+checkbox.addEventListener('click', checkboxClick);
+
+
+/**
+ * @param {event} event This event means automatic submiting. 
+ * In this case event is disabled, because before user submits(sing up), each and every form part must be validated.
+ * @param {boolean} isValid Only after every validation is true, signUpUser function is called, and user successfully signs up. 
+ * Otherwise, if just one validation is false, user can't sign up.
+ */
+function submitSignUpForm(event) {
+    event.preventDefault();
+    let isValid = true;
+    if (!nameValidation()) isValid = false;
+    if (!emailValidation()) isValid = false;
+    if (!passwordValidation()) isValid = false;
+    if (!confirmPasswordValidation()) isValid = false;
+    if (!privacyPolicyValidation()) isValid = false;
+    if (isValid) {
+        let userData = {
+            name: nameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value.trim(),
+        };
+        signUpUser(userData);
+    } else { console.log("Validation failed!") }
+}
+
+
+/**
+ * This function is used to send user datas to a server, and to inform user of successfully signing up.
+ * @param {string} userData User enters his data, which will be stored on server.
+ */
+async function signUpUser(userData) {
+    const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
+    try {
+        let response = await fetch(`${BASE_URL}users.json`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        showOverlay()
+    } catch (error) {
+        console.error("Failed to save user:", error.message);
+    }
+}
+
+/**
+ * After 1 second user is forwarded to main page, where he can log in as a registered user.
+ */
+function showOverlay() {
+    document.getElementById('signed-up-screen').style.display = "block";
+    setTimeout(() => {
+        document.getElementById('signed-up-screen').style.display = "none";
+        sessionStorage.setItem('cameFromSignUp', 'true');
+        window.location.href = "./index.html";
+    }, 1000);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#closeAddContact">closeAddContact</a></li><li><a href="global.html#closeAddContactMobile">closeAddContactMobile</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeEditContact">closeEditContact</a></li><li><a href="global.html#closeEditMobileContact">closeEditMobileContact</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openAddContact">openAddContact</a></li><li><a href="global.html#openAddContactMobile">openAddContactMobile</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openEditContact">openEditContact</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showEditOverlay">showEditOverlay</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateContactData">validateContactData</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Aug 16 2025 15:13:23 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

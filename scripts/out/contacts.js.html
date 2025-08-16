@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contacts.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contacts.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// bg overlay close
+let currentOpenOverlay = null;
+
+document.getElementById('bg_overlay').addEventListener('click', function () {
+    switch (currentOpenOverlay) {
+        case 'add-desktop':
+            closeAddContact();
+            break;
+        case 'add-mobile':
+            closeAddContactMobile();
+            break;
+        case 'edit-desktop':
+            closeEditContact();
+            break;
+        case 'edit-mobile':
+            closeEditMobileContact();
+            break;
+    }
+
+    currentOpenOverlay = null;
+});
+
+/**
+ * this function is used to open the add contact overlay
+ */
+function openAddContact() {
+    currentOpenOverlay = 'add-desktop';
+    document.getElementById('add_contact_overlay').style.left = "5%";
+    document.getElementById('add_contact_overlay').style.top = "20%";
+    document.getElementById('bg_overlay').style.display = "flex";
+}
+
+/**
+ * this function is used to close the add contact overlay
+ */
+function closeAddContact() {
+    document.getElementById('add_contact_overlay').style.left = "105%";
+    document.getElementById('bg_overlay').style.display = "none";
+}
+
+/**
+ * this function is used to open the add contact mobile overlay
+ */
+function openAddContactMobile() {
+    currentOpenOverlay = 'add-mobile';
+    document.getElementById('add_contact_btn').style.display = "none";
+    document.getElementById('burger_contact_btn').style.display = "none";
+    document.getElementById('add_contact_overlay').style.top = "6.5%","!important";
+    document.getElementById('bg_overlay').style.display = "flex";
+}
+
+/**
+ * this function is used to close the add contact mobile overlay
+ */
+function closeAddContactMobile() {
+    document.getElementById('add_contact_overlay').style.top = "106.5%";
+    document.getElementById('bg_overlay').style.display = "none";
+    document.getElementById('add_contact_btn').style.display = "flex";
+    document.getElementById('burger_contact_btn').style.display = "flex";
+}
+
+document.getElementById('add_contact_overlay').addEventListener('click', function (event) {
+    event.stopPropagation();
+});
+
+/**
+ * this function is used to open the edit contact overlay
+ */
+function closeEditContact() {
+    document.getElementById('edit_contact_overlay').style.left = "105%";
+    document.getElementById('bg_overlay').style.display = "none";
+    document.getElementById('burger_contact_btn').style.zIndex = "99";
+}
+
+/**
+ * this function is used to close the edit contact mobile overlay
+ */
+function closeEditMobileContact() {
+    document.getElementById('edit_contact_overlay').style.top = "106.5%", "!important";
+    document.getElementById('bg_overlay').style.display = "none";
+    document.getElementById('burger_contact_btn').style.display = "flex";
+    document.getElementById('burger_contact_btn').style.zIndex = "99";
+}
+
+document.getElementById('edit_contact_overlay').addEventListener('click', function (event) {
+    event.stopPropagation();
+});
+
+/**
+ * this function is used to open contact details, showing them next to the contact column.
+ * this is intended for display sizes of 650px and higher.
+ */
+function openContactOverview() {
+    document.getElementById('contacts').style.display = "none";
+    document.getElementById('contact-overview').style.display = "flex";
+    document.getElementById('contact_information').style.left = "16px";
+    document.getElementById('co-devider-mobile').style.display = "flex"
+    document.getElementById('add_contact_btn').style.display = "none";
+    document.getElementById('burger_contact_btn').style.display = "flex";
+    document.getElementById('back_contact_btn').style.display = "flex";
+}
+
+/**
+ * this function is used to open a small burgermenu 
+ */
+function openContactOptions() {
+    document.getElementById('contact-options').style.left = 'calc(100% - 132px)';
+    setTimeout(() => {
+        document.addEventListener("click", outsideClickListener);
+    }, 0); 
+}
+
+/**
+ * this function is used to close a small burgermenu
+ */
+function closeContactOptions() {
+    document.getElementById('contact-options').style.left = '120%';
+    document.removeEventListener("click", outsideClickListener);
+}
+
+function outsideClickListener(event) {
+    const contact = document.getElementById('contact-options');
+    if (!contact.contains(event.target)) {
+        closeContactOptions();
+    }
+}
+
+/**
+ * this function is used to close the contact detail screen and return to the contact column 
+ */
+function goBack() {
+    resetContactOverview();
+    document.querySelectorAll('.contact_entry.highlight-contact')
+        .forEach(el => el.classList.remove('highlight-contact'));
+    document.getElementById('contact_information').innerHTML = '';
+    currentDisplayedContactId = null;
+}
+
+/**
+ * this function is used to switch the content that is being shown on the contact page.
+ * the function hides the contact details and rerenders the contact list.
+ */
+function resetContactOverview() {
+    document.getElementById('contacts').style.display = "flex";
+    document.getElementById('contact-overview').style.display = "none";
+    document.getElementById('contact_information').style.left = "750px";
+    document.getElementById('add_contact_btn').style.display = "flex";
+    document.getElementById('burger_contact_btn').style.display = "none";
+    document.getElementById('back_contact_btn').style.display = "none";
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#closeAddContact">closeAddContact</a></li><li><a href="global.html#closeAddContactMobile">closeAddContactMobile</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeEditContact">closeEditContact</a></li><li><a href="global.html#closeEditMobileContact">closeEditMobileContact</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openAddContact">openAddContact</a></li><li><a href="global.html#openAddContactMobile">openAddContactMobile</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openEditContact">openEditContact</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showEditOverlay">showEditOverlay</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateContactData">validateContactData</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Aug 16 2025 15:13:23 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
