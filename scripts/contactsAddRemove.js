@@ -1,11 +1,10 @@
 /**
- * Fügt einen neuen Kontakt zu Firebase und lokal hinzu
- * @param {event} event - verhindert das automatische Neuladen des Formulars
+ * this function is used to add a contact to firebase / locally
+ * @param {event} event - is necessary to prevent the refresh of the page on submit
  */
 async function addNewContact(event) {
     event.preventDefault();
     const newContactData = getFormData();
-    if (!validateContactData(newContactData)) return;
 
     const newId = await saveContactToFirebase(newContactData);
     addContactLocally(newId, newContactData);
@@ -21,7 +20,7 @@ async function addNewContact(event) {
 }
 
 /**
- * Holt die Daten aus den Input-Feldern des Kontaktformulars
+ * this function is used to gather the information from the input fields of the overlay form
  */
 function getFormData() {
     return {
@@ -31,16 +30,68 @@ function getFormData() {
     };
 }
 
-/**
- * Prüft, ob alle Felder ausgefüllt wurden
- */
-function validateContactData({ name, mail, phone }) {
-    if (!name || !mail || !phone) {
-        alert("Bitte alle Felder ausfüllen.");
-        return false;
-    }
-    return true;
+function setupValidation() {
+    const nameInput = document.getElementById("add-name-input");
+    const mailInput = document.getElementById("add-mail-input");
+    const phoneInput = document.getElementById("add-phone-input");
+
+    // Regex Regeln
+    const nameRegex = /^[A-Za-zÄÖÜäöüß\s]+$/;
+    const mailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const phoneRegex = /^\+?[0-9\s]{7,}$/;
+
+    // --- Name ---
+    nameInput.addEventListener("input", function () {
+        this.value = this.value.replace(/[^A-Za-zÄÖÜäöüß\s]/g, ""); // blockiert falsche Zeichen
+        const errorDiv = document.getElementById("error-name");
+        if (!this.value.trim()) {
+            errorDiv.textContent = "Bitte einen Namen eingeben.";
+        } else if (!nameRegex.test(this.value)) {
+            errorDiv.textContent = "Nur Buchstaben und Leerzeichen erlaubt.";
+        } else {
+            errorDiv.textContent = "";
+        }
+    });
+
+    // --- Mail ---
+    mailInput.addEventListener("input", function () {
+        const errorDiv = document.getElementById("error-mail");
+        if (!this.value.trim()) {
+            errorDiv.textContent = "Bitte eine E-Mail-Adresse eingeben.";
+        } else if (!mailRegex.test(this.value)) {
+            errorDiv.textContent = "Bitte ein gültiges Format verwenden (z. B. name@mail.de).";
+        } else {
+            errorDiv.textContent = "";
+        }
+    });
+
+    // --- Phone ---
+    phoneInput.addEventListener("input", function () {
+        this.value = this.value.replace(/(?!^\+)[^\d\s]/g, ""); // nur + am Anfang, sonst Ziffern + Leerzeichen
+        const errorDiv = document.getElementById("error-phone");
+        if (!this.value.trim()) {
+            errorDiv.textContent = "Bitte eine Telefonnummer eingeben.";
+        } else if (!phoneRegex.test(this.value)) {
+            errorDiv.textContent = "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang.";
+        } else {
+            errorDiv.textContent = "";
+        }
+    });
+
+    // --- Validierung beim Submit ---
+    document.getElementById("add-contact-form").addEventListener("submit", function (event) {
+        if (
+            !nameRegex.test(nameInput.value.trim()) ||
+            !mailRegex.test(mailInput.value.trim()) ||
+            !phoneRegex.test(phoneInput.value.trim())
+        ) {
+            event.preventDefault();
+        }
+    });
 }
+
+// Call setupValidation on page load
+document.addEventListener("DOMContentLoaded", setupValidation);
 
 /**
  * Speichert den neuen Kontakt in Firebase

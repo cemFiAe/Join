@@ -3,6 +3,7 @@
     flex-direction: row;
     justify-content: flex-start;
     width: 90%;
+    max-width: 1500px;
     height: 60%;
     position: absolute;
     padding: 0;
@@ -355,4 +356,19 @@
 
 .highlight-contact h4 {
     color: white !important;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
+}
+
+.error-message {
+    display: flex;
+    justify-content: flex-start !important;
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    margin-left: 8px;
 }

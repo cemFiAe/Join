@@ -38,9 +38,18 @@
     </div>
     <div class="right">
       <form id="add-contact-form" onsubmit="addNewContact(event)">
-        <input required id="add-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
-        <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
-        <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
+        <div class="form-group">
+         <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
+         <div id="error-name" class="error-message"></div>
+        </div>
+        <div class="form-group">
+         <input required id="add-mail-input" class="mail-input" type="text" placeholder="E-Mail">
+         <div id="error-mail" class="error-message"></div>
+        </div>
+        <div class="form-group">
+         <input required id="add-phone-input" class="phone-input" type="text" placeholder="Telefonnummer">
+         <div id="error-phone" class="error-message"></div>
+        </div>
         <div>
           <button type="button" onclick="event.stopPropagation(), closeAddContact()" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="event.stopPropagation(), closeAddContactMobile()" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
