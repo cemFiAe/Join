@@ -1,10 +1,18 @@
 @media (max-width: 650px) {
 
+    header {
+        padding: 40px 60px 0px;
+    }
+
+    /* section {
+        height: 560px;
+    } */
+
     .header-logo {
         position: absolute;
         left: 20px;
-        top: 15px;
-        scale: 0.64;
+        top: 0px;
+        scale: 0.5;
     }
 
     .mobile-header {

@@ -1,29 +1,43 @@
 @media (max-width: 650px) {
 
+    section {
+        height: 560px;
+    }
+
     .sign-up-window {
-        height: 595px;
+        height: 512px;
         width: 396px;
         justify-content: start;
-        margin-top: 180px;
+        margin-top: 72px;
     }
 
     .sign-up-window>h1 {
-        font-size: 48px;
+        font-size: 40px;
         margin-right: 52px;
-        margin-top: 32px;
-        max-width: 232px;
+        max-width: 200px;
+    }
+
+    .sign-up-form {
+        padding-top: 12px;
+        height: auto;
     }
 
     .sign-up-buttons {
-        margin-top: 32px;
+        /* margin-top: 32px; */
+        display: flex;
+        height: 90px;
     }
 
     .mobile-sign-up-button {
         width: 180px;
     }
 
-      footer {
-        top: 880px;
+    .checkbox-and-alert {
+        gap: 2px;
+    }
+
+    footer {
+        top: 628px;
     }
 }
 
