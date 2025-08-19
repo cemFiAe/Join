@@ -8,7 +8,7 @@ header {
 }
 
 section {
-    height: 640px;
+    height: calc(100vh - 400px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,7 +128,7 @@ section {
 
 footer {
     position: fixed;
-    top: 960px;
+    top: calc(100vh - 10%);
     left: 0;
     right: 0;
     display: flex;

@@ -1,7 +1,7 @@
 @media (max-width: 650px) {
 
     section {
-        height: 560px;
+        height: calc(100vh - 108px);
     }
 
     .sign-up-window {
@@ -37,7 +37,7 @@
     }
 
     footer {
-        top: 628px;
+        top: calc(100vh - 5%)
     }
 }
 

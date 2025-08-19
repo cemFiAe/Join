@@ -4,13 +4,9 @@
         padding: 40px 60px 0px;
     }
 
-    /* section {
-        height: 560px;
-    } */
-
     .header-logo {
         position: absolute;
-        left: 20px;
+        left: 0px;
         top: 0px;
         scale: 0.5;
     }

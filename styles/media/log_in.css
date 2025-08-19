@@ -16,7 +16,7 @@
     }
 
     section {
-        height: 510px;
+        height: calc(100vh - 160px);
     }
 
     .sign-up-shortcut {
@@ -81,7 +81,7 @@
     }
 
     footer {
-        top: 628px;
+        top: calc(100vh - 5%)
     }
 
 
