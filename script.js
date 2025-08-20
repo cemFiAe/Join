@@ -8,11 +8,7 @@ let menuOpen = false;
  * this function is used to open the mobile burger menu
  */
 function openMenu() {
-  const screenWidth = window.innerWidth;
-  const menuWidth = mobileNav.offsetWidth;
-  const leftValue = screenWidth - menuWidth - 16;
-
-  mobileNav.style.left = `${leftValue}px`;
+  mobileNav.style.transform = "translateX(0)";
   menuOpen = true;
   document.addEventListener("click", handleClickOutside);
 }
@@ -21,7 +17,7 @@ function openMenu() {
  * this function is used to close the mobile burger menu
  */
 function closeMenu() {
-  mobileNav.style.left = "100%";
+  mobileNav.style.transform = "translateX(120%)";
   menuOpen = false;
   document.removeEventListener("click", handleClickOutside);
 }

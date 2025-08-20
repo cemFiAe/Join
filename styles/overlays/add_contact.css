@@ -250,7 +250,7 @@
     align-items: center;
     position: absolute;
     z-index: 99;
-    left: calc(100% - 100px);
+    right: 26px;
     top: 85%;
     width: 56px;
     height: 56px;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * this function is used to add a contact to firebase / locally
  * @param {event} event - is necessary to prevent the refresh of the page on submit
@@ -35,14 +36,12 @@ function setupValidation() {
     const mailInput = document.getElementById("add-mail-input");
     const phoneInput = document.getElementById("add-phone-input");
 
-    // Regex Regeln
     const nameRegex = /^[A-Za-zÄÖÜäöüß\s]+$/;
     const mailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     const phoneRegex = /^\+?[0-9\s]{7,}$/;
 
-    // --- Name ---
     nameInput.addEventListener("input", function () {
-        this.value = this.value.replace(/[^A-Za-zÄÖÜäöüß\s]/g, ""); // blockiert falsche Zeichen
+        this.value = this.value.replace(/[^A-Za-zÄÖÜäöüß\s]/g, ""); 
         const errorDiv = document.getElementById("error-name");
         if (!this.value.trim()) {
             errorDiv.textContent = "Bitte einen Namen eingeben.";
@@ -53,7 +52,6 @@ function setupValidation() {
         }
     });
 
-    // --- Mail ---
     mailInput.addEventListener("input", function () {
         const errorDiv = document.getElementById("error-mail");
         if (!this.value.trim()) {
@@ -67,7 +65,7 @@ function setupValidation() {
 
     // --- Phone ---
     phoneInput.addEventListener("input", function () {
-        this.value = this.value.replace(/(?!^\+)[^\d\s]/g, ""); // nur + am Anfang, sonst Ziffern + Leerzeichen
+        this.value = this.value.replace(/(?!^\+)[^\d\s]/g, ""); 
         const errorDiv = document.getElementById("error-phone");
         if (!this.value.trim()) {
             errorDiv.textContent = "Bitte eine Telefonnummer eingeben.";
