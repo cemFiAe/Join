@@ -9,6 +9,7 @@ let menuOpen = false;
  */
 function openMenu() {
   mobileNav.style.transform = "translateX(0)";
+  mobileNav.style.marginRight = "16px";
   menuOpen = true;
   document.addEventListener("click", handleClickOutside);
 }
@@ -17,7 +18,8 @@ function openMenu() {
  * this function is used to close the mobile burger menu
  */
 function closeMenu() {
-  mobileNav.style.transform = "translateX(120%)";
+  mobileNav.style.transform = "translateX(100%)";
+  mobileNav.style.marginRight = "0";
   menuOpen = false;
   document.removeEventListener("click", handleClickOutside);
 }
