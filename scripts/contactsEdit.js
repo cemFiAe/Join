@@ -90,7 +90,7 @@ function editOverlayDesktop () {
  */
 function editOverlayMobile () {
     document.getElementById('edit_contact_overlay').style.left = "5%";
-    document.getElementById('edit_contact_overlay').style.top = "6.5%", "!important";
+    document.getElementById('edit_contact_overlay').style.top = "80px", "!important";
 }
 
 /**

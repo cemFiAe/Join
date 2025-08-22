@@ -45,7 +45,7 @@ function openAddContactMobile() {
     currentOpenOverlay = 'add-mobile';
     document.getElementById('add_contact_btn').style.display = "none";
     document.getElementById('burger_contact_btn').style.display = "none";
-    document.getElementById('add_contact_overlay').style.top = "6.5%","!important";
+    document.getElementById('add_contact_overlay').style.top = "80px","!important";
     document.getElementById('bg_overlay').style.display = "flex";
 }
 
@@ -64,7 +64,7 @@ document.getElementById('add_contact_overlay').addEventListener('click', functio
 });
 
 /**
- * this function is used to open the edit contact overlay
+ * this function is used to close the edit contact overlay
  */
 function closeEditContact() {
     document.getElementById('edit_contact_overlay').style.left = "105%";

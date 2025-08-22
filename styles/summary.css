@@ -2,7 +2,7 @@
     width: 56px; height: 56px; background: #e5e7eb; border-radius: 559px; display: flex; align-items: center; justify-content: center; color: #4b5563; font-size: 0.875rem; 
 }
 .content_wrapper{
-    display: flex; flex-direction: column; gap: 30px; padding-left: 328px; padding-top: 110px;
+    display: flex; flex-direction: column; gap: 30px; padding-left: 328px; padding-top: 110px; height: calc(100vh - 96px);
 }
 .title { 
     display: flex; justify-content: center; align-items: center; height: 73px;
