@@ -138,13 +138,11 @@
     .add_contact_overlay {
         flex-direction: column !important;
         align-items: center;
-        left: 5% !important;
-        top: 106.5%;
+        transform: translate(-50%, -50%) translateX(0) translateY(200%) !important;
     }
     .edit_contact_overlay {
         flex-direction: column !important;
-        left: 5% !important;
-        top: 106.5%;
+        transform: translate(-50%, -50%) translateX(0) translateY(200%) !important;
     }
     .overlay-logo {
         display: none;

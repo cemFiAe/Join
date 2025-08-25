@@ -25,8 +25,7 @@ document.getElementById('bg_overlay').addEventListener('click', function () {
  */
 function openAddContact() {
     currentOpenOverlay = 'add-desktop';
-    document.getElementById('add_contact_overlay').style.left = "5%";
-    document.getElementById('add_contact_overlay').style.top = "20%";
+    document.getElementById('add_contact_overlay').style.transform = "translate(-50%, -50%) translateX(0)";
     document.getElementById('bg_overlay').style.display = "flex";
 }
 
@@ -34,7 +33,7 @@ function openAddContact() {
  * this function is used to close the add contact overlay
  */
 function closeAddContact() {
-    document.getElementById('add_contact_overlay').style.left = "105%";
+    document.getElementById('add_contact_overlay').style.transform = "translate(-50%, -50%) translateX(200%)";
     document.getElementById('bg_overlay').style.display = "none";
 }
 
@@ -45,7 +44,7 @@ function openAddContactMobile() {
     currentOpenOverlay = 'add-mobile';
     document.getElementById('add_contact_btn').style.display = "none";
     document.getElementById('burger_contact_btn').style.display = "none";
-    document.getElementById('add_contact_overlay').style.top = "80px","!important";
+    document.getElementById('add_contact_overlay').style.setProperty("transform", "translate(-50%, -50%) translateX(0) translateY(0)", "important");
     document.getElementById('bg_overlay').style.display = "flex";
 }
 
@@ -53,7 +52,7 @@ function openAddContactMobile() {
  * this function is used to close the add contact mobile overlay
  */
 function closeAddContactMobile() {
-    document.getElementById('add_contact_overlay').style.top = "106.5%";
+    document.getElementById('add_contact_overlay').style.transform = "translate(-50%, -50%) translateY(200%)", "!important"
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('add_contact_btn').style.display = "flex";
     document.getElementById('burger_contact_btn').style.display = "flex";
@@ -67,7 +66,7 @@ document.getElementById('add_contact_overlay').addEventListener('click', functio
  * this function is used to close the edit contact overlay
  */
 function closeEditContact() {
-    document.getElementById('edit_contact_overlay').style.left = "105%";
+    document.getElementById('edit_contact_overlay').style.transform = "translate(-50%, -50%) translateX(200%)";
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('burger_contact_btn').style.zIndex = "99";
 }
@@ -76,7 +75,7 @@ function closeEditContact() {
  * this function is used to close the edit contact mobile overlay
  */
 function closeEditMobileContact() {
-    document.getElementById('edit_contact_overlay').style.top = "106.5%", "!important";
+    document.getElementById('edit_contact_overlay').style.transform = "translate(-50%, -50%) translateY(200%)", "!important"
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('burger_contact_btn').style.display = "flex";
     document.getElementById('burger_contact_btn').style.zIndex = "99";
