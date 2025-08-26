@@ -170,7 +170,7 @@ body {
 
 .contact_information {
     position: fixed;
-    top: 311px;
+    top: 280px;
     left: 100%;
     transition: left ease-in 0.3s;
     display: flex;

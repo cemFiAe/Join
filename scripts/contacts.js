@@ -91,9 +91,15 @@ document.getElementById('edit_contact_overlay').addEventListener('click', functi
  */
 function openContactOverview() {
     document.getElementById('contacts').style.display = "none";
-    document.getElementById('contact-overview').style.display = "flex";
+
+    if (window.innerHeight >= 650) {
+        document.getElementById('contact-overview').style.display = "flex";
+    } else {
+        document.getElementById('contact-overview').style.display = "none";
+    }
+
     document.getElementById('contact_information').style.left = "16px";
-    document.getElementById('co-devider-mobile').style.display = "flex"
+    document.getElementById('co-devider-mobile').style.display = "flex";
     document.getElementById('add_contact_btn').style.display = "none";
     document.getElementById('burger_contact_btn').style.display = "flex";
     document.getElementById('back_contact_btn').style.display = "flex";

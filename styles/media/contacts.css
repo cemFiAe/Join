@@ -1,50 +1,47 @@
-@media (max-height: 950px) {
-    .span , .blue-line {
-        display: none;
-    }
-    .left {
-        justify-content: flex-start !important;
-        padding-top: 16px;
-        height: 180px !important;
-    }   
-}
-
-@media (max-height: 800px) {
-     .left {
-        height: 140px !important;
-     }
-}
-
 @media (max-height: 750px) {
     .add_contact_btn, .burger_contact_btn {
         top: 75% !important;
     }
+    .left {
+        justify-content: flex-start !important;
+        padding-top: 60px;
+        height: 260px !important;
+    }
+}
+
+@media (max-height: 650px) {
     .circle {
         height: 96px !important;
         width: 96px !important;
     }
-}
-
-@media (max-height: 700px) {
-    .contact_overview {
-        display: none !important;
+    .left {
+        padding-top: 20px;
+        height: 200px !important;
+    }
+    .right {
+        transform: scale(0.8);
+        transform-origin: center;
+        padding-top: 60px !important;
     }
     .contact_information {
-        top: 120px;
+        top: 124px;
     }
-    .mid {
-        display: none !important;
-    }
-    .left {
-        height: 64px !important;
-    }
-}
-
-@media (max-height: 550px) {
     .add_contact_btn, .burger_contact_btn {
         top: 70% !important;
     }
 }
+
+@media (max-height: 530px) {
+    .right {
+        transform: scale(0.75);
+        height: 288px;
+    }
+    .add_contact_btn, .burger_contact_btn {
+        top: 65% !important;
+    }
+}
+
+/* ================================= */
 
 @media (max-width: 650px) {
 .contacts {
@@ -119,7 +116,7 @@
 
 /* overlay */
 
-@media (min-width: 650px) {
+@media (min-width: 651px) {
     .add_contact_btn {
         display: none !important;
     }
@@ -131,6 +128,9 @@
     }
     .cancel-btn {
         display: flex !important;
+    }
+    .left {
+        height: 100%;
     }
 }
 
@@ -149,10 +149,11 @@
     }
     .left {
         height: 352px;
-        width: auto !important;
+        width: 100% !important;
         padding-inline: 24px;
         border-top-right-radius: 30px;
         border-top-left-radius: 30px;
+        border-bottom-left-radius: 0px !important;
     }
     .side-title {
     font-size: 47px;
@@ -164,7 +165,9 @@
         height: 0px;
     }
     .circle {
-        position: relative;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
     .right {
         flex: 1;
@@ -188,7 +191,7 @@
 
 @media (max-width: 650px) {
     .add_contact_overlay, .edit_contact_overlay {
-        height: calc(100vh - 160px) !important;
+        height: calc(100vh) !important;
     }
     .left {
         padding-inline: 16px !important;
@@ -198,6 +201,9 @@
         bottom: 300px !important;
         left: 50% !important;
         transform: translateX(-50%);
+    }
+    .right {
+        padding-top: 80px;
     }
 }
 
@@ -231,5 +237,8 @@
     }
     .contact_name, .contact_mail {
         font-size: 18px;
+    }
+    .blue-line {
+        width: 70px !important;
     }
 }
