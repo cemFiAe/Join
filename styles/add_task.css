@@ -195,6 +195,14 @@ a {
     height: 20px;
   }
 
+  .option {
+    font-size: 1rem;
+    background-image: url(../assets/icons/add_task/arrow_drop_down.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: 7.21px 4.6px !important;
+    background-position: right 16px center !important;
+  }
+
   .form-group select,
 #assigned, #category {
   max-width: 100%;
@@ -574,6 +582,10 @@ select[multiple] {
   background-color: white;
   justify-content: space-between;
   align-items: center;
+  background-image: url(../assets/icons/add_task/arrow_drop_down.png) !important;
+  background-repeat: no-repeat !important;
+  background-size: 7.21px 4.6px !important;
+  background-position: right 16px center !important;
 }
 
 .imgDropdown {

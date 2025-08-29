@@ -30,7 +30,7 @@
 
 .log-in-window>h1 {
     font-size: 61px;
-    margin-block: 16px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: center;
     align-items: center;

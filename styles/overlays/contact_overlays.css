@@ -1,15 +1,19 @@
-.add_contact_overlay, .edit_contact_overlay {
+.add_contact_overlay, 
+.edit_contact_overlay {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
     width: 90%;
+    max-width: 1500px;
     height: 60%;
-    position: absolute;
+    position: fixed;
     padding: 0;
     margin: 0;
-    left: 105%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translateX(200%);
     z-index: 999;
-    background-color: #2A3647;
     border-radius: 30px;
     border-style: solid;
     border-color: #424B59;
@@ -89,10 +93,18 @@
 
 .mid {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     background-color: white;
-    padding-inline: 83px;
+    padding-left: 83px;
+    padding-right: 60px;
+    border: none;
+}
+
+.edit_initials_circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .circle {
@@ -106,6 +118,7 @@
     border-color: white;
     background-color: #D9D9D9;
     filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.1));
+    z-index: 99;
 }
 
 .person {
@@ -119,6 +132,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 32px;
+    padding-left: 23px;
     width: 100%;
     border: none;
     border-top-right-radius: 30px;
@@ -249,9 +263,9 @@
     align-items: center;
     position: absolute;
     z-index: 99;
-    left: calc(100% - 100px);
-    top: 85%;
+    right: 26px;
     width: 56px;
+    top: 80%;
     height: 56px;
     padding: 12px;
     background-color: #2A3647;
@@ -355,4 +369,19 @@
 
 .highlight-contact h4 {
     color: white !important;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
+}
+
+.error-message {
+    display: flex;
+    justify-content: flex-start !important;
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    margin-left: 8px;
 }

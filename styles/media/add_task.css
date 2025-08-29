@@ -3,7 +3,7 @@
     flex-direction: column;
   }
   .main_content {
-    padding-top: 60px;
+    padding-top: 24px;
   }
   .add_task_button {
     flex-direction: column;
@@ -31,7 +31,7 @@
 @media (max-width: 650px) {
   .main_content {
     padding-inline: 16px;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 224px);
   }
   .container {
     height: calc(100vh - 160px);
@@ -40,6 +40,7 @@
     width: 100%;
     transform: scale(1.0);
     margin-bottom: 16px;
+    gap: 30px;
   }
   .add_task_button {
     margin-top: 8px;
@@ -50,7 +51,7 @@
   .create-btn-container {
     position: absolute;
     z-index: 999;
-    bottom: 96px;
+    bottom: 80px;
     right: 16px;
     background-color: #F6F7F8;
   }
@@ -76,7 +77,11 @@
     transform-origin: left;
   }
   .create-btn-container {
-    left: 16px;
+    left: 0;
+    width: 100%;
+    padding-left: 8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 }
 

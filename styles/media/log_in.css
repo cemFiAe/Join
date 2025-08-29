@@ -15,6 +15,10 @@
         scale: 0.64;
     }
 
+    section {
+        height: calc(100vh - 160px);
+    }
+
     .sign-up-shortcut {
         display: none;
     }
@@ -24,12 +28,12 @@
     }
 
     .log-in-window {
-        height: 475px;
+        height: 400px;
         width: 396px;
     }
 
     .log-in-window>h1 {
-        font-size: 48px;
+        font-size: 40px;
     }
 
     .blue-line {
@@ -43,6 +47,11 @@
     .email-password>input {
         height: 48px;
         width: 304px;
+    }
+
+    .log-in-form {
+        height: 160px;
+        padding-top: 8px;
     }
 
     .log-in-buttons {
@@ -72,7 +81,7 @@
     }
 
     footer {
-        top: 880px;
+        top: calc(100vh - 5%)
     }
 
 
@@ -98,10 +107,6 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-    }
-
-    #main-window {
-        padding-top: 113px;
     }
 
 

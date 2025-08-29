@@ -81,16 +81,14 @@ function editOverlayLogic() {
  * this function is used to resize the edit overlay
  */
 function editOverlayDesktop () {
-    document.getElementById('edit_contact_overlay').style.left = "5%";
-    document.getElementById('edit_contact_overlay').style.top = "20%";
+    document.getElementById('edit_contact_overlay').style.transform = "translate(-50%, -50%) translateX(0)";
 }
 
 /**
  * this function is used to resize the edit overlay
  */
 function editOverlayMobile () {
-    document.getElementById('edit_contact_overlay').style.left = "5%";
-    document.getElementById('edit_contact_overlay').style.top = "6.5%", "!important";
+    document.getElementById('edit_contact_overlay').style.setProperty("transform", "translate(-50%, -50%) translateX(0) translateY(0)", "important");
 }
 
 /**

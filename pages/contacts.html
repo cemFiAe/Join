@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="../styles/media/contacts.css" />
   <link rel="stylesheet" type="text/css" href="../styles/standard.css" />
   <link rel="stylesheet" type="text/css" href="../style.css" />
-  <link rel="stylesheet" type="text/css" href="../styles/overlays/add_contact.css" />
+  <link rel="stylesheet" type="text/css" href="../styles/overlays/contact_overlays.css" />
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/fav/android-chrome-192x192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/fav/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/fav/favicon-32x32.png" />
@@ -38,9 +38,18 @@
     </div>
     <div class="right">
       <form id="add-contact-form" onsubmit="addNewContact(event)">
-        <input required id="add-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
-        <input required id="add-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
-        <input required id="add-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
+        <div class="form-group">
+         <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
+         <div id="error-name" class="error-message"></div>
+        </div>
+        <div class="form-group">
+         <input required id="add-mail-input" class="mail-input" type="text" placeholder="E-Mail">
+         <div id="error-mail" class="error-message"></div>
+        </div>
+        <div class="form-group">
+         <input required id="add-phone-input" class="phone-input" type="text" placeholder="Telefonnummer">
+         <div id="error-phone" class="error-message"></div>
+        </div>
         <div>
           <button type="button" onclick="event.stopPropagation(), closeAddContact()" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="event.stopPropagation(), closeAddContactMobile()" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
@@ -61,7 +70,7 @@
       <div class="blue-line"></div>
     </div>
     <div class="mid">
-        <div id="edit_initials_circle"></div>
+        <div class="edit_initials_circle" id="edit_initials_circle"></div>
     </div>
     <div class="right">
       <form onsubmit="editContact(event)">
@@ -130,7 +139,7 @@
 
 <nav class="mobile-header">
   <a href="#"><img class="mobile-logo" src="../assets/img/logo/logo_mobile.svg" alt=""></a>
-  <div id="mobile-user-avatar" class="user-avatar"></div>
+  <a onclick="openMenu()" id="menuToggle"><div id="mobile-user-avatar" class="user-avatar"></div></a>
 </nav>
 
 

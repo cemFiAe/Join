@@ -169,8 +169,8 @@ body {
 /* contact information */
 
 .contact_information {
-    position: absolute;
-    top: 311px;
+    position: fixed;
+    top: 280px;
     left: 100%;
     transition: left ease-in 0.3s;
     display: flex;
@@ -316,9 +316,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
-    top: 83%;
+    top: 80%;
     left: 120%;
     height: 100px;
     width: 116px;
