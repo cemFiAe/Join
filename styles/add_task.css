@@ -661,3 +661,17 @@ select[multiple] {
   align-items: center;
   justify-content: center;
 }
+
+/* "+N" Badge für Überlauf */
+.avatar-badge-more {
+  width: 32px;          /* gleiche Maße wie .avatar-badge bei dir */
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  background: #2A3647;  /* neutral/dunkel */
+}

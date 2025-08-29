@@ -111,6 +111,15 @@ function getProfileBadge(userId) {
   return `<span class="profile-badge" style="background:${color};">${initials}</span>`;
 }
 
+function renderBadgesCap(ids, cap = 4) {
+  const list = (Array.isArray(ids) ? ids : [ids]).filter(Boolean).map(String);
+  const first = list.slice(0, cap).map(getProfileBadge).join('');
+  const extra = list.length - cap;
+  const more  = extra > 0 ? `<span class="profile-badge profile-badge-more">+${extra}</span>` : '';
+  return first + more;
+}
+
+
 // =======================
 // Daten laden
 // =======================
@@ -235,13 +244,14 @@ function renderBoard(arr) {
 }
 
 /**
- * Eine Task-Karte erzeugen.
+ * Eine Task-Karte erzeugen (zeigt max. 4 Avatare, Rest als +N).
  * @param {Task} task
  * @returns {HTMLDivElement}
  */
 function createTaskCard(task) {
-  const done = Array.isArray(task.subtasks) ? task.subtasks.filter(st => st.done).length : 0;
+  const done  = Array.isArray(task.subtasks) ? task.subtasks.filter(st => st.done).length : 0;
   const total = Array.isArray(task.subtasks) ? task.subtasks.length : 0;
+
   /** @type {Record<TaskPriority, string>} */
   const prioMap = { urgent: "prio_top", medium: "prio_mid", low: "prio_low" };
   const prioIcon = prioMap[/** @type {TaskPriority} */(task.priority || "medium")] || "prio_mid";
@@ -249,19 +259,31 @@ function createTaskCard(task) {
   const cat = (task.category || '').toLowerCase();
   const categoryClass =
     "task-header" +
-    (cat.includes("bug") ? " bug-task"
-      : cat.includes("user") ? " tech-task"
-        : cat.includes("tech") ? " user-task"
-          : cat.includes("research") ? " research-task" : "");
+    (cat.includes("bug")      ? " bug-task"
+    : cat.includes("user")    ? " tech-task"
+    : cat.includes("tech")    ? " user-task"
+    : cat.includes("research")? " research-task" : "");
 
-  const assigned = (Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo]).filter(Boolean);
-  const badgeHtml = assigned.map(uid => getProfileBadge(String(uid))).join('');
+  // --- Badges: max. 4 zeigen, Rest als +N ---
+  const assignedIds = Array.isArray(task.assignedTo)
+    ? task.assignedTo.filter(Boolean)
+    : (task.assignedTo ? [task.assignedTo] : []);
+
+  const maxVisibleBadges = 4;
+  const visibleIds = assignedIds.slice(0, maxVisibleBadges);
+  const overflow = assignedIds.length - visibleIds.length;
+
+  const badgeHtml =
+    visibleIds.map(id => getProfileBadge(String(id))).join('') +
+    (overflow > 0
+      ? `<span class="profile-badge more-badge" title="+${overflow} more">+${overflow}</span>`
+      : "");
 
   const subBar = total
     ? `<div class="task-bar">
          <div class="bar-wrapper">
            <div class="progress-bar">
-             <span class="progress-bar-fill" style="width:${Math.round(done / total * 100)}%"></span>
+             <span class="progress-bar-fill" style="width:${Math.round((done / total) * 100)}%"></span>
            </div>
          </div>
          <span class="sub-task">${done}/${total} Subtasks</span>
@@ -282,13 +304,13 @@ function createTaskCard(task) {
 
   card.setAttribute("draggable", "true");
   card.dataset.taskId = task.id;
-
   card.addEventListener("dragstart", dragStartHandler);
-  card.addEventListener("dragend", dragEndHandler);
-  card.addEventListener("click", () => openTaskDetail(task));
+  card.addEventListener("dragend",   dragEndHandler);
+  card.addEventListener("click",     () => openTaskDetail(task));
 
   return card;
 }
+
 
 // =======================
 // Drag & Drop

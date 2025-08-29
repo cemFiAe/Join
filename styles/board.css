@@ -301,6 +301,15 @@
     z-index: 1;
     position: relative;
 }
+.profile-badge-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2A3647; /* neutral/dunkel */
+  color: #fff;
+  font-weight: 700;
+}
+
 .profile-badge:first-child { margin-left: 0; z-index: 1; }
 .profile-badge:nth-child(2) { z-index: 2; }
 .profile-badge:nth-child(3) { z-index: 3; }

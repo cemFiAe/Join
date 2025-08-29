@@ -1,10 +1,7 @@
 // @ts-check
-/* global firebase */
 
-// @ts-check
 /** Firebase kommt über das CDN → aus `window` ziehen (Cast auf window) */
 const firebase = /** @type {any} */ (window).firebase;
-
 
 document.addEventListener('DOMContentLoaded', function () {
   /**
@@ -157,16 +154,29 @@ document.addEventListener('DOMContentLoaded', function () {
    */
   function renderAssignedBadges() {
     if (!assignedBadges) return;
+
+    const MAX_BADGES = 4;               // bei Bedarf auf 5 ändern
     assignedBadges.innerHTML = '';
-    Object.entries(assignedUsers).forEach(([_, user]) => {
-      if (user.selected) {
-        const badge = document.createElement('div');
-        badge.className = 'avatar-badge';
-        badge.textContent = user.initials;
-        badge.style.backgroundColor = generateColorFromString(user.name);
-        assignedBadges.appendChild(badge);
-      }
+
+    const selected = Object.values(assignedUsers).filter(u => u.selected);
+
+    // die ersten MAX_BADGES als Avatare
+    selected.slice(0, MAX_BADGES).forEach(user => {
+      const badge = document.createElement('div');
+      badge.className = 'avatar-badge';
+      badge.textContent = user.initials;
+      badge.style.backgroundColor = generateColorFromString(user.name);
+      assignedBadges.appendChild(badge);
     });
+
+    // Rest als "+N"
+    const extra = selected.length - MAX_BADGES;
+    if (extra > 0) {
+      const more = document.createElement('div');
+      more.className = 'avatar-badge avatar-badge-more';
+      more.textContent = `+${extra}`;
+      assignedBadges.appendChild(more);
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -175,8 +185,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /** @type {NodeListOf<HTMLButtonElement>} */
   const priorityBtns = document.querySelectorAll('.priority-buttons .btn');
-  priorityBtns.forEach(btn => btn.classList.remove('active'));
+
+  // alles zunächst in "inaktiv" + Icon-Default
   priorityBtns.forEach(btn => {
+    btn.classList.remove('active');
     if (btn.classList.contains('btn_medium')) {
       const def = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.default'));
       const sel = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.white'));
@@ -185,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
         sel.style.display = 'none';
       }
     }
+
+    // Klick-Logik
     btn.addEventListener('click', function () {
       priorityBtns.forEach(b => {
         b.classList.remove('active');
@@ -209,6 +223,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // "Medium" standardmäßig aktiv setzen (NUR EINMAL, nicht in der Schleife)
+  {
+    const mediumBtn = /** @type {HTMLButtonElement | null} */(
+      document.querySelector('.priority-buttons .btn.btn_medium')
+    );
+    if (mediumBtn) {
+      mediumBtn.classList.add('active');
+      const def = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.default'));
+      const sel = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.white'));
+      if (def && sel) {
+        def.style.display = 'none';
+        sel.style.display = '';
+      }
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Subtasks (Erstellen, Inline-Edit, Löschen)
   // ---------------------------------------------------------------------------
@@ -231,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const subtaskClearBtn = document.querySelector('.clear-subtask-input');
   /** @type {HTMLUListElement | null} */
   const subtaskList = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
-  
+
   if (subtaskInput && subtaskAddBtn) {
     subtaskInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
@@ -355,100 +385,144 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-// ---------------------------------------------------------------------------
-// Task erstellen
-// ---------------------------------------------------------------------------
-/** Button „Create Task“ */
-const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
-if (createBtn) {
-  createBtn.addEventListener('click', function (e) {
-    e.preventDefault();
+  // === heutiges Datum als Minimum setzen (lokale Zeitzone korrekt) ===
+  const dueInput = /** @type {HTMLInputElement|null} */(document.getElementById('due'));
+  if (dueInput) {
+    const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
+    const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
+    dueInput.min = todayLocalISO;
 
-    const titleEl       = /** @type {HTMLInputElement | null} */   (document.getElementById('title'));
-    const descriptionEl = /** @type {HTMLTextAreaElement | null} */(document.getElementById('description'));
-    const dueEl         = /** @type {HTMLInputElement | null} */   (document.getElementById('due'));
-    const categoryEl    = /** @type {HTMLSelectElement | null} */  (document.getElementById('category'));
-
-    const title       = titleEl?.value.trim() ?? '';
-    const description = descriptionEl?.value.trim() ?? '';
-    const dueDate     = dueEl?.value.trim() ?? '';
-    const category    = categoryEl?.value ?? '';
-
-    const assignedTo = Object.entries(assignedUsers)
-      .filter(([, u]) => u.selected)
-      .map(([id]) => id);
-
-    /** @type {'urgent'|'medium'|'low'|null} */
-    let priority = null;
-    const activePriorityBtn = /** @type {HTMLButtonElement | null} */ (
-      document.querySelector('.priority-buttons .btn.active')
-    );
-    if (activePriorityBtn) {
-      const p = (activePriorityBtn.textContent || '').trim().split(/\s+/)[0].toLowerCase();
-      if (p === 'urgent' || p === 'medium' || p === 'low') priority = p;
-    } // <— WICHTIG: diese Klammer hat bei dir gefehlt!
-
-    if (!title || !dueDate || !category || !priority) {
-      alert("Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen!");
-      return;
-    }
-
-    const taskObj = {
-      title,
-      description,
-      dueDate,
-      priority,
-      assignedTo,
-      category,
-      subtasks: [...subtasks],
-      status: "todo",
-      createdAt: Date.now()
-    };
-
-    const newTaskKey = firebase.database().ref().child('tasks').push().key;
-    firebase.database().ref('tasks/' + newTaskKey).set({
-      ...taskObj,
-      id: newTaskKey
-    }).then(() => {
-      localStorage.setItem('showBoardToast', '1');
-      window.location.href = '../pages/board.html';
-    }).catch((error) => {
-      alert("Fehler beim Speichern: " + error.message);
+    // Guard: falls der User manuell zurücksetzt
+    dueInput.addEventListener('input', () => {
+      if (dueInput.value && dueInput.value < dueInput.min) {
+        dueInput.value = dueInput.min;
+      }
     });
-  });
-}
+  }
 
+  // ---------------------------------------------------------------------------
+  // Task erstellen
+  // ---------------------------------------------------------------------------
+  /** Button „Create Task“ */
+  const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
+  if (createBtn) {
+    createBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const titleEl       = /** @type {HTMLInputElement | null} */   (document.getElementById('title'));
+      const descriptionEl = /** @type {HTMLTextAreaElement | null} */(document.getElementById('description'));
+      const dueEl         = /** @type {HTMLInputElement | null} */   (document.getElementById('due'));
+      const categoryEl    = /** @type {HTMLSelectElement | null} */  (document.getElementById('category'));
+
+      const title       = titleEl?.value.trim() ?? '';
+      const description = descriptionEl?.value.trim() ?? '';
+      const dueDate     = dueEl?.value.trim() ?? '';
+      const category    = categoryEl?.value ?? '';
+
+      // Falls der Browser-Validator umgangen wird
+      if (dueInput && dueDate < dueInput.min) {
+        alert("Bitte ein Fälligkeitsdatum ab heute wählen.");
+        return;
+      }
+
+      const assignedTo = Object.entries(assignedUsers)
+        .filter(([, u]) => u.selected)
+        .map(([id]) => id);
+
+      /** @type {'urgent'|'medium'|'low'|null} */
+      let priority = null;
+      const activePriorityBtn = /** @type {HTMLButtonElement | null} */ (
+        document.querySelector('.priority-buttons .btn.active')
+      );
+      if (activePriorityBtn) {
+        const p = (activePriorityBtn.textContent || '').trim().split(/\s+/)[0].toLowerCase();
+        if (p === 'urgent' || p === 'medium' || p === 'low') priority = p;
+      }
+
+      if (!title || !dueDate || !category || !priority) {
+        alert("Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen!");
+        return;
+      }
+
+      const taskObj = {
+        title,
+        description,
+        dueDate,
+        priority,
+        assignedTo,
+        category,
+        subtasks: [...subtasks],
+        status: "todo",
+        createdAt: Date.now()
+      };
+
+      const newTaskKey = firebase.database().ref().child('tasks').push().key;
+      firebase.database().ref('tasks/' + newTaskKey).set({
+        ...taskObj,
+        id: newTaskKey
+      }).then(() => {
+        localStorage.setItem('showBoardToast', '1');
+        window.location.href = '../pages/board.html';
+      }).catch((error) => {
+        alert("Fehler beim Speichern: " + error.message);
+      });
+    });
+  }
 
   /** Formular zurücksetzen (Felder + Auswahl + Subtasks + Priority). */
   function clearForm() {
-    const t = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
-    const d = /** @type {HTMLTextAreaElement | null} */ (document.getElementById('description'));
+    const t  = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
+    const d  = /** @type {HTMLTextAreaElement | null} */ (document.getElementById('description'));
     const du = /** @type {HTMLInputElement | null} */ (document.getElementById('due'));
-    const c = /** @type {HTMLSelectElement | null} */ (document.getElementById('category'));
+    const c  = /** @type {HTMLSelectElement | null} */ (document.getElementById('category'));
 
-    if (t) t.value = '';
-    if (d) d.value = '';
+    if (t)  t.value = '';
+    if (d)  d.value = '';
     if (du) du.value = '';
-    if (c) c.selectedIndex = 0;
+    if (c)  c.selectedIndex = 0;
 
-    Object.values(assignedUsers).forEach(user => user.selected = false);
+    // Assigned zurücksetzen
+    Object.values(assignedUsers).forEach(u => (u.selected = false));
     renderAssignedDropdown();
     renderAssignedBadges();
 
-    priorityBtns.forEach((b) => {
+    // Dropdown sicher schließen
+    const dropdownLocal = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
+    if (dropdownLocal) dropdownLocal.classList.add('hidden');
+
+    // Priority zurücksetzen → "Medium" preselecten + Icon-Logik korrekt setzen
+    /** @type {NodeListOf<HTMLButtonElement>} */
+    const allPrioBtns = document.querySelectorAll('.priority-buttons .btn');
+    allPrioBtns.forEach((b) => {
       b.classList.remove('active');
       if (b.classList.contains('btn_medium')) {
         const def = /** @type {HTMLElement | null} */ (b.querySelector('.icon.default'));
         const sel = /** @type {HTMLElement | null} */ (b.querySelector('.icon.white'));
         if (def && sel) {
-          def.style.display = '';
+          def.style.display = '';   // default sichtbar, white verstecken
           sel.style.display = 'none';
         }
       }
     });
+    const mediumBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn.btn_medium'));
+    if (mediumBtn) {
+      mediumBtn.classList.add('active');
+      const def = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.default'));
+      const sel = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.white'));
+      if (def && sel) {
+        def.style.display = 'none'; // bei aktiv: default-Icon verstecken
+        sel.style.display = '';     // weißes Icon zeigen
+      }
+    }
 
+    // Subtasks leeren (Array + UI + Input)
     subtasks = [];
-    if (subtaskList) subtaskList.innerHTML = '';
+    const subtaskListLocal = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+    if (subtaskListLocal) subtaskListLocal.innerHTML = '';
+    const subtaskInputLocal = /** @type {HTMLInputElement | null} */ (document.querySelector('.input-icon-subtask input'));
+    if (subtaskInputLocal) subtaskInputLocal.value = '';
+    const clearX = /** @type {HTMLButtonElement | null} */ (document.querySelector('.clear-subtask-input'));
+    if (clearX) clearX.style.display = 'none';
   }
 
   // Clear-Button (links unten)
@@ -463,9 +537,8 @@ if (createBtn) {
   // ---------------------------------------------------------------------------
   // Dropdown öffnen/schließen (Assigned to)
   // ---------------------------------------------------------------------------
-
   const assignedSelectBox = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedSelectBox'));
-  const dropdown = assignedDropdown;
+  const dropdown = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
 
   if (assignedSelectBox && dropdown) {
     assignedSelectBox.addEventListener('click', () => {
