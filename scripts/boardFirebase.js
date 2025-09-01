@@ -1,21 +1,14 @@
 // @ts-check
-/* global firebase, Choices, assignedDropdown, assignedUsers, assignedBadges, currentUserEmail, generateColorFromString */
-
-// =======================
-// Typen (JSDoc)
-// =======================
-/**
- * @typedef {{title: string, done: boolean}} Subtask
- */
+/* global firebase, Choices */
 
 /**
- * @typedef {"todo"|"inprogress"|"awaitingfeedback"|"done"} TaskStatus
+ * =======================
+ * Typen (JSDoc)
+ * =======================
  */
-
-/**
- * @typedef {"urgent"|"medium"|"low"} TaskPriority
- */
-
+/** @typedef {{title: string, done: boolean}} Subtask */
+/** @typedef {"todo"|"inprogress"|"awaitingfeedback"|"done"} TaskStatus */
+/** @typedef {"urgent"|"medium"|"low"} TaskPriority */
 /**
  * @typedef {{
  *   id: string;
@@ -29,16 +22,15 @@
  *   subtasks?: Subtask[];
  * }} Task
  */
-
-/**
- * @typedef {{ name?: string; email?: string }} Person
- */
-
+/** @typedef {{ name?: string; email?: string }} Person */
 /** @typedef {Record<string, Person>} PersonMap */
 
-// =======================
-// Farbpalette & Helpers
-// =======================
+
+/**
+ * =======================
+ * Farbpalette & Helpers
+ * =======================
+ */
 /** @type {string[]} */
 const BADGE_COLORS = [
   "#FFA800", "#FF5EB3", "#6E52FF", "#9327FF", "#00BEE8",
@@ -63,6 +55,7 @@ let assignedUsers = {};
 
 /** aktuell eingeloggte Mail (für „(You)“) */
 const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
+let assignOutsideListenerInstalled = false;
 
 /** Farb-Helper wie auf der Add-Task-Seite */
 function generateColorFromString(str) {
@@ -77,29 +70,17 @@ let users = {};
 /** WICHTIG: um Kollisionen zu vermeiden, NICHT „contacts“ nennen */
 let boardContacts = /** @type {PersonMap} */ ({});
 
-/**
- * Deterministische Farbe aus einem String.
- * @param {string} str
- * @returns {string}
- */
+/** Deterministische Farbe aus einem String. */
 function getInitialsColor(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
   return BADGE_COLORS[Math.abs(hash) % BADGE_COLORS.length];
 }
 
-/**
- * Hole Person aus users/boardContacts.
- * @param {string} id
- * @returns {Person | null}
- */
+/** Hole Person aus users/boardContacts. */
 const getPersonData = (id) => users[id] || boardContacts[id] || null;
 
-/**
- * HTML für runden Avatar-Badge mit Initialen.
- * @param {string} userId
- * @returns {string}
- */
+/** HTML für runden Avatar-Badge mit Initialen. */
 function getProfileBadge(userId) {
   const user = getPersonData(userId);
   if (!user) return '';
@@ -120,15 +101,17 @@ function renderBadgesCap(ids, cap = 4) {
 }
 
 
-// =======================
-// Daten laden
-// =======================
-// users -> contacts -> tasks
+/**
+ * =======================
+ * Daten laden
+ * =======================
+ * users -> contacts -> tasks
+ */
 firebase.database().ref("users").once("value").then(snap => {
   /** @type {any} */
   const val = snap.val();
   users = val || {};
-  // für das Edit-Dropdown in openTaskDetail
+  // für den Edit-Dialog
   // @ts-ignore
   window.allUsers = users;
 
@@ -139,30 +122,29 @@ firebase.database().ref("users").once("value").then(snap => {
     // @ts-ignore
     window.allContacts = boardContacts;
 
-    // === Erst jetzt evtl. Custom-Dropdown initialisieren ===
-    if (typeof window.initAssignedDropdown === "function") {
-      // @ts-ignore
-      window.initAssignedDropdown();
-    }
+    // === Custom-Dropdown IMMER initialisieren ===
+    initAssignedDropdown();
+
     loadAllTasks();
   });
 });
 
-/** Initialisiert das „Assigned to“-Dropdown (DOM-Handles, Daten & Events). */
+/** Initialisiert das „Assigned to“-Dropdown im Board-Add-Task-Dialog. */
 function initAssignedDropdown() {
-  // DOM holen
+  // DOM aus dem Add-Task-Dialog
   assignedDropdown  = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedDropdown'));
   assignedBadges    = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedBadges'));
   assignedSelectBox = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedSelectBox'));
+  if (!assignedSelectBox || !assignedDropdown) return;
 
-  // Daten aus users/boardContacts in assignedUsers mergen
+  // --- Daten mergen (users + contacts) ---
   assignedUsers = {};
   Object.entries(users || {}).forEach(([id, u]) => {
     const name = u?.name || u?.email || id;
     assignedUsers[id] = {
       name,
       email: u?.email || '',
-      initials: name.split(' ').slice(0,2).map(n => n[0]?.toUpperCase() || '').join(''),
+      initials: name.split(' ').slice(0, 2).map(n => n[0]?.toUpperCase() || '').join(''),
       selected: false
     };
   });
@@ -172,7 +154,7 @@ function initAssignedDropdown() {
     assignedUsers[id] = {
       name,
       email: '',
-      initials: name.split(' ').slice(0,2).map(n => n[0]?.toUpperCase() || '').join(''),
+      initials: name.split(' ').slice(0, 2).map(n => n[0]?.toUpperCase() || '').join(''),
       selected: false
     };
   });
@@ -181,23 +163,88 @@ function initAssignedDropdown() {
   renderAssignedDropdown();
   renderAssignedBadges();
 
-  // Toggle öffnen/schließen
-  if (assignedSelectBox && assignedDropdown) {
-    assignedSelectBox.addEventListener('click', () => {
-      assignedDropdown.classList.toggle('hidden');
+  // Helper: Badges (un)sichtbar machen, ohne Layout zu ändern
+  const setBadgesVisible = (show) => {
+    if (!assignedBadges) return;
+    assignedBadges.style.visibility = show ? 'visible' : 'hidden';
+  };
+  setBadgesVisible(true);
+
+  // Helper: Placeholder nie überschreiben
+  const setFixedPlaceholder = () => {
+    const span = assignedSelectBox.querySelector('span');
+    if (span) span.textContent = 'Select contacts to assign';
+  };
+  setFixedPlaceholder();
+
+  // --- SelectBox öffnen/schließen (nur 1× verdrahten) ---
+  if (!assignedSelectBox.dataset.wired) {
+    assignedSelectBox.dataset.wired = '1';
+
+    const toggleOpen = (open) => {
+      if (!assignedDropdown) return;
+      const wantOpen = (open === undefined)
+        ? assignedDropdown.classList.contains('hidden')
+        : !!open;
+
+      if (wantOpen) {
+        assignedDropdown.classList.remove('hidden');
+        assignedDropdown.style.display = 'block';
+        setBadgesVisible(false);     // Badges während offen unsichtbar
+        setFixedPlaceholder();       // Placeholder fix halten
+        // Fokus/Bedienung
+        const first = /** @type {HTMLElement|null} */ (assignedDropdown.querySelector('.custom-option'));
+        first?.focus();
+      } else {
+        assignedDropdown.classList.add('hidden');
+        assignedDropdown.style.display = 'none';
+        setBadgesVisible(true);      // nach dem Schließen Badges zeigen
+        setFixedPlaceholder();       // Placeholder fix halten
+      }
+    };
+
+    // Klick auf die Box toggelt
+    assignedSelectBox.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      toggleOpen(); // toggle
     });
-  }
 
-  // Outside-Click schließt Dropdown
-  document.addEventListener('click', (e) => {
-    const wrapper = /** @type {HTMLElement|null} */ (document.querySelector('.assigned-to-wrapper'));
-    const target  = /** @type {EventTarget|null} */ (e.target);
-    if (wrapper && target instanceof Node && !wrapper.contains(target)) {
-      if (assignedDropdown) assignedDropdown.classList.add('hidden');
+    // Tastatur: Enter/Space öffnet, ESC schließt
+    assignedSelectBox.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        toggleOpen(true);
+      }
+    });
+
+    // ESC im Dropdown schließt
+    assignedDropdown.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+        toggleOpen(false);
+        assignedSelectBox.focus();
+      }
+    });
+
+    // Outside-Click schließt NUR dieses Dropdown (Listener nur 1×)
+    const self = /** @type {any} */ (initAssignedDropdown);
+    if (!self._outsideListenerInstalled) {
+      self._outsideListenerInstalled = true;
+      document.addEventListener('click', (e) => {
+        if (!assignedDropdown) return;
+        const wrapper = assignedDropdown.closest('.assigned-to-wrapper');
+        const inside = (e.target instanceof Node) && wrapper ? wrapper.contains(e.target) : false;
+        if (!inside) {
+          assignedDropdown.classList.add('hidden');
+          assignedDropdown.style.display = 'none';
+          setBadgesVisible(true);
+          setFixedPlaceholder();
+        }
+      });
     }
-  });
+  }
 }
-
 
 /** Tasks abonnieren und Board rendern. */
 function loadAllTasks() {
@@ -209,12 +256,11 @@ function loadAllTasks() {
   });
 }
 
-// =======================
-// Task-Board & Karten
-// =======================
+
 /**
- * Board spaltenweise aufbauen.
- * @param {Task[]} arr
+ * =======================
+ * Task-Board & Karten
+ * =======================
  */
 function renderBoard(arr) {
   /** @type {Record<TaskStatus, string>} */
@@ -243,11 +289,7 @@ function renderBoard(arr) {
   });
 }
 
-/**
- * Eine Task-Karte erzeugen (zeigt max. 4 Avatare, Rest als +N).
- * @param {Task} task
- * @returns {HTMLDivElement}
- */
+/** Eine Task-Karte erzeugen (zeigt max. 4 Avatare, Rest als +N). */
 function createTaskCard(task) {
   const done  = Array.isArray(task.subtasks) ? task.subtasks.filter(st => st.done).length : 0;
   const total = Array.isArray(task.subtasks) ? task.subtasks.length : 0;
@@ -312,10 +354,11 @@ function createTaskCard(task) {
 }
 
 
-// =======================
-// Drag & Drop
-// =======================
-/** @type {string | null} */
+/**
+ * =======================
+ * Drag & Drop
+ * =======================
+ */
 let draggedTaskId = null;
 
 ["toDo", "inProgress", "awaitFeedback", "done"].forEach(id => {
@@ -340,24 +383,20 @@ let draggedTaskId = null;
   el.addEventListener("dragleave", function () { this.classList.remove('drop-target'); });
 });
 
-/** @this {HTMLDivElement} */
 function dragStartHandler() {
   draggedTaskId = this.dataset.taskId || null;
   setTimeout(() => this.classList.add('dragging'), 0);
 }
-
-/** @this {HTMLDivElement} */
 function dragEndHandler() {
   draggedTaskId = null;
   this.classList.remove('dragging');
 }
 
-// =======================
-// Suche
-// =======================
+
 /**
- * Board nach Titel/Beschreibung filtern.
- * @param {string} value
+ * =======================
+ * Suche
+ * =======================
  */
 function searchTasks(value) {
   const v = value.trim().toLowerCase();
@@ -378,12 +417,11 @@ function searchTasks(value) {
   if (mobileSearch) mobileSearch.addEventListener('input', e => searchTasks((/** @type {HTMLInputElement} */(e.currentTarget)).value));
 }
 
-// =======================
-// Task-Detail & Edit Dialog
-// =======================
+
 /**
- * Öffnet den Task-Detail-Dialog und steuert View/Edit.
- * @param {Task} task
+ * =======================
+ * Task-Detail & Edit Dialog
+ * =======================
  */
 function openTaskDetail(task) {
   const dialog = /** @type {HTMLDialogElement} */(document.getElementById("taskDetailDialog"));
@@ -394,7 +432,7 @@ function openTaskDetail(task) {
   /** @type {Record<TaskPriority, string>} */
   const prioIcons = { urgent: "prio_top.svg", medium: "prio_mid.svg", low: "prio_low.svg" };
   const prioIcon  = prioIcons[/** @type {TaskPriority} */(task.priority || "medium")];
-  const prioLabel = (task.priority || "").charAt(0).toUpperCase() + (task.priority || "").slice(1);
+  const prioLabel = (task.priority || "medium").charAt(0).toUpperCase() + (task.priority || "medium").slice(1);
 
   renderDetail();
 
@@ -477,9 +515,9 @@ function openTaskDetail(task) {
           </div>
           <label>Priority</label>
           <div class="priority-buttons">
-            <button type="button" class="btn${task.priority === "urgent" ? " active" : ""}" data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt=""></button>
-            <button type="button" class="btn${task.priority === "medium" ? " active" : ""}" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt=""></button>
-            <button type="button" class="btn${task.priority === "low" ? " active" : ""}" data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt=""></button>
+            <button type="button" class="btn${(task.priority || "medium") === "urgent" ? " active" : ""}"  data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt=""></button>
+            <button type="button" class="btn${(task.priority || "medium") === "medium" ? " active" : ""}" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt=""></button>
+            <button type="button" class="btn${(task.priority || "medium") === "low" ? " active" : ""}"     data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt=""></button>
           </div>
           <label>Assigned to</label>
           <select id="editAssignedTo" multiple></select>
@@ -490,6 +528,19 @@ function openTaskDetail(task) {
             <button id="saveTaskBtn" class="create_task_btn" type="submit">Ok &#10003;</button>
           </div>
         </form>`;
+
+      // --- Datum ab heute begrenzen (Edit-Dialog)
+      {
+        const editDue = /** @type {HTMLInputElement|null} */(body.querySelector('#editDueDate'));
+        if (editDue) {
+          const tz = new Date().getTimezoneOffset() * 60000;
+          const todayLocal = new Date(Date.now() - tz).toISOString().slice(0, 10);
+          editDue.min = todayLocal;
+          editDue.addEventListener('input', () => {
+            if (editDue.value && editDue.value < editDue.min) editDue.value = editDue.min;
+          });
+        }
+      }
 
       // Priority
       /** @type {TaskPriority} */
@@ -600,11 +651,6 @@ function openTaskDetail(task) {
 }
 
 // === Subtasks editieren (Inline) ===
-/**
- * Subtask-Liste inkl. Eingabe & Hover-Actions rendern.
- * @param {HTMLDivElement} container
- * @param {Task} task
- */
 function renderSubtasksEdit(container, task) {
   container.innerHTML = '';
 
@@ -706,12 +752,7 @@ function renderSubtasksEdit(container, task) {
   subtaskInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addSubtask(); } });
 }
 
-/**
- * Inline-Edit eines Subtasks (Save mit Enter/Blur, Cancel mit Esc).
- * @param {HTMLLIElement} li
- * @param {number} idx
- * @param {Task} task
- */
+/** Inline-Edit eines Subtasks (Save mit Enter/Blur, Cancel mit Esc). */
 function editSubtaskInline(li, idx, task) {
   const span = /** @type {HTMLSpanElement} */(li.querySelector('.subtask-title'));
   const actions = /** @type {HTMLElement} */(li.querySelector('.subtask-actions'));
@@ -750,13 +791,11 @@ function editSubtaskInline(li, idx, task) {
   input.focus();
 }
 
-// =======================
-// Delete Dialog & Date Helper
-// =======================
+
 /**
- * Bestätigungsdialog: Task löschen.
- * @param {string} taskId
- * @param {HTMLDialogElement} parentDialog
+ * =======================
+ * Delete Dialog & Date Helper
+ * =======================
  */
 function showDeleteConfirmDialog(taskId, parentDialog) {
   const deleteDialog = /** @type {HTMLDialogElement} */(document.getElementById('deleteConfirmDialog'));
@@ -774,11 +813,7 @@ function showDeleteConfirmDialog(taskId, parentDialog) {
   cancelBtn.onclick = () => deleteDialog.close();
 }
 
-/**
- * Datum in MM/DD/YYYY normalisieren (nimmt yyyy-mm-dd oder bereits mm/dd/yyyy).
- * @param {string} dueDate
- * @returns {string}
- */
+/** Datum in MM/DD/YYYY normalisieren (nimmt yyyy-mm-dd oder bereits mm/dd/yyyy). */
 function formatDueDate(dueDate) {
   if (!dueDate) return '';
   /** @type {Date | null} */
@@ -798,21 +833,30 @@ function formatDueDate(dueDate) {
   return dueDate;
 }
 
-// ===================================================================
-// Die folgenden drei Funktionen nutzen Variablen aus deinem Add-Task
-// Overlay (assignedDropdown, assignedUsers, assignedBadges, ...).
-// Um Editor-Fehler zu vermeiden, sind sie oben als /* global … */ deklariert.
-// ===================================================================
 
-/** Custom-Dropdown „Assigned to“ neu rendern. */
+/**
+ * ===================================================================
+ * UI-Teile aus dem Add-Task-Overlay (Board)
+ * ===================================================================
+ */
+/** Custom-Dropdown „Assigned to“ neu rendern (fixe Liste, keine Selected-Sektion). */
 function renderAssignedDropdown() {
   const dd = assignedDropdown;
   if (!dd) return;
+
+  // Scrollposition merken, damit die Liste beim toggeln NICHT springt
+  const keepScroll = dd.scrollTop;
   dd.innerHTML = '';
 
-  Object.entries(assignedUsers).forEach(([id, user]) => {
+  // Stabile, fixe Reihenfolge (alphabetisch nach Name)
+  const entries = Object.entries(assignedUsers).sort(([, a], [, b]) =>
+    String(a.name).localeCompare(String(b.name))
+  );
+
+  entries.forEach(([id, user]) => {
     const option = document.createElement('div');
     option.className = 'custom-option';
+    option.tabIndex = 0; // keyboard focus
     option.dataset.userId = id;
 
     const avatar = document.createElement('div');
@@ -835,28 +879,93 @@ function renderAssignedDropdown() {
     option.appendChild(checkbox);
     dd.appendChild(option);
 
-    // Auswahl toggeln – Dropdown bleibt offen
-    option.addEventListener('pointerdown', (ev) => {
+    // Auswahl toggeln – Dropdown bleibt offen, Liste bleibt fix
+    const toggle = (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
       assignedUsers[id].selected = !assignedUsers[id].selected;
-      renderAssignedDropdown();
-      renderAssignedBadges();
+      renderAssignedDropdown();   // UI refresh (gleiche Reihenfolge)
+      renderAssignedBadges();     // Badges refresh (mit +N)
+      // Scrollposition wiederherstellen
+      dd.scrollTop = keepScroll;
+    };
+
+    option.addEventListener('pointerdown', toggle);
+    option.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') toggle(ev);
     });
   });
+
+  // Scrollposition zurücksetzen
+  dd.scrollTop = keepScroll;
 }
 
-/** Avatar-Badges unter dem Feld neu aufbauen. */
+/** Avatar-Badges unter dem Feld (max. 4, Rest als +N). */
 function renderAssignedBadges() {
   const container = assignedBadges;
   if (!container) return;
+
   container.innerHTML = '';
-  Object.values(assignedUsers).forEach((user) => {
-    if (!user.selected) return;
+
+  const selectedList = Object.entries(assignedUsers)
+    .filter(([, u]) => u.selected)
+    .map(([, u]) => u);
+
+  const cap = 4;
+  selectedList.slice(0, cap).forEach(user => {
     const badge = document.createElement('div');
     badge.className = 'avatar-badge';
     badge.textContent = user.initials;
     badge.style.backgroundColor = generateColorFromString(user.name);
     container.appendChild(badge);
   });
+
+  const extra = selectedList.length - cap;
+  if (extra > 0) {
+    const more = document.createElement('div');
+    more.className = 'avatar-badge avatar-badge-more';
+    more.textContent = `+${extra}`;
+    container.appendChild(more);
+  }
 }
+
+
+/**
+ * ===================================================================
+ * Board-Overlay Defaults: Medium-Prio + Datum "ab heute"
+ * ===================================================================
+ */
+(function ensureBoardAddDefaults() {
+  // Medium vorselektieren
+  const wrap = document.querySelector('#addTaskOverlay .priority-buttons');
+  if (wrap && !wrap.querySelector('.btn.active')) {
+    const mediumBtn = wrap.querySelector('[data-priority="medium"]');
+    if (mediumBtn instanceof HTMLButtonElement) {
+      mediumBtn.classList.add('active');
+    }
+  }
+
+  // Sicherstellen, dass das Dropdown auch wirklich „lebt“, sobald der Dialog aufgeht
+(function ensureAddDropdownOnOpen(){
+  const dlg = /** @type {HTMLDialogElement|null} */ (document.getElementById('addTaskOverlay'));
+  if (!dlg) return;
+
+  const rebind = () => setTimeout(() => initAssignedDropdown(), 0);
+
+  // Re-init, wenn das <dialog> geöffnet wird (open-Attribut)
+  new MutationObserver(() => { if (dlg.open) rebind(); })
+    .observe(dlg, { attributes: true, attributeFilter: ['open'] });
+})();
+
+
+  // Datum ab heute
+  const due = /** @type {HTMLInputElement|null} */(document.getElementById('task-due-date'));
+  if (due) {
+    const tz = new Date().getTimezoneOffset() * 60000;
+    const todayLocal = new Date(Date.now() - tz).toISOString().slice(0, 10);
+    due.min = todayLocal;
+    due.addEventListener('input', () => {
+      if (due.value && due.value < due.min) due.value = due.min;
+    });
+  }
+})();

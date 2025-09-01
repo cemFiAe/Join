@@ -248,27 +248,22 @@
 
 <dialog id="editTaskDialog" class="add_task_dialog_overlay">
   <div class="main_content">
-    <!-- Kopfzeile -->
     <div class="headline">
       <h1>Edit Task</h1>
       <button type="button" class="close-add-task-overlay" id="cancelEditBtn">&times;</button>
     </div>
 
-    <!-- Inhalt (vertikal) -->
     <div class="box-wrapper" style="flex-direction: column; gap: 24px; padding: 0 40px;">
-      <!-- Title -->
       <div class="form-section">
         <label for="editTitle">Title<span class="required">*</span></label>
         <input id="editTitle" type="text" placeholder="Enter a title" required>
       </div>
 
-      <!-- Description -->
       <div class="form-section">
         <label for="editDescription">Description</label>
         <textarea id="editDescription" placeholder="Enter a description"></textarea>
       </div>
 
-      <!-- Due date -->
       <div class="form-section">
         <label for="editDueDate">Due date<span class="required">*</span></label>
         <div class="input-icon-date">
@@ -277,7 +272,6 @@
         </div>
       </div>
 
-      <!-- Priority -->
       <div class="form-section">
         <label>Priority</label>
         <div class="priority-buttons">
@@ -299,7 +293,6 @@
         </div>
       </div>
 
-      <!-- Assigned to (wie Add Task, aber mit eigenen IDs) -->
       <div class="form-group">
         <label for="editAssignedSelectBox">Assigned to</label>
         <div class="assigned-to-wrapper">
@@ -312,8 +305,6 @@
         </div>
       </div>
 
-
-      <!-- Category (readonly) -->
       <div class="form-section">
         <label for="editCategory">Category<span class="required">*</span></label>
         <select id="editCategory" disabled>
@@ -321,29 +312,26 @@
         </select>
       </div>
 
-      <!-- Subtasks -->
-    <div class="form-section">
-      <div style="font-weight:600; margin-bottom: 4px;">Subtasks</div>
-      <div class="input-icon-subtask">
-        <input id="editSubtaskInput" type="text" placeholder="Add subtask" autocomplete="off">
-        <button type="button" class="add-subtask" id="addEditSubtaskBtn">
-          <span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt=""></span>
-        </button>
-        <button type="button" class="clear-subtask-input" id="clearEditSubtaskInput" tabindex="-1" aria-label="Clear subtask input" style="display:none;">&#10005;</button>
+      <div class="form-section">
+        <div style="font-weight:600; margin-bottom: 4px;">Subtasks</div>
+        <div class="input-icon-subtask">
+          <input id="editSubtaskInput" type="text" placeholder="Add subtask" autocomplete="off">
+          <button type="button" class="add-subtask" id="addEditSubtaskBtn">
+            <span class="icon"><img src="../assets/icons/add_task/subtask_icon.png" alt=""></span>
+          </button>
+          <button type="button" class="clear-subtask-input" id="clearEditSubtaskInput" tabindex="-1" aria-label="Clear subtask input" style="display:none;">&#10005;</button>
+        </div>
+        <ul id="editSubtasksList"></ul>
       </div>
-      <ul id="editSubtasksList"></ul>
-    </div>
 
-    <!-- Buttons unten -->
-    <div class="add_task_button" style="padding: 28px 40px; justify-content: flex-end;">
-      <button type="button" class="clear_button" id="cancelEditBtnBottom">Cancel x</button>
-      <button type="submit" form="editTaskForm" class="create_task_btn">Save ✓</button>
+      <div class="add_task_button" style="padding: 28px 40px; justify-content: flex-end;">
+        <button type="button" class="clear_button" id="cancelEditBtnBottom">Cancel x</button>
+        <button type="submit" form="editTaskForm" class="create_task_btn">Save ✓</button>
+      </div>
     </div>
   </div>
 </dialog>
 
-
-  
 <div id="subtask-tooltip" class="subtask-tooltip"></div>
 <div id="custom-warning-modal" class="modal-hidden" style="position:fixed;z-index:9999;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;box-shadow:0 6px 32px #0002;padding:32px 24px;font-size:18px;min-width:260px;max-width:95vw;text-align:center;display:none;">
     <div id="custom-warning-content"></div>

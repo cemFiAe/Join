@@ -1,8 +1,26 @@
 // @ts-check
 /* global firebase */
 
+// ===== Bootstrapping: sorgt dafür, dass onDomReady immer läuft =====
+(function init() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onDomReady);
+  } else {
+    onDomReady();
+  }
+})();
 
-document.addEventListener('DOMContentLoaded', function () {
+/** Wird nach DOM-Ready aufgerufen. Hier kommt dein bisheriger Code rein. */
+/** @param {Event=} _ev */
+function onDomReady(_ev) {
+  // ---- MACH DIE FUNKTION GLOBAL FÜR inline onclick="openAddTaskDialog('todo')" ----
+  // @ts-ignore
+  window.openAddTaskDialog = function (/** @type {'todo'|'inprogress'|'awaitingfeedback'|'done'} */ status = 'todo') {
+    clearAddTaskForm();
+    const dialog = /** @type {HTMLDialogElement} */(document.getElementById('addTaskOverlay'));
+    dialog.dataset.status = status;
+    dialog.showModal();
+  };
   // ──────────────────────────────────────────────────────────────────────────
   // Typen
   // ──────────────────────────────────────────────────────────────────────────
@@ -15,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
    */
 
   /**
-   * Ein Eintrag im „Assigned to“-Dropdown.
+   * Ein Eintrag im „Assigned to“-Dropdown (Add-Task auf dem Board).
    * @typedef {Object} AssignedUserEntry
    * @property {string}  name
    * @property {string}  initials
@@ -27,10 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Toast
   // ──────────────────────────────────────────────────────────────────────────
 
-  /**
-   * Zeigt den „Task created“-Toast oben rechts kurz an.
-   * @returns {void}
-   */
   function showBoardToast() {
     const toast = /** @type {HTMLDivElement | null} */ (document.getElementById('taskToast'));
     if (!toast) return;
@@ -52,21 +66,39 @@ document.addEventListener('DOMContentLoaded', function () {
   // ──────────────────────────────────────────────────────────────────────────
 
   /**
-   * Öffnet das Add-Task-Dialogfenster und setzt das Ziel-Statusfeld vor.
-   * @param {'todo'|'inprogress'|'awaitingfeedback'|'done'} [status='todo']
+   * Öffnet das Add-Task-Dialogfenster:
+   *  - setzt Ziel-Status
+   *  - setzt min-Datum = heute
+   *  - preselect „Medium“
+   *  - bindet Dropdown-Handler
    */
-  // @ts-ignore: wir hängen absichtlich an window
+  // @ts-ignore – absichtlich an window gehängt
   window.openAddTaskDialog = function (status = 'todo') {
     clearAddTaskForm();
-    const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
-    dialog.dataset.status = status;
-    dialog.showModal();
+
+    const addDlg = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
+    addDlg.dataset.status = status;
+
+    // min = heute (lokale TZ) für das Date-Input
+    const dateInput = /** @type {HTMLInputElement | null} */ (document.getElementById('task-due-date'));
+    if (dateInput) {
+      const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
+      dateInput.min = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
+    }
+
+    // "Medium" standardmäßig aktiv
+    document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+    const mediumBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn[data-priority="medium"]'));
+    if (mediumBtn) mediumBtn.classList.add('active');
+
+    addDlg.showModal();
+    bindAddAssignedDropdownHandlers(); // robustes (Re)Binding beim Öffnen
   };
 
   /** @type {HTMLDialogElement} */
   const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
 
-  // Close overlay via X or Cancel
+  // Overlay schließen (X oder „Clear“)
   const closeBtn  = /** @type {HTMLButtonElement} */ (document.querySelector('.close-add-task-overlay'));
   const cancelBtn = /** @type {HTMLButtonElement} */ (document.querySelector('.clear_button'));
   closeBtn.onclick = cancelBtn.onclick = function () {
@@ -74,24 +106,20 @@ document.addEventListener('DOMContentLoaded', function () {
     clearAddTaskForm();
   };
 
-  /**
-   * Setzt alle Felder des Overlays zurück.
-   * @returns {void}
-   */
   function clearAddTaskForm() {
-    (/** @type {HTMLInputElement} */ (document.getElementById('title'))).value = '';
-    (/** @type {HTMLTextAreaElement} */ (document.getElementById('description'))).value = '';
-    (/** @type {HTMLInputElement} */ (document.getElementById('task-due-date'))).value = '';
-    (/** @type {HTMLSelectElement} */ (document.getElementById('category'))).selectedIndex = 0;
+    (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value = '';
+    (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value = '';
+    (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value = '';
+    (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).selectedIndex = 0;
 
     // Assigned User Reset
-    Object.values(assignedUsers).forEach(u => (u.selected = false));
-    renderAssignedDropdown();
-    renderAssignedBadges();
+    Object.values(addAssignedUsers).forEach(u => (u.selected = false));
+    renderAddAssignedDropdown();
+    renderAddAssignedBadges();
+    addAssignedDropdownEl?.classList.add('hidden');
 
     // Priority zurücksetzen
-    document.querySelectorAll('.priority-buttons .btn')
-      .forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
 
     // Subtasks zurücksetzen
     const w = /** @type {any} */ (window);
@@ -117,14 +145,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const w = /** @type {any} */ (window);
   w.boardSubtasks = /** @type {Subtask[]} */ ([]);
 
-  const subtaskInput  = /** @type {HTMLInputElement} */   (document.querySelector('.input-icon-subtask input'));
-  const subtaskAddBtn = /** @type {HTMLButtonElement} */  (document.querySelector('.add-subtask'));
-  const subtaskList   = /** @type {HTMLUListElement} */   (document.getElementById('subtask-list'));
+  const subtaskInput  = /** @type {HTMLInputElement}  */ (document.querySelector('.input-icon-subtask input'));
+  const subtaskAddBtn = /** @type {HTMLButtonElement} */ (document.querySelector('.add-subtask'));
+  const subtaskList   = /** @type {HTMLUListElement}  */ (document.getElementById('subtask-list'));
 
-  /**
-   * Fügt den aktuellen Subtask aus dem Eingabefeld zur Liste hinzu.
-   * @returns {void}
-   */
   function addSubtaskToList() {
     const value = subtaskInput.value.trim();
     if (!value) return;
@@ -158,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Kategorien (wie Add Task)
+  // Kategorien
   // ──────────────────────────────────────────────────────────────────────────
   /** @type {("Technical Task"|"User Story"|"Bug"|"Research")[]} */
   const categories = ["Technical Task", "User Story", "Bug", "Research"];
@@ -172,59 +196,55 @@ document.addEventListener('DOMContentLoaded', function () {
     catSelect.appendChild(o);
   });
 
-// --- Custom Warning (kleiner Hinweis-Toast in der Mitte) ---
+  // ──────────────────────────────────────────────────────────────────────────
+  // Kleiner Hinweis-Toast (Mitte)
+  // ──────────────────────────────────────────────────────────────────────────
+  function showCustomWarning(msg) {
+    const modal = /** @type {HTMLDivElement|null} */ (document.getElementById('custom-warning-modal'));
+    if (!modal) return;
 
-/**
- * Zeigt eine kurze Warnung im Overlay an.
- * @param {string} msg
- */
-function showCustomWarning(msg) {
-  const modal = /** @type {HTMLDivElement|null} */ (document.getElementById('custom-warning-modal'));
-  if (!modal) return;
+    const content = /** @type {HTMLElement|null} */ (modal.querySelector('#custom-warning-content'));
+    if (content) content.innerText = msg;
 
-  const content = /** @type {HTMLElement|null} */ (modal.querySelector('#custom-warning-content'));
-  if (content) content.innerText = msg;
-
-  modal.classList.replace('modal-hidden', 'modal-visible');
-  setTimeout(() => {
-    modal.classList.replace('modal-visible', 'modal-hidden');
-  }, 2500);
-}
-
-/* Optional global verfügbar machen (für Aufrufe aus anderen Dateien) */
-(/** @type {any} */ (window)).showCustomWarning = showCustomWarning;
-
+    modal.classList.replace('modal-hidden', 'modal-visible');
+    setTimeout(() => {
+      modal.classList.replace('modal-visible', 'modal-hidden');
+    }, 2500);
+  }
+  (/** @type {any} */ (window)).showCustomWarning = showCustomWarning;
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Assigned-to Dropdown (custom, wie in Add Task)
+  // Assigned-to Dropdown (Add-Dialog, Kollisionen vermeiden → Prefix)
   // ──────────────────────────────────────────────────────────────────────────
-  const assignedDropdown  = /** @type {HTMLDivElement} */ (document.getElementById('assignedDropdown'));
-  const assignedBadges    = /** @type {HTMLDivElement} */ (document.getElementById('assignedBadges'));
-  const assignedSelectBox = /** @type {HTMLDivElement} */ (document.getElementById('assignedSelectBox'));
 
-  /** Map: userId → AssignedUserEntry */
-  let assignedUsers = /** @type {Record<string, AssignedUserEntry>} */ ({});
+  /** DOM */
+  const addAssignedDropdownEl  = /** @type {HTMLDivElement} */ (document.getElementById('assignedDropdown'));
+  const addAssignedBadgesEl    = /** @type {HTMLDivElement} */ (document.getElementById('assignedBadges'));
+  const addAssignedSelectBoxEl = /** @type {HTMLDivElement} */ (document.getElementById('assignedSelectBox'));
 
-  /** Für „(You)“-Markierung */
+  /** Daten */
+  let addAssignedUsers = /** @type {Record<string, AssignedUserEntry>} */ ({});
+
   const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
 
-  /**
-   * Initialen (max. 2 Zeichen) aus Name generieren.
-   * @param {string} name
-   * @returns {string}
-   */
   function getInitials(name) {
     return name.split(' ').slice(0, 2).map(n => n[0]?.toUpperCase() || '').join('');
   }
+  function generateColorFromString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 50%)`;
+  }
 
-  // Users + Contacts laden
+  // Users + Contacts laden (einmalig)
   Promise.all([
     fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
     fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
   ]).then(([users, contacts]) => {
     if (users) {
       Object.entries(users).forEach(([id, data]) => {
-        assignedUsers[id] = {
+        addAssignedUsers[id] = {
           name: data.name || data.email || id,
           email: data.email,
           initials: getInitials(data.name || data.email || id),
@@ -234,8 +254,8 @@ function showCustomWarning(msg) {
     }
     if (contacts) {
       Object.entries(contacts).forEach(([id, data]) => {
-        if (!assignedUsers[id]) {
-          assignedUsers[id] = {
+        if (!addAssignedUsers[id]) {
+          addAssignedUsers[id] = {
             name: data.name || id,
             email: '',
             initials: getInitials(data.name || id),
@@ -244,31 +264,15 @@ function showCustomWarning(msg) {
         }
       });
     }
-    renderAssignedDropdown();
-    renderAssignedBadges();
+    renderAddAssignedDropdown();
+    renderAddAssignedBadges();
   });
 
-  /**
-   * Erzeugt aus einem String eine deterministische HSL-Farbe (für Avatare).
-   * @param {string} str
-   * @returns {string} CSS-HSL
-   */
-  function generateColorFromString(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    const hue = hash % 360;
-    return `hsl(${hue}, 70%, 50%)`;
-  }
+  function renderAddAssignedDropdown() {
+    if (!addAssignedDropdownEl) return;
+    addAssignedDropdownEl.innerHTML = '';
 
-  /**
-   * Baut die Optionsliste im „Assigned to“-Dropdown neu auf.
-   * @returns {void}
-   */
-  function renderAssignedDropdown() {
-    if (!assignedDropdown) return;
-    assignedDropdown.innerHTML = '';
-
-    Object.entries(assignedUsers).forEach(([id, user]) => {
+    Object.entries(addAssignedUsers).forEach(([id, user]) => {
       const option = document.createElement('div');
       option.className = 'custom-option';
       option.dataset.userId = id;
@@ -291,64 +295,89 @@ function showCustomWarning(msg) {
       option.appendChild(avatar);
       option.appendChild(label);
       option.appendChild(checkbox);
-      assignedDropdown.appendChild(option);
+      addAssignedDropdownEl.appendChild(option);
 
-      // NICHT schließen beim Auswählen – Dropdown bleibt offen
+      // Auswahl toggeln – Dropdown bleibt offen
       option.addEventListener('pointerdown', (ev) => {
-        ev.preventDefault();          // verhindert Fokuswechsel
-        ev.stopPropagation();         // blockt Outside-Handler
-        assignedUsers[id].selected = !assignedUsers[id].selected;
-        renderAssignedDropdown();     // UI refresh
-        renderAssignedBadges();       // Badges refresh
+        ev.preventDefault();
+        ev.stopPropagation();
+        addAssignedUsers[id].selected = !addAssignedUsers[id].selected;
+        renderAddAssignedDropdown();
+        renderAddAssignedBadges();
       });
     });
   }
 
-  /**
-   * Zeigt die runden Initialen-Badges unter dem Feld an (ausgewählte User).
-   * @returns {void}
-   */
-  function renderAssignedBadges() {
-    if (!assignedBadges) return;
-    assignedBadges.innerHTML = '';
-    Object.entries(assignedUsers).forEach(([_, user]) => {
-      if (user.selected) {
-        const badge = document.createElement('div');
-        badge.className = 'avatar-badge';
-        badge.textContent = user.initials;
-        badge.style.backgroundColor = generateColorFromString(user.name);
-        assignedBadges.appendChild(badge);
-      }
-    });
-  }
+function renderAddAssignedBadges() {
+  if (!addAssignedBadgesEl) return;
+  addAssignedBadgesEl.innerHTML = '';
 
-  // Dropdown öffnen/schließen
-  if (assignedSelectBox && assignedDropdown) {
-    assignedSelectBox.addEventListener('click', () => {
-      assignedDropdown.classList.toggle('hidden');
-    });
-  }
-  // Klick außerhalb schließt Dropdown
-  document.addEventListener('click', (e) => {
-    const wrapper = /** @type {HTMLDivElement | null} */ (document.querySelector('.assigned-to-wrapper'));
-    const target = /** @type {EventTarget | null} */ (e.target);
-    if (wrapper && target instanceof Node && !wrapper.contains(target)) {
-      if (assignedDropdown) assignedDropdown.classList.add('hidden');
-    }
+  const MAX_BADGES = 4; // wie auf der add_task Seite
+  const selected = Object.values(addAssignedUsers).filter(u => u.selected);
+
+  // bis zu 4 echte Badges
+  selected.slice(0, MAX_BADGES).forEach(user => {
+    const badge = document.createElement('div');
+    badge.className = 'avatar-badge';
+    badge.textContent = user.initials;
+    badge.style.backgroundColor = generateColorFromString(user.name);
+    addAssignedBadgesEl.appendChild(badge);
   });
+
+  // Rest als +N
+  const extra = selected.length - MAX_BADGES;
+  if (extra > 0) {
+    const more = document.createElement('div');
+    more.className = 'avatar-badge avatar-badge-more';
+    more.textContent = `+${extra}`;
+    addAssignedBadgesEl.appendChild(more);
+  }
+}
+
+
+  /** Robustes Open/Close-Binding (jedes Öffnen des Dialogs) */
+  function bindAddAssignedDropdownHandlers() {
+    if (!addAssignedSelectBoxEl || !addAssignedDropdownEl) return;
+
+    // Nur einmal binden
+    if (!addAssignedSelectBoxEl.dataset.bound) {
+      addAssignedSelectBoxEl.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        addAssignedDropdownEl.classList.toggle('hidden');
+      });
+      addAssignedSelectBoxEl.dataset.bound = '1';
+    }
+
+    // Klicks im Dropdown selbst nicht als Outside werten
+    if (!addAssignedDropdownEl.dataset.bound) {
+      addAssignedDropdownEl.addEventListener('click', (ev) => ev.stopPropagation());
+      addAssignedDropdownEl.dataset.bound = '1';
+    }
+
+    // Outside-Click (pro Öffnen neu aktiviert → dann wieder entfernt)
+    const outside = (e) => {
+      const target = e.target instanceof Node ? e.target : null;
+      const wrapper = /** @type {HTMLElement|null} */ (document.querySelector('.assigned-to-wrapper'));
+      if (wrapper && target && !wrapper.contains(target)) {
+        addAssignedDropdownEl.classList.add('hidden');
+        document.removeEventListener('click', outside, true);
+      }
+    };
+    document.addEventListener('click', outside, true);
+  }
 
   // ──────────────────────────────────────────────────────────────────────────
   // Save Task
   // ──────────────────────────────────────────────────────────────────────────
   (/** @type {HTMLButtonElement} */ (document.querySelector('.create_task_btn')))
     .addEventListener('click', () => {
-      const title       = (/** @type {HTMLInputElement}  */ (document.getElementById('title'))).value.trim();
+      const title       = (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value.trim();
       const description = (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value.trim();
-      const dueDate     = (/** @type {HTMLInputElement}  */ (document.getElementById('task-due-date'))).value.trim();
+      const dueDate     = (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value.trim();
       const category    = (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).value;
 
-      // Assigned User aus Custom-Dropdown
-      const assignedTo = Object.entries(assignedUsers)
+      // Assigned User aus Custom-Dropdown (Add-Dialog)
+      const assignedTo = Object.entries(addAssignedUsers)
         .filter(([, u]) => u.selected)
         .map(([id]) => id);
 
@@ -395,4 +424,4 @@ function showCustomWarning(msg) {
         })
         .catch(err => (/** @type {any} */ (window)).showCustomWarning("Fehler: " + err.message));
     });
-});
+}

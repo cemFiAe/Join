@@ -354,3 +354,7 @@ body {
     transition: ease-in 0.075s;
     filter: brightness(0) saturate(100%) invert(61%) sepia(91%) saturate(342%) hue-rotate(174deg) brightness(96%) contrast(95%);
 }
+/* sorgt für das dunkle Overlay hinter dem <dialog> */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}

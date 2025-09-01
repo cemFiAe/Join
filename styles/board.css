@@ -582,3 +582,36 @@ select[multiple] {
   font-size: 1rem;
   background: #888;
 }
+
+/* === Profile/Avatar badges (Fallback, falls nicht vorhanden) === */
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  border: 2px solid #fff; /* nicer stacking look */
+}
+
+/* === "+N" Badge – neutraler Kreis, dunkler Text === */
+.profile-badge.more-badge,
+.profile-badge-more {
+  background: #E5E7EB;   /* light gray */
+  color: #111827;        /* dark text */
+  font-weight: 600;
+}
+
+/* Optional: leichtes Überlappen, wenn mehrere Badges nebeneinander stehen */
+.task-status .profile-badge + .profile-badge {
+  margin-left: -8px;
+}
+/* rundes +N Badge; übernimmt Form/Größe von .avatar-badge */
+.avatar-badge-more {
+  background: #454545;
+  color: #333;
+  font-weight: 600;
+}

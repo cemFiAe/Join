@@ -181,9 +181,9 @@
   </button>
 
   <nav id="contact-options" class="contact-options">
-    <a id="edit-btn-mobile" onclick="editMobileContact()" href=""><img src="../assets/icons/contacts/edit.svg"
+    <a id="edit-btn-mobile" onclick="editMobileContact(); return false;" href="#"><img src="../assets/icons/contacts/edit.svg"
         alt="pen-icon">Edit</a>
-    <a id="delete-btn-mobile" onclick="deleteMobileContact()" href=""><img src="../assets/icons/contacts/delete.svg"
+    <a id="delete-btn-mobile" onclick="deleteMobileContact(); return false;" href="#"><img src="../assets/icons/contacts/delete.svg"
         alt="trashcan-icon">Delete</a>
   </nav>
 
@@ -212,8 +212,8 @@
   <script src="../scripts/contactsOwnProfile.js"></script>
   <script src="../scripts/contactsBackend.js"></script>
   <script src="../scripts/contactsAddRemove.js"></script>
-  <script src="../scripts/contactsEdit.js"></script>
   <script src="../scripts/contacts.js"></script>
+  <script src="../scripts/contactsEdit.js"></script>
   <script src="../scripts/logInGuest.js"></script>
   <script src="../scripts/logOutUser.js"></script>
   <script src="../scripts/authGuard.js"></script> 
