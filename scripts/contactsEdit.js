@@ -45,7 +45,7 @@ function getContactById(id) {
  */
 function fillEditForm(data) {
     document.getElementById('edit-name-input').value = data.name;
-    document.getElementById('edit-mail-input').value = data.mail;
+    document.getElementById('edit-mail-input').value = data.mail || data.email || "";
     document.getElementById('edit-phone-input').value = data.phone;
 
     const initials = getInitials(data.name);
