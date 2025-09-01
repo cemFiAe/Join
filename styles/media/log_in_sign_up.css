@@ -1,14 +1,14 @@
 @media (max-width: 650px) {
 
     header {
-        padding: 40px 60px 0px;
+        padding: 60px 60px 0px;
     }
 
     .header-logo {
         position: absolute;
-        left: 0px;
-        top: 0px;
-        scale: 0.5;
+        left: -16px;
+        top: -30px;
+        scale: 0.35;
     }
 
     .mobile-header {
