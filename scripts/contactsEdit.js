@@ -1,99 +1,147 @@
-// @ts-check
+let currentlyEditingContactId = null;
 
 /**
- * Liefert die ID des aktuell im Edit-Overlay geöffneten Kontakts.
+ * this function is used to open the edit contact overlay
+ * @param {string} id - id of the contact
  */
-function getCurrentEditingId() {
-  const dlg = /** @type {HTMLDialogElement|null} */ (document.getElementById('edit_contact_overlay'));
-  const id = dlg?.dataset?.contactId || '';
-  // Fallback, falls irgendwo noch eine alte Variable gesetzt wird
-  // @ts-ignore
-  return id || (typeof window.currentlyEditingContactId === 'string' ? window.currentlyEditingContactId : '');
+function openEditContact(id) {
+    event.preventDefault();
+    currentlyEditingContactId = id;
+
+    const contact = getContactById(id);
+    if (!contact) return;
+
+    fillEditForm(contact.data);
+    showEditOverlay();
 }
 
 /**
- * Form absenden → Kontakt speichern.
+ * this function is used to
+ * @param {event} event - is necessary to prevent the page from refreshing
  */
 async function editContact(event) {
-  event.preventDefault();
-  const id = getCurrentEditingId();
-  if (!id) return;
+    event.preventDefault();
+    const id = currentlyEditingContactId;
+    const contact = getContactById(id);
+    if (!contact) return;
 
-  const contact = getContactById(id);
-  if (!contact) return;
-
-  const updatedData = collectUpdatedFormData(contact.data);
-  await updateContactInFirebase(id, updatedData);
-  updateLocalContact(id, updatedData);
+    const updatedData = collectUpdatedFormData(contact.data);
+    await updateContactInFirebase(id, updatedData);
+    updateLocalContact(id, updatedData);
 }
 
 /**
- * Hilfsfunktionen aus deinem bestehenden Code
+ * this function is used to find a contact
+ * @param {string} id - id of the contact
+ * @returns - object, containing contact data
  */
 function getContactById(id) {
-  // @ts-ignore
-  return contacts.find(c => c.id === id);
-}
-
-function collectUpdatedFormData(current) {
-  return {
-    name:  (/** @type {HTMLInputElement} */(document.getElementById('edit-name-input'))).value.trim()  || current.name,
-    mail:  (/** @type {HTMLInputElement} */(document.getElementById('edit-mail-input'))).value.trim()  || current.mail,
-    phone: (/** @type {HTMLInputElement} */(document.getElementById('edit-phone-input'))).value.trim() || current.phone,
-  };
-}
-
-async function updateContactInFirebase(id, data) {
-  // @ts-ignore
-  await putData(`/contacts/${id}`, data);
+    return contacts.find(c => c.id === id);
 }
 
 /**
- * Mobile: über Burger-Menü öffnen
+ * this function is used to fill the form of the edit overlay
+ * @param {object} data - contains information like name, mail or phone 
+ */
+function fillEditForm(data) {
+    document.getElementById('edit-name-input').value = data.name;
+    document.getElementById('edit-mail-input').value = data.mail || data.email || "";
+    document.getElementById('edit-phone-input').value = data.phone;
+
+    const initials = getInitials(data.name);
+    const color = getColorFromName(data.name);
+    const circleHTML = createInitialIcon(initials, color, 'circle', 128);
+    document.getElementById('edit_initials_circle').innerHTML = circleHTML;
+}
+
+/**
+ * this function is used to make the edit overlay appear
+ */
+function showEditOverlay() {
+    editOverlayLogic();
+    document.getElementById('bg_overlay').style.display = "flex";
+    document.getElementById('burger_contact_btn').style.display = "none";
+    document.getElementById('add_contact_btn').style.display = "none";
+    document.getElementById('burger_contact_btn').style.zIndex = "999";
+}
+
+/**
+ * this function is used to animate the appearing of the edit overlay
+ */
+function editOverlayLogic() {
+    currentOpenOverlay = (window.innerWidth <= 650) ? 'edit-mobile' : 'edit-desktop';
+    if (currentOpenOverlay === 'edit-mobile') {
+        editOverlayMobile();
+    } else if (currentOpenOverlay === 'edit-desktop') {
+        editOverlayDesktop();
+    }
+}
+
+/**
+ * this function is used to resize the edit overlay
+ */
+function editOverlayDesktop () {
+    document.getElementById('edit_contact_overlay').style.transform = "translate(-50%, -50%) translateX(0)";
+}
+
+/**
+ * this function is used to resize the edit overlay
+ */
+function editOverlayMobile () {
+    document.getElementById('edit_contact_overlay').style.setProperty("transform", "translate(-50%, -50%) translateX(0) translateY(0)", "important");
+}
+
+/**
+ * this function is used to overwrite the data of a contact
+ * @param {object} current - contains the old contact data of the contact
+ * @returns {object} - contains the new contact data 
+ */
+function collectUpdatedFormData(current) {
+    return {
+        name: document.getElementById('edit-name-input').value.trim() || current.name,
+        mail: document.getElementById('edit-mail-input').value.trim() || current.mail,
+        phone: document.getElementById('edit-phone-input').value.trim() || current.phone,
+    };
+}
+
+/**
+ * this function is used to update the data of a contact in firebase
+ * @param {string} id - id of the contact
+ * @param {object} data - contains information like name, mail or phone 
+ */
+async function updateContactInFirebase(id, data) {
+    await putData(`/contacts/${id}`, data);
+}
+
+/**
+ * this function is used to edit contact information like name, mail or phone. it is executed on displays of <650 px width.
  */
 function editMobileContact() {
-  // @ts-ignore
-  event?.preventDefault?.();
-  // @ts-ignore
-  if (window.currentDisplayedContactId) {
-    // openEditContact kommt aus contacts.js
-    // @ts-ignore
-    window.openEditContact(window.currentDisplayedContactId);
-    // @ts-ignore
-    closeContactOptions();
-  }
+    event.preventDefault();
+    if (currentDisplayedContactId) {
+        openEditContact(currentDisplayedContactId);
+        closeContactOptions();
+    }
 }
 
 /**
- * Löschen (Desktop)
+ * this function is used to delete a contact. executed from the editing overlay.
  */
 function deleteContactFromEdit() {
-  const id = getCurrentEditingId();
-  if (!id) return;
-  // @ts-ignore
-  deleteContact(id);
-  // @ts-ignore
-  window.closeEditContact && window.closeEditContact();
+    if (!currentlyEditingContactId) return;
+
+    deleteContact(currentlyEditingContactId);
+
+    closeEditContact();
 }
 
 /**
- * Löschen (Mobile)
+ * this function is used to delete a contact. executed from the editing overlay on displays of <650 px width
  */
 function deleteContactFromEditMobile() {
-  const id = getCurrentEditingId();
-  if (!id) return;
-  // @ts-ignore
-  deleteContact(id);
-  // @ts-ignore
-  window.closeEditContact && window.closeEditContact();
-  // @ts-ignore
-  goBack();
-  // @ts-ignore
-  closeContactOptions();
+    if (!currentlyEditingContactId) return;
+    deleteContact(currentlyEditingContactId);
+    closeEditContact();
+    goBack();
+    closeContactOptions();
 }
-
-/* ---- nur die Handler exportieren; KEIN weiteres 'W' definieren ---- */
-window.editContact = editContact;
-window.editMobileContact = editMobileContact;
-window.deleteContactFromEdit = deleteContactFromEdit;
-window.deleteContactFromEditMobile = deleteContactFromEditMobile;
