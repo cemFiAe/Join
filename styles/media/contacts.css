@@ -67,6 +67,9 @@
     margin-left: 16px;
     margin-top: 48px;
 }
+.contact_mail {
+    max-width: 336px;
+}
 .co-devider {
     display: none;
 }

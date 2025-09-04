@@ -117,12 +117,13 @@ function getContactTemplateByData(data, id) {
     const initials = getInitials(data.name);
     const bgColor = getColorFromName(data.name);
     const icon = createInitialIcon(initials, bgColor);
+    const email = data.mail || data.email || "";
 
     return `<div id="contact-${id}" onclick="handleContactClick('${id}')" class="contact_entry">
           ${icon}
           <div>
             <h4 class="contact_name">${data.name}</h4>
-            <span class="contact_mail">${data.mail || data.email || ""}</span>
+            <span class="contact_mail" title="${email}">${email}</span>
           </div>
         </div>`;
 }

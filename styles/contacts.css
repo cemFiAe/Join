@@ -77,8 +77,10 @@ body {
     gap: 35px;
     padding-block: 15px;
     padding-inline: 24px;
-    word-break: break-word;
-    overflow-wrap: break-word;
+}
+
+.contact_entry div {
+    max-width: 229px !important;
 }
 
 .contact_entry:hover {
@@ -118,9 +120,14 @@ body {
 }
 
 .contact_mail {
+    display: inline-block;
     font-size: 20px;
     font-weight: 400;
     color: #007CEE;
+    max-width: 229px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* contact overview */
@@ -170,7 +177,7 @@ body {
 
 .contact_information {
     position: fixed;
-    top: 280px;
+    top: 311px;
     left: 100%;
     transition: left ease-in 0.3s;
     display: flex;
@@ -284,8 +291,10 @@ body {
 
 .ci-mail {
     color: #007CEE;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    max-width: 229px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* overlay and mobile-specials */
