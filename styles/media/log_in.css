@@ -16,7 +16,7 @@
     }
 
     section {
-        height: calc(100vh - 160px);
+        height: calc(100vh - 180px);
     }
 
     .sign-up-shortcut {
@@ -54,10 +54,6 @@
         height: 48px;
         width: 304px;
     }
-/* 
-    .password-third {
-        height: 52px;
-    } */
 
     .log-in-form {
         height: 128px;
@@ -100,7 +96,7 @@
 
     /* move logo effect */
 
-    .loading-overlay {
+    #overlay {
         height: 100vh;
         width: 100%;
         max-width: 650px;
@@ -108,18 +104,26 @@
         justify-content: center;
         align-items: center;
         background-color: rgb(42, 54, 71);
-        animation: fadeOutOverlay 0.25s ease forwards;
-        animation-delay: 0.75s;
-    }
-
-    .mobile-log-in-logo {
-        display: block;
-        animation: move 0.25s ease forwards;
-        animation-delay: 0.75s;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        animation: fadeOutOverlay 0.6s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .mobile-log-in-logo {
+        display: block;
+        animation: move 0.6s ease forwards;
+        animation-delay: 0.3s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .header-logo {
+        display: block;
     }
 
 
@@ -132,9 +136,9 @@
 
     @keyframes move {
         100% {
-            left: 55px;
-            top: 55px;
-            scale: 0.64;
+            left: 0px;
+            top: 0px;
+            scale: 0.35;
         }
     }
 }
