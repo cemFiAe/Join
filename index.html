@@ -21,13 +21,10 @@
 </head>
 
 <body onload="checkLoadingScreen()">
-    <div id="overlay" class="loading-overlay">
-        <img class="log-in-logo" src="./assets/img/logo/join_logo_big.svg">
-        <img class="mobile-log-in-logo" src="./assets/img/logo/logo_nav.svg">
-    </div>
 
     <div id="main-window" style="display: none;">
         <header>
+            <div class="no-logo"></div>
             <img class="header-logo" src="./assets/img/logo/logo_log_in.svg">
             <div class="sign-up-shortcut">
                 <label>Not a Join user?</label>
@@ -41,7 +38,8 @@
                 <div class="blue-line"></div>
                 <form id="log-in-form" class="log-in-form" action="./pages/summary.html">
                     <div class="email">
-                        <input type="text" id="log-in-email-input" class="email-input" placeholder="Email" autocomplete="off">
+                        <input type="text" id="log-in-email-input" class="email-input" placeholder="Email"
+                            autocomplete="off">
                         <label id="log-in-email-alert" class="email-alert">Please insert correct email</label>
                     </div>
 
@@ -54,8 +52,10 @@
                     </div>
                 </form>
                 <div class="log-in-buttons">
-                    <button type="submit" id="log-in-button" class="buttons bigger-buttons" form="log-in-form">Log in</button>
-                    <button type="submit" id="guest-log-in-button" class="buttons white-button bigger-buttons" form="log-in-form">Guest Log in</button>
+                    <button type="submit" id="log-in-button" class="buttons bigger-buttons" form="log-in-form">Log
+                        in</button>
+                    <button type="submit" id="guest-log-in-button" class="buttons white-button bigger-buttons"
+                        form="log-in-form">Guest Log in</button>
                 </div>
             </div>
         </section>
@@ -70,12 +70,18 @@
             <a href="./pages/unlogged_user/legal_notice.html">Legal notice</a>
         </footer>
     </div>
+
+    <div id="overlay" class="loading-overlay">
+        <img class="log-in-logo" src="./assets/img/logo/join_logo_big.svg">
+        <img class="mobile-log-in-logo" src="./assets/img/logo/logo_nav.svg">
+    </div>
+
     <script src="./scripts/logInLoading.js"></script>
     <script src="./scripts/logInVariables.js"></script>
     <script src="./scripts/emailValidation.js"></script>
     <script src="./scripts/passwordValidationAndVisibility.js"></script>
     <script src="./scripts/formValidationAndLogIn.js"></script>
-    <script src="./scripts/logInGuest.js"></script> 
+    <script src="./scripts/logInGuest.js"></script>
     <script src="./scripts/contactsOwnProfile.js"></script>
 </body>
 
