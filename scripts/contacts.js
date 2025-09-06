@@ -21,6 +21,33 @@ document.getElementById('bg_overlay').addEventListener('click', function () {
 });
 
 /**
+ * clears all inputfields and disables submit button
+ * this prevents the button still being active from a valid previous entry
+ */
+function clearAddContactInputs() {
+    const inputs = [
+        document.getElementById("add-name-input"),
+        document.getElementById("add-mail-input"),
+        document.getElementById("add-phone-input")
+    ];
+    inputs.forEach(input => {
+        if (input) {
+            input.value = "";
+            input.classList.remove("input-error");
+        }
+    });
+
+    const errorIds = ["error-name", "error-mail", "error-phone"];
+    errorIds.forEach(id => {
+        const errorDiv = document.getElementById(id);
+        if (errorDiv) errorDiv.textContent = "";
+    });
+
+    const submitBtn = document.querySelector("#add-contact-form button[type='submit']");
+    if (submitBtn) submitBtn.disabled = true;
+}
+
+/**
  * this function is used to open the add contact overlay
  */
 function openAddContact() {
@@ -35,6 +62,7 @@ function openAddContact() {
 function closeAddContact() {
     document.getElementById('add_contact_overlay').style.transform = "translate(-50%, -50%) translateX(200%)";
     document.getElementById('bg_overlay').style.display = "none";
+    clearAddContactInputs();
 }
 
 /**
@@ -56,6 +84,7 @@ function closeAddContactMobile() {
     document.getElementById('bg_overlay').style.display = "none";
     document.getElementById('add_contact_btn').style.display = "flex";
     document.getElementById('burger_contact_btn').style.display = "flex";
+    clearAddContactInputs();
 }
 
 document.getElementById('add_contact_overlay').addEventListener('click', function (event) {

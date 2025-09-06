@@ -31,83 +31,140 @@ function getFormData() {
     };
 }
 
+/**
+ * Validates an input field against a regex and displays error messages.
+ * @param {HTMLInputElement} input - The input element to validate.
+ * @param {RegExp} regex - Regular expression used for validation.
+ * @param {string} errorId - The ID of the corresponding error container (DIV).
+ * @param {{required: string, invalid: string}} errorMsg - Error messages for empty or invalid input.
+ * @returns {boolean} - True if input is valid, otherwise false.
+ */
+function validateInput(input, regex, errorId, errorMsg) {
+    const errorDiv = document.getElementById(errorId);
+    errorDiv.classList.add("error-message");
+    if (!input.value.trim()) {
+        errorDiv.textContent = errorMsg.required;
+        input.classList.add("input-error");
+        return false;
+    } else if (!regex.test(input.value.trim())) {
+        errorDiv.textContent = errorMsg.invalid;
+        input.classList.add("input-error");
+        return false;
+    }
+    errorDiv.textContent = "";
+    input.classList.remove("input-error");
+    return true;
+}
+
+/**
+ * Checks all input fields (name, email, phone) and enables/disables the submit button.
+ * @param {HTMLInputElement} nameInput - Input field for the name.
+ * @param {HTMLInputElement} mailInput - Input field for the email address.
+ * @param {HTMLInputElement} phoneInput - Input field for the phone number.
+ * @param {HTMLButtonElement} submitBtn - The form's submit button.
+ * @param {{name: RegExp, mail: RegExp, phone: RegExp}} regexes - Regex patterns for validation.
+ * @returns {boolean} - True if all inputs are valid, otherwise false.
+ */
+function checkAllValid(nameInput, mailInput, phoneInput, submitBtn, regexes) {
+    const validName = validateInput(nameInput, regexes.name, "error-name", {
+        required: "Bitte einen Namen eingeben.",
+        invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+    });
+    const validMail = validateInput(mailInput, regexes.mail, "error-mail", {
+        required: "Bitte eine E-Mail-Adresse eingeben.",
+        invalid: "Format: buchstaben+zahlen@mail.de"
+    });
+    const validPhone = validateInput(phoneInput, regexes.phone, "error-phone", {
+        required: "Bitte eine Telefonnummer eingeben.",
+        invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+    });
+    submitBtn.disabled = !(validName && validMail && validPhone);
+    return validName && validMail && validPhone;
+}
+
+/**
+ * Adds a listener to the name input that removes invalid characters in real-time
+ * and re-checks validation on each input.
+ * @param {HTMLInputElement} nameInput - Input field for the name.
+ * @param {Function} checkValid - Callback function to check validation of all fields.
+ */
+function handleNameInput(nameInput, checkValid) {
+    nameInput.addEventListener("input", () => {
+        nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
+        checkValid();
+    });
+}
+
+
+/**
+ * Adds a listener to the phone input that removes invalid characters in real-time
+ * and re-checks validation on each input.
+ * @param {HTMLInputElement} phoneInput - Input field for the phone number.
+ * @param {Function} checkValid - Callback function to check validation of all fields.
+ */
+function handlePhoneInput(phoneInput, checkValid) {
+    phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
+        checkValid();
+    });
+}
+
+/**
+ * Initializes form validation:
+ * - Sets regex rules for name, email, and phone
+ * - Activates live validation on input
+ * - Disables the submit button until all inputs are valid
+ * - Prevents multiple form submissions
+ */
 function setupValidation() {
     const nameInput = document.getElementById("add-name-input");
     const mailInput = document.getElementById("add-mail-input");
     const phoneInput = document.getElementById("add-phone-input");
+    const form = document.getElementById("add-contact-form");
+    const submitBtn = form.querySelector("button[type='submit']");
+    const regexes = {
+        name: /^[A-Za-z\s]+$/,
+        mail: /^[A-Za-z0-9]+@[A-Za-z]+\.[A-Za-z]+$/,
+        phone: /^\+?[0-9\s]{7,}$/
+    };
 
-    const nameRegex = /^[A-Za-zÄÖÜäöüß\s]+$/;
-    const mailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    const phoneRegex = /^\+?[0-9\s]{7,}$/;
+    const checkValid = () => checkAllValid(nameInput, mailInput, phoneInput, submitBtn, regexes);
+    handleNameInput(nameInput, checkValid);
+    mailInput.addEventListener("input", checkValid);
+    handlePhoneInput(phoneInput, checkValid);
 
-    nameInput.addEventListener("input", function () {
-        this.value = this.value.replace(/[^A-Za-zÄÖÜäöüß\s]/g, ""); 
-        const errorDiv = document.getElementById("error-name");
-        if (!this.value.trim()) {
-            errorDiv.textContent = "Bitte einen Namen eingeben.";
-        } else if (!nameRegex.test(this.value)) {
-            errorDiv.textContent = "Nur Buchstaben und Leerzeichen erlaubt.";
-        } else {
-            errorDiv.textContent = "";
-        }
-    });
-
-    mailInput.addEventListener("input", function () {
-        const errorDiv = document.getElementById("error-mail");
-        if (!this.value.trim()) {
-            errorDiv.textContent = "Bitte eine E-Mail-Adresse eingeben.";
-        } else if (!mailRegex.test(this.value)) {
-            errorDiv.textContent = "Bitte ein gültiges Format verwenden (z. B. name@mail.de).";
-        } else {
-            errorDiv.textContent = "";
-        }
-    });
-
-    // --- Phone ---
-    phoneInput.addEventListener("input", function () {
-        this.value = this.value.replace(/(?!^\+)[^\d\s]/g, ""); 
-        const errorDiv = document.getElementById("error-phone");
-        if (!this.value.trim()) {
-            errorDiv.textContent = "Bitte eine Telefonnummer eingeben.";
-        } else if (!phoneRegex.test(this.value)) {
-            errorDiv.textContent = "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang.";
-        } else {
-            errorDiv.textContent = "";
-        }
-    });
-
-    // --- Validierung beim Submit ---
-    document.getElementById("add-contact-form").addEventListener("submit", function (event) {
-        if (
-            !nameRegex.test(nameInput.value.trim()) ||
-            !mailRegex.test(mailInput.value.trim()) ||
-            !phoneRegex.test(phoneInput.value.trim())
-        ) {
+    form.addEventListener("submit", (event) => {
+        if (!checkValid()) {
             event.preventDefault();
+            return;
         }
+        submitBtn.disabled = true;
+        setTimeout(() => submitBtn.disabled = false, 1500);
     });
 }
 
-// Call setupValidation on page load
+/** 
+ * Call setupValidation on page load
+ */ 
 document.addEventListener("DOMContentLoaded", setupValidation);
 
 /**
- * Speichert den neuen Kontakt in Firebase
+ * saves new contact to firebase
  */
 async function saveContactToFirebase(data) {
     const response = await postData("/contacts", data);
-    return response.name; // Die neue ID von Firebase
+    return response.name; // new ID from firebase
 }
 
 /**
- * Fügt Kontakt lokal in das contacts-Array ein
+ * adds contact locally to contacts array
  */
 function addContactLocally(id, data) {
     contacts.push({ id, data });
 }
 
 /**
- * Hebt neu erstellten Kontakt hervor
+ * focuses on the newly created contact
  */
 function focusOnNewContact(id) {
     requestAnimationFrame(() => {
@@ -120,7 +177,7 @@ function focusOnNewContact(id) {
 }
 
 /**
- * Scrollt zu einem Kontakt und hebt ihn hervor
+ * scrolls and highlights the newly created contact
  */
 function highlightAndScrollTo(element, removeOnly = false) {
     const container = document.getElementById('contacts');
@@ -140,16 +197,16 @@ function highlightAndScrollTo(element, removeOnly = false) {
 }
 
 /**
- * Löscht einen Kontakt, entfernt ihn aus allen Aufgaben und der Datenbank
+ * deletes a contact and removes him from all tasks and contact list
  * @param {string} id - die ID des Kontakts
  */
 async function deleteContact(id) {
-    // 1. Tasks laden
+    // 1. load tasks 
     let tasksResponse = await fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
     let tasks = await tasksResponse.json();
     let updates = {};
 
-// tasks: das geladene Task-Objekt (aus der Firebase-DB)
+// tasks: the loaded task-object from firebase
 for (let taskId in tasks) {
     let t = tasks[taskId];
     if (Array.isArray(t.assignedTo)) {
@@ -170,7 +227,7 @@ for (let taskId in tasks) {
     }
 }
 
-    // 2. Kontakt aus contacts löschen
+    // 2. deletes contact from contacts 
     await deleteContactFromFirebase(id);
     removeContactFromLocalArray(id);
     document.getElementById('contact_information').innerHTML = '';
@@ -183,7 +240,7 @@ for (let taskId in tasks) {
 
 
 /**
- * Löscht einen Kontakt aus der Firebase-Datenbank
+ * deletes contact from firebase
  */
 async function deleteContactFromFirebase(id) {
     try {
@@ -199,14 +256,14 @@ async function deleteContactFromFirebase(id) {
 }
 
 /**
- * Entfernt Kontakt lokal aus dem Array
+ * deletes contact from local contact array
  */
 function removeContactFromLocalArray(id) {
     contacts = contacts.filter(contact => contact.id !== id);
 }
 
 /**
- * Spezielles Löschen für Mobilgeräte (< 650px)
+ * special delete for mobile (< 650px)
  */
 function deleteMobileContact() {
     event.preventDefault();

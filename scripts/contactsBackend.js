@@ -13,7 +13,7 @@ async function onloadFunction() {
 
     contacts = [];
 
-    // Lade alle Kontakte
+    // load all contacts
     if (contactResponse) {
         let contactsArray = Object.keys(contactResponse);
         for (let index = 0; index < contactsArray.length; index++) {
@@ -24,11 +24,11 @@ async function onloadFunction() {
         }
     }
 
-    // Lade alle User (die NICHT schon als Kontakt existieren!)
+    // load all users (that DONT exist already as a contact!)
     if (userResponse) {
         let userArray = Object.keys(userResponse);
         for (let index = 0; index < userArray.length; index++) {
-            // User nur hinzufügen, wenn die ID nicht schon als Kontakt existiert
+            // add user only, if the ID doesnt exist as a contact 
             if (!contacts.find(c => c.id === userArray[index])) {
                 contacts.push({
                     id: userArray[index],

@@ -4,8 +4,8 @@
     }
     .left {
         justify-content: flex-start !important;
-        padding-top: 60px;
-        height: 260px !important;
+        padding-top: 40px;
+        height: 220px !important;
     }
 }
 
@@ -32,12 +32,18 @@
 }
 
 @media (max-height: 530px) {
+    .left {
+        height: 160px !important;
+    }
     .right {
-        transform: scale(0.75);
+        transform: scale(0.70);
         height: 288px;
     }
     .add_contact_btn, .burger_contact_btn {
         top: 65% !important;
+    }
+    .span {
+        font-size: 17px !important;
     }
 }
 
