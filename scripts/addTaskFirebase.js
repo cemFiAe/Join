@@ -283,11 +283,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const li = document.createElement('li');
       li.classList.add('subtask-item');
       li.innerHTML = `
-        <span class="subtask-title">${value}</span>
+        <span class="subtask-title">• ${value}</span>
         <span class="subtask-actions" style="display:none;">
           <button type="button" class="subtask-edit-btn" title="Bearbeiten">
             <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
           </button>
+          <div class="subtask-divider"></div>
           <button type="button" class="subtask-delete-btn" title="Löschen">
             <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
           </button>
@@ -339,12 +340,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const input = document.createElement('input');
     input.type = 'text';
     input.value = oldValue;
-    input.style.width = '70%';
+    input.style.width = '100%';
+    input.style.fontSize = '16px';
+    input.style.paddingLeft = '4px';    
+
     span.replaceWith(input);
+
+    li.classList.add('editing');
 
     /** Guard gegen doppeltes Ersetzen durch blur + enter */
     let replaced = false;
-
+    
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') save();
       if (e.key === 'Escape') cancel();
@@ -361,6 +367,7 @@ document.addEventListener('DOMContentLoaded', function () {
       newSpan.textContent = subtaskObj.title;
 
       if (input.parentNode) input.replaceWith(newSpan);
+      li.classList.remove('editing');
       if (actions) actions.style.display = 'none';
     }
     function cancel() {
