@@ -361,56 +361,60 @@ document.addEventListener('DOMContentLoaded', function () {
    * @param {Subtask} subtaskObj
    */
   function editSubtask(li, subtaskObj) {
-    const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
-    const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-    const oldValue = span.textContent || '';
+  const span = li.querySelector('.subtask-title');
+  const actions = li.querySelector('.subtask-actions');
+  const oldValue = span.textContent || '';
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = oldValue;
-    input.style.width = '100%';
-    input.style.fontSize = '16px';
-    input.style.paddingLeft = '4px';    
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = oldValue;
+  input.style.width = '100%';
 
-    span.replaceWith(input);
+  span.replaceWith(input);
+  li.classList.add('editing');
 
-    li.classList.add('editing');
+  const editBtn = li.querySelector('.subtask-edit-btn img');
+  if (editBtn) editBtn.src = '../assets/icons/add_task/check.svg';
 
-    /** Guard gegen doppeltes Ersetzen durch blur + enter */
-    let replaced = false;
-    
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') save();
-      if (e.key === 'Escape') cancel();
-    });
-    input.addEventListener('blur', save);
+  let replaced = false;
 
-    function save() {
-      if (replaced) return;
-      replaced = true;
-      subtaskObj.title = input.value.trim() || oldValue;
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') cancel();
+  });
+  input.addEventListener('blur', save);
 
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = subtaskObj.title;
+  function save() {
+    if (replaced) return;
+    replaced = true;
+    subtaskObj.title = input.value.trim() || oldValue;
 
-      if (input.parentNode) input.replaceWith(newSpan);
-      li.classList.remove('editing');
-      if (actions) actions.style.display = 'none';
-    }
-    function cancel() {
-      if (replaced) return;
-      replaced = true;
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = subtaskObj.title;
+    input.replaceWith(newSpan);
 
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = oldValue;
+    li.classList.remove('editing');
+    if (actions) actions.style.display = 'none';
 
-      if (input.parentNode) input.replaceWith(newSpan);
-      if (actions) actions.style.display = 'none';
-    }
-    input.focus();
+    if (editBtn) editBtn.src = '../assets/icons/add_task/edit.png';
   }
+  function cancel() {
+    if (replaced) return;
+    replaced = true;
+
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = oldValue;
+    input.replaceWith(newSpan);
+
+    if (actions) actions.style.display = 'none';
+
+    if (editBtn) editBtn.src = '../assets/icons/add_task/edit.png';
+  }
+
+  input.focus();
+}
 
   // Eingabe im Subtaskfeld leeren (X-Button), falls vorhanden
   if (subtaskClearBtn && subtaskInput) {
