@@ -555,6 +555,7 @@ select[multiple] {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  border: 2px solid white;
   color: white;
   display: flex;
   justify-content: center;
@@ -571,24 +572,10 @@ select[multiple] {
 }
 
 .custom-option-checkbox {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.custom-option-checkbox.checked {
-  background-color: #29abe2;
-  border-color: #29abe2;
-}
-
-.custom-option-checkbox.checked::after {
-  content: '✓';
-  color: white;
-  font-size: 13px;
+  border: none;
 }
 
 /* Button in Dropdown verstecken (Choices generiert Buttons in Multi-Selects) */
@@ -669,19 +656,6 @@ select[multiple] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.custom-option-checkbox {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.custom-option-checkbox.checked {
-  background-size: 14px;
-  border-color: #29abe2;
 }
 
 .assigned-badges {

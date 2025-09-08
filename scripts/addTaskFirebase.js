@@ -109,44 +109,72 @@ document.addEventListener('DOMContentLoaded', function () {
    * Nutzt `assignedUsers` und schreibt die Optionen in `#assignedDropdown`.
    */
   function renderAssignedDropdown() {
-    if (!assignedDropdown) return;
-    assignedDropdown.innerHTML = '';
+  if (!assignedDropdown) return;
+  assignedDropdown.innerHTML = '';
 
-    Object.entries(assignedUsers).forEach(([id, user]) => {
-      const option = document.createElement('div');
-      option.className = 'custom-option';
-      option.dataset.userId = id;
+  Object.entries(assignedUsers).forEach(([id, user]) => {
+    const option = document.createElement('div');
+    option.className = 'custom-option';
+    option.dataset.userId = id;
 
-      const avatar = document.createElement('div');
-      avatar.className = 'custom-option-avatar';
-      avatar.style.backgroundColor = generateColorFromString(user.name);
-      avatar.textContent = user.initials;
+    option.style.borderRadius = '8px';
+    option.style.padding = '4px 8px';
+    option.style.transition = 'background-color 0.075s, color 0.075s';
 
-      const label = document.createElement('div');
-      label.className = 'custom-option-label';
-      label.textContent = user.name + (
-        user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
-      );
+    const avatar = document.createElement('div');
+    avatar.className = 'custom-option-avatar';
+    avatar.style.backgroundColor = generateColorFromString(user.name);
+    avatar.textContent = user.initials;
 
-      const checkbox = document.createElement('div');
-      checkbox.className = 'custom-option-checkbox';
-      if (user.selected) checkbox.classList.add('checked');
+    const label = document.createElement('div');
+    label.className = 'custom-option-label';
+    label.textContent = user.name + (
+      user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
+    );
 
-      option.appendChild(avatar);
-      option.appendChild(label);
-      option.appendChild(checkbox);
-      assignedDropdown.appendChild(option);
+    const checkbox = document.createElement('img');
+    checkbox.className = 'custom-option-checkbox';
+    checkbox.src = user.selected ? '../assets/icons/add_task/selected.svg' : '../assets/icons/add_task/unselected.svg';
+    checkbox.style.width = '18px';
+    checkbox.style.height = '18px';
 
-      // Auswahl soll Dropdown NICHT schließen → pointerdown mit stopPropagation
-      option.addEventListener('pointerdown', (ev) => {
-        ev.preventDefault();    // verhindert Fokuswechsel
-        ev.stopPropagation();   // blockt Outside-Handler
-        assignedUsers[id].selected = !assignedUsers[id].selected;
-        renderAssignedDropdown();   // UI aktualisieren
-        renderAssignedBadges();     // Badges aktualisieren
-      });
+    option.appendChild(avatar);
+    option.appendChild(label);
+    option.appendChild(checkbox);
+    assignedDropdown.appendChild(option);
+
+    // Funktion, um Hintergrund und Schriftfarbe nur bei ausgewählten Users zu setzen
+    function updateStyle() {
+      if (user.selected) {
+        option.style.backgroundColor = '#2A3647';
+        label.style.color = '#ffffff';  
+      } else {
+        option.style.backgroundColor = '';
+        label.style.color = '';          
+      }
+    }
+    updateStyle();
+
+    option.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      assignedUsers[id].selected = !assignedUsers[id].selected;
+      checkbox.src = assignedUsers[id].selected ? '../assets/icons/add_task/unselected.svg' : '../assets/icons/add_task/selected.svg';
+      renderAssignedDropdown();
+      renderAssignedBadges();
     });
-  }
+
+    // Hover nur, wenn User ausgewählt ist
+    option.addEventListener('mouseenter', () => {
+      if (user.selected) option.style.backgroundColor = '#091931';
+    });
+    option.addEventListener('mouseleave', () => {
+      updateStyle();
+    });
+  });
+}
+
+
 
   /**
    * Badge-Zeile unter dem Feld neu aufbauen.
