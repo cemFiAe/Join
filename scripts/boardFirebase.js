@@ -929,6 +929,23 @@ function renderAssignedBadges() {
   }
 }
 
+// === Exporte für board.js ===
+(/** @type {any} */(window)).initAssignedDropdown = initAssignedDropdown;
+
+(/** @type {any} */(window)).__boardGetSelectedAssigned = function () {
+  return Object.entries(assignedUsers)
+    .filter(([, u]) => u.selected)
+    .map(([id]) => id);
+};
+
+(/** @type {any} */(window)).__boardResetAssigned = function () {
+  Object.values(assignedUsers).forEach(u => u.selected = false);
+  renderAssignedDropdown();
+  renderAssignedBadges();
+  if (assignedDropdown) assignedDropdown.classList.add('hidden');
+};
+
+
 
 /**
  * ===================================================================

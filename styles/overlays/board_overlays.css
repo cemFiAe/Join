@@ -174,11 +174,41 @@
 /* =============== */
 /* Subtask Input   */
 /* =============== */
-.input-icon-subtask {
-  position: relative;
-  display: flex;
+/* Subtask: X & ✓ IM Input */
+.input-icon-subtask { position: relative; }
+.input-icon-subtask input {
+  padding-right: 72px;           /* Platz für X & ✓ */
+}
+
+/* Container der Inline-Buttons INSIDE des Inputs (rechts) */
+.subtask-inline-actions {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: none;                 /* per JS ein/aus */
+  gap: 8px;
   align-items: center;
-  width: 100%;
+}
+
+/* Buttons (X/✓) */
+.subtask-inline-actions .inline-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.subtask-inline-actions .inline-btn:hover {
+  background: #f4f4f4;
+  border-color: #d7d7d738;
 }
 
 .input-icon-subtask input[type="text"] {
@@ -207,8 +237,6 @@
   line-height: normal;
   outline: none;
 }
-
-
 
 .add-subtask-btn {
   position: absolute;
@@ -278,9 +306,14 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  height: 20px;
+  height: 40px;
   margin-bottom: 6px;
   position: relative;
+  justify-content: space-between;
+}
+.subtask-item:hover{
+  background-color: rgba(43, 43, 43, 0.063);
+  border-radius: 8px;
 }
 .subtask-title {
   flex: 1;
@@ -292,18 +325,19 @@
 .subtask-item:hover .subtask-actions {
   display: inline-flex;
 }
-.subtask-edit-btn,
-.subtask-delete-btn {
+.subtask-edit-btn, .subtask-delete-btn {
   background: none;
   border: none;
   cursor: pointer;
   padding: 2px;
-  border-radius: 5px;
-  transition: background 0.2s;
+  margin: 0 2px;
+  opacity: 0.7;
+  transition: opacity 0.075s;
 }
+
 .subtask-edit-btn:hover,
 .subtask-delete-btn:hover {
-  background: #f2f3f5;
+  opacity: 1;
 }
 
 

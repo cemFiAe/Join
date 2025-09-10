@@ -3,7 +3,8 @@
 /** Firebase kommt über das CDN → aus `window` ziehen (Cast auf window) */
 const firebase = /** @type {any} */ (window).firebase;
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', /** @param {Event} _ev */ function (_ev) {
+
   /**
    * Liste der verfügbaren Kategorien für Tasks.
    * @type {("Technical Task"|"User Story"|"Bug"|"Research")[]}
@@ -239,170 +240,293 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Subtasks (Erstellen, Inline-Edit, Löschen)
-  // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Subtasks (Erstellen, Inline-Edit, Löschen)
+// ---------------------------------------------------------------------------
 
-  /**
-   * Form eines Subtasks (Add Task Seite).
-   * @typedef {Object} Subtask
-   * @property {string} title
-   * @property {boolean} done
-   */
+/**
+ * Form eines Subtasks (Add Task Seite).
+ * @typedef {Object} Subtask
+ * @property {string} title
+ * @property {boolean} done
+ */
 
-  /** Aktuelle Subtask-Liste (wird in den Task übernommen) */
-  let subtasks = /** @type {Subtask[]} */ ([]);
+/** Aktuelle Subtask-Liste (wird in den Task übernommen) */
+let subtasks = /** @type {Subtask[]} */ ([]);
 
-  /** @type {HTMLInputElement | null} */
-  const subtaskInput = document.querySelector('.input-icon-subtask input');
-  /** @type {HTMLButtonElement | null} */
-  const subtaskAddBtn = document.querySelector('.add-subtask');
-  /** @type {HTMLButtonElement | null} */
-  const subtaskClearBtn = document.querySelector('.clear-subtask-input');
-  /** @type {HTMLUListElement | null} */
-  const subtaskList = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+/** @type {HTMLInputElement | null} */
+const subtaskInput = document.querySelector('.input-icon-subtask input');
+/** @type {HTMLButtonElement | null} */
+const subtaskAddBtn = document.querySelector('.add-subtask');
+/** @type {HTMLButtonElement | null} */
+const subtaskClearBtn = document.querySelector('.clear-subtask-input');
+/** @type {HTMLUListElement | null} */
+const subtaskList = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
 
-  if (subtaskInput && subtaskAddBtn) {
-    subtaskInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        addSubtask();
-      }
-    });
-    subtaskAddBtn.addEventListener('click', addSubtask);
-  }
+/* --- X & ✓ im Input integrieren (ohne bestehende Struktur zu brechen) --- */
+const subtaskWrap = /** @type {HTMLDivElement|null} */(document.querySelector('.input-icon-subtask'));
+let inlineWrap = /** @type {HTMLDivElement|null} */(subtaskWrap?.querySelector('.subtask-inline-actions'));
+if (subtaskWrap && !inlineWrap) {
+  inlineWrap = document.createElement('div');
+  inlineWrap.className = 'subtask-inline-actions';
 
-  /** Subtask hinzufügen (aus dem Eingabefeld). */
-  function addSubtask() {
-    if (!subtaskInput || !subtaskList) return;
-    const value = subtaskInput.value.trim();
-    if (value) {
-      const subtaskObj = /** @type {Subtask} */ ({ title: value, done: false });
-      subtasks.push(subtaskObj);
+  const btnClear = document.createElement('button');
+  btnClear.type = 'button';
+  btnClear.className = 'inline-btn inline-x';
+  btnClear.textContent = '✕';
 
-      const li = document.createElement('li');
-      li.classList.add('subtask-item');
-      li.innerHTML = `
-        <span class="subtask-title">${value}</span>
-        <span class="subtask-actions" style="display:none;">
-          <button type="button" class="subtask-edit-btn" title="Bearbeiten">
-            <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
-          </button>
-          <button type="button" class="subtask-delete-btn" title="Löschen">
-            <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
-          </button>
-        </span>
-      `;
-      subtaskList.appendChild(li);
-      subtaskInput.value = '';
+  const btnOk = document.createElement('button');
+  btnOk.type = 'button';
+  btnOk.className = 'inline-btn inline-check';
+  btnOk.textContent = '✓';
 
-      li.addEventListener('mouseenter', () => {
-        const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-        if (actions) actions.style.display = 'inline-block';
-      });
-      li.addEventListener('mouseleave', () => {
-        const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-        if (actions) actions.style.display = 'none';
-      });
+  inlineWrap.appendChild(btnClear);
+  inlineWrap.appendChild(btnOk);
+  subtaskWrap.appendChild(inlineWrap);
 
-      const editBtn = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-edit-btn'));
-      const delBtn  = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-delete-btn'));
+  btnClear.addEventListener('click', () => {
+    if (!subtaskInput) return;
+    subtaskInput.value = '';
+    subtaskInput.focus();
+    hideInlineActions();
+  });
+  btnOk.addEventListener('click', () => {
+    addSubtask();
+    subtaskInput?.focus();
+  });
+}
 
-      if (editBtn) {
-        editBtn.addEventListener('click', function () {
-          editSubtask(li, subtaskObj);
-        });
-      }
-      if (delBtn) {
-        delBtn.addEventListener('click', function () {
-          if (!subtaskList) return;
-          subtaskList.removeChild(li);
-          // Index sauber bestimmen und aus Array entfernen
-          const items = Array.from(subtaskList.children);
-          const idx = items.indexOf(li);
-          if (idx > -1) subtasks.splice(idx, 1);
-        });
-      }
+function showInlineActions() {
+  if (inlineWrap) inlineWrap.style.display = 'flex';
+  if (subtaskAddBtn) subtaskAddBtn.style.display = 'none'; // altes Plus ausblenden
+}
+function hideInlineActions() {
+  if (inlineWrap) inlineWrap.style.display = 'none';
+  if (subtaskAddBtn) subtaskAddBtn.style.display = '';     // Plus (falls vorhanden) wieder zeigen
+}
+
+if (subtaskInput && subtaskAddBtn) {
+  subtaskInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addSubtask();
     }
-  }
+  });
+  subtaskAddBtn.addEventListener('click', addSubtask);
 
-  /**
-   * Inline-Edit eines Subtask-Titels mit Enter/Escape/Blur.
-   * @param {HTMLLIElement} li
-   * @param {Subtask} subtaskObj
-   */
-  function editSubtask(li, subtaskObj) {
-    const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
-    const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-    const oldValue = span.textContent || '';
+  // Inline-Buttons automatisch zeigen/verstecken
+  subtaskInput.addEventListener('focus', showInlineActions);
+  subtaskInput.addEventListener('input', showInlineActions);
+  subtaskInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      const inside = document.activeElement instanceof Node && subtaskWrap
+        ? subtaskWrap.contains(document.activeElement)
+        : false;
+      if (!inside && !subtaskInput.value.trim()) hideInlineActions();
+    }, 0);
+  });
+}
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = oldValue;
-    input.style.width = '70%';
-    span.replaceWith(input);
+/** Subtask hinzufügen (aus dem Eingabefeld). */
+function addSubtask() {
+  if (!subtaskInput || !subtaskList) return;
+  const value = subtaskInput.value.trim();
+  if (value) {
+    const subtaskObj = /** @type {Subtask} */ ({ title: value, done: false });
+    subtasks.push(subtaskObj);
 
-    /** Guard gegen doppeltes Ersetzen durch blur + enter */
-    let replaced = false;
+    const li = document.createElement('li');
+    li.classList.add('subtask-item');
+    li.innerHTML = `
+      <span class="subtask-title">${escapeHtml(value)}</span>
+      <span class="subtask-actions" style="display:none;">
+        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+        </button>
+        <button type="button" class="subtask-delete-btn" title="Löschen">
+          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+        </button>
+      </span>
+    `;
+    subtaskList.appendChild(li);
+    subtaskInput.value = '';
+    hideInlineActions();
 
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') save();
-      if (e.key === 'Escape') cancel();
+    li.addEventListener('mouseenter', () => {
+      const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
+      if (actions) actions.style.display = 'inline-block';
     });
-    input.addEventListener('blur', save);
-
-    function save() {
-      if (replaced) return;
-      replaced = true;
-      subtaskObj.title = input.value.trim() || oldValue;
-
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = subtaskObj.title;
-
-      if (input.parentNode) input.replaceWith(newSpan);
+    li.addEventListener('mouseleave', () => {
+      const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
       if (actions) actions.style.display = 'none';
-    }
-    function cancel() {
-      if (replaced) return;
-      replaced = true;
-
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = oldValue;
-
-      if (input.parentNode) input.replaceWith(newSpan);
-      if (actions) actions.style.display = 'none';
-    }
-    input.focus();
-  }
-
-  // Eingabe im Subtaskfeld leeren (X-Button), falls vorhanden
-  if (subtaskClearBtn && subtaskInput) {
-    subtaskClearBtn.addEventListener('click', function () {
-      subtaskInput.value = '';
-      subtaskClearBtn.style.display = 'none';
     });
-  }
 
-  // === heutiges Datum als Minimum setzen (lokale Zeitzone korrekt) ===
-  const dueInput = /** @type {HTMLInputElement|null} */(document.getElementById('due'));
-  if (dueInput) {
-    const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
-    const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
-    dueInput.min = todayLocalISO;
+    const editBtn = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-edit-btn'));
+    const delBtn  = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-delete-btn'));
 
-    // Guard: falls der User manuell zurücksetzt
-    dueInput.addEventListener('input', () => {
-      if (dueInput.value && dueInput.value < dueInput.min) {
-        dueInput.value = dueInput.min;
-      }
-    });
+    if (editBtn) {
+      editBtn.addEventListener('click', function () {
+        editSubtask(li, subtaskObj);
+      });
+    }
+    if (delBtn) {
+      delBtn.addEventListener('click', function () {
+        if (!subtaskList) return;
+        subtaskList.removeChild(li);
+        // Index sauber bestimmen und aus Array entfernen
+        const items = Array.from(subtaskList.children);
+        const idx = items.indexOf(li);
+        if (idx > -1) subtasks.splice(idx, 1);
+      });
+    }
   }
+}
+
+/**
+ * Inline-Edit eines Subtask-Titels mit Enter/Escape/Blur.
+ * @param {HTMLLIElement} li
+ * @param {Subtask} subtaskObj
+ */
+function editSubtask(li, subtaskObj) {
+  const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
+  const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
+  const oldValue = span.textContent || '';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = oldValue;
+  input.style.width = '70%';
+  span.replaceWith(input);
+
+  /** Guard gegen doppeltes Ersetzen durch blur + enter */
+  let replaced = false;
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') cancel();
+  });
+  input.addEventListener('blur', save);
+
+  function save() {
+    if (replaced) return;
+    replaced = true;
+    subtaskObj.title = input.value.trim() || oldValue;
+
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = subtaskObj.title;
+
+    if (input.parentNode) input.replaceWith(newSpan);
+    if (actions) actions.style.display = 'none';
+  }
+  function cancel() {
+    if (replaced) return;
+    replaced = true;
+
+    const newSpan = document.createElement('span');
+    newSpan.className = 'subtask-title';
+    newSpan.textContent = oldValue;
+
+    if (input.parentNode) input.replaceWith(newSpan);
+    if (actions) actions.style.display = 'none';
+  }
+  input.focus();
+}
+
+// Eingabe im Subtaskfeld leeren (X-Button), falls vorhanden
+if (subtaskClearBtn && subtaskInput) {
+  subtaskClearBtn.addEventListener('click', function () {
+    subtaskInput.value = '';
+    subtaskClearBtn.style.display = 'none';
+    hideInlineActions();
+  });
+}
+
+// === heutiges Datum als Minimum setzen (lokale Zeitzone korrekt) ===
+const dueInput = /** @type {HTMLInputElement|null} */(document.getElementById('due'));
+if (dueInput) {
+  const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
+  const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
+  dueInput.min = todayLocalISO;
+
+  // Guard: falls der User manuell zurücksetzt
+  dueInput.addEventListener('input', () => {
+    if (dueInput.value && dueInput.value < dueInput.min) {
+      dueInput.value = dueInput.min;
+    }
+  });
+}
+
+/* kleiner Helper fürs sichere Einfügen von Text */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
 
   // ---------------------------------------------------------------------------
-  // Task erstellen
+  // ►►► Task erstellen + erst TOAST, dann Redirect auf Board ◄◄◄
   // ---------------------------------------------------------------------------
+
+/** Slide-in toast that shows ONLY the image (which already contains the text). */
+function showAddTaskToast() {
+  // (Re)inject CSS every call so old styles are overwritten
+  let style = document.getElementById('add-task-toast-style');
+  if (!style) {
+    style = document.createElement('style');
+    style.id = 'add-task-toast-style';
+    document.head.appendChild(style);
+  }
+  style.textContent = `
+    @keyframes slideUpToCenter {
+      0%   { top: 100%; transform: translate(-50%, 0);    opacity: 1; }
+      100% { top: 50%;  transform: translate(-50%, -50%); opacity: 1; }
+    }
+    #addTaskToast {
+      position: fixed;
+      left: 50%;
+      top: 100%;                 /* start at bottom edge */
+      transform: translate(-50%, 0);
+      z-index: 99999;
+      background: transparent;   /* NO dark bubble behind */
+      padding: 0;                /* no padding */
+      border-radius: 0;          /* no radius */
+      box-shadow: none;          /* no shadow */
+      will-change: top, transform;
+      pointer-events: none;      /* fully non-interactive */
+    }
+    #addTaskToast.enter {
+      animation: slideUpToCenter .55s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    #addTaskToast img {
+      display: block;            /* remove inline gaps */
+      width: 300px;              /* bigger image */
+      height: auto;
+    }
+  `;
+
+  // Create/replace the node (image only)
+  let toast = document.getElementById('addTaskToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'addTaskToast';
+    document.body.appendChild(toast);
+  }
+    toast.innerHTML = `
+      <img src="../assets/icons/add_task/board_white.png" alt="">
+    `;  // ^ Use your image path that already includes the text
+
+  // Restart animation
+  toast.classList.remove('enter');
+  // @ts-ignore force reflow
+  void toast.offsetHeight;
+  toast.classList.add('enter');
+}
+
+
+
+
   /** Button „Create Task“ */
   const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
   if (createBtn) {
@@ -457,15 +581,16 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       const newTaskKey = firebase.database().ref().child('tasks').push().key;
-      firebase.database().ref('tasks/' + newTaskKey).set({
-        ...taskObj,
-        id: newTaskKey
-      }).then(() => {
-        localStorage.setItem('showBoardToast', '1');
-        window.location.href = '../pages/board.html';
-      }).catch((error) => {
-        alert("Fehler beim Speichern: " + error.message);
-      });
+firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey })
+  .then(() => {
+    showAddTaskToast();                     // only the image
+    setTimeout(() => {
+      window.location.href = '../pages/board.html';
+    }, 1600);
+  })
+  .catch(err => alert('Fehler beim Speichern: ' + err.message));
+
+;
     });
   }
 
@@ -555,3 +680,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+// === Form Validation Helpers ===
+function setDateMinToday(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.setAttribute('min', new Date().toISOString().split('T')[0]);
+}
+
+// überall aufrufen, wo es diese Felder gibt
+document.addEventListener('DOMContentLoaded', () => {
+  setDateMinToday('#task-due-date');  // Add Task
+  setDateMinToday('#editDueDate');    // Edit (Board-Detail)
+});
+
+// nutze diese Funktion vor dem Speichern, wenn du Custom-Buttons hast:
+function reportFormValidity(formEl) {
+  if (!formEl) return true;
+  // HTML5 Validation UI
+  if (!formEl.reportValidity()) return false;
+  return true;
+}

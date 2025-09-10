@@ -1,7 +1,7 @@
 // @ts-check
 /* global firebase */
 
-// ===== Bootstrapping: sorgt dafür, dass onDomReady immer läuft =====
+// === Bootstrapping: onDomReady immer ausführen ===
 (function init() {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', onDomReady);
@@ -10,76 +10,60 @@
   }
 })();
 
-/** Wird nach DOM-Ready aufgerufen. Hier kommt dein bisheriger Code rein. */
-/** @param {Event=} _ev */
-function onDomReady(_ev) {
-  // ---- MACH DIE FUNKTION GLOBAL FÜR inline onclick="openAddTaskDialog('todo')" ----
+/** Bild-Toast: slidet von unten in die Bildschirmmitte (nur das Bild). */
+function showAddTaskToast() {
+  let style = document.getElementById('add-task-toast-style');
+  if (!style) {
+    style = document.createElement('style');
+    style.id = 'add-task-toast-style';
+    document.head.appendChild(style);
+  }
+  style.textContent = `
+    @keyframes slideUpToCenter {
+      0%   { top: 100%; transform: translate(-50%, 0);    opacity: 1; }
+      100% { top: 50%;  transform: translate(-50%, -50%); opacity: 1; }
+    }
+    #addTaskToast {
+      position: fixed;
+      left: 50%;
+      top: 100%;
+      transform: translate(-50%, 0);
+      z-index: 99999;
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+      will-change: top, transform;
+      pointer-events: none;
+    }
+    #addTaskToast.enter { animation: slideUpToCenter .55s cubic-bezier(.2,.8,.2,1) forwards; }
+    #addTaskToast img { display:block; width:300px; height:auto; }
+  `;
+
+  let toast = document.getElementById('addTaskToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'addTaskToast';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<img src="../assets/icons/add_task/board_white.png" alt="">`;
+
+  toast.classList.remove('enter'); void toast.offsetHeight; toast.classList.add('enter');
+}
+
+/** Wird nach DOM-Ready aufgerufen. */
+function onDomReady() {
+  // ──────────────────────────────────────────────────────────────────────────
+  // Globale API: Add-Task Overlay öffnen (onclick in board.html)
+  // ──────────────────────────────────────────────────────────────────────────
   // @ts-ignore
   window.openAddTaskDialog = function (/** @type {'todo'|'inprogress'|'awaitingfeedback'|'done'} */ status = 'todo') {
-    clearAddTaskForm();
-    const dialog = /** @type {HTMLDialogElement} */(document.getElementById('addTaskOverlay'));
-    dialog.dataset.status = status;
-    dialog.showModal();
-  };
-  // ──────────────────────────────────────────────────────────────────────────
-  // Typen
-  // ──────────────────────────────────────────────────────────────────────────
-
-  /**
-   * Ein Subtask im Add-Task/Board Overlay.
-   * @typedef {Object} Subtask
-   * @property {string}  title
-   * @property {boolean} done
-   */
-
-  /**
-   * Ein Eintrag im „Assigned to“-Dropdown (Add-Task auf dem Board).
-   * @typedef {Object} AssignedUserEntry
-   * @property {string}  name
-   * @property {string}  initials
-   * @property {boolean} selected
-   * @property {string=} email
-   */
-
-  // ──────────────────────────────────────────────────────────────────────────
-  // Toast
-  // ──────────────────────────────────────────────────────────────────────────
-
-  function showBoardToast() {
-    const toast = /** @type {HTMLDivElement | null} */ (document.getElementById('taskToast'));
-    if (!toast) return;
-    toast.classList.add('show');
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-      toast.classList.remove('show');
-      toast.classList.add('hidden');
-    }, 3000);
-  }
-
-  if (localStorage.getItem('showBoardToast')) {
-    showBoardToast();
-    localStorage.removeItem('showBoardToast');
-  }
-
-  // ──────────────────────────────────────────────────────────────────────────
-  // Add-Task Overlay öffnen/schließen
-  // ──────────────────────────────────────────────────────────────────────────
-
-  /**
-   * Öffnet das Add-Task-Dialogfenster:
-   *  - setzt Ziel-Status
-   *  - setzt min-Datum = heute
-   *  - preselect „Medium“
-   *  - bindet Dropdown-Handler
-   */
-  // @ts-ignore – absichtlich an window gehängt
-  window.openAddTaskDialog = function (status = 'todo') {
     clearAddTaskForm();
 
     const addDlg = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
     addDlg.dataset.status = status;
 
-    // min = heute (lokale TZ) für das Date-Input
+    // min = heute (lokale TZ) für Date-Input
     const dateInput = /** @type {HTMLInputElement | null} */ (document.getElementById('task-due-date'));
     if (dateInput) {
       const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
@@ -88,44 +72,61 @@ function onDomReady(_ev) {
 
     // "Medium" standardmäßig aktiv
     document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
-    const mediumBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn[data-priority="medium"]'));
+    const mediumBtn = /** @type {HTMLButtonElement | null} */ (
+      document.querySelector('.priority-buttons .btn[data-priority="medium"]')
+    );
     if (mediumBtn) mediumBtn.classList.add('active');
 
     addDlg.showModal();
-    bindAddAssignedDropdownHandlers(); // robustes (Re)Binding beim Öffnen
+    // Dropdown-Setup kommt AUS boardFirebase.js
+    // @ts-ignore
+    window.initAssignedDropdown && window.initAssignedDropdown();
   };
 
-  /** @type {HTMLDialogElement} */
-  const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
+  // ──────────────────────────────────────────────────────────────────────────
+  // Animation nach Redirect von Add-Task
+  // ──────────────────────────────────────────────────────────────────────────
+  if (localStorage.getItem('showBoardToast')) {
+    showAddTaskToast();
+    localStorage.removeItem('showBoardToast');
+  }
 
-  // Overlay schließen (X oder „Clear“)
+  // ──────────────────────────────────────────────────────────────────────────
+  // Add-Task Overlay schließen
+  // ──────────────────────────────────────────────────────────────────────────
+  const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
   const closeBtn  = /** @type {HTMLButtonElement} */ (document.querySelector('.close-add-task-overlay'));
-  const cancelBtn = /** @type {HTMLButtonElement} */ (document.querySelector('.clear_button'));
-  closeBtn.onclick = cancelBtn.onclick = function () {
+  const clearBtnL = /** @type {HTMLButtonElement} */ (document.querySelector('.clear_button'));
+
+  if (closeBtn) closeBtn.onclick = closeAddOverlay;
+  if (clearBtnL) clearBtnL.onclick = closeAddOverlay;
+
+  function closeAddOverlay(e) {
+    e?.preventDefault?.();
     dialog.close();
     clearAddTaskForm();
-  };
+  }
 
+  /** Alle Felder des Overlays zurücksetzen. */
   function clearAddTaskForm() {
     (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value = '';
     (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value = '';
     (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value = '';
     (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).selectedIndex = 0;
 
-    // Assigned User Reset
-    Object.values(addAssignedUsers).forEach(u => (u.selected = false));
-    renderAddAssignedDropdown();
-    renderAddAssignedBadges();
-    addAssignedDropdownEl?.classList.add('hidden');
+    // Assigned reset über Helper aus boardFirebase.js
+    // @ts-ignore
+    window.__boardResetAssigned && window.__boardResetAssigned();
 
     // Priority zurücksetzen
     document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
 
     // Subtasks zurücksetzen
-    const w = /** @type {any} */ (window);
-    w.boardSubtasks = /** @type {Subtask[]} */ ([]);
-    (/** @type {HTMLUListElement} */ (document.getElementById('subtask-list'))).innerHTML = '';
-    (/** @type {HTMLInputElement} */ (document.querySelector('.input-icon-subtask input'))).value = '';
+    subtasks = [];
+    const ul = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+    if (ul) ul.innerHTML = '';
+    if (subtaskInput) subtaskInput.value = '';
+    hideInlineActions();
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -140,268 +141,248 @@ function onDomReady(_ev) {
     });
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Subtask-Logik
+  // Subtasks (Eingabe mit X & ✓, Liste, Inline-Edit)
   // ──────────────────────────────────────────────────────────────────────────
-  const w = /** @type {any} */ (window);
-  w.boardSubtasks = /** @type {Subtask[]} */ ([]);
+  /**
+   * @typedef {{ title:string; done:boolean }} Subtask
+   */
+  let subtasks = /** @type {Subtask[]} */ ([]);
 
-  const subtaskInput  = /** @type {HTMLInputElement}  */ (document.querySelector('.input-icon-subtask input'));
-  const subtaskAddBtn = /** @type {HTMLButtonElement} */ (document.querySelector('.add-subtask'));
-  const subtaskList   = /** @type {HTMLUListElement}  */ (document.getElementById('subtask-list'));
+  // ---------- Subtask-Eingabe (X & ✓ im Input) ----------
+  const subtaskWrap   = /** @type {HTMLDivElement|null} */ (document.querySelector('.input-icon-subtask'));
+  const subtaskInput  = /** @type {HTMLInputElement|null} */  (subtaskWrap?.querySelector('input'));
+  const addIconBtn    = /** @type {HTMLButtonElement|null} */ (subtaskWrap?.querySelector('.add-subtask')); // altes Plus-Icon
+  const subtaskList   = /** @type {HTMLUListElement|null} */  (document.getElementById('subtask-list'));
 
-  function addSubtaskToList() {
+  // Inline-Container im Input anlegen (falls nicht vorhanden)
+  let inlineWrap = /** @type {HTMLDivElement|null} */ (subtaskWrap?.querySelector('.subtask-inline-actions'));
+  if (subtaskWrap && !inlineWrap) {
+    inlineWrap = document.createElement('div');
+    inlineWrap.className = 'subtask-inline-actions';
+
+    const btnClear = document.createElement('button');
+    btnClear.type = 'button';
+    btnClear.className = 'inline-btn inline-x';
+    btnClear.textContent = '✕';
+
+    const btnOk = document.createElement('button');
+    btnOk.type = 'button';
+    btnOk.className = 'inline-btn inline-check';
+    btnOk.textContent = '✓';
+
+    inlineWrap.appendChild(btnClear);
+    inlineWrap.appendChild(btnOk);
+    subtaskWrap.appendChild(inlineWrap);
+
+    // Aktionen
+    btnClear.addEventListener('click', () => {
+      if (!subtaskInput) return;
+      subtaskInput.value = '';
+      subtaskInput.focus();
+      hideInlineActions();
+    });
+    btnOk.addEventListener('click', () => {
+      addSubtask();
+      hideInlineActions();
+      subtaskInput?.focus();
+    });
+  }
+
+  function showInlineActions() {
+    if (inlineWrap) inlineWrap.style.display = 'flex';
+    if (addIconBtn) addIconBtn.style.display = 'none';
+  }
+  function hideInlineActions() {
+    if (inlineWrap) inlineWrap.style.display = 'none';
+    if (addIconBtn) addIconBtn.style.display = '';
+  }
+
+  // Events fürs Eingabefeld
+  if (subtaskInput) {
+    subtaskInput.addEventListener('focus', showInlineActions);
+    subtaskInput.addEventListener('input', showInlineActions);
+    subtaskInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addSubtask();
+        hideInlineActions();
+        subtaskInput.focus();
+      }
+    });
+    subtaskInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        const inside = document.activeElement instanceof Node && subtaskWrap
+          ? subtaskWrap.contains(document.activeElement)
+          : false;
+        if (!inside && !subtaskInput.value.trim()) hideInlineActions();
+      }, 0);
+    });
+  }
+
+  if (addIconBtn) addIconBtn.addEventListener('click', addSubtask);
+
+  function addSubtask() {
+    if (!subtaskInput || !subtaskList) return;
     const value = subtaskInput.value.trim();
     if (!value) return;
 
-    /** @type {Subtask} */
-    const subtask = { title: value, done: false };
-    w.boardSubtasks.push(subtask);
+    const model = /** @type {Subtask} */ ({ title: value, done: false });
+    subtasks.push(model);
 
     const li = document.createElement('li');
     li.className = 'subtask-item';
     li.innerHTML = `
-      <span>${value}</span>
-      <button type="button" class="delete-subtask" title="Remove">&times;</button>
+      <span class="subtask-title">${escapeHtml(value)}</span>
+      <span class="subtask-actions" style="display:none;">
+        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+        </button>
+        <button type="button" class="subtask-delete-btn" title="Löschen">
+          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+        </button>
+      </span>
     `;
     subtaskList.appendChild(li);
     subtaskInput.value = '';
 
-    (/** @type {HTMLButtonElement} */ (li.querySelector('.delete-subtask'))).onclick = () => {
-      const idx = w.boardSubtasks.findIndex((st) => st.title === value);
-      if (idx > -1) w.boardSubtasks.splice(idx, 1);
+    li.addEventListener('mouseenter', () => {
+      const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+      if (a) a.style.display = 'inline-block';
+    });
+    li.addEventListener('mouseleave', () => {
+      const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+      if (a) a.style.display = 'none';
+    });
+
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => {
+      editSubtaskInline(li, model);
+    });
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+      if (!subtaskList) return;
+      const items = Array.from(subtaskList.children);
+      const idx = items.indexOf(li);
+      if (idx > -1) subtasks.splice(idx, 1);
       li.remove();
-    };
+    });
   }
 
-  subtaskAddBtn.addEventListener('click', addSubtaskToList);
-  subtaskInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addSubtaskToList();
+  function editSubtaskInline(li, model) {
+    const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
+    const actions = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+    const oldValue = span.textContent || '';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = oldValue;
+    input.style.width = '70%';
+    input.style.height = '70%';
+    span.replaceWith(input);
+
+    let replaced = false;
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') save();
+      if (e.key === 'Escape') cancel();
+    });
+    input.addEventListener('blur', save);
+
+    function save() {
+      if (replaced) return;
+      replaced = true;
+      model.title = input.value.trim() || oldValue;
+
+      const newSpan = document.createElement('span');
+      newSpan.className = 'subtask-title';
+      newSpan.textContent = model.title;
+
+      if (input.parentNode) input.replaceWith(newSpan);
+      if (actions) actions.style.display = 'none';
     }
-  });
+    function cancel() {
+      if (replaced) return;
+      replaced = true;
+
+      const newSpan = document.createElement('span');
+      newSpan.className = 'subtask-title';
+      newSpan.textContent = oldValue;
+
+      if (input.parentNode) input.replaceWith(newSpan);
+      if (actions) actions.style.display = 'none';
+    }
+    input.focus();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Kategorien
+  // Kategorien füllen
   // ──────────────────────────────────────────────────────────────────────────
   /** @type {("Technical Task"|"User Story"|"Bug"|"Research")[]} */
   const categories = ["Technical Task", "User Story", "Bug", "Research"];
-
   const catSelect = /** @type {HTMLSelectElement} */ (document.getElementById('category'));
-  catSelect.innerHTML = '<option value="">Select task category</option>';
-  categories.forEach((c) => {
-    const o = document.createElement('option');
-    o.value = c;
-    o.textContent = c;
-    catSelect.appendChild(o);
-  });
+  if (catSelect) {
+    catSelect.innerHTML = '<option value="">Select task category</option>';
+    categories.forEach((c) => {
+      const o = document.createElement('option');
+      o.value = c;
+      o.textContent = c;
+      catSelect.appendChild(o);
+    });
+  }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Kleiner Hinweis-Toast (Mitte)
+  // Hinweis-Toast (Mitte) – optional
   // ──────────────────────────────────────────────────────────────────────────
   function showCustomWarning(msg) {
     const modal = /** @type {HTMLDivElement|null} */ (document.getElementById('custom-warning-modal'));
     if (!modal) return;
-
     const content = /** @type {HTMLElement|null} */ (modal.querySelector('#custom-warning-content'));
     if (content) content.innerText = msg;
-
     modal.classList.replace('modal-hidden', 'modal-visible');
-    setTimeout(() => {
-      modal.classList.replace('modal-visible', 'modal-hidden');
-    }, 2500);
+    setTimeout(() => modal.classList.replace('modal-visible', 'modal-hidden'), 2500);
   }
-  (/** @type {any} */ (window)).showCustomWarning = showCustomWarning;
+  // @ts-ignore
+  window.showCustomWarning = showCustomWarning;
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Assigned-to Dropdown (Add-Dialog, Kollisionen vermeiden → Prefix)
-  // ──────────────────────────────────────────────────────────────────────────
-
-  /** DOM */
-  const addAssignedDropdownEl  = /** @type {HTMLDivElement} */ (document.getElementById('assignedDropdown'));
-  const addAssignedBadgesEl    = /** @type {HTMLDivElement} */ (document.getElementById('assignedBadges'));
-  const addAssignedSelectBoxEl = /** @type {HTMLDivElement} */ (document.getElementById('assignedSelectBox'));
-
-  /** Daten */
-  let addAssignedUsers = /** @type {Record<string, AssignedUserEntry>} */ ({});
-
-  const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
-
-  function getInitials(name) {
-    return name.split(' ').slice(0, 2).map(n => n[0]?.toUpperCase() || '').join('');
-  }
-  function generateColorFromString(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    const hue = hash % 360;
-    return `hsl(${hue}, 70%, 50%)`;
-  }
-
-  // Users + Contacts laden (einmalig)
-  Promise.all([
-    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
-    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
-  ]).then(([users, contacts]) => {
-    if (users) {
-      Object.entries(users).forEach(([id, data]) => {
-        addAssignedUsers[id] = {
-          name: data.name || data.email || id,
-          email: data.email,
-          initials: getInitials(data.name || data.email || id),
-          selected: false
-        };
-      });
-    }
-    if (contacts) {
-      Object.entries(contacts).forEach(([id, data]) => {
-        if (!addAssignedUsers[id]) {
-          addAssignedUsers[id] = {
-            name: data.name || id,
-            email: '',
-            initials: getInitials(data.name || id),
-            selected: false
-          };
-        }
-      });
-    }
-    renderAddAssignedDropdown();
-    renderAddAssignedBadges();
-  });
-
-  function renderAddAssignedDropdown() {
-    if (!addAssignedDropdownEl) return;
-    addAssignedDropdownEl.innerHTML = '';
-
-    Object.entries(addAssignedUsers).forEach(([id, user]) => {
-      const option = document.createElement('div');
-      option.className = 'custom-option';
-      option.dataset.userId = id;
-
-      const avatar = document.createElement('div');
-      avatar.className = 'custom-option-avatar';
-      avatar.style.backgroundColor = generateColorFromString(user.name);
-      avatar.textContent = user.initials;
-
-      const label = document.createElement('div');
-      label.className = 'custom-option-label';
-      label.textContent = user.name + (
-        user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
-      );
-
-      const checkbox = document.createElement('div');
-      checkbox.className = 'custom-option-checkbox';
-      if (user.selected) checkbox.classList.add('checked');
-
-      option.appendChild(avatar);
-      option.appendChild(label);
-      option.appendChild(checkbox);
-      addAssignedDropdownEl.appendChild(option);
-
-      // Auswahl toggeln – Dropdown bleibt offen
-      option.addEventListener('pointerdown', (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        addAssignedUsers[id].selected = !addAssignedUsers[id].selected;
-        renderAddAssignedDropdown();
-        renderAddAssignedBadges();
-      });
-    });
-  }
-
-function renderAddAssignedBadges() {
-  if (!addAssignedBadgesEl) return;
-  addAssignedBadgesEl.innerHTML = '';
-
-  const MAX_BADGES = 4; // wie auf der add_task Seite
-  const selected = Object.values(addAssignedUsers).filter(u => u.selected);
-
-  // bis zu 4 echte Badges
-  selected.slice(0, MAX_BADGES).forEach(user => {
-    const badge = document.createElement('div');
-    badge.className = 'avatar-badge';
-    badge.textContent = user.initials;
-    badge.style.backgroundColor = generateColorFromString(user.name);
-    addAssignedBadgesEl.appendChild(badge);
-  });
-
-  // Rest als +N
-  const extra = selected.length - MAX_BADGES;
-  if (extra > 0) {
-    const more = document.createElement('div');
-    more.className = 'avatar-badge avatar-badge-more';
-    more.textContent = `+${extra}`;
-    addAssignedBadgesEl.appendChild(more);
-  }
-}
-
-
-  /** Robustes Open/Close-Binding (jedes Öffnen des Dialogs) */
-  function bindAddAssignedDropdownHandlers() {
-    if (!addAssignedSelectBoxEl || !addAssignedDropdownEl) return;
-
-    // Nur einmal binden
-    if (!addAssignedSelectBoxEl.dataset.bound) {
-      addAssignedSelectBoxEl.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        addAssignedDropdownEl.classList.toggle('hidden');
-      });
-      addAssignedSelectBoxEl.dataset.bound = '1';
-    }
-
-    // Klicks im Dropdown selbst nicht als Outside werten
-    if (!addAssignedDropdownEl.dataset.bound) {
-      addAssignedDropdownEl.addEventListener('click', (ev) => ev.stopPropagation());
-      addAssignedDropdownEl.dataset.bound = '1';
-    }
-
-    // Outside-Click (pro Öffnen neu aktiviert → dann wieder entfernt)
-    const outside = (e) => {
-      const target = e.target instanceof Node ? e.target : null;
-      const wrapper = /** @type {HTMLElement|null} */ (document.querySelector('.assigned-to-wrapper'));
-      if (wrapper && target && !wrapper.contains(target)) {
-        addAssignedDropdownEl.classList.add('hidden');
-        document.removeEventListener('click', outside, true);
-      }
-    };
-    document.addEventListener('click', outside, true);
-  }
-
-  // ──────────────────────────────────────────────────────────────────────────
-  // Save Task
+  // Create Task (speichert + Animation)
   // ──────────────────────────────────────────────────────────────────────────
   (/** @type {HTMLButtonElement} */ (document.querySelector('.create_task_btn')))
     .addEventListener('click', () => {
+      const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
+
       const title       = (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value.trim();
       const description = (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value.trim();
       const dueDate     = (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value.trim();
       const category    = (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).value;
 
-      // Assigned User aus Custom-Dropdown (Add-Dialog)
-      const assignedTo = Object.entries(addAssignedUsers)
-        .filter(([, u]) => u.selected)
-        .map(([id]) => id);
+      // Aus boardFirebase.js
+      // @ts-ignore
+      const assignedTo = (window.__boardGetSelectedAssigned && window.__boardGetSelectedAssigned()) || [];
 
-      const activeBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn.active'));
+      const activeBtn = /** @type {HTMLButtonElement | null} */ (
+        document.querySelector('.priority-buttons .btn.active')
+      );
       const priority  = activeBtn ? activeBtn.dataset.priority : null;
 
-      // validation
       if (!title || !dueDate || !category) {
-        (/** @type {any} */ (window)).showCustomWarning("Bitte alle Pflichtfelder ausfüllen!");
+        // @ts-ignore
+        window.showCustomWarning?.("Bitte alle Pflichtfelder ausfüllen!");
         return;
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
-        (/** @type {any} */ (window)).showCustomWarning("Datum im Format JJJJ-MM-TT wählen.");
+        // @ts-ignore
+        window.showCustomWarning?.("Datum im Format JJJJ-MM-TT wählen.");
         return;
       }
       if (!priority) {
-        (/** @type {any} */ (window)).showCustomWarning("Bitte eine Priorität auswählen!");
+        // @ts-ignore
+        window.showCustomWarning?.("Bitte eine Priorität auswählen!");
         return;
       }
-
-      /** @type {Subtask[]} */
-      const cleanSubtasks = (/** @type {Subtask[]} */ (w.boardSubtasks))
-        .filter(st => st.title.trim())
-        .map(st => ({ title: st.title.trim(), done: !!st.done }));
 
       const taskObj = {
         title,
@@ -410,8 +391,8 @@ function renderAddAssignedBadges() {
         priority,
         assignedTo,
         category,
-        subtasks: cleanSubtasks,
-        status: dialog.dataset.status,
+        subtasks: [...subtasks],
+        status: dialog.dataset.status || 'todo',
         createdAt: Date.now()
       };
 
@@ -420,8 +401,21 @@ function renderAddAssignedBadges() {
         .then(() => {
           dialog.close();
           clearAddTaskForm();
-          showBoardToast();
+          showAddTaskToast(); // neue Bild-Animation
         })
-        .catch(err => (/** @type {any} */ (window)).showCustomWarning("Fehler: " + err.message));
+        .catch(err => {
+          // @ts-ignore
+          window.showCustomWarning?.("Fehler: " + err.message);
+        });
     });
 }
+
+// === Kleine Helper für min-Date ===
+function setDateMinToday(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.setAttribute('min', new Date().toISOString().split('T')[0]);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  setDateMinToday('#task-due-date');   // Add Task (Board-Overlay)
+});

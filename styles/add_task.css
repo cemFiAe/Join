@@ -310,7 +310,19 @@ a {
     color: #000000 !important;
     opacity: 1;
 }
-  .input-icon-subtask { position: relative; }
+.input-icon-subtask { position: relative; }
+.subtask-inline-actions{
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  display:none; gap:10px; align-items:center; pointer-events:none;
+}
+.subtask-inline-actions .inline-btn{
+  pointer-events:auto; border:1px solid transparent; background:transparent;
+  padding:2px 6px; border-radius:6px; line-height:1; font-size:16px; cursor:pointer;
+}
+.subtask-inline-actions .inline-btn:hover{ background:#f1f1f1; border-color:#D1D1D1; }
+.input-icon-subtask input{ padding-right:56px; }
+
+
   .input-icon-subtask input { padding-right: 10px; height: 48px;}
   .input-icon-subtask .add-subtask { position: absolute; padding-inline: 0; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer;}
   .input-icon-subtask .add-subtask img { width: 20px; height: 20px; object-fit: cover;}
@@ -409,7 +421,10 @@ a {
   padding: 2px 0;
   position: relative;
 }
-
+.subtask-item:hover{
+  background-color: rgba(43, 43, 43, 0.063);
+  border-radius: 8px;
+}
 .subtask-title {
   flex: 1;
   padding-left: 4px;
