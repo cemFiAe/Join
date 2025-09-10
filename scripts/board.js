@@ -87,7 +87,7 @@ function onDomReady() {
   // Animation nach Redirect von Add-Task
   // ──────────────────────────────────────────────────────────────────────────
   if (localStorage.getItem('showBoardToast')) {
-    showAddTaskToast();
+    showBoardAddToast();
     localStorage.removeItem('showBoardToast');
   }
 
@@ -401,7 +401,7 @@ function onDomReady() {
         .then(() => {
           dialog.close();
           clearAddTaskForm();
-          showAddTaskToast(); // neue Bild-Animation
+          showBoardAddToast(); // slidet rein & verschwindet automatisch
         })
         .catch(err => {
           // @ts-ignore
@@ -419,3 +419,66 @@ function setDateMinToday(selector) {
 document.addEventListener('DOMContentLoaded', () => {
   setDateMinToday('#task-due-date');   // Add Task (Board-Overlay)
 });
+
+/** Image-only Slide-Toast (Board) – kommt von unten in die Mitte und verschwindet automatisch */
+function showBoardAddToast() {
+  // Styles nur 1× injizieren
+  let style = document.getElementById('board-add-toast-style');
+  if (!style) {
+    style = document.createElement('style');
+    style.id = 'board-add-toast-style';
+    style.textContent = `
+      @keyframes boardToastIn {
+        0%   { top: 100%; transform: translate(-50%, 0);    opacity: 1; }
+        100% { top: 50%;  transform: translate(-50%, -50%); opacity: 1; }
+      }
+      @keyframes boardToastOut {
+        0%   { top: 50%;  transform: translate(-50%, -50%); opacity: 1; }
+        100% { top: 100%; transform: translate(-50%, 0);    opacity: 0; }
+      }
+      #boardAddToast {
+        position: fixed;
+        left: 50%;
+        top: 100%;
+        transform: translate(-50%, 0);
+        z-index: 99999;
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        pointer-events: none;
+      }
+      #boardAddToast img { display:block; width:300px; height:auto; }
+      #boardAddToast.enter { animation: boardToastIn .55s cubic-bezier(.2,.8,.2,1) forwards; }
+      #boardAddToast.leave { animation: boardToastOut .5s ease forwards; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // Node erstellen/wiederverwenden
+  let toast = document.getElementById('boardAddToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'boardAddToast';
+    toast.innerHTML = `<img src="../assets/icons/add_task/board_white.png" alt="">`;
+    document.body.appendChild(toast);
+  }
+
+  // Eintrittsanimation neu starten
+  toast.classList.remove('leave', 'enter');
+  // @ts-ignore – reflow
+  void toast.offsetWidth;
+  toast.classList.add('enter');
+
+  // Auto-Hide: kurze Verweilzeit, dann „leave“ + DOM entfernen
+  clearTimeout(/** @type {any} */(showBoardAddToast)._t);
+  /** @type {any} */(showBoardAddToast)._t = setTimeout(() => {
+    toast.classList.remove('enter');
+    toast.classList.add('leave');
+    const onEnd = () => {
+      toast.removeEventListener('animationend', onEnd);
+      toast.remove();  // komplett raus
+    };
+    toast.addEventListener('animationend', onEnd);
+  }, 1200); // 1.2s in der Mitte stehen lassen
+}

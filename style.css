@@ -398,3 +398,19 @@ body {
         font-size: 12px;
     }
 }
+
+/* Native HTML5 validation look */
+input:required:invalid,
+select:required:invalid,
+textarea:required:invalid {
+  border-color: #ff8190 !important;
+}
+
+input:required:valid,
+select:required:valid,
+textarea:required:valid {
+  border-color: #22c55e !important;
+}
+
+/* Browser-Tooltip besser lesbar (optional) */
+input::placeholder, textarea::placeholder { color:#9aa3af; }

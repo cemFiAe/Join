@@ -40,7 +40,7 @@ a {
   }
   .form-group label {
     font-size: 20px;
-    height: 24px;
+    height: 28px;
     color: #1f2937;
   }
   .required {
@@ -159,11 +159,10 @@ a {
   }
 
   #subtask-list {
-    list-style: disc inside;
     margin-top: 8px;
     color: #4b5563;
     font-size: 16px;
-    max-height: 60px;
+    max-height: 118px;
     overflow-y: scroll;
   }
 #subtask-list li {
@@ -172,6 +171,8 @@ a {
   overflow: hidden;          /* Alles, was zu lang ist, wird nicht angezeigt */
   text-overflow: ellipsis;   /* ... am Ende, wenn zu lang */
   max-width: 100%;           /* Wichtig für Flex-Layouts */
+  list-style-type: circle;
+  list-style-position: outside;
 }
 
   .form-group select {
@@ -417,26 +418,59 @@ a {
 .subtask-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 2px 0;
+  margin-right: 8px;
   position: relative;
+  height: 32px;
 }
 .subtask-item:hover{
   background-color: rgba(43, 43, 43, 0.063);
   border-radius: 8px;
 }
 .subtask-title {
+  display: flex;
+  align-items: center;
+  height: 32px;
   flex: 1;
   padding-left: 4px;
+  color: #000;
 }
 
 .subtask-actions {
   display: none;
   gap: 4px;
+  height: 32px;
 }
 
 .subtask-item:hover .subtask-actions {
-  display: inline-block !important;
+  display: flex !important;
+}
+
+.subtask-item:hover {
+  background-color: #EEEEEE;
+  border-radius: 8px;
+}
+
+.subtask-item.editing .subtask-actions {
+  background-color: #fff !important;
+  display: flex !important;
+}
+
+.subtask-item.editing {
+  border-radius: 8px;
+  border: solid 1px #29ABE2;
+}
+
+
+
+.subtask-divider {
+  width: 1px;
+  margin-top: 10%;
+  height: 70%;
+  background-color: #D1D1D1;
+}
+
+.subtask-item input:focus {
+  border: none;
 }
 
 .subtask-edit-btn, .subtask-delete-btn {
@@ -445,12 +479,6 @@ a {
   cursor: pointer;
   padding: 2px;
   margin: 0 2px;
-  opacity: 0.7;
-  transition: opacity 0.075s;
-}
-
-.subtask-edit-btn:hover,
-.subtask-delete-btn:hover {
   opacity: 1;
 }
 
@@ -542,6 +570,7 @@ select[multiple] {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  border: 2px solid white;
   color: white;
   display: flex;
   justify-content: center;
@@ -558,24 +587,10 @@ select[multiple] {
 }
 
 .custom-option-checkbox {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.custom-option-checkbox.checked {
-  background-color: #29abe2;
-  border-color: #29abe2;
-}
-
-.custom-option-checkbox.checked::after {
-  content: '✓';
-  color: white;
-  font-size: 13px;
+  border: none;
 }
 
 /* Button in Dropdown verstecken (Choices generiert Buttons in Multi-Selects) */
@@ -656,19 +671,6 @@ select[multiple] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.custom-option-checkbox {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.custom-option-checkbox.checked {
-  background-size: 14px;
-  border-color: #29abe2;
 }
 
 .assigned-badges {

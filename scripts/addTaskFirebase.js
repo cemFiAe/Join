@@ -110,44 +110,72 @@ document.addEventListener('DOMContentLoaded', /** @param {Event} _ev */ function
    * Nutzt `assignedUsers` und schreibt die Optionen in `#assignedDropdown`.
    */
   function renderAssignedDropdown() {
-    if (!assignedDropdown) return;
-    assignedDropdown.innerHTML = '';
+  if (!assignedDropdown) return;
+  assignedDropdown.innerHTML = '';
 
-    Object.entries(assignedUsers).forEach(([id, user]) => {
-      const option = document.createElement('div');
-      option.className = 'custom-option';
-      option.dataset.userId = id;
+  Object.entries(assignedUsers).forEach(([id, user]) => {
+    const option = document.createElement('div');
+    option.className = 'custom-option';
+    option.dataset.userId = id;
 
-      const avatar = document.createElement('div');
-      avatar.className = 'custom-option-avatar';
-      avatar.style.backgroundColor = generateColorFromString(user.name);
-      avatar.textContent = user.initials;
+    option.style.borderRadius = '8px';
+    option.style.padding = '4px 8px';
+    option.style.transition = 'background-color 0.075s, color 0.075s';
 
-      const label = document.createElement('div');
-      label.className = 'custom-option-label';
-      label.textContent = user.name + (
-        user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
-      );
+    const avatar = document.createElement('div');
+    avatar.className = 'custom-option-avatar';
+    avatar.style.backgroundColor = generateColorFromString(user.name);
+    avatar.textContent = user.initials;
 
-      const checkbox = document.createElement('div');
-      checkbox.className = 'custom-option-checkbox';
-      if (user.selected) checkbox.classList.add('checked');
+    const label = document.createElement('div');
+    label.className = 'custom-option-label';
+    label.textContent = user.name + (
+      user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
+    );
 
-      option.appendChild(avatar);
-      option.appendChild(label);
-      option.appendChild(checkbox);
-      assignedDropdown.appendChild(option);
+    const checkbox = document.createElement('img');
+    checkbox.className = 'custom-option-checkbox';
+    checkbox.src = user.selected ? '../assets/icons/add_task/selected.svg' : '../assets/icons/add_task/unselected.svg';
+    checkbox.style.width = '18px';
+    checkbox.style.height = '18px';
 
-      // Auswahl soll Dropdown NICHT schließen → pointerdown mit stopPropagation
-      option.addEventListener('pointerdown', (ev) => {
-        ev.preventDefault();    // verhindert Fokuswechsel
-        ev.stopPropagation();   // blockt Outside-Handler
-        assignedUsers[id].selected = !assignedUsers[id].selected;
-        renderAssignedDropdown();   // UI aktualisieren
-        renderAssignedBadges();     // Badges aktualisieren
-      });
+    option.appendChild(avatar);
+    option.appendChild(label);
+    option.appendChild(checkbox);
+    assignedDropdown.appendChild(option);
+
+    // Funktion, um Hintergrund und Schriftfarbe nur bei ausgewählten Users zu setzen
+    function updateStyle() {
+      if (user.selected) {
+        option.style.backgroundColor = '#2A3647';
+        label.style.color = '#ffffff';  
+      } else {
+        option.style.backgroundColor = '';
+        label.style.color = '';          
+      }
+    }
+    updateStyle();
+
+    option.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      assignedUsers[id].selected = !assignedUsers[id].selected;
+      checkbox.src = assignedUsers[id].selected ? '../assets/icons/add_task/unselected.svg' : '../assets/icons/add_task/selected.svg';
+      renderAssignedDropdown();
+      renderAssignedBadges();
     });
-  }
+
+    // Hover nur, wenn User ausgewählt ist
+    option.addEventListener('mouseenter', () => {
+      if (user.selected) option.style.backgroundColor = '#091931';
+    });
+    option.addEventListener('mouseleave', () => {
+      updateStyle();
+    });
+  });
+}
+
+
 
   /**
    * Badge-Zeile unter dem Feld neu aufbauen.
@@ -254,18 +282,41 @@ document.addEventListener('DOMContentLoaded', /** @param {Event} _ev */ function
 /** Aktuelle Subtask-Liste (wird in den Task übernommen) */
 let subtasks = /** @type {Subtask[]} */ ([]);
 
-/** @type {HTMLInputElement | null} */
-const subtaskInput = document.querySelector('.input-icon-subtask input');
-/** @type {HTMLButtonElement | null} */
-const subtaskAddBtn = document.querySelector('.add-subtask');
-/** @type {HTMLButtonElement | null} */
-const subtaskClearBtn = document.querySelector('.clear-subtask-input');
-/** @type {HTMLUListElement | null} */
-const subtaskList = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+/** DOM */
+const subtaskInput    = /** @type {HTMLInputElement|null} */ (document.querySelector('.input-icon-subtask input'));
+const subtaskAddBtn   = /** @type {HTMLButtonElement|null} */ (document.querySelector('.add-subtask'));
+const subtaskClearBtn = /** @type {HTMLButtonElement|null} */ (document.querySelector('.clear-subtask-input'));
+const subtaskList     = /** @type {HTMLUListElement|null} */ (document.getElementById('subtask-list'));
 
-/* --- X & ✓ im Input integrieren (ohne bestehende Struktur zu brechen) --- */
-const subtaskWrap = /** @type {HTMLDivElement|null} */(document.querySelector('.input-icon-subtask'));
-let inlineWrap = /** @type {HTMLDivElement|null} */(subtaskWrap?.querySelector('.subtask-inline-actions'));
+// --- Inline X & ✓ im Subtask-Input (Add Task) ---
+const subtaskWrap = /** @type {HTMLDivElement|null} */ (document.querySelector('.input-icon-subtask'));
+let inlineWrap = /** @type {HTMLDivElement|null} */ (subtaskWrap?.querySelector('.subtask-inline-actions'));
+
+// Styles nur 1x injizieren
+(function ensureInlineStyles(){
+  let s = document.getElementById('subtask-inline-styles');
+  if (!s) {
+    s = document.createElement('style');
+    s.id = 'subtask-inline-styles';
+    s.textContent = `
+      .input-icon-subtask{ position:relative; }
+      .subtask-inline-actions{
+        position:absolute; inset-inline-end:8px; top:50%;
+        transform:translateY(-50%);
+        display:none; gap:8px; align-items:center;
+      }
+      .subtask-inline-actions .inline-btn{
+        border:none; background:transparent; padding:4px; line-height:1; cursor:pointer; border-radius:8px;
+      }
+      .subtask-inline-actions .inline-btn:hover{
+        background:#f1f1f1; outline:1px solid #dcdcdc;
+      }
+    `;
+    document.head.appendChild(s);
+  }
+})();
+
+// Container + Buttons anlegen (falls nicht vorhanden)
 if (subtaskWrap && !inlineWrap) {
   inlineWrap = document.createElement('div');
   inlineWrap.className = 'subtask-inline-actions';
@@ -280,8 +331,7 @@ if (subtaskWrap && !inlineWrap) {
   btnOk.className = 'inline-btn inline-check';
   btnOk.textContent = '✓';
 
-  inlineWrap.appendChild(btnClear);
-  inlineWrap.appendChild(btnOk);
+  inlineWrap.append(btnClear, btnOk);
   subtaskWrap.appendChild(inlineWrap);
 
   btnClear.addEventListener('click', () => {
@@ -293,6 +343,7 @@ if (subtaskWrap && !inlineWrap) {
   btnOk.addEventListener('click', () => {
     addSubtask();
     subtaskInput?.focus();
+    hideInlineActions();
   });
 }
 
@@ -302,21 +353,22 @@ function showInlineActions() {
 }
 function hideInlineActions() {
   if (inlineWrap) inlineWrap.style.display = 'none';
-  if (subtaskAddBtn) subtaskAddBtn.style.display = '';     // Plus (falls vorhanden) wieder zeigen
+  if (subtaskAddBtn) subtaskAddBtn.style.display = '';     // Plus wieder zeigen
 }
 
-if (subtaskInput && subtaskAddBtn) {
-  subtaskInput.addEventListener('keydown', function (e) {
+// Input-Events
+if (subtaskInput) {
+  subtaskInput.addEventListener('focus', showInlineActions);
+  subtaskInput.addEventListener('input', showInlineActions);
+  subtaskInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       addSubtask();
+      hideInlineActions();
+      subtaskInput.focus();
     }
   });
-  subtaskAddBtn.addEventListener('click', addSubtask);
-
-  // Inline-Buttons automatisch zeigen/verstecken
-  subtaskInput.addEventListener('focus', showInlineActions);
-  subtaskInput.addEventListener('input', showInlineActions);
+  // Nur ausblenden, wenn leer & Fokus wirklich raus ist
   subtaskInput.addEventListener('blur', () => {
     setTimeout(() => {
       const inside = document.activeElement instanceof Node && subtaskWrap
@@ -327,59 +379,71 @@ if (subtaskInput && subtaskAddBtn) {
   });
 }
 
+
+/** Sicheres Einfügen von Text */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+
+if (subtaskInput && subtaskAddBtn) {
+  subtaskInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addSubtask();
+    }
+  });
+  subtaskAddBtn.addEventListener('click', addSubtask);
+}
+
 /** Subtask hinzufügen (aus dem Eingabefeld). */
 function addSubtask() {
   if (!subtaskInput || !subtaskList) return;
   const value = subtaskInput.value.trim();
-  if (value) {
-    const subtaskObj = /** @type {Subtask} */ ({ title: value, done: false });
-    subtasks.push(subtaskObj);
+  if (!value) return;
 
-    const li = document.createElement('li');
-    li.classList.add('subtask-item');
-    li.innerHTML = `
-      <span class="subtask-title">${escapeHtml(value)}</span>
-      <span class="subtask-actions" style="display:none;">
-        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
-          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
-        </button>
-        <button type="button" class="subtask-delete-btn" title="Löschen">
-          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
-        </button>
-      </span>
-    `;
-    subtaskList.appendChild(li);
-    subtaskInput.value = '';
-    hideInlineActions();
+  const subtaskObj = /** @type {Subtask} */ ({ title: value, done: false });
+  subtasks.push(subtaskObj);
 
-    li.addEventListener('mouseenter', () => {
-      const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-      if (actions) actions.style.display = 'inline-block';
-    });
-    li.addEventListener('mouseleave', () => {
-      const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
-      if (actions) actions.style.display = 'none';
-    });
+  const li = document.createElement('li');
+  li.classList.add('subtask-item');
+  li.innerHTML = `
+    <span class="subtask-title">${escapeHtml(value)}</span>
+    <span class="subtask-actions" style="display:none;">
+      <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+        <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+      </button>
+      <button type="button" class="subtask-delete-btn" title="Löschen">
+        <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+      </button>
+    </span>
+  `;
+  subtaskList.appendChild(li);
+  subtaskInput.value = '';
 
-    const editBtn = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-edit-btn'));
-    const delBtn  = /** @type {HTMLButtonElement | null} */ (li.querySelector('.subtask-delete-btn'));
+  // Hover-Actions
+  li.addEventListener('mouseenter', () => {
+    const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+    if (a) a.style.display = 'inline-block';
+  });
+  li.addEventListener('mouseleave', () => {
+    const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+    if (a) a.style.display = 'none';
+  });
 
-    if (editBtn) {
-      editBtn.addEventListener('click', function () {
-        editSubtask(li, subtaskObj);
-      });
-    }
-    if (delBtn) {
-      delBtn.addEventListener('click', function () {
-        if (!subtaskList) return;
-        subtaskList.removeChild(li);
-        // Index sauber bestimmen und aus Array entfernen
-        const items = Array.from(subtaskList.children);
-        const idx = items.indexOf(li);
-        if (idx > -1) subtasks.splice(idx, 1);
-      });
-    }
-  }
+  // Edit
+  (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => {
+    editSubtask(li, subtaskObj);
+  });
+
+  // Delete
+  (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+    if (!subtaskList) return;
+    const idx = Array.from(subtaskList.children).indexOf(li);
+    if (idx > -1) subtasks.splice(idx, 1);
+    li.remove();
+  });
 }
 
 /**
@@ -388,8 +452,8 @@ function addSubtask() {
  * @param {Subtask} subtaskObj
  */
 function editSubtask(li, subtaskObj) {
-  const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
-  const actions = /** @type {HTMLElement | null} */ (li.querySelector('.subtask-actions'));
+  const span    = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
+  const actions = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
   const oldValue = span.textContent || '';
 
   const input = document.createElement('input');
@@ -398,14 +462,7 @@ function editSubtask(li, subtaskObj) {
   input.style.width = '70%';
   span.replaceWith(input);
 
-  /** Guard gegen doppeltes Ersetzen durch blur + enter */
-  let replaced = false;
-
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') save();
-    if (e.key === 'Escape') cancel();
-  });
-  input.addEventListener('blur', save);
+  let replaced = false; // Guard gegen doppelte Ausführung
 
   function save() {
     if (replaced) return;
@@ -419,6 +476,7 @@ function editSubtask(li, subtaskObj) {
     if (input.parentNode) input.replaceWith(newSpan);
     if (actions) actions.style.display = 'none';
   }
+
   function cancel() {
     if (replaced) return;
     replaced = true;
@@ -430,32 +488,37 @@ function editSubtask(li, subtaskObj) {
     if (input.parentNode) input.replaceWith(newSpan);
     if (actions) actions.style.display = 'none';
   }
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') cancel();
+  });
+  input.addEventListener('blur', save);
+
   input.focus();
 }
 
 // Eingabe im Subtaskfeld leeren (X-Button), falls vorhanden
 if (subtaskClearBtn && subtaskInput) {
-  subtaskClearBtn.addEventListener('click', function () {
+  subtaskClearBtn.addEventListener('click', () => {
     subtaskInput.value = '';
     subtaskClearBtn.style.display = 'none';
-    hideInlineActions();
   });
 }
 
 // === heutiges Datum als Minimum setzen (lokale Zeitzone korrekt) ===
-const dueInput = /** @type {HTMLInputElement|null} */(document.getElementById('due'));
+const dueInput = /** @type {HTMLInputElement|null} */ (document.getElementById('due'));
 if (dueInput) {
   const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
   const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
   dueInput.min = todayLocalISO;
-
-  // Guard: falls der User manuell zurücksetzt
   dueInput.addEventListener('input', () => {
     if (dueInput.value && dueInput.value < dueInput.min) {
       dueInput.value = dueInput.min;
     }
   });
 }
+
 
 /* kleiner Helper fürs sichere Einfügen von Text */
 function escapeHtml(s) {
