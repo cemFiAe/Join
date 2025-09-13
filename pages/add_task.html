@@ -17,6 +17,16 @@
   <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/fav/favicon-16x16.png" />
   <link rel="manifest" href="../assets/icons/fav/site.webmanifest" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+  <style>
+    /* Minimaler Stil für den Fehler-Dialog */
+    dialog#errorDialog { border:none; border-radius:12px; padding:0; max-width:520px; width:92%; }
+    .err-card { padding:20px 22px; display:grid; gap:12px; }
+    .err-title { margin:0; font-size:18px; font-weight:700; color:#2A3647; }
+    .err-body ul { margin:8px 0 0 18px; padding:0; }
+    .err-actions { display:flex; justify-content:flex-end; }
+    .err-actions button { padding:10px 16px; border-radius:10px; border:1px solid #2A3647; background:#2A3647; color:#fff; cursor:pointer; }
+    dialog::backdrop { background: rgba(0,0,0,.3); }
+  </style>
 </head>
 
 <body>
@@ -194,6 +204,22 @@
       <span class="footer-span">Contacts</span>
     </div>
   </footer>
+
+  <!-- Nur hinzugefügt: einfacher Fehler-Dialog -->
+  <dialog id="errorDialog">
+    <div class="err-card">
+      <h3 class="err-title">Task konnte nicht erstellt werden</h3>
+      <div class="err-body">
+        <p>Bitte korrigiere die folgenden Punkte:</p>
+        <ul id="errorList"></ul>
+      </div>
+      <div class="err-actions">
+        <form method="dialog">
+          <button type="submit" id="errorCloseBtn">OK</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 
   <script src="../script.js"></script>
   <script src="../scripts/realtimeDatabase.js"></script>

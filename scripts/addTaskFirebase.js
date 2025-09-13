@@ -5,268 +5,310 @@ const firebase = /** @type {any} */ (window).firebase;
 
 document.addEventListener('DOMContentLoaded', /** @param {Event} _ev */ function (_ev) {
 
-  /**
-   * Liste der verfügbaren Kategorien für Tasks.
-   * @type {("Technical Task"|"User Story"|"Bug"|"Research")[]}
-   */
-  const categories = ["Technical Task", "User Story", "Bug", "Research"];
+  // ---- Form Validation (Add Task Seite) ----
+const addForm = /** @type {HTMLFormElement|null} */ (document.getElementById('addTaskForm'));
 
-  /** Kategorien-Dropdown initialisieren */
-  const categorySelect = /** @type {HTMLSelectElement | null} */ (document.getElementById('category'));
-  if (categorySelect) {
-    categorySelect.innerHTML = '<option value="">Select task category</option>';
-    categories.forEach(cat => {
-      categorySelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
-  }
+// Falls das versteckte Pflichtfeld für Priority nicht existiert, anlegen
+let priorityHidden = /** @type {HTMLInputElement|null} */ (document.getElementById('priorityField'));
+if (!priorityHidden && addForm) {
+  priorityHidden = document.createElement('input');
+  priorityHidden.type = 'text';
+  priorityHidden.id = 'priorityField';
+  priorityHidden.name = 'priority';
+  priorityHidden.required = true;
+  // unsichtbar machen
+  priorityHidden.style.position = 'absolute';
+  priorityHidden.style.left = '-9999px';
+  priorityHidden.style.opacity = '0';
+  priorityHidden.style.width = '0';
+  priorityHidden.style.height = '0';
+  priorityHidden.style.border = '0';
+  priorityHidden.style.padding = '0';
+  addForm.appendChild(priorityHidden);
+}
 
-  // ---------------------------------------------------------------------------
-  // Assigned-User Dropdown (Avatare + Badges)
-  // ---------------------------------------------------------------------------
+// Titel/Due/Category sicherheitshalber als required markieren (falls im HTML mal fehlt)
+(/** @type {HTMLInputElement|null} */(document.getElementById('title')))?.setAttribute('required','');
+(/** @type {HTMLInputElement|null} */(document.getElementById('title')))?.setAttribute('minlength','2');
+(/** @type {HTMLInputElement|null} */(document.getElementById('due')))?.setAttribute('required','');
+(/** @type {HTMLSelectElement|null} */(document.getElementById('category')))?.setAttribute('required','');
 
-  /** Container für die Optionsliste im Dropdown */
-  const assignedDropdown = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
-  /** Container für die runden Badges unter dem Feld */
-  const assignedBadges = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedBadges'));
+// Helper: Priority-Wert in das versteckte Feld schreiben (+ CustomValidity)
+function setPriorityValue(v /** @type {'urgent'|'medium'|'low'|''} */) {
+  if (!priorityHidden) return;
+  priorityHidden.value = v || '';
+  priorityHidden.setCustomValidity(priorityHidden.value ? '' : 'Please choose a priority');
+}
 
-  /**
-   * Form einer „Assigned“-Eintragung pro User/Kontakt.
-   * @typedef {Object} AssignedUserEntry
-   * @property {string} name
-   * @property {string} initials
-   * @property {boolean} selected
-   * @property {string=} email
-   */
 
-  /**
-   * Map: userId -> AssignedUserEntry
-   * @type {Record<string, AssignedUserEntry>}
-   */
-  let assignedUsers = {};
+/**
+ * Liste der verfügbaren Kategorien für Tasks.
+ * @type {("Technical Task"|"User Story"|"Bug"|"Research")[]}
+ */
+const categories = ["Technical Task", "User Story", "Bug", "Research"];
 
-  /** aktuell eingeloggte Mail (für „(You)“-Markierung) */
-  const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
+/** Kategorien-Dropdown initialisieren */
+const categorySelect = /** @type {HTMLSelectElement | null} */ (document.getElementById('category'));
+if (categorySelect) {
+  categorySelect.innerHTML = '<option value="">Select task category</option>';
+  categories.forEach(cat => {
+    categorySelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+  });
+}
 
-  /**
-   * Initialen (max. 2 Zeichen) aus einem Namen generieren.
-   * @param {string} name
-   * @returns {string}
-   */
-  function getInitials(name) {
-    return name.split(" ").slice(0, 2).map(n => n[0]?.toUpperCase() || '').join('');
-  }
+// ---------------------------------------------------------------------------
+// Assigned-User Dropdown (Avatare + Badges)
+// ---------------------------------------------------------------------------
 
-  // Users + Contacts laden und in assignedUsers zusammenführen
-  Promise.all([
-    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
-    fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
-  ])
-    .then(([users, contacts]) => {
-      if (users && typeof users === 'object') {
-        Object.entries(users).forEach(([id, data]) => {
-          const name = (data && (data.name || data.email)) || id;
+/** Container für die Optionsliste im Dropdown */
+const assignedDropdown = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
+/** Container für die runden Badges unter dem Feld */
+const assignedBadges = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedBadges'));
+
+/**
+ * Form einer „Assigned“-Eintragung pro User/Kontakt.
+ * @typedef {Object} AssignedUserEntry
+ * @property {string} name
+ * @property {string} initials
+ * @property {boolean} selected
+ * @property {string=} email
+ */
+
+/**
+ * Map: userId -> AssignedUserEntry
+ * @type {Record<string, AssignedUserEntry>}
+ */
+let assignedUsers = {};
+
+/** aktuell eingeloggte Mail (für „(You)“-Markierung) */
+const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').trim().toLowerCase();
+
+/**
+ * Initialen (max. 2 Zeichen) aus einem Namen generieren.
+ * @param {string} name
+ * @returns {string}
+ */
+function getInitials(name) {
+  return name.split(" ").slice(0, 2).map(n => n[0]?.toUpperCase() || '').join('');
+}
+
+// Users + Contacts laden und in assignedUsers zusammenführen
+Promise.all([
+  fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/users.json").then(r => r.json()),
+  fetch("https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/contacts.json").then(r => r.json())
+])
+  .then(([users, contacts]) => {
+    if (users && typeof users === 'object') {
+      Object.entries(users).forEach(([id, data]) => {
+        const name = (data && (data.name || data.email)) || id;
+        assignedUsers[id] = {
+          name,
+          email: (data && data.email) || '',
+          initials: getInitials(name),
+          selected: false
+        };
+      });
+    }
+    if (contacts && typeof contacts === 'object') {
+      Object.entries(contacts).forEach(([id, data]) => {
+        if (!assignedUsers[id]) {
+          const name = (data && data.name) || id;
           assignedUsers[id] = {
             name,
-            email: (data && data.email) || '',
+            email: '',
             initials: getInitials(name),
             selected: false
           };
-        });
-      }
-      if (contacts && typeof contacts === 'object') {
-        Object.entries(contacts).forEach(([id, data]) => {
-          if (!assignedUsers[id]) {
-            const name = (data && data.name) || id;
-            assignedUsers[id] = {
-              name,
-              email: '',
-              initials: getInitials(name),
-              selected: false
-            };
-          }
-        });
-      }
-      renderAssignedDropdown();
-      renderAssignedBadges();
-    })
-    .catch((err) => {
-      console.error('Failed to load users/contacts', err);
-    });
-
-  /**
-   * Aus einem String deterministische HSL-Farbe erzeugen (für Avatare).
-   * @param {string} str
-   * @returns {string} hsl(...)
-   */
-  function generateColorFromString(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    const hue = hash % 360;
-    return `hsl(${hue}, 70%, 50%)`;
-  }
-
-  /**
-   * Dropdown-Liste „Assigned to“ neu aufbauen.
-   * Nutzt `assignedUsers` und schreibt die Optionen in `#assignedDropdown`.
-   */
-  function renderAssignedDropdown() {
-  if (!assignedDropdown) return;
-  assignedDropdown.innerHTML = '';
-
-  Object.entries(assignedUsers).forEach(([id, user]) => {
-    const option = document.createElement('div');
-    option.className = 'custom-option';
-    option.dataset.userId = id;
-
-    option.style.borderRadius = '8px';
-    option.style.padding = '4px 8px';
-    option.style.transition = 'background-color 0.075s, color 0.075s';
-
-    const avatar = document.createElement('div');
-    avatar.className = 'custom-option-avatar';
-    avatar.style.backgroundColor = generateColorFromString(user.name);
-    avatar.textContent = user.initials;
-
-    const label = document.createElement('div');
-    label.className = 'custom-option-label';
-    label.textContent = user.name + (
-      user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
-    );
-
-    const checkbox = document.createElement('img');
-    checkbox.className = 'custom-option-checkbox';
-    checkbox.src = user.selected ? '../assets/icons/add_task/selected.svg' : '../assets/icons/add_task/unselected.svg';
-    checkbox.style.width = '18px';
-    checkbox.style.height = '18px';
-
-    option.appendChild(avatar);
-    option.appendChild(label);
-    option.appendChild(checkbox);
-    assignedDropdown.appendChild(option);
-
-    // Funktion, um Hintergrund und Schriftfarbe nur bei ausgewählten Users zu setzen
-    function updateStyle() {
-      if (user.selected) {
-        option.style.backgroundColor = '#2A3647';
-        label.style.color = '#ffffff';  
-      } else {
-        option.style.backgroundColor = '';
-        label.style.color = '';          
-      }
+        }
+      });
     }
-    updateStyle();
-
-    option.addEventListener('pointerdown', (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      assignedUsers[id].selected = !assignedUsers[id].selected;
-      checkbox.src = assignedUsers[id].selected ? '../assets/icons/add_task/unselected.svg' : '../assets/icons/add_task/selected.svg';
-      renderAssignedDropdown();
-      renderAssignedBadges();
-    });
-
-    // Hover nur, wenn User ausgewählt ist
-    option.addEventListener('mouseenter', () => {
-      if (user.selected) option.style.backgroundColor = '#091931';
-    });
-    option.addEventListener('mouseleave', () => {
-      updateStyle();
-    });
+    renderAssignedDropdown();
+    renderAssignedBadges();
+  })
+  .catch((err) => {
+    console.error('Failed to load users/contacts', err);
   });
+
+/**
+ * Aus einem String deterministische HSL-Farbe erzeugen (für Avatare).
+ * @param {string} str
+ * @returns {string} hsl(...)
+ */
+function generateColorFromString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  const hue = hash % 360;
+  return `hsl(${hue}, 70%, 50%)`;
+}
+
+/**
+ * Dropdown-Liste „Assigned to“ neu aufbauen.
+ * Nutzt `assignedUsers` und schreibt die Optionen in `#assignedDropdown`.
+ */
+function renderAssignedDropdown() {
+if (!assignedDropdown) return;
+assignedDropdown.innerHTML = '';
+
+Object.entries(assignedUsers).forEach(([id, user]) => {
+  const option = document.createElement('div');
+  option.className = 'custom-option';
+  option.dataset.userId = id;
+
+  option.style.borderRadius = '8px';
+  option.style.padding = '4px 8px';
+  option.style.transition = 'background-color 0.075s, color 0.075s';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'custom-option-avatar';
+  avatar.style.backgroundColor = generateColorFromString(user.name);
+  avatar.textContent = user.initials;
+
+  const label = document.createElement('div');
+  label.className = 'custom-option-label';
+  label.textContent = user.name + (
+    user.email && user.email.trim().toLowerCase() === currentUserEmail ? ' (You)' : ''
+  );
+
+  const checkbox = document.createElement('img');
+  checkbox.className = 'custom-option-checkbox';
+  checkbox.src = user.selected ? '../assets/icons/add_task/selected.svg' : '../assets/icons/add_task/unselected.svg';
+  checkbox.style.width = '18px';
+  checkbox.style.height = '18px';
+
+  option.appendChild(avatar);
+  option.appendChild(label);
+  option.appendChild(checkbox);
+  assignedDropdown.appendChild(option);
+
+  // Funktion, um Hintergrund und Schriftfarbe nur bei ausgewählten Users zu setzen
+  function updateStyle() {
+    if (user.selected) {
+      option.style.backgroundColor = '#2A3647';
+      label.style.color = '#ffffff';  
+    } else {
+      option.style.backgroundColor = '';
+      label.style.color = '';          
+    }
+  }
+  updateStyle();
+
+  option.addEventListener('pointerdown', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    assignedUsers[id].selected = !assignedUsers[id].selected;
+    checkbox.src = assignedUsers[id].selected ? '../assets/icons/add_task/unselected.svg' : '../assets/icons/add_task/selected.svg';
+    renderAssignedDropdown();
+    renderAssignedBadges();
+  });
+
+  // Hover nur, wenn User ausgewählt ist
+  option.addEventListener('mouseenter', () => {
+    if (user.selected) option.style.backgroundColor = '#091931';
+  });
+  option.addEventListener('mouseleave', () => {
+    updateStyle();
+  });
+});
 }
 
 
 
-  /**
-   * Badge-Zeile unter dem Feld neu aufbauen.
-   * Liest `assignedUsers` und schreibt in `#assignedBadges`.
-   */
-  function renderAssignedBadges() {
-    if (!assignedBadges) return;
+/**
+ * Badge-Zeile unter dem Feld neu aufbauen.
+ * Liest `assignedUsers` und schreibt in `#assignedBadges`.
+ */
+function renderAssignedBadges() {
+  if (!assignedBadges) return;
 
-    const MAX_BADGES = 4;               // bei Bedarf auf 5 ändern
-    assignedBadges.innerHTML = '';
+  const MAX_BADGES = 4;               // bei Bedarf auf 5 ändern
+  assignedBadges.innerHTML = '';
 
-    const selected = Object.values(assignedUsers).filter(u => u.selected);
+  const selected = Object.values(assignedUsers).filter(u => u.selected);
 
-    // die ersten MAX_BADGES als Avatare
-    selected.slice(0, MAX_BADGES).forEach(user => {
-      const badge = document.createElement('div');
-      badge.className = 'avatar-badge';
-      badge.textContent = user.initials;
-      badge.style.backgroundColor = generateColorFromString(user.name);
-      assignedBadges.appendChild(badge);
-    });
+  // die ersten MAX_BADGES als Avatare
+  selected.slice(0, MAX_BADGES).forEach(user => {
+    const badge = document.createElement('div');
+    badge.className = 'avatar-badge';
+    badge.textContent = user.initials;
+    badge.style.backgroundColor = generateColorFromString(user.name);
+    assignedBadges.appendChild(badge);
+  });
 
-    // Rest als "+N"
-    const extra = selected.length - MAX_BADGES;
-    if (extra > 0) {
-      const more = document.createElement('div');
-      more.className = 'avatar-badge avatar-badge-more';
-      more.textContent = `+${extra}`;
-      assignedBadges.appendChild(more);
+  // Rest als "+N"
+  const extra = selected.length - MAX_BADGES;
+  if (extra > 0) {
+    const more = document.createElement('div');
+    more.className = 'avatar-badge avatar-badge-more';
+    more.textContent = `+${extra}`;
+    assignedBadges.appendChild(more);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Priority-Buttons (ein Button aktiv + Icon-Wechsel bei "Medium")
+// ---------------------------------------------------------------------------
+
+/** @type {NodeListOf<HTMLButtonElement>} */
+const priorityBtns = document.querySelectorAll('.priority-buttons .btn');
+
+// alles zunächst in "inaktiv" + Icon-Default
+priorityBtns.forEach(btn => {
+  btn.classList.remove('active');
+  if (btn.classList.contains('btn_medium')) {
+    const def = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.default'));
+    const sel = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.white'));
+    if (def && sel) {
+      def.style.display = '';
+      sel.style.display = 'none';
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Priority-Buttons (ein Button aktiv + Icon-Wechsel bei "Medium")
-  // ---------------------------------------------------------------------------
-
-  /** @type {NodeListOf<HTMLButtonElement>} */
-  const priorityBtns = document.querySelectorAll('.priority-buttons .btn');
-
-  // alles zunächst in "inaktiv" + Icon-Default
-  priorityBtns.forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.classList.contains('btn_medium')) {
-      const def = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.default'));
-      const sel = /** @type {HTMLImageElement | null} */ (btn.querySelector('.icon.white'));
-      if (def && sel) {
-        def.style.display = '';
-        sel.style.display = 'none';
-      }
-    }
-
-    // Klick-Logik
-    btn.addEventListener('click', function () {
-      priorityBtns.forEach(b => {
-        b.classList.remove('active');
-        if (b.classList.contains('btn_medium')) {
-          const def = /** @type {HTMLElement | null} */ (b.querySelector('.icon.default'));
-          const sel = /** @type {HTMLElement | null} */ (b.querySelector('.icon.white'));
-          if (def && sel) {
-            def.style.display = '';
-            sel.style.display = 'none';
-          }
-        }
-      });
-      this.classList.add('active');
-      if (this.classList.contains('btn_medium')) {
-        const def = /** @type {HTMLElement | null} */ (this.querySelector('.icon.default'));
-        const sel = /** @type {HTMLElement | null} */ (this.querySelector('.icon.white'));
+  // Klick-Logik
+  btn.addEventListener('click', function () {
+    priorityBtns.forEach(b => {
+      b.classList.remove('active');
+      if (b.classList.contains('btn_medium')) {
+        const def = /** @type {HTMLElement | null} */ (b.querySelector('.icon.default'));
+        const sel = /** @type {HTMLElement | null} */ (b.querySelector('.icon.white'));
         if (def && sel) {
-          def.style.display = 'none';
-          sel.style.display = '';
+          def.style.display = '';
+          sel.style.display = 'none';
         }
       }
     });
-  });
-
-  // "Medium" standardmäßig aktiv setzen (NUR EINMAL, nicht in der Schleife)
-  {
-    const mediumBtn = /** @type {HTMLButtonElement | null} */(
-      document.querySelector('.priority-buttons .btn.btn_medium')
-    );
-    if (mediumBtn) {
-      mediumBtn.classList.add('active');
-      const def = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.default'));
-      const sel = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.white'));
+    this.classList.add('active');
+    if (this.classList.contains('btn_medium')) {
+      const def = /** @type {HTMLElement | null} */ (this.querySelector('.icon.default'));
+      const sel = /** @type {HTMLElement | null} */ (this.querySelector('.icon.white'));
       if (def && sel) {
         def.style.display = 'none';
         sel.style.display = '';
       }
     }
+    // NEU: verstecktes Pflichtfeld setzen (für Validation)
+    const p = (this.dataset.priority || '').toLowerCase();
+    if (p === 'urgent' || p === 'medium' || p === 'low') setPriorityValue(p);
+    else setPriorityValue('');
+  });
+});
+
+// "Medium" standardmäßig aktiv setzen (NUR EINMAL, nicht in der Schleife)
+{
+  const mediumBtn = /** @type {HTMLButtonElement | null} */(
+    document.querySelector('.priority-buttons .btn.btn_medium')
+  );
+  if (mediumBtn) {
+    mediumBtn.classList.add('active');
+    const def = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.default'));
+    const sel = /** @type {HTMLElement | null} */(mediumBtn.querySelector('.icon.white'));
+    if (def && sel) {
+      def.style.display = 'none';
+      sel.style.display = '';
+    }
+    // NEU: Default auch im hidden Feld festhalten
+    setPriorityValue('medium');
   }
+}
 
 // ---------------------------------------------------------------------------
 // Subtasks (Erstellen, Inline-Edit, Löschen)
@@ -587,9 +629,19 @@ function showAddTaskToast() {
   toast.classList.add('enter');
 }
 
-
-
-
+/* --- NEU: kleiner Fehler-Dialog statt alert() --- */
+function showErrorDialog(messages /** @type {string[]} */) {
+  const dlg = /** @type {HTMLDialogElement|null} */ (document.getElementById('errorDialog'));
+  const list = /** @type {HTMLUListElement|null} */ (document.getElementById('errorList'));
+  if (!dlg || !list) return;
+  list.innerHTML = '';
+  messages.forEach(m => {
+    const li = document.createElement('li');
+    li.textContent = m;
+    list.appendChild(li);
+  });
+  if (!dlg.open) dlg.showModal();
+}
   /** Button „Create Task“ */
   const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
   if (createBtn) {
@@ -608,7 +660,8 @@ function showAddTaskToast() {
 
       // Falls der Browser-Validator umgangen wird
       if (dueInput && dueDate < dueInput.min) {
-        alert("Bitte ein Fälligkeitsdatum ab heute wählen.");
+        // alert("Bitte ein Fälligkeitsdatum ab heute wählen.");
+        showErrorDialog(['Bitte ein Fälligkeitsdatum ab heute wählen.']);
         return;
       }
 
@@ -627,7 +680,8 @@ function showAddTaskToast() {
       }
 
       if (!title || !dueDate || !category || !priority) {
-        alert("Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen!");
+        // alert("Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen!");
+        showErrorDialog(['Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen.']);
         return;
       }
 
@@ -651,7 +705,10 @@ firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey 
       window.location.href = '../pages/board.html';
     }, 1600);
   })
-  .catch(err => alert('Fehler beim Speichern: ' + err.message));
+  .catch(err => {
+    // alert('Fehler beim Speichern: ' + err.message)
+    showErrorDialog([`Fehler beim Speichern: ${err.message}`]);
+  });
 
 ;
     });
@@ -701,6 +758,7 @@ firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey 
         def.style.display = 'none'; // bei aktiv: default-Icon verstecken
         sel.style.display = '';     // weißes Icon zeigen
       }
+      setPriorityValue('medium');
     }
 
     // Subtasks leeren (Array + UI + Input)
@@ -719,6 +777,9 @@ firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey 
     clearBtn.addEventListener('click', function (e) {
       e.preventDefault();
       clearForm();
+      // Fokus auf Titel nach Reset – JS-konform (kein TS "as")
+      const titleEl = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
+      if (titleEl) titleEl.focus();
     });
   }
 

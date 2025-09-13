@@ -51,6 +51,18 @@ function showAddTaskToast() {
   toast.classList.remove('enter'); void toast.offsetHeight; toast.classList.add('enter');
 }
 
+/** ZENTRALER Fehlerdialog (nutzt <dialog id="errorDialog"> in board.html) */
+function showErrorDialog(message) {
+  const dlg = document.getElementById('errorDialog');
+  if (!(dlg instanceof HTMLDialogElement)) {
+    alert(message); // Fallback, falls Dialog-Element fehlt
+    return;
+  }
+  const p = dlg.querySelector('p');
+  if (p) p.textContent = message;
+  if (!dlg.open) dlg.showModal();
+}
+
 /** Wird nach DOM-Ready aufgerufen. */
 function onDomReady() {
   // ──────────────────────────────────────────────────────────────────────────
@@ -334,25 +346,11 @@ function onDomReady() {
   }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Hinweis-Toast (Mitte) – optional
-  // ──────────────────────────────────────────────────────────────────────────
-  function showCustomWarning(msg) {
-    const modal = /** @type {HTMLDivElement|null} */ (document.getElementById('custom-warning-modal'));
-    if (!modal) return;
-    const content = /** @type {HTMLElement|null} */ (modal.querySelector('#custom-warning-content'));
-    if (content) content.innerText = msg;
-    modal.classList.replace('modal-hidden', 'modal-visible');
-    setTimeout(() => modal.classList.replace('modal-visible', 'modal-hidden'), 2500);
-  }
-  // @ts-ignore
-  window.showCustomWarning = showCustomWarning;
-
-  // ──────────────────────────────────────────────────────────────────────────
-  // Create Task (speichert + Animation)
+  // Create Task (speichert + Animation) – mit vollständiger Dialog-Validation
   // ──────────────────────────────────────────────────────────────────────────
   (/** @type {HTMLButtonElement} */ (document.querySelector('.create_task_btn')))
     .addEventListener('click', () => {
-      const dialog = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
+      const overlayDlg = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
 
       const title       = (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value.trim();
       const description = (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value.trim();
@@ -368,19 +366,34 @@ function onDomReady() {
       );
       const priority  = activeBtn ? activeBtn.dataset.priority : null;
 
-      if (!title || !dueDate || !category) {
-        // @ts-ignore
-        window.showCustomWarning?.("Bitte alle Pflichtfelder ausfüllen!");
+      // === Validierung (ALLE Felder → IMMER über deinen errorDialog) ===
+      if (!title) {
+        showErrorDialog("Bitte einen Titel eingeben!");
+        return;
+      }
+      if (!description) {
+        showErrorDialog("Bitte eine Beschreibung eingeben!");
+        return;
+      }
+      if (!dueDate) {
+        showErrorDialog("Bitte ein Fälligkeitsdatum auswählen!");
         return;
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
-        // @ts-ignore
-        window.showCustomWarning?.("Datum im Format JJJJ-MM-TT wählen.");
+        showErrorDialog("Datum im Format JJJJ-MM-TT wählen.");
+        return;
+      }
+      if (!category) {
+        showErrorDialog("Bitte eine Kategorie auswählen!");
         return;
       }
       if (!priority) {
-        // @ts-ignore
-        window.showCustomWarning?.("Bitte eine Priorität auswählen!");
+        showErrorDialog("Bitte eine Priorität auswählen!");
+        return;
+      }
+      // Wenn du mindestens eine Zuweisung willst, diesen Block aktiv lassen:
+      if (!assignedTo.length) {
+        showErrorDialog("Bitte mindestens eine Person zuweisen!");
         return;
       }
 
@@ -392,20 +405,29 @@ function onDomReady() {
         assignedTo,
         category,
         subtasks: [...subtasks],
-        status: dialog.dataset.status || 'todo',
+        status: overlayDlg.dataset.status || 'todo',
         createdAt: Date.now()
       };
 
       const newKey = firebase.database().ref().child('tasks').push().key;
       firebase.database().ref('tasks/' + newKey).set({ ...taskObj, id: newKey })
         .then(() => {
-          dialog.close();
-          clearAddTaskForm();
+          overlayDlg.close();
+          // Felder leeren (wie beim Schließen)
+          (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value = '';
+          (/** @type {HTMLTextAreaElement}*/ (document.getElementById('description'))).value = '';
+          (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value = '';
+          (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).selectedIndex = 0;
+          // @ts-ignore
+          window.__boardResetAssigned && window.__boardResetAssigned();
+          document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+          const ul = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+          if (ul) ul.innerHTML = '';
+
           showBoardAddToast(); // slidet rein & verschwindet automatisch
         })
         .catch(err => {
-          // @ts-ignore
-          window.showCustomWarning?.("Fehler: " + err.message);
+          showErrorDialog("Fehler: " + err.message);
         });
     });
 }

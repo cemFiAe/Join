@@ -895,3 +895,15 @@
   animation: slideInRight 0.35s cubic-bezier(.32,1.2,.32,1) both;
 }
 
+dialog#errorDialog{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);border:none;border-radius:12px;padding:0;max-width:520px;width:92%;z-index:9999}
+dialog::backdrop{background:rgba(0,0,0,.3)}
+.dialog-box{padding:20px 24px;background:#fff;border-radius:12px;font-family:sans-serif}
+.dialog-box h3{margin-top:0;color:#2A3647}
+.dialog-actions{display:flex;justify-content:flex-end;margin-top:16px}
+.dialog-actions button{background:#2A3647;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer}
+.dialog-actions button:hover{background:#091931}
+
+.field-invalid {
+  border: 2px solid #E74C3C !important;
+  background-color: #fffafa;
+}
