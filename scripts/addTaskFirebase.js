@@ -489,56 +489,113 @@ function addSubtask() {
 }
 
 /**
- * Inline-Edit eines Subtask-Titels mit Enter/Escape/Blur.
+ * Subtask inline bearbeiten – gleicher Look/Flow wie auf Board:
+ * runde Box, blauer Rand, ✕ (abbrechen/löschen) & ✓ (speichern) rechts.
+ * Enter/✓/Blur = speichern, Esc/✕ = abbrechen. Mülleimer-Delete bleibt separat.
  * @param {HTMLLIElement} li
- * @param {Subtask} subtaskObj
+ * @param {{ title:string, done:boolean }} subtaskObj
  */
 function editSubtask(li, subtaskObj) {
-  const span    = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
-  const actions = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
-  const oldValue = span.textContent || '';
+  const oldValue = subtaskObj.title;
+  li.classList.add('editing');
+
+  const row   = document.createElement('div');
+  row.className = 'subtask-edit-box';
+
+  // ▼ NEU: Zeile muss flex + 100% breit sein
+  row.style.display = 'flex';
+  row.style.alignItems = 'center';
+  row.style.gap = '8px';
+  row.style.width = '100%';
 
   const input = document.createElement('input');
   input.type = 'text';
   input.value = oldValue;
-  input.style.width = '70%';
-  span.replaceWith(input);
+  input.placeholder = 'Edit subtask';
+  input.className = 'subtask-edit-input';
 
-  let replaced = false; // Guard gegen doppelte Ausführung
+  // ▼ NEU: Eingabefeld füllt die ganze Zeile
+  input.style.width = '100%';
+  input.style.flex = '1 1 auto';
+  input.style.boxSizing = 'border-box';
 
-  function save() {
-    if (replaced) return;
-    replaced = true;
-    subtaskObj.title = input.value.trim() || oldValue;
+  const actions = document.createElement('div');
+  actions.className = 'subtask-edit-actions';
 
-    const newSpan = document.createElement('span');
-    newSpan.className = 'subtask-title';
-    newSpan.textContent = subtaskObj.title;
+  const btnCancel = document.createElement('button');
+  btnCancel.type = 'button';
+  btnCancel.className = 'subtask-edit-btn';
+  btnCancel.title = 'Cancel';
+  btnCancel.textContent = '✕';
 
-    if (input.parentNode) input.replaceWith(newSpan);
-    if (actions) actions.style.display = 'none';
-  }
+  const btnOk = document.createElement('button');
+  btnOk.type = 'button';
+  btnOk.className = 'subtask-edit-btn';
+  btnOk.title = 'Save';
+  btnOk.textContent = '✓';
 
-  function cancel() {
-    if (replaced) return;
-    replaced = true;
+  actions.append(btnCancel, btnOk);
+  row.append(input, actions);
 
-    const newSpan = document.createElement('span');
-    newSpan.className = 'subtask-title';
-    newSpan.textContent = oldValue;
+  li.innerHTML = '';
+  li.appendChild(row);
 
-    if (input.parentNode) input.replaceWith(newSpan);
-    if (actions) actions.style.display = 'none';
-  }
+  // Verhindern, dass Button-Klick zuerst blur auslöst
+  btnCancel.addEventListener('mousedown', e => e.preventDefault());
+  btnOk.addEventListener('mousedown',     e => e.preventDefault());
 
+  // Zurück in Anzeige-Ansicht + Events neu binden
+  const rebuild = (text) => {
+    subtaskObj.title = text;
+    li.classList.remove('editing');
+    li.innerHTML = `
+      <span class="subtask-title">${escapeHtml(text)}</span>
+      <span class="subtask-actions" style="display:none;">
+        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+        </button>
+        <button type="button" class="subtask-delete-btn" title="Löschen">
+          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+        </button>
+      </span>
+    `;
+
+    // Hover-UI
+    li.addEventListener('mouseenter', () => {
+      const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+      if (a) a.style.display = 'inline-flex';
+    });
+    li.addEventListener('mouseleave', () => {
+      const a = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
+      if (a) a.style.display = 'none';
+    });
+
+    // Edit/Delete neu binden
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => editSubtask(li, subtaskObj));
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+      const ul = li.parentElement; if (!ul) return;
+      const idx = Array.from(ul.children).indexOf(li);
+      if (idx > -1) subtasks.splice(idx, 1);
+      li.remove();
+    });
+  };
+
+  const save   = () => rebuild(input.value.trim() || oldValue);
+  const cancel = () => rebuild(oldValue);
+
+  // Aktionen
+  btnOk.addEventListener('click', save);
+  btnCancel.addEventListener('click', cancel);
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') save();
     if (e.key === 'Escape') cancel();
   });
-  input.addEventListener('blur', save);
+  input.addEventListener('blur', save);   // Blur = speichern (wie auf Board)
 
   input.focus();
+  input.select();
 }
+
 
 // Eingabe im Subtaskfeld leeren (X-Button), falls vorhanden
 if (subtaskClearBtn && subtaskInput) {

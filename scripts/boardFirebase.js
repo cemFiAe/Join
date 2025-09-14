@@ -855,9 +855,13 @@ function renderAssignedDropdown() {
 
   entries.forEach(([id, user]) => {
     const option = document.createElement('div');
-    option.className = 'custom-option';
-    option.tabIndex = 0; // keyboard focus
-    option.dataset.userId = id;
+option.className = 'custom-option';
+option.tabIndex = 0;
+option.dataset.userId = id;
+
+// ▼ NEU: markierte Einträge für CSS stylen
+if (user.selected) option.classList.add('selected');
+
 
     const avatar = document.createElement('div');
     avatar.className = 'custom-option-avatar';

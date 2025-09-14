@@ -924,3 +924,91 @@ dialog::backdrop{background:rgba(0,0,0,.3)}
   border: 2px solid #E74C3C !important;
   background-color: #fffafa;
 }
+/* Container (Dropdown) */
+.assigned-dropdown {
+  border: 1px solid #DEE1E6;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.12);
+  background: #fff;
+  padding: 8px;
+}
+
+/* Option-Zeile */
+.custom-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease;
+}
+
+.custom-option:hover {
+  background: #F3F4F6;
+}
+
+/* Avatar (farbig, mit heller Kontur) */
+.custom-option-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fff;      /* helle Kontur wie im Figma-Screenshot */
+  box-shadow: 0 0 0 1px #E5E7EB;/* dezenter Ring */
+  flex-shrink: 0;
+}
+
+/* Name */
+.custom-option-label {
+  flex: 1;
+  font-size: 16px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Checkbox-Icon (rechts) – neutraler Zustand */
+.custom-option-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 2px solid #CFD5DE;
+  background: #fff;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* markierte Zeile: dunkler Hintergrund + helle Schrift */
+.custom-option.selected {
+  background: #2A3647;   /* dein Dark-Blue */
+}
+.custom-option.selected .custom-option-label { color: #fff; }
+
+/* markierte Checkbox mit Häkchen */
+.custom-option.selected .custom-option-checkbox {
+  border-color: white;
+  background: transparent;
+}
+.custom-option.selected .custom-option-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 6px;
+  height: 10px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+}
+
+/* Optional: beim Hover über selektierte noch etwas dunkler */
+.custom-option.selected:hover {
+  background: #1F2A3C;
+}
