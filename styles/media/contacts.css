@@ -196,6 +196,9 @@
     .close-x-mobile {
         display: block !important;
     }
+    .contact_overview div, .contact_overview span {
+        display: none;
+    }
 }
 
 @media (max-width: 650px) {

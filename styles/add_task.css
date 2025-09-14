@@ -433,12 +433,14 @@ a {
   flex: 1;
   padding-left: 4px;
   color: #000;
+  padding-left: 8px;
 }
 
 .subtask-actions {
   display: none;
   gap: 4px;
   height: 32px;
+  padding-right: 8px;
 }
 
 .subtask-item:hover .subtask-actions {

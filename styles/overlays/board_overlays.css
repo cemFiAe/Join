@@ -85,8 +85,7 @@
   background: white;
   border: 1px solid #ddd;
   border-radius: 9px;
-  padding: 10px 16px;
-  margin-bottom: 6px;
+  padding: 10px 12px;
   box-sizing: border-box;
 }
 .add_task_dialog_overlay input:focus,
@@ -213,13 +212,14 @@
 .subtask-inline-actions .inline-btn:hover {
   background: #f4f4f4;
   border-color: #d7d7d738;
+  border-radius: 50%;
 }
 
 .input-icon-subtask input[type="text"] {
   width: 100%;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  padding: 10px 40px 10px 10px; /* Rechts Platz für Button */
+  padding: 10px 40px 10px 12px; /* Rechts Platz für Button */
   font-family: inherit;
   font-size: 1rem;
   color: #111827;
@@ -233,7 +233,7 @@
   width: 100%;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  padding: 10px 40px 10px 10px; /* Platz rechts für Button */
+  padding: 10px 40px 10px 12px; /* Platz rechts für Button */
   font-family: inherit;
   font-size: 1rem;
   color: #111827;
@@ -285,7 +285,7 @@
 #edit-detail-list li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 6px;
 }
 
@@ -321,10 +321,12 @@
 }
 .subtask-title {
   flex: 1;
+  padding-left: 8px;
 }
 .subtask-actions {
   display: none;
   gap: 4px;
+  padding-right: 8px;
 }
 .subtask-item:hover .subtask-actions {
   display: inline-flex;
@@ -344,6 +346,11 @@
   opacity: 1;
 }
 
+.subtask-edit-input {
+  height: 40px;
+  margin-bottom: 0;
+  width: 100%;
+}
 
 /* Button area */
 .add_task_button {
@@ -612,6 +619,17 @@
   min-width: 0;
 }
 
+.right-box select {
+  appearance: none;
+}
+
+.option {
+  background-image: url(../../assets/icons/add_task/arrow_drop_down.png) !important;
+  background-repeat: no-repeat !important;
+  background-size: 7.21px 4.6px !important;
+  background-position: right 12px center !important;
+}
+
 /* Verberge die ausgewählten „Pills“ im Input-Feld */
 .choices__list--multiple .choices__item {
   display: none !important;
@@ -651,7 +669,6 @@
 .assigned-to-wrapper {
   position: relative;
   width: 100%;
-  margin-bottom: 6px;
 }
 .assigned-select-box {
   display: flex;
@@ -753,11 +770,6 @@
 /* Button in Dropdown verstecken (Choices generiert Buttons in Multi-Selects) */
 .choices__item .choices__button {
   display: none;
-}
-
-.assigned-to-wrapper {
-  position: relative;
-  width: 100%;
 }
 
 .assigned-select-box {
