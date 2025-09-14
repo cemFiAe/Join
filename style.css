@@ -399,18 +399,61 @@ body {
     }
 }
 
-/* Native HTML5 validation look */
-input:required:invalid,
-select:required:invalid,
-textarea:required:invalid {
-  border-color: #ff8190 !important;
-}
-
-input:required:valid,
-select:required:valid,
-textarea:required:valid {
-  border-color: #22c55e !important;
-}
+/* ─────────────────────────────────────────────────────────────
+   Form-Validation / Fokus-Styling (nur während Fokus)
+   ───────────────────────────────────────────────────────────── */
 
 /* Browser-Tooltip besser lesbar (optional) */
 input::placeholder, textarea::placeholder { color:#9aa3af; }
+
+/* Basis */
+input, textarea, select {
+  border: 1px solid #D1D1D1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+
+/* Fokus + gültig = blau */
+input:focus:valid,
+textarea:focus:valid,
+select:focus:valid {
+  border: 2px solid #29ABE2 !important;
+  box-shadow: 0 0 0 3px rgba(41,171,226,.18);
+}
+
+/* Fokus + ungültig = rot (nur bei Fokus, nicht dauerhaft) */
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  border: 2px solid #E74C3C !important;
+  box-shadow: 0 0 0 3px rgba(231,76,60,.12);
+}
+
+/* Inline-Hinweis wie im Screenshot – nur zeigen, wenn Feld fokussiert & invalid */
+.form-group .field-hint {
+  display: none;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #E74C3C;
+}
+.form-group:has(input:focus:invalid) .field-hint,
+.form-group:has(textarea:focus:invalid) .field-hint,
+.form-group:has(select:focus:invalid) .field-hint {
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Subtask-Edit (Figma)
+   ───────────────────────────────────────────────────────────── */
+.subtask-edit-row { display:flex; align-items:center; gap:8px; width:100%; }
+.subtask-edit-input {
+  flex:1; height:36px; padding:8px 12px; border:1px solid #D1D1D1; border-radius:8px; font:inherit;
+}
+.subtask-edit-actions { display:flex; gap:6px; }
+.subtask-edit-btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border:1px solid #E7E7E7; border-radius:8px; background:#fff; cursor:pointer;
+}
+.subtask-edit-btn:hover { background:#F7F7F7; }
+

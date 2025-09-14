@@ -420,7 +420,7 @@ a {
   align-items: center;
   margin-right: 8px;
   position: relative;
-  height: 32px;
+  height: 40px;
 }
 .subtask-item:hover{
   background-color: rgba(43, 43, 43, 0.063);
@@ -457,10 +457,8 @@ a {
 
 .subtask-item.editing {
   border-radius: 8px;
-  border: solid 1px #29ABE2;
+  border-bottom: solid 1px #29ABE2;
 }
-
-
 
 .subtask-divider {
   width: 1px;
@@ -528,8 +526,6 @@ select[multiple] {
     outline: none;
     box-shadow: 0 0 0 2px #29abe233;
 }
-
-/* ... dein kompletter vorheriger Code bleibt bestehen ... */
 
 /* Avatar Badge unter dem Select */
 .assigned-badges {

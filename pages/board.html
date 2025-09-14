@@ -198,17 +198,24 @@
     <div class="box-wrapper">
       <!-- LEFT BOX -->
       <div class="left-box">
+       <!-- Beispiel Title -->
+      <div class="form-group title_input">
         <label for="title">Title<span class="required">*</span></label>
-        <input id="title" type="text" placeholder="Enter a title" autocomplete="off">
+        <input id="title" type="text" placeholder="Enter a title" required minlength="2" autocomplete="off">
+        <small class="field-hint">This field is required</small>
+      </div>
 
         <label for="description">Description</label>
-        <textarea id="description" placeholder="Enter a description"></textarea>
-
+        <textarea id="description" placeholder="Enter a description" required data-required-text="This field is required"></textarea>
+      
+      <div class="form-group title_input">
         <label for="task-due-date">Due date<span class="required">*</span></label>
         <div class="input-icon">
           <input type="date" id="task-due-date" required>
+          <small class="field-hint">This field is required</small>
         </div>
       </div>
+    </div>
 
       <div class="divider"></div>
 

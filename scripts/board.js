@@ -118,6 +118,7 @@ function onDomReady() {
     dialog.close();
     clearAddTaskForm();
   }
+  
 
   /** Alle Felder des Overlays zurücksetzen. */
   function clearAddTaskForm() {
@@ -278,50 +279,69 @@ function onDomReady() {
     });
   }
 
-  function editSubtaskInline(li, model) {
-    const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
-    const actions = /** @type {HTMLElement|null} */ (li.querySelector('.subtask-actions'));
-    const oldValue = span.textContent || '';
+function editSubtaskInline(li, model) {
+  const oldValue = model.title;
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = oldValue;
-    input.style.width = '70%';
-    input.style.height = '70%';
-    span.replaceWith(input);
+  const row = document.createElement('div');
+  row.className = 'subtask-edit-row';
 
-    let replaced = false;
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') save();
-      if (e.key === 'Escape') cancel();
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'subtask-edit-input';
+  input.value = oldValue;
+  input.placeholder = 'Edit subtask';
+
+  const actions = document.createElement('div');
+  actions.className = 'subtask-edit-actions';
+
+  const btnCancel = document.createElement('button');
+  btnCancel.type = 'button';
+  btnCancel.className = 'subtask-edit-btn';
+  btnCancel.title = 'Cancel';
+  btnCancel.textContent = '✕';
+
+  const btnOk = document.createElement('button');
+  btnOk.type = 'button';
+  btnOk.className = 'subtask-edit-btn';
+  btnOk.title = 'Save';
+  btnOk.textContent = '✓';
+
+  actions.append(btnCancel, btnOk);
+  row.append(input, actions);
+  li.innerHTML = ''; li.appendChild(row);
+
+  const rebindItem = (newTitle) => {
+    model.title = newTitle;
+    li.innerHTML = `
+      <span class="subtask-title">${escapeHtml(newTitle)}</span>
+      <span class="subtask-actions" style="display:none;">
+        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+        </button>
+        <button type="button" class="subtask-delete-btn" title="Löschen">
+          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+        </button>
+      </span>
+    `;
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => editSubtaskInline(li, model));
+    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+      const ul = li.parentElement; if (!ul) return;
+      const idx = Array.from(ul.children).indexOf(li);
+      if (idx > -1) subtasks.splice(idx, 1);
+      li.remove();
     });
-    input.addEventListener('blur', save);
+  };
 
-    function save() {
-      if (replaced) return;
-      replaced = true;
-      model.title = input.value.trim() || oldValue;
+  const save = () => rebindItem(input.value.trim() || oldValue);
+  const cancel = () => rebindItem(oldValue);
 
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = model.title;
+  btnOk.addEventListener('click', save);
+  btnCancel.addEventListener('click', cancel);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') cancel(); });
 
-      if (input.parentNode) input.replaceWith(newSpan);
-      if (actions) actions.style.display = 'none';
-    }
-    function cancel() {
-      if (replaced) return;
-      replaced = true;
+  input.focus(); input.select();
+}
 
-      const newSpan = document.createElement('span');
-      newSpan.className = 'subtask-title';
-      newSpan.textContent = oldValue;
-
-      if (input.parentNode) input.replaceWith(newSpan);
-      if (actions) actions.style.display = 'none';
-    }
-    input.focus();
-  }
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => (
