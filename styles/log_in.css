@@ -48,6 +48,10 @@
     cursor: pointer;
 }
 
+.password-third {
+    height: 78px;
+}
+
 .log-in-password {
     height: 48px;
     display: flex;
@@ -60,7 +64,7 @@
 
 .log-in-password>input {
     width: 100%;
-    max-width: 310px;
+    max-width: 312px;
     font-size: 24px;
     border-radius: 12px;
     border: none;

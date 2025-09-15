@@ -1,88 +1,3 @@
-/* name input properties */
-
-.name {
-    height: 78px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 0px 0px 24px;
-    margin: 0px 8px;
-}
-
-.name-input {
-    height: 48px;
-    width: 100%;
-    max-width: 352px;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    font-size: 24px;
-    padding-left: 16px;
-    margin: 0px 8px;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    background-image: url(../assets/icons/sign_up/person.svg);
-    background-repeat: no-repeat;
-    background-position: 94%;
-    border-radius: 12px;
-}
-
-.name-input:hover {
-    cursor: pointer;
-}
-
-.name-input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.name>input:focus {
-    outline: none;
-}
-
-.name-alert {
-    width: 100%;
-    max-width: 352px;
-    font-size: 12px;
-    text-align: start;
-    padding-left: 4px;
-    color: rgb(255, 129, 144);
-    display: none;
-}
-
-
-/* sign up password input properties */
-
-.sign-up-password {
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    border-radius: 12px;
-    margin: 0px 8px;
-}
-
-.sign-up-password>input {
-    width: 100%;
-    max-width: 310px;
-    font-size: 24px;
-    border-radius: 12px;
-    border: none;
-    padding-left: 16px;
-}
-
-.sign-up-password>input:hover {
-    cursor: pointer;
-}
-
-.sign-up-password>input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.sign-up-password>input:focus {
-    outline: none;
-}
 
 /* sign up page properties */
 
@@ -139,6 +54,130 @@
     cursor: pointer;
 }
 
+/* name input properties */
+.name {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0px 0px 18px;
+    margin: 0px 8px;
+}
+
+.name-input {
+    height: 48px;
+    width: 100%;
+    max-width: 352px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    font-size: 24px;
+    padding-left: 16px;
+    margin: 0px 8px;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    background-image: url(../assets/icons/sign_up/person.svg);
+    background-repeat: no-repeat;
+    background-position: 94%;
+    border-radius: 12px;
+}
+
+.name-input:hover {
+    cursor: pointer;
+}
+
+.name-input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.name>input:focus {
+    outline: none;
+}
+
+.name-alert {
+    width: 100%;
+    max-width: 352px;
+    font-size: 12px;
+    text-align: start;
+    padding-left: 4px;
+    color: rgb(255, 129, 144);
+    display: none;
+}
+
+/* password input properties */
+.password-first {
+    height: 78px;
+}
+
+.sign-up-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.sign-up-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.sign-up-password>input:hover {
+    cursor: pointer;
+}
+
+.sign-up-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.sign-up-password>input:focus {
+    outline: none;
+}
+
+/* confirm password input properties */
+.password-second {
+    height: 78px;
+}
+
+.confirm-password {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid rgb(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 0px 8px;
+}
+
+.confirm-password>input {
+    width: 100%;
+    max-width: 310px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    padding-left: 16px;
+}
+
+.confirm-password>input:hover {
+    cursor: pointer;
+}
+
+.confirm-password>input::placeholder {
+    font-size: 20px;
+    color: rgb(209, 209, 209);
+}
+
+.confirm-password>input:focus {
+    outline: none;
+}
+
 .sign-up-buttons {
     height: 112px;
     display: flex;
@@ -152,7 +191,6 @@
     justify-content: start;
     align-items: center;
     flex-direction: column;
-    gap: 8px;
 }
 
 .checkbox-area {
@@ -231,38 +269,4 @@
     to {
         transform: translate(-50%, -50%);
     }
-}
-
-/* confirm password input properties */
-
-.confirm-password {
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid rgb(0, 0, 0, 0.1);
-    border-radius: 12px;
-    margin: 0px 8px;
-}
-
-.confirm-password>input {
-    width: 100%;
-    max-width: 310px;
-    font-size: 24px;
-    border-radius: 12px;
-    border: none;
-    padding-left: 16px;
-}
-
-.confirm-password>input:hover {
-    cursor: pointer;
-}
-
-.confirm-password>input::placeholder {
-    font-size: 20px;
-    color: rgb(209, 209, 209);
-}
-
-.confirm-password>input:focus {
-    outline: none;
 }
