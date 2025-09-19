@@ -2,8 +2,10 @@
 ````markdown
 # 📝 Join – Kanban Project Management Tool
 
-**Join** is a collaborative Kanban-style project management tool built by a group of students at Developer Akademie GmbH.
-It helps teams visualize and organize their tasks using a clean, intuitive interface with real-time updates powered by Firebase Realtime Database.
+**Join** is a collaborative Kanban-style project management tool built by a group of students
+at Developer Akademie GmbH.
+It helps teams visualize and organize their tasks using a clean, intuitive interface with
+real-time updates powered by Firebase Realtime Database.
 
 > ⚠️ This project is for educational purposes and is not intended for commercial or extensive business use.
 
