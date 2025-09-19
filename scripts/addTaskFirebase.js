@@ -10,22 +10,28 @@ const addForm = /** @type {HTMLFormElement|null} */ (document.getElementById('ad
 
 // Falls das versteckte Pflichtfeld für Priority nicht existiert, anlegen
 let priorityHidden = /** @type {HTMLInputElement|null} */ (document.getElementById('priorityField'));
-if (!priorityHidden && addForm) {
+if (!priorityHidden) {
   priorityHidden = document.createElement('input');
   priorityHidden.type = 'text';
   priorityHidden.id = 'priorityField';
   priorityHidden.name = 'priority';
   priorityHidden.required = true;
+
   // unsichtbar machen
-  priorityHidden.style.position = 'absolute';
-  priorityHidden.style.left = '-9999px';
-  priorityHidden.style.opacity = '0';
-  priorityHidden.style.width = '0';
-  priorityHidden.style.height = '0';
-  priorityHidden.style.border = '0';
-  priorityHidden.style.padding = '0';
-  addForm.appendChild(priorityHidden);
+  Object.assign(priorityHidden.style, {
+    position: 'absolute',
+    left: '-9999px',
+    opacity: '0',
+    width: '0',
+    height: '0',
+    border: '0',
+    padding: '0',
+  });
+
+  // Wenn es kein <form id="addTaskForm"> gibt, einfach an <body> hängen.
+  (document.getElementById('addTaskForm') || document.body).appendChild(priorityHidden);
 }
+
 
 // Titel/Due/Category sicherheitshalber als required markieren (falls im HTML mal fehlt)
 (/** @type {HTMLInputElement|null} */(document.getElementById('title')))?.setAttribute('required','');
@@ -699,146 +705,155 @@ function showErrorDialog(messages /** @type {string[]} */) {
   });
   if (!dlg.open) dlg.showModal();
 }
-  /** Button „Create Task“ */
-  const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
-  if (createBtn) {
-    createBtn.addEventListener('click', function (e) {
-      e.preventDefault();
+/** Button „Create Task“ – nur native HTML-Validation */
+const createBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.create_task_btn'));
+if (createBtn) {
+  createBtn.addEventListener('click', async function (e) {
+    e.preventDefault();
 
-      const titleEl       = /** @type {HTMLInputElement | null} */   (document.getElementById('title'));
-      const descriptionEl = /** @type {HTMLTextAreaElement | null} */(document.getElementById('description'));
-      const dueEl         = /** @type {HTMLInputElement | null} */   (document.getElementById('due'));
-      const categoryEl    = /** @type {HTMLSelectElement | null} */  (document.getElementById('category'));
+    const titleEl       = /** @type {HTMLInputElement | null} */   (document.getElementById('title'));
+    const descriptionEl = /** @type {HTMLTextAreaElement | null} */(document.getElementById('description'));
+    const dueEl         = /** @type {HTMLInputElement | null} */   (document.getElementById('due'));
+    const categoryEl    = /** @type {HTMLSelectElement | null} */  (document.getElementById('category'));
+    const prioHidden    = /** @type {HTMLInputElement | null} */   (document.getElementById('priorityField'));
 
-      const title       = titleEl?.value.trim() ?? '';
-      const description = descriptionEl?.value.trim() ?? '';
-      const dueDate     = dueEl?.value.trim() ?? '';
-      const category    = categoryEl?.value ?? '';
+// ▶︎ Nur native Browser-Validation
+const ok =
+  (!!titleEl && titleEl.reportValidity()) &&
+  (!!dueEl && dueEl.reportValidity()) &&
+  (!!categoryEl && categoryEl.reportValidity()) &&
+  (priorityHidden ? priorityHidden.reportValidity() : true); // <— wichtig
+if (!ok) return;
 
-      // Falls der Browser-Validator umgangen wird
-      if (dueInput && dueDate < dueInput.min) {
-        // alert("Bitte ein Fälligkeitsdatum ab heute wählen.");
-        showErrorDialog(['Bitte ein Fälligkeitsdatum ab heute wählen.']);
-        return;
-      }
 
-      const assignedTo = Object.entries(assignedUsers)
-        .filter(([, u]) => u.selected)
-        .map(([id]) => id);
+    // Werte einsammeln
+    const title       = titleEl?.value.trim() ?? '';
+    const description = descriptionEl?.value.trim() ?? '';
+    const dueDate     = dueEl?.value.trim() ?? '';
+    const category    = categoryEl?.value ?? '';
 
-      /** @type {'urgent'|'medium'|'low'|null} */
-      let priority = null;
-      const activePriorityBtn = /** @type {HTMLButtonElement | null} */ (
-        document.querySelector('.priority-buttons .btn.active')
-      );
-      if (activePriorityBtn) {
-        const p = (activePriorityBtn.textContent || '').trim().split(/\s+/)[0].toLowerCase();
-        if (p === 'urgent' || p === 'medium' || p === 'low') priority = p;
-      }
+    const assignedTo = Object.entries(assignedUsers)
+      .filter(([, u]) => u.selected)
+      .map(([id]) => id);
 
-      if (!title || !dueDate || !category || !priority) {
-        // alert("Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen!");
-        showErrorDialog(['Bitte alle Pflichtfelder ausfüllen und eine Priorität wählen.']);
-        return;
-      }
-
-      const taskObj = {
-        title,
-        description,
-        dueDate,
-        priority,
-        assignedTo,
-        category,
-        subtasks: [...subtasks],
-        status: "todo",
-        createdAt: Date.now()
-      };
-
-      const newTaskKey = firebase.database().ref().child('tasks').push().key;
-firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey })
-  .then(() => {
-    showAddTaskToast();                     // only the image
-    setTimeout(() => {
-      window.location.href = '../pages/board.html';
-    }, 1600);
-  })
-  .catch(err => {
-    // alert('Fehler beim Speichern: ' + err.message)
-    showErrorDialog([`Fehler beim Speichern: ${err.message}`]);
-  });
-
-;
-    });
-  }
-
-  /** Formular zurücksetzen (Felder + Auswahl + Subtasks + Priority). */
-  function clearForm() {
-    const t  = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
-    const d  = /** @type {HTMLTextAreaElement | null} */ (document.getElementById('description'));
-    const du = /** @type {HTMLInputElement | null} */ (document.getElementById('due'));
-    const c  = /** @type {HTMLSelectElement | null} */ (document.getElementById('category'));
-
-    if (t)  t.value = '';
-    if (d)  d.value = '';
-    if (du) du.value = '';
-    if (c)  c.selectedIndex = 0;
-
-    // Assigned zurücksetzen
-    Object.values(assignedUsers).forEach(u => (u.selected = false));
-    renderAssignedDropdown();
-    renderAssignedBadges();
-
-    // Dropdown sicher schließen
-    const dropdownLocal = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
-    if (dropdownLocal) dropdownLocal.classList.add('hidden');
-
-    // Priority zurücksetzen → "Medium" preselecten + Icon-Logik korrekt setzen
-    /** @type {NodeListOf<HTMLButtonElement>} */
-    const allPrioBtns = document.querySelectorAll('.priority-buttons .btn');
-    allPrioBtns.forEach((b) => {
-      b.classList.remove('active');
-      if (b.classList.contains('btn_medium')) {
-        const def = /** @type {HTMLElement | null} */ (b.querySelector('.icon.default'));
-        const sel = /** @type {HTMLElement | null} */ (b.querySelector('.icon.white'));
-        if (def && sel) {
-          def.style.display = '';   // default sichtbar, white verstecken
-          sel.style.display = 'none';
-        }
-      }
-    });
-    const mediumBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn.btn_medium'));
-    if (mediumBtn) {
-      mediumBtn.classList.add('active');
-      const def = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.default'));
-      const sel = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.white'));
-      if (def && sel) {
-        def.style.display = 'none'; // bei aktiv: default-Icon verstecken
-        sel.style.display = '';     // weißes Icon zeigen
-      }
-      setPriorityValue('medium');
+    /** @type {'urgent'|'medium'|'low'|null} */
+    let priority = null;
+    const activePriorityBtn = /** @type {HTMLButtonElement | null} */ (
+      document.querySelector('.priority-buttons .btn.active')
+    );
+    if (activePriorityBtn) {
+      const p = (activePriorityBtn.dataset.priority || '').toLowerCase();
+      if (p === 'urgent' || p === 'medium' || p === 'low') priority = p;
     }
 
-    // Subtasks leeren (Array + UI + Input)
-    subtasks = [];
-    const subtaskListLocal = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
-    if (subtaskListLocal) subtaskListLocal.innerHTML = '';
-    const subtaskInputLocal = /** @type {HTMLInputElement | null} */ (document.querySelector('.input-icon-subtask input'));
-    if (subtaskInputLocal) subtaskInputLocal.value = '';
-    const clearX = /** @type {HTMLButtonElement | null} */ (document.querySelector('.clear-subtask-input'));
-    if (clearX) clearX.style.display = 'none';
+    const taskObj = {
+      title,
+      description,
+      dueDate,
+      priority,
+      assignedTo,
+      category,
+      subtasks: [...subtasks],
+      status: "todo",
+      createdAt: Date.now()
+    };
+
+    const newTaskKey = firebase.database().ref().child('tasks').push().key;
+    firebase.database().ref('tasks/' + newTaskKey).set({ ...taskObj, id: newTaskKey })
+      .then(() => {
+        showAddTaskToast();
+        setTimeout(() => {
+          window.location.href = '../pages/board.html';
+        }, 1600);
+      })
+      .catch(err => {
+        // Optional: reine Konsole, kein Modal
+        console.error('Fehler beim Speichern:', err);
+      });
+  });
+}
+
+
+  function getCategorySelect() {
+  const el =
+    document.getElementById('category') ||
+    document.querySelector('select#category') ||
+    document.querySelector('select[name="category"]');
+  return (el instanceof HTMLSelectElement) ? el : null;
+}
+
+
+  /** Formular zurücksetzen (Felder + Auswahl + Subtasks + Priority). */
+function clearForm() {
+  const t  = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
+  const d  = /** @type {HTMLTextAreaElement | null} */ (document.getElementById('description'));
+  const du = /** @type {HTMLInputElement | null} */ (document.getElementById('due'));
+
+  if (t)  t.value = '';
+  if (d)  d.value = '';
+  if (du) du.value = '';
+
+  // ← robustes Zurücksetzen der Category (nur wenn Select wirklich existiert)
+  const catEl = (() => {
+    const el =
+      document.getElementById('category') ||
+      document.querySelector('select#category') ||
+      document.querySelector('select[name="category"]');
+    return (el instanceof HTMLSelectElement) ? el : null;
+  })();
+  if (catEl) {
+    catEl.selectedIndex = 0;
+    catEl.setCustomValidity('');
+    catEl.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
-  // Clear-Button (links unten)
-  const clearBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.clear_button'));
-  if (clearBtn) {
-    clearBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      clearForm();
-      // Fokus auf Titel nach Reset – JS-konform (kein TS "as")
-      const titleEl = /** @type {HTMLInputElement | null} */ (document.getElementById('title'));
-      if (titleEl) titleEl.focus();
-    });
+  // Assigned zurücksetzen
+  Object.values(assignedUsers).forEach(u => (u.selected = false));
+  renderAssignedDropdown();
+  renderAssignedBadges();
+  const dropdownLocal = /** @type {HTMLDivElement | null} */ (document.getElementById('assignedDropdown'));
+  if (dropdownLocal) dropdownLocal.classList.add('hidden');
+
+  // Priority -> Medium
+  /** @type {NodeListOf<HTMLButtonElement>} */
+  const allPrioBtns = document.querySelectorAll('.priority-buttons .btn');
+  allPrioBtns.forEach(b => {
+    b.classList.remove('active');
+    if (b.classList.contains('btn_medium')) {
+      const def = /** @type {HTMLElement | null} */ (b.querySelector('.icon.default'));
+      const sel = /** @type {HTMLElement | null} */ (b.querySelector('.icon.white'));
+      if (def && sel) { def.style.display = ''; sel.style.display = 'none'; }
+    }
+  });
+  const mediumBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.priority-buttons .btn.btn_medium'));
+  if (mediumBtn) {
+    mediumBtn.classList.add('active');
+    const def = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.default'));
+    const sel = /** @type {HTMLElement | null} */ (mediumBtn.querySelector('.icon.white'));
+    if (def && sel) { def.style.display = 'none'; sel.style.display = ''; }
+    setPriorityValue('medium');
   }
+
+  // Subtasks leeren
+  subtasks = [];
+  const subtaskListLocal = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
+  if (subtaskListLocal) subtaskListLocal.innerHTML = '';
+  const subtaskInputLocal = /** @type {HTMLInputElement | null} */ (document.querySelector('.input-icon-subtask input'));
+  if (subtaskInputLocal) subtaskInputLocal.value = '';
+  const clearX = /** @type {HTMLButtonElement | null} */ (document.querySelector('.clear-subtask-input'));
+  if (clearX) clearX.style.display = 'none';
+}
+
+
+  // Clear-Button (links unten)
+const clearBtn = /** @type {HTMLButtonElement | null} */ (document.querySelector('.clear_button'));
+if (clearBtn) {
+  clearBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearForm();     // kein titleEl.focus() mehr!
+  });
+}
+
 
   // ---------------------------------------------------------------------------
   // Dropdown öffnen/schließen (Assigned to)

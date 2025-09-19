@@ -228,28 +228,6 @@
   <script src="../scripts/logInGuest.js"></script>
   <script src="../scripts/logOutUser.js"></script>
   <script src="../scripts/authGuard.js"></script> 
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('clearTaskButton').addEventListener('click', function () {
-          // Eingabefelder leeren
-          document.getElementById('title').value = "";
-          document.getElementById('description').value = "";
-          document.getElementById('due').value = "";
-
-          // DropDowns zurücksetzen
-          document.getElementById('assigned').selectedIndex = 0;
-          document.getElementById('category').selectedIndex = 0;
-
-          // Subtasks leeren
-          let subtaskList = document.getElementById('subtask-list');
-          if (subtaskList) subtaskList.innerHTML = "";
-
-          // Priority zurücksetzen: Falls du per Klasse auswählst
-          let priorityBtns = document.querySelectorAll('.priority-buttons .btn');
-          priorityBtns.forEach(btn => btn.classList.remove('active'));
-      });
-  });
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 </body>

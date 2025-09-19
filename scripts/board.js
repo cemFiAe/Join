@@ -51,7 +51,7 @@ function showAddTaskToast() {
   toast.classList.remove('enter'); void toast.offsetHeight; toast.classList.add('enter');
 }
 
-/** ZENTRALER Fehlerdialog (nutzt <dialog id="errorDialog"> in board.html) */
+/** ZENTRALER Fehlerdialog (nur noch für echte Fehler, nicht für Validation) */
 function showErrorDialog(message) {
   const dlg = document.getElementById('errorDialog');
   if (!(dlg instanceof HTMLDialogElement)) {
@@ -119,6 +119,27 @@ function onDomReady() {
     clearAddTaskForm();
   }
   
+  // ──────────────────────────────────────────────────────────────────────────
+  // Overlay-Form + verstecktes Pflichtfeld für Priority (native Validation)
+  // ──────────────────────────────────────────────────────────────────────────
+  const overlayForm = /** @type {HTMLFormElement|null} */ (dialog?.querySelector('.task-form'));
+  let overlayPrioHidden = /** @type {HTMLInputElement|null} */ (dialog?.querySelector('#overlayPriority'));
+  if (!overlayPrioHidden) {
+    overlayPrioHidden = document.createElement('input');
+    overlayPrioHidden.type = 'text';
+    overlayPrioHidden.id = 'overlayPriority';
+    overlayPrioHidden.name = 'priority';
+    overlayPrioHidden.required = true;
+    Object.assign(overlayPrioHidden.style, {
+      position:'absolute', left:'-9999px', opacity:'0', width:'0', height:'0', border:'0', padding:'0'
+    });
+    (overlayForm || document.body).appendChild(overlayPrioHidden);
+  }
+  function setOverlayPriority(v /** @type {'urgent'|'medium'|'low'|''} */) {
+    if (!overlayPrioHidden) return;
+    overlayPrioHidden.value = v || '';
+    overlayPrioHidden.setCustomValidity(overlayPrioHidden.value ? '' : 'Please choose a priority');
+  }
 
   /** Alle Felder des Overlays zurücksetzen. */
   function clearAddTaskForm() {
@@ -131,8 +152,11 @@ function onDomReady() {
     // @ts-ignore
     window.__boardResetAssigned && window.__boardResetAssigned();
 
-    // Priority zurücksetzen
+    // Priority zurücksetzen → Medium aktiv + hidden required Feld setzen
     document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+    const m = /** @type {HTMLButtonElement|null} */ (document.querySelector('.priority-buttons .btn[data-priority="medium"]'));
+    if (m) m.classList.add('active');
+    setOverlayPriority('medium');
 
     // Subtasks zurücksetzen
     subtasks = [];
@@ -140,16 +164,20 @@ function onDomReady() {
     if (ul) ul.innerHTML = '';
     if (subtaskInput) subtaskInput.value = '';
     hideInlineActions();
+
+    // WICHTIG: kein Fokus setzen & kein reportValidity hier!
   }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Priority Button Handling
+  // Priority Button Handling  (+ hidden required Feld setzen)
   // ──────────────────────────────────────────────────────────────────────────
   document.querySelectorAll('.priority-buttons .btn')
     .forEach((btn, _, all) => {
       btn.addEventListener('click', function () {
         all.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
+        const p = /** @type {HTMLElement} */ (this).dataset.priority || '';
+        setOverlayPriority((p === 'urgent' || p === 'medium' || p === 'low') ? p : '');
       });
     });
 
@@ -279,69 +307,77 @@ function onDomReady() {
     });
   }
 
-function editSubtaskInline(li, model) {
-  const oldValue = model.title;
+  function editSubtaskInline(li, model) {
+    const oldValue = model.title;
 
-  const row = document.createElement('div');
-  row.className = 'subtask-edit-row';
+    const row = document.createElement('div');
+    row.className = 'subtask-edit-row';
+    // Input-Zeile vollbreit
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.gap = '8px';
+    row.style.width = '100%';
 
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'subtask-edit-input';
-  input.value = oldValue;
-  input.placeholder = 'Edit subtask';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'subtask-edit-input';
+    input.value = oldValue;
+    input.placeholder = 'Edit subtask';
+    // Input füllt die Zeile
+    input.style.width = '100%';
+    input.style.flex = '1 1 auto';
+    input.style.boxSizing = 'border-box';
 
-  const actions = document.createElement('div');
-  actions.className = 'subtask-edit-actions';
+    const actions = document.createElement('div');
+    actions.className = 'subtask-edit-actions';
 
-  const btnCancel = document.createElement('button');
-  btnCancel.type = 'button';
-  btnCancel.className = 'subtask-edit-btn';
-  btnCancel.title = 'Cancel';
-  btnCancel.textContent = '✕';
+    const btnCancel = document.createElement('button');
+    btnCancel.type = 'button';
+    btnCancel.className = 'subtask-edit-btn';
+    btnCancel.title = 'Cancel';
+    btnCancel.textContent = '✕';
 
-  const btnOk = document.createElement('button');
-  btnOk.type = 'button';
-  btnOk.className = 'subtask-edit-btn';
-  btnOk.title = 'Save';
-  btnOk.textContent = '✓';
+    const btnOk = document.createElement('button');
+    btnOk.type = 'button';
+    btnOk.className = 'subtask-edit-btn';
+    btnOk.title = 'Save';
+    btnOk.textContent = '✓';
 
-  actions.append(btnCancel, btnOk);
-  row.append(input, actions);
-  li.innerHTML = ''; li.appendChild(row);
+    actions.append(btnCancel, btnOk);
+    row.append(input, actions);
+    li.innerHTML = ''; li.appendChild(row);
 
-  const rebindItem = (newTitle) => {
-    model.title = newTitle;
-    li.innerHTML = `
-      <span class="subtask-title">${escapeHtml(newTitle)}</span>
-      <span class="subtask-actions" style="display:none;">
-        <button type="button" class="subtask-edit-btn" title="Bearbeiten">
-          <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
-        </button>
-        <button type="button" class="subtask-delete-btn" title="Löschen">
-          <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
-        </button>
-      </span>
-    `;
-    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => editSubtaskInline(li, model));
-    (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
-      const ul = li.parentElement; if (!ul) return;
-      const idx = Array.from(ul.children).indexOf(li);
-      if (idx > -1) subtasks.splice(idx, 1);
-      li.remove();
-    });
-  };
+    const rebindItem = (newTitle) => {
+      model.title = newTitle;
+      li.innerHTML = `
+        <span class="subtask-title">${escapeHtml(newTitle)}</span>
+        <span class="subtask-actions" style="display:none;">
+          <button type="button" class="subtask-edit-btn" title="Bearbeiten">
+            <img src="../assets/icons/add_task/edit.png" alt="Edit" style="width:16px;height:16px;">
+          </button>
+          <button type="button" class="subtask-delete-btn" title="Löschen">
+            <img src="../assets/icons/add_task/delete.png" alt="Delete" style="width:16px;height:16px;">
+          </button>
+        </span>
+      `;
+      (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-edit-btn')))?.addEventListener('click', () => editSubtaskInline(li, model));
+      (/** @type {HTMLButtonElement|null} */ (li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+        const ul = li.parentElement; if (!ul) return;
+        const idx = Array.from(ul.children).indexOf(li);
+        if (idx > -1) subtasks.splice(idx, 1);
+        li.remove();
+      });
+    };
 
-  const save = () => rebindItem(input.value.trim() || oldValue);
-  const cancel = () => rebindItem(oldValue);
+    const save = () => rebindItem(input.value.trim() || oldValue);
+    const cancel = () => rebindItem(oldValue);
 
-  btnOk.addEventListener('click', save);
-  btnCancel.addEventListener('click', cancel);
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') cancel(); });
+    btnOk.addEventListener('click', save);
+    btnCancel.addEventListener('click', cancel);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') cancel(); });
 
-  input.focus(); input.select();
-}
-
+    input.focus(); input.select();
+  }
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => (
@@ -366,10 +402,13 @@ function editSubtaskInline(li, model) {
   }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Create Task (speichert + Animation) – mit vollständiger Dialog-Validation
+  // Create Task (native HTML-Validation via reportValidity)
   // ──────────────────────────────────────────────────────────────────────────
   (/** @type {HTMLButtonElement} */ (document.querySelector('.create_task_btn')))
     .addEventListener('click', () => {
+      // native Browser-Validierung des Overlays
+      if (overlayForm && !overlayForm.reportValidity()) return;
+
       const overlayDlg = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
 
       const title       = (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value.trim();
@@ -385,37 +424,6 @@ function editSubtaskInline(li, model) {
         document.querySelector('.priority-buttons .btn.active')
       );
       const priority  = activeBtn ? activeBtn.dataset.priority : null;
-
-      // === Validierung (ALLE Felder → IMMER über deinen errorDialog) ===
-      if (!title) {
-        showErrorDialog("Bitte einen Titel eingeben!");
-        return;
-      }
-      if (!description) {
-        showErrorDialog("Bitte eine Beschreibung eingeben!");
-        return;
-      }
-      if (!dueDate) {
-        showErrorDialog("Bitte ein Fälligkeitsdatum auswählen!");
-        return;
-      }
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
-        showErrorDialog("Datum im Format JJJJ-MM-TT wählen.");
-        return;
-      }
-      if (!category) {
-        showErrorDialog("Bitte eine Kategorie auswählen!");
-        return;
-      }
-      if (!priority) {
-        showErrorDialog("Bitte eine Priorität auswählen!");
-        return;
-      }
-      // Wenn du mindestens eine Zuweisung willst, diesen Block aktiv lassen:
-      if (!assignedTo.length) {
-        showErrorDialog("Bitte mindestens eine Person zuweisen!");
-        return;
-      }
 
       const taskObj = {
         title,
@@ -447,6 +455,7 @@ function editSubtaskInline(li, model) {
           showBoardAddToast(); // slidet rein & verschwindet automatisch
         })
         .catch(err => {
+          // Nur Speichere-Fehler noch im Dialog anzeigen
           showErrorDialog("Fehler: " + err.message);
         });
     });
@@ -512,7 +521,7 @@ function showBoardAddToast() {
   void toast.offsetWidth;
   toast.classList.add('enter');
 
-  // Auto-Hide: kurze Verweilzeit, dann „leave“ + DOM entfernen
+  // Auto-Hide
   clearTimeout(/** @type {any} */(showBoardAddToast)._t);
   /** @type {any} */(showBoardAddToast)._t = setTimeout(() => {
     toast.classList.remove('enter');
@@ -522,5 +531,5 @@ function showBoardAddToast() {
       toast.remove();  // komplett raus
     };
     toast.addEventListener('animationend', onEnd);
-  }, 1200); // 1.2s in der Mitte stehen lassen
+  }, 1200);
 }
