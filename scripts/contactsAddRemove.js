@@ -42,6 +42,7 @@ function getFormData() {
 function validateInput(input, regex, errorId, errorMsg) {
     const errorDiv = document.getElementById(errorId);
     errorDiv.classList.add("error-message");
+
     if (!input.value.trim()) {
         errorDiv.textContent = errorMsg.required;
         input.classList.add("input-error");
@@ -51,6 +52,7 @@ function validateInput(input, regex, errorId, errorMsg) {
         input.classList.add("input-error");
         return false;
     }
+
     errorDiv.textContent = "";
     input.classList.remove("input-error");
     return true;
@@ -58,63 +60,30 @@ function validateInput(input, regex, errorId, errorMsg) {
 
 /**
  * Checks all input fields (name, email, phone) and enables/disables the submit button.
- * @param {HTMLInputElement} nameInput - Input field for the name.
- * @param {HTMLInputElement} mailInput - Input field for the email address.
- * @param {HTMLInputElement} phoneInput - Input field for the phone number.
- * @param {HTMLButtonElement} submitBtn - The form's submit button.
- * @param {{name: RegExp, mail: RegExp, phone: RegExp}} regexes - Regex patterns for validation.
  * @returns {boolean} - True if all inputs are valid, otherwise false.
  */
-function checkAllValid(nameInput, mailInput, phoneInput, submitBtn, regexes) {
-    const validName = validateInput(nameInput, regexes.name, "error-name", {
-        required: "Bitte einen Namen eingeben.",
-        invalid: "Nur Buchstaben und Leerzeichen erlaubt."
-    });
-    const validMail = validateInput(mailInput, regexes.mail, "error-mail", {
-        required: "Bitte eine E-Mail-Adresse eingeben.",
-        invalid: "Format: buchstaben+zahlen@mail.de"
-    });
-    const validPhone = validateInput(phoneInput, regexes.phone, "error-phone", {
-        required: "Bitte eine Telefonnummer eingeben.",
-        invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
-    });
-    submitBtn.disabled = !(validName && validMail && validPhone);
-    return validName && validMail && validPhone;
-}
+function allInputsValid() {
+    const nameInput = document.getElementById("add-name-input");
+    const mailInput = document.getElementById("add-mail-input");
+    const phoneInput = document.getElementById("add-phone-input");
 
-/**
- * Adds a listener to the name input that removes invalid characters in real-time
- * and re-checks validation on each input.
- * @param {HTMLInputElement} nameInput - Input field for the name.
- * @param {Function} checkValid - Callback function to check validation of all fields.
- */
-function handleNameInput(nameInput, checkValid) {
-    nameInput.addEventListener("input", () => {
-        nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
-        checkValid();
-    });
-}
+    const regexes = {
+        name: /^[A-Za-z\s]+$/,
+        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/,
+        phone: /^\+?[0-9\s]{7,}$/
+    };
 
-
-/**
- * Adds a listener to the phone input that removes invalid characters in real-time
- * and re-checks validation on each input.
- * @param {HTMLInputElement} phoneInput - Input field for the phone number.
- * @param {Function} checkValid - Callback function to check validation of all fields.
- */
-function handlePhoneInput(phoneInput, checkValid) {
-    phoneInput.addEventListener("input", () => {
-        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
-        checkValid();
-    });
+    return (
+        regexes.name.test(nameInput.value.trim()) &&
+        regexes.mail.test(mailInput.value.trim()) &&
+        regexes.phone.test(phoneInput.value.trim())
+    );
 }
 
 /**
  * Initializes form validation:
- * - Sets regex rules for name, email, and phone
- * - Activates live validation on input
+ * - Validates only the currently focused input
  * - Disables the submit button until all inputs are valid
- * - Prevents multiple form submissions
  */
 function setupValidation() {
     const nameInput = document.getElementById("add-name-input");
@@ -122,25 +91,66 @@ function setupValidation() {
     const phoneInput = document.getElementById("add-phone-input");
     const form = document.getElementById("add-contact-form");
     const submitBtn = form.querySelector("button[type='submit']");
+
     const regexes = {
         name: /^[A-Za-z\s]+$/,
-        mail: /^[A-Za-z0-9]+@[A-Za-z]+\.[A-Za-z]+$/,
+        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/,
         phone: /^\+?[0-9\s]{7,}$/
     };
 
-    const checkValid = () => checkAllValid(nameInput, mailInput, phoneInput, submitBtn, regexes);
-    handleNameInput(nameInput, checkValid);
-    mailInput.addEventListener("input", checkValid);
-    handlePhoneInput(phoneInput, checkValid);
+    const errorMsgs = {
+        name: {
+            required: "Bitte einen Namen eingeben.",
+            invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+        },
+        mail: {
+            required: "Bitte eine E-Mail-Adresse eingeben.",
+            invalid: "Bitte eine gültige E-Mail eingeben, z.B muster@mail.de"
+        },
+        phone: {
+            required: "Bitte eine Telefonnummer eingeben.",
+            invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+        }
+    };
 
+    // Echtzeit-Filter für Name
+    nameInput.addEventListener("input", () => {
+        nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
+    });
+
+    // Echtzeit-Filter für Phone
+    phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
+    });
+
+    // Validation nur für das aktuell fokussierte Feld
+    [nameInput, mailInput, phoneInput].forEach(input => {
+        input.addEventListener("input", () => {
+            if (document.activeElement === input) {
+                if (input === nameInput) {
+                    validateInput(input, regexes.name, "error-name", errorMsgs.name);
+                } else if (input === mailInput) {
+                    validateInput(input, regexes.mail, "error-mail", errorMsgs.mail);
+                } else if (input === phoneInput) {
+                    validateInput(input, regexes.phone, "error-phone", errorMsgs.phone);
+                }
+            }
+            submitBtn.disabled = !allInputsValid();
+        });
+    });
+
+    // Block mehrfach Submit
     form.addEventListener("submit", (event) => {
-        if (!checkValid()) {
+        if (!allInputsValid()) {
             event.preventDefault();
             return;
         }
         submitBtn.disabled = true;
         setTimeout(() => submitBtn.disabled = false, 1500);
     });
+
+    // Initial state
+    submitBtn.disabled = true;
 }
 
 /** 

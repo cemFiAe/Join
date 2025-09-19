@@ -41,16 +41,6 @@ async function onloadFunction() {
     renderAllContacts();
 }
 
-
-
-// initial Function to create the first contact
-
-/* async function onloadFunction() {
-    postData("/contacts", {"mail": "test@mail.de", "name": "Max Muster", "phone": "+49 1234 567 89 0"});    
-    renderAllContacts();
-} */
-
-
 /**
  * this function is used to fetch the data from firebase and convert it into .json format
  * @param {string} path - this is used to change the root that is being fetched from firebase
@@ -395,6 +385,8 @@ function getContactDetailsTemplate(id, data, initials, bgColor) {
 
 /**
  * this function is used to update the contact array's data
+ * @param {string} id - this is the id of the contact
+ * @param {Object} data - object containing contact information like name, mail or phone
  */
 function updateLocalContact(id, data) {
     const contact = getContactById(id);

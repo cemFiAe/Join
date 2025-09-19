@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="right">
-      <form id="add-contact-form" onsubmit="addNewContact(event)">
+      <form id="add-contact-form" autocomplete="off" onsubmit="addNewContact(event)">
         <div class="form-group">
          <input required id="add-name-input" class="name-input" type="text" placeholder="Name">
          <div id="error-name" class="error-message"></div>
@@ -73,10 +73,19 @@
         <div class="edit_initials_circle" id="edit_initials_circle"></div>
     </div>
     <div class="right">
-      <form onsubmit="editContact(event)">
-        <input id="edit-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
-        <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
-        <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
+      <form id="edit-contact-form" autocomplete="off" onsubmit="editContact(event)">
+        <div class="form-group">
+          <input id="edit-name-input" class="name-input" type="text" placeholder="Name" maxlength="50">
+          <div id="edit-error-name" class="error-message"></div>
+        </div>
+        <div class="form-group">
+         <input id="edit-mail-input" class="mail-input" type="text" placeholder="Email" maxlength="50">
+         <div id="edit-error-mail" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <input id="edit-phone-input" class="phone-input" type="text" placeholder="Phone" maxlength="50">
+          <div id="edit-error-phone" class="error-message"></div>
+        </div>
         <div>
           <button type="button" onclick="deleteContactFromEditMobile()" class="cancel-btn-mobile">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="deleteContactFromEdit()" class="cancel-btn">Delete<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>

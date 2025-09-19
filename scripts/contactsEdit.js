@@ -4,6 +4,8 @@ let currentlyEditingContactId = null;
  * this function is used to open the edit contact overlay
  * @param {string} id - id of the contact
  */
+let editValidationInitialized = false;
+
 function openEditContact(id) {
     event.preventDefault();
     currentlyEditingContactId = id;
@@ -13,6 +15,11 @@ function openEditContact(id) {
 
     fillEditForm(contact.data);
     showEditOverlay();
+
+    if (!editValidationInitialized) {
+        setupEditValidation();
+        editValidationInitialized = true;
+    }
 }
 
 /**
@@ -28,6 +35,10 @@ async function editContact(event) {
     const updatedData = collectUpdatedFormData(contact.data);
     await updateContactInFirebase(id, updatedData);
     updateLocalContact(id, updatedData);
+
+    closeEditContact(); 
+    rerenderContactList();
+    focusOnNewContact(id);
 }
 
 /**
@@ -144,4 +155,76 @@ function deleteContactFromEditMobile() {
     closeEditContact();
     goBack();
     closeContactOptions();
+}
+
+/**
+ * Initializes validation for the edit contact form
+ */
+function setupEditValidation() {
+    const nameInput = document.getElementById("edit-name-input");
+    const mailInput = document.getElementById("edit-mail-input");
+    const phoneInput = document.getElementById("edit-phone-input");
+    const form = document.getElementById("edit-contact-form");
+    const submitBtn = form.querySelector("button[type='submit']");
+
+    const regexes = {
+        name: /^[A-Za-z\s]+$/,
+        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/, 
+        phone: /^\+?[0-9\s]{7,}$/
+    };
+
+    const errorMsgs = {
+        name: {
+            required: "Bitte einen Namen eingeben.",
+            invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+        },
+        mail: {
+            required: "Bitte eine E-Mail-Adresse eingeben.",
+            invalid: "Bitte eine gültige E-Mail eingeben, z.B muster@mail.de"
+        },
+        phone: {
+            required: "Bitte eine Telefonnummer eingeben.",
+            invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+        }
+    };
+
+    nameInput.addEventListener("input", () => {
+        nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
+    });
+
+    phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
+    });
+
+    [nameInput, mailInput, phoneInput].forEach(input => {
+        input.addEventListener("input", () => {
+            if (input === nameInput) {
+                validateInput(input, regexes.name, "edit-error-name", errorMsgs.name);
+            } else if (input === mailInput) {
+                validateInput(input, regexes.mail, "edit-error-mail", errorMsgs.mail);
+            } else if (input === phoneInput) {
+                validateInput(input, regexes.phone, "edit-error-phone", errorMsgs.phone);
+            }
+            toggleSubmit();
+        });
+    });
+
+    form.addEventListener("submit", (event) => {
+        if (submitBtn.disabled) {
+            event.preventDefault();
+            return;
+        }
+        submitBtn.disabled = true;
+        setTimeout(() => submitBtn.disabled = false, 1500);
+    });
+
+    toggleSubmit();
+
+    function toggleSubmit() {
+        submitBtn.disabled = !(
+            regexes.name.test(nameInput.value.trim()) &&
+            regexes.mail.test(mailInput.value.trim()) &&
+            regexes.phone.test(phoneInput.value.trim())
+        );
+    }
 }
