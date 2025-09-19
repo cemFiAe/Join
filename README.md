@@ -33,7 +33,8 @@ real-time updates powered by Firebase Realtime Database.
 
 ## 🔧 Firebase Configuration
 
-To use your own Firebase setup, replace the config object in `firebase.js` with your Firebase project credentials:
+To use your own Firebase setup, replace the config object in `firebase.js`
+with your Firebase project credentials:
 
 ```js
 const firebaseConfig = {
