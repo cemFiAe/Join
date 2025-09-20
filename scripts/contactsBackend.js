@@ -219,7 +219,7 @@ function createDivider() {
  */
 function renderAllContacts() {
     const container = document.getElementById('contacts');
-    container.innerHTML = '<button onclick="openAddContact()" class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>';
+    container.innerHTML = '<button onclick="openOverlay(`add`)" class="new_contact_btn">Add new contact <img class="person_add" src="../assets/icons/contacts/person_add.svg" alt=""></button>';
     const groups = groupContactsByInitial(contacts);
     const letters = Object.keys(groups).sort();
 
@@ -349,7 +349,6 @@ function animateContactDetails(container) {
     if (window.innerWidth > 650) {
         container.classList.add('slide-in');
         container.classList.remove('slide-out');
-        container.style.left = '750px';
     } else {
         container.style.transition = 'none';
         container.style.left = '16px';
@@ -391,7 +390,19 @@ function getContactDetailsTemplate(id, data, initials, bgColor) {
 function updateLocalContact(id, data) {
     const contact = getContactById(id);
     if (contact) contact.data = data;
-    closeEditContact();
+
     rerenderContactList();
-    showDetails(id);
+
+    const target = document.getElementById(`contact-${id}`);
+    if (target) {
+        highlightAndScrollTo(target);
+    }
+
+    const container = document.getElementById('contact_information');
+    if (currentDisplayedContactId === id && container.innerHTML !== '') {
+        renderContactDetails(container, contact, id);
+        animateContactDetails(container);
+    } else {
+        showDetails(id);
+    }
 }

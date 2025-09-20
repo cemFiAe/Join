@@ -1,4 +1,5 @@
 // ------------------ MOBILE MENU ------------------ //
+
 const menuToggle = document.getElementById("menuToggle");
 const mobileNav = document.getElementById("mobileNav");
 const mobileAvatar = document.getElementById("mobile-user-avatar");
@@ -48,6 +49,7 @@ if (mobileAvatar) {
 }
 
 // ------------------ DESKTOP BURGER MENU (Avatar-Trigger) ------------------ //
+
 const avatarTrigger = document.getElementById('board-user-avatar');
 const burger = document.getElementById('burger');
 let burgerOpen = false;
@@ -88,3 +90,39 @@ function outsideClickListener(event) {
 if (avatarTrigger) {
   avatarTrigger.addEventListener('click', toggleBurgerMenu);
 }
+
+// -------------------- TABLET BURGER MENU ------------------ //
+
+document.addEventListener("DOMContentLoaded", () => {
+  const tabletTrigger = document.getElementById('tabletTrigger');
+  const tabletMenu = document.getElementById('tabletNavBar');
+  let tabletMenuOpen = false;
+
+  function openTabletMenu() {
+    tabletMenu.classList.add('d_flex');
+    tabletMenuOpen = true;
+    document.addEventListener("click", outsideTabletClickListener);
+  }
+
+  function closeTabletMenu() {
+    tabletMenu.classList.remove('d_flex');
+    tabletMenuOpen = false;
+    document.removeEventListener("click", outsideTabletClickListener);
+  }
+
+  function toggleTabletMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    tabletMenuOpen ? closeTabletMenu() : openTabletMenu();
+  }
+
+  function outsideTabletClickListener(event) {
+    if (!tabletMenu.contains(event.target) && !tabletTrigger.contains(event.target)) {
+      closeTabletMenu();
+    }
+  }
+
+  if (tabletTrigger) {
+    tabletTrigger.addEventListener('click', toggleTabletMenu);
+  }
+});

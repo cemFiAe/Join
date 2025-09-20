@@ -14,7 +14,7 @@ function openEditContact(id) {
     if (!contact) return;
 
     fillEditForm(contact.data);
-    showEditOverlay();
+    openOverlay('edit');
 
     if (!editValidationInitialized) {
         setupEditValidation();
@@ -36,9 +36,7 @@ async function editContact(event) {
     await updateContactInFirebase(id, updatedData);
     updateLocalContact(id, updatedData);
 
-    closeEditContact(); 
-    rerenderContactList();
-    focusOnNewContact(id);
+    closeOverlay('edit'); 
 }
 
 /**
@@ -63,17 +61,6 @@ function fillEditForm(data) {
     const color = getColorFromName(data.name);
     const circleHTML = createInitialIcon(initials, color, 'circle', 128);
     document.getElementById('edit_initials_circle').innerHTML = circleHTML;
-}
-
-/**
- * this function is used to make the edit overlay appear
- */
-function showEditOverlay() {
-    editOverlayLogic();
-    document.getElementById('bg_overlay').style.display = "flex";
-    document.getElementById('burger_contact_btn').style.display = "none";
-    document.getElementById('add_contact_btn').style.display = "none";
-    document.getElementById('burger_contact_btn').style.zIndex = "999";
 }
 
 /**
@@ -143,7 +130,7 @@ function deleteContactFromEdit() {
 
     deleteContact(currentlyEditingContactId);
 
-    closeEditContact();
+    closeOverlay('edit');
 }
 
 /**

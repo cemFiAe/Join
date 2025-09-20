@@ -3,6 +3,10 @@ body {
     overflow-y: hidden;
 }
 
+.tablet-header-icon {
+    display: none;
+}
+
 .contacts {
     display: flex;
     flex-direction: column;
@@ -193,20 +197,32 @@ body {
   animation: slideOutToRight 0.3s forwards;
 }
 
+/* Standardwert ab 1371px */
+#contact_information {
+  --contact-left: 750px;
+}
+
+/* Für 650px – 1370px */
+@media (min-width: 650px) and (max-width: 1370px) {
+  #contact_information {
+    --contact-left: 511px;
+  }
+}
+
 @keyframes slideInFromRight {
   from {
     left: 100%;
     opacity: 0;
   }
   to {
-    left: 750px;
+    left: var(--contact-left);
     opacity: 1;
   }
 }
 
 @keyframes slideOutToRight {
   from {
-    left: 750px;
+    left: var(--contact-left);
     opacity: 1;
   }
   to {
@@ -366,4 +382,47 @@ body {
 /* sorgt für das dunkle Overlay hinter dem <dialog> */
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.35);
+}
+
+/* tablet burger menu */
+
+.tabletNavBar {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+    z-index: 99;
+    top: 96px;
+    left: 16px;
+    height: 224px;
+    width: 424px;
+    padding: 10px;
+    background-color: #2A3647;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.tabletNavBar a {
+    text-decoration: none;
+    color: #CDCDCD;
+    height: 46px;
+    width: 100%;
+    font: 16px 400;
+    padding: 8px;
+}
+
+.tabletNavBar a:hover {
+    background-color: #2A3D59;
+    cursor: pointer;
+    transition: ease-in 0.075s;
+}
+
+.navBarDivider {
+    background-color: #CDCDCD;
+    height: 2px;
+    width: 408px;
+    margin-left: 8px;
 }

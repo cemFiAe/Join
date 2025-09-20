@@ -24,7 +24,7 @@
 
   <dialog id="add_contact_overlay" class="add_contact_overlay">
     <div class="left">
-      <img onclick="closeAddContactMobile()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
+      <img onclick="closeOverlay('add')" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
         alt="x-btn">
       <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
       <h1 class="side-title">Add contact</h1>
@@ -51,19 +51,19 @@
          <div id="error-phone" class="error-message"></div>
         </div>
         <div>
-          <button type="button" onclick="event.stopPropagation(), closeAddContact()" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button type="button" onclick="event.stopPropagation(), closeAddContactMobile()" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="button" onclick="event.stopPropagation(), closeOverlay('add')" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
+          <button type="button" onclick="event.stopPropagation(), closeOverlay('add')" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg"
               alt="checkmark"></button>
         </div>
       </form>
-      <img onclick="closeAddContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+      <img onclick="closeOverlay('add')" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
     </div>
   </dialog>
 
   <dialog id="edit_contact_overlay" class="edit_contact_overlay">
     <div class="left">
-      <img onclick="closeEditMobileContact()" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
+      <img onclick="closeOverlay('edit')" class="close-x-mobile" src="../assets/icons/contacts/close-mobile.svg"
         alt="x-btn">
       <img class="overlay-logo" src="../assets/icons/contacts/logo.svg" alt="join_logo">
       <h1 class="side-title">Edit contact</h1>
@@ -95,20 +95,29 @@
 
       <div>
       </div>
-      <img onclick="closeEditContact()" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
+      <img onclick="closeOverlay('edit')" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">
     </div>
   </dialog>
 
 <header class="header">
-    <h2 class="title">Kanban Project Management Tool</h2>
-<div class="header-icons">
-    <a href="../pages/help.html">
-        <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="Help">
-    </a>
-    <div id="board-user-avatar" class="user-avatar"></div>
-</div>
-
+  <h2 class="title">Kanban Project Management Tool</h2>
+  <div class="header-icons">
+   <a href="../pages/help.html">
+    <img class="help-icon" src="../assets/icons/frame/header/help.svg" alt="Help">
+   </a>
+   <div id="board-user-avatar" class="user-avatar"></div>
+  </div>
 </header>
+  <a href="" id="tabletTrigger"><img class="tablet-header-icon" src="../assets/img/logo/logo_mobile.svg" alt="logo"></a>  
+
+  <nav id="tabletNavBar" class="tabletNavBar">
+    <a href="./summary.html">Summary</a>
+    <a href="./add_task.html">Add Task</a>
+    <a href="./board.html">Board</a>
+    <div class="navBarDivider"></div>
+    <a href="./privacy_policy.html">Privacy Policy</a>
+    <a href="./legal_notice.html">Legal notice</a>
+  </nav>
 
   <nav id="burger" class="burger">
     <a href="./legal_notice.html">Legal Notice</a>
@@ -177,7 +186,7 @@
 
   </section>
 
-  <button id="add_contact_btn" onclick="openAddContactMobile()" class="add_contact_btn">
+  <button id="add_contact_btn" onclick="openOverlay('add')" class="add_contact_btn">
     <img class="mobile_add" src="../assets/icons/contacts/mobile_add.svg" alt="">
   </button>
 
@@ -216,12 +225,12 @@
     </div>
   </footer>
 
-  <script src="../script.js"></script>
+  <script src="../script.js" defer></script>
   <script src="../scripts/currentUser.js"></script>
   <script src="../scripts/contactsOwnProfile.js"></script>
   <script src="../scripts/contactsBackend.js"></script>
   <script src="../scripts/contactsAddRemove.js"></script>
-  <script src="../scripts/contacts.js"></script>
+  <script src="../scripts/contacts.js" defer></script>
   <script src="../scripts/contactsEdit.js"></script>
   <script src="../scripts/logInGuest.js"></script>
   <script src="../scripts/logOutUser.js"></script>

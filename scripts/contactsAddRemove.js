@@ -10,7 +10,7 @@ async function addNewContact(event) {
     const newId = await saveContactToFirebase(newContactData);
     addContactLocally(newId, newContactData);
     document.getElementById('add-contact-form').reset();
-    closeAddContactMobile();
+    closeOverlay('add');
     rerenderContactList();
     showSuccessOverlay();
     focusOnNewContact(newId);
@@ -113,17 +113,14 @@ function setupValidation() {
         }
     };
 
-    // Echtzeit-Filter für Name
     nameInput.addEventListener("input", () => {
         nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
     });
 
-    // Echtzeit-Filter für Phone
     phoneInput.addEventListener("input", () => {
         phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
     });
 
-    // Validation nur für das aktuell fokussierte Feld
     [nameInput, mailInput, phoneInput].forEach(input => {
         input.addEventListener("input", () => {
             if (document.activeElement === input) {
@@ -139,7 +136,6 @@ function setupValidation() {
         });
     });
 
-    // Block mehrfach Submit
     form.addEventListener("submit", (event) => {
         if (!allInputsValid()) {
             event.preventDefault();
@@ -149,7 +145,6 @@ function setupValidation() {
         setTimeout(() => submitBtn.disabled = false, 1500);
     });
 
-    // Initial state
     submitBtn.disabled = true;
 }
 
