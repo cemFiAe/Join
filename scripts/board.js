@@ -55,7 +55,7 @@ function showAddTaskToast() {
 function showErrorDialog(message) {
   const dlg = document.getElementById('errorDialog');
   if (!(dlg instanceof HTMLDialogElement)) {
-    alert(message); // Fallback, falls Dialog-Element fehlt
+    alert(message); // Fallback
     return;
   }
   const p = dlg.querySelector('p');
@@ -141,6 +141,14 @@ function onDomReady() {
     overlayPrioHidden.setCustomValidity(overlayPrioHidden.value ? '' : 'Please choose a priority');
   }
 
+  // WICHTIG: Native Required-Attribute für Title, Date, Category setzen
+  const titleEl  = /** @type {HTMLInputElement|null} */   (document.getElementById('title'));
+  const dueEl    = /** @type {HTMLInputElement|null} */   (document.getElementById('task-due-date'));
+  const catEl    = /** @type {HTMLSelectElement|null} */  (document.getElementById('category'));
+  if (titleEl)  { titleEl.required = true; titleEl.minLength = 2; }
+  if (dueEl)    { dueEl.required = true; }
+  if (catEl)    { catEl.required = true; }   // ← verhindert Erstellen ohne Category
+
   /** Alle Felder des Overlays zurücksetzen. */
   function clearAddTaskForm() {
     (/** @type {HTMLInputElement}   */ (document.getElementById('title'))).value = '';
@@ -165,7 +173,7 @@ function onDomReady() {
     if (subtaskInput) subtaskInput.value = '';
     hideInlineActions();
 
-    // WICHTIG: kein Fokus setzen & kein reportValidity hier!
+    // Kein Fokus setzen & keine reportValidity hier!
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -399,6 +407,8 @@ function onDomReady() {
       o.textContent = c;
       catSelect.appendChild(o);
     });
+    // sicherstellen, dass native Validation greift
+    catSelect.required = true;
   }
 
   // ──────────────────────────────────────────────────────────────────────────
