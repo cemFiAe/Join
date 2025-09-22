@@ -100,16 +100,16 @@ function setupValidation() {
 
     const errorMsgs = {
         name: {
-            required: "Bitte einen Namen eingeben.",
-            invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+            required: "Please enter a name.",
+            invalid: "Only letters and spaces are allowed."
         },
         mail: {
-            required: "Bitte eine E-Mail-Adresse eingeben.",
-            invalid: "Bitte eine gültige E-Mail eingeben, z.B muster@mail.de"
+            required: "Please enter an e-mail.",
+            invalid: "Please enter a valid e-mail, e.g example@mail.de"
         },
         phone: {
-            required: "Bitte eine Telefonnummer eingeben.",
-            invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+            required: "Please enter a phone number.",
+            invalid: "Atleast 7 numbers, only numbers / spaces allowed, optional + at start."
         }
     };
 
