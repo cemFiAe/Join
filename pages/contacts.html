@@ -53,8 +53,11 @@
         <div>
           <button type="button" onclick="event.stopPropagation(), closeOverlay('add')" class="cancel-btn">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
           <button type="button" onclick="event.stopPropagation(), closeOverlay('add')" class="cancel-btn-mobile">Cancel<img src="../assets/icons/contacts/Close.svg" alt="x_icon"></button>
-          <button type="submit" class="create-btn">Create contact<img src="../assets/icons/contacts/check.svg"
+          <div id="submit-wrapper" style="position: relative; display: inline-block;">
+            <button type="submit" class="create-btn" id="submit-btn" disabled>Create contact<img src="../assets/icons/contacts/check.svg"
               alt="checkmark"></button>
+            <div id="submit-overlay" style="position: absolute; inset: 0; cursor: not-allowed;"></div>
+          </div>
         </div>
       </form>
       <img onclick="closeOverlay('add')" class="close-x" src="../assets/icons/contacts/Close.svg" alt="x-btn">

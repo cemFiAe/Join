@@ -84,6 +84,7 @@ function allInputsValid() {
  * Initializes form validation:
  * - Validates only the currently focused input
  * - Disables the submit button until all inputs are valid
+ * - Validates all inputs when create button is klicked
  */
 function setupValidation() {
     const nameInput = document.getElementById("add-name-input");
@@ -91,6 +92,7 @@ function setupValidation() {
     const phoneInput = document.getElementById("add-phone-input");
     const form = document.getElementById("add-contact-form");
     const submitBtn = form.querySelector("button[type='submit']");
+    const overlay = document.getElementById("submit-overlay");
 
     const regexes = {
         name: /^[A-Za-z\s]+$/,
@@ -109,7 +111,7 @@ function setupValidation() {
         },
         phone: {
             required: "Please enter a phone number.",
-            invalid: "Atleast 7 numbers, only numbers / spaces allowed, optional + at start."
+            invalid: "At least 7 numbers, only numbers / spaces allowed, optional + at start."
         }
     };
 
@@ -132,7 +134,9 @@ function setupValidation() {
                     validateInput(input, regexes.phone, "error-phone", errorMsgs.phone);
                 }
             }
+
             submitBtn.disabled = !allInputsValid();
+            overlay.style.display = submitBtn.disabled ? "block" : "none";
         });
     });
 
@@ -142,10 +146,21 @@ function setupValidation() {
             return;
         }
         submitBtn.disabled = true;
-        setTimeout(() => submitBtn.disabled = false, 1500);
+        overlay.style.display = "block";
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            overlay.style.display = "none";
+        }, 1500);
+    });
+
+    overlay.addEventListener("click", () => {
+        validateInput(nameInput, regexes.name, "error-name", errorMsgs.name);
+        validateInput(mailInput, regexes.mail, "error-mail", errorMsgs.mail);
+        validateInput(phoneInput, regexes.phone, "error-phone", errorMsgs.phone);
     });
 
     submitBtn.disabled = true;
+    overlay.style.display = "block";
 }
 
 /** 
