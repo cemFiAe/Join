@@ -548,11 +548,16 @@
   flex-direction: column;
   gap: 8px;
   margin: 0.6em 0 1.1em;
+  overflow-y: auto !important;
+  max-height: 160px;
+  height: fit-content;
 }
 .assigned-user {
   display: flex;
   align-items: center;
   gap: 10px;
+  height: 32px;
+  min-height: 32px;
 }
 .assigned-user-name {
   font-size: 1rem;
@@ -561,6 +566,8 @@
 
 .task-detail-subtasks {
   margin: 0.7em 0 0.8em;
+  max-height: 120px;
+  overflow-y: auto !important;
 }
 .task-detail-subtasks label {
   display: flex;
@@ -569,6 +576,8 @@
   font-size: 1rem;
   margin-bottom: 4px;
   cursor: pointer;
+  height: 20px;
+  min-height: 20px;
 }
 
 .task-detail-actions {
@@ -804,7 +813,7 @@
   background: #29ABE2;
   color: #fff;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   margin-left: -10px;
   border: 2px solid #fff;
   letter-spacing: 0.5px;
