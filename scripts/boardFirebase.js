@@ -49,6 +49,128 @@ const BADGE_COLORS = [
   "#EB5D5D", "#009788", "#7B61FF", "#5A9FFF", "#1E90FF", "#F96D00", "#43B581", "#FF6C6C"
 ];
 
+/** Reihenfolge der Spalten für „Move to“ (muss zu deinen IDs passen) */
+const COLUMN_ORDER = /** @type {Record<TaskStatus, string>} */({
+  todo: "toDo",
+  inprogress: "inProgress",
+  awaitingfeedback: "awaitFeedback",
+  done: "done",
+});
+
+/** Für Nachbarstatus: */
+const STATUS_SEQUENCE = /** @type {TaskStatus[]} */([
+  "todo", "inprogress", "awaitingfeedback", "done"
+]);
+
+/** kleines CSS für das Mobile-Menü (einmalig injizieren) */
+(function ensureMoveMenuStyles(){
+  if (document.getElementById('mobile-move-menu-styles')) return;
+  const s = document.createElement('style');
+  s.id = 'mobile-move-menu-styles';
+  s.textContent = `
+    .move-menu {
+      position: fixed;
+      z-index: 100000;
+      background:#1F2A3C;
+      color:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      box-shadow:0 8px 24px rgba(0,0,0,.25);
+      width: 160px;
+    }
+    .move-menu h5 {
+      margin:0 0 8px 0;
+      font-size:12px;
+      font-weight:700;
+      opacity:.85;
+    }
+    .move-menu .item {
+      display:flex; align-items:center; gap:10px;
+      padding:8px 6px; border-radius:10px; cursor:pointer;
+      font-size:14px;
+    }
+    .move-menu .item:hover { background:#0f1729; }
+    .move-menu .arrow { font-weight:700; }
+  `;
+  document.head.appendChild(s);
+})();
+
+/** Nachbarstatus zum aktuellen ermitteln */
+function getAdjacentStatus(current /** @type {TaskStatus} */, dir /** 'up'|'down' */) {
+  const i = STATUS_SEQUENCE.indexOf(current);
+  if (i < 0) return null;
+  if (dir === 'up' && i > 0) return STATUS_SEQUENCE[i-1];
+  if (dir === 'down' && i < STATUS_SEQUENCE.length - 1) return STATUS_SEQUENCE[i+1];
+  return null;
+}
+
+/** Task in anderen Status schreiben */
+function moveTaskToStatus(taskId, newStatus /** @type {TaskStatus} */) {
+  if (!newStatus) return;
+  firebase.database().ref("tasks/" + taskId + "/status").set(newStatus);
+}
+
+/** Singleton-Menü */
+let _moveMenuEl = null;
+function getMoveMenuEl() {
+  if (_moveMenuEl) return _moveMenuEl;
+  const el = document.createElement('div');
+  el.className = 'move-menu';
+  el.style.display = 'none';
+  el.innerHTML = `
+    <h5>Move to</h5>
+    <div class="item item-up"><span class="arrow">↑</span><span class="label-up">Up</span></div>
+    <div class="item item-down"><span class="arrow">↓</span><span class="label-down">Down</span></div>
+  `;
+  document.body.appendChild(el);
+
+  // Outside click -> schließen
+  document.addEventListener('click', (e) => {
+    if (!el || el.style.display === 'none') return;
+    if (!(e.target instanceof Node)) return;
+    if (!el.contains(e.target)) el.style.display = 'none';
+  });
+
+  _moveMenuEl = el;
+  return el;
+}
+
+/** Menü an einer Karte anzeigen */
+function showMoveMenuForCard(cardEl, task /** @type {Task} */) {
+  const menu = getMoveMenuEl();
+  // Position nahe der Karte
+  const r = cardEl.getBoundingClientRect();
+  const x = Math.min(window.innerWidth - 180, r.right + 8);
+  const y = Math.max(8, r.top);
+
+  menu.style.left = `${x}px`;
+  menu.style.top  = `${y}px`;
+  menu.style.display = 'block';
+
+  // Buttons konfigurieren (aktiv/deaktiv je nach Nachbarn)
+  const upBtn = /** @type {HTMLDivElement} */ (menu.querySelector('.item-up'));
+  const dnBtn = /** @type {HTMLDivElement} */ (menu.querySelector('.item-down'));
+
+  const upStatus = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'up');
+  const dnStatus = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'down');
+
+  upBtn.style.opacity = upStatus ? '1' : '.35';
+  upBtn.style.pointerEvents = upStatus ? 'auto' : 'none';
+
+  dnBtn.style.opacity = dnStatus ? '1' : '.35';
+  dnBtn.style.pointerEvents = dnStatus ? 'auto' : 'none';
+
+  // alte Handler sauber entfernen und neu setzen
+  const cloneUp = upBtn.cloneNode(true); upBtn.replaceWith(cloneUp);
+  const cloneDn = dnBtn.cloneNode(true); dnBtn.replaceWith(cloneDn);
+
+  /** @type {HTMLDivElement} */(menu.querySelector('.item-up'))
+    .addEventListener('click', () => { if (upStatus) moveTaskToStatus(task.id, upStatus); menu.style.display='none'; });
+  /** @type {HTMLDivElement} */(menu.querySelector('.item-down'))
+    .addEventListener('click', () => { if (dnStatus) moveTaskToStatus(task.id, dnStatus); menu.style.display='none'; });
+}
+
+
 /** @type {Task[]} */
 let tasks = [];
 
@@ -446,7 +568,6 @@ function createTaskCard(task) {
     : cat.includes("tech")    ? " user-task"
     : cat.includes("research")? " research-task" : "");
 
-  // --- Badges: max. 4 zeigen, Rest als +N ---
   const assignedIds = Array.isArray(task.assignedTo)
     ? task.assignedTo.filter(Boolean)
     : (task.assignedTo ? [task.assignedTo] : []);
@@ -461,16 +582,16 @@ function createTaskCard(task) {
       ? `<span class="profile-badge more-badge" title="+${overflow} more">+${overflow}</span>`
       : "");
 
-  const subBar = (total > 0 && done > 0)
-  ? `<div class="task-bar">
-       <div class="bar-wrapper">
-         <div class="progress-bar">
-           <span class="progress-bar-fill" style="width:${Math.round((done / total) * 100)}%"></span>
+  const subBar = total
+    ? `<div class="task-bar">
+         <div class="bar-wrapper">
+           <div class="progress-bar">
+             <span class="progress-bar-fill" style="width:${Math.round((done / total) * 100)}%"></span>
+           </div>
          </div>
-       </div>
-       <span class="sub-task">${done}/${total} Subtasks</span>
-     </div>`
-  : "";
+         <span class="sub-task">${done}/${total} Subtasks</span>
+       </div>`
+    : "";
 
   const card = document.createElement("div");
   card.className = "task";
@@ -484,11 +605,51 @@ function createTaskCard(task) {
       <img class="prio-icon" src="../assets/icons/board/prio/${prioIcon}.svg" alt="">
     </div>`;
 
+  // Desktop Drag & Drop beibehalten
   card.setAttribute("draggable", "true");
   card.dataset.taskId = task.id;
   card.addEventListener("dragstart", dragStartHandler);
   card.addEventListener("dragend",   dragEndHandler);
-  card.addEventListener("click",     () => openTaskDetail(task));
+
+  // Klick öffnet Detail (wenn kein Menü gerade via Long-Press geöffnet wurde)
+  card.addEventListener("click", () => openTaskDetail(task));
+
+  // === Mobile: Long-Press -> Move-Menü ===
+  let pressTimer = /** @type {number | null} */(null);
+  let startX = 0, startY = 0;
+  const LONG_MS = 550;
+
+  const cancelTimer = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+
+  card.addEventListener('touchstart', (ev) => {
+    if (!ev.touches || ev.touches.length !== 1) return;
+    const t = ev.touches[0];
+    startX = t.clientX; startY = t.clientY;
+    cancelTimer();
+    pressTimer = window.setTimeout(() => {
+      // Öffne Menü und unterdrücke den „click“ auf Karte
+      ev.preventDefault();
+      ev.stopPropagation();
+      showMoveMenuForCard(card, task);
+    }, LONG_MS);
+  }, { passive: true });
+
+  card.addEventListener('touchmove', (ev) => {
+    if (!pressTimer || !ev.touches || ev.touches.length !== 1) return;
+    const t = ev.touches[0];
+    const dx = Math.abs(t.clientX - startX);
+    const dy = Math.abs(t.clientY - startY);
+    if (dx > 10 || dy > 10) cancelTimer(); // Finger bewegt -> abbrechen
+  }, { passive: true });
+
+  card.addEventListener('touchend', cancelTimer, { passive: true });
+  card.addEventListener('touchcancel', cancelTimer, { passive: true });
+
+  // Optional: Rechtsklick (Desktop) zeigt ebenfalls das Menü
+  card.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    showMoveMenuForCard(card, task);
+  });
 
   return card;
 }
