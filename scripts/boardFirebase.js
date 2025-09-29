@@ -62,6 +62,15 @@ const STATUS_SEQUENCE = /** @type {TaskStatus[]} */([
   "todo", "inprogress", "awaitingfeedback", "done"
 ]);
 
+/** Sichtbare Namen der Spalten fürs Move-Menü */
+const STATUS_LABELS = /** @type {Record<TaskStatus,string>} */({
+  todo: 'To-do',
+  inprogress: 'In progress',
+  awaitingfeedback: 'Review',
+  done: 'Done',
+});
+
+
 /** kleines CSS für das Mobile-Menü (einmalig injizieren) */
 (function ensureMoveMenuStyles(){
   if (document.getElementById('mobile-move-menu-styles')) return;
@@ -73,7 +82,7 @@ const STATUS_SEQUENCE = /** @type {TaskStatus[]} */([
       z-index: 100000;
       background:#1F2A3C;
       color:#fff;
-      border-radius:12px;
+      border-radius: 8px 22px 22px 22px;;
       padding:10px 12px;
       box-shadow:0 8px 24px rgba(0,0,0,.25);
       width: 160px;
@@ -119,8 +128,14 @@ function getMoveMenuEl() {
   el.style.display = 'none';
   el.innerHTML = `
     <h5>Move to</h5>
-    <div class="item item-up"><span class="arrow">↑</span><span class="label-up">Up</span></div>
-    <div class="item item-down"><span class="arrow">↓</span><span class="label-down">Down</span></div>
+    <div class="item item-up">
+      <span class="arrow">↑</span>
+      <span class="label-up"></span>
+    </div>
+    <div class="item item-down">
+      <span class="arrow">↓</span>
+      <span class="label-down"></span>
+    </div>
   `;
   document.body.appendChild(el);
 
@@ -135,40 +150,60 @@ function getMoveMenuEl() {
   return el;
 }
 
-/** Menü an einer Karte anzeigen */
+
+/** Menü an einer Karte anzeigen (mit Ziel-Spaltennamen) */
 function showMoveMenuForCard(cardEl, task /** @type {Task} */) {
   const menu = getMoveMenuEl();
-  // Position nahe der Karte
+
+  // Position neben der Karte
   const r = cardEl.getBoundingClientRect();
   const x = Math.min(window.innerWidth - 180, r.right + 8);
   const y = Math.max(8, r.top);
-
   menu.style.left = `${x}px`;
   menu.style.top  = `${y}px`;
   menu.style.display = 'block';
 
-  // Buttons konfigurieren (aktiv/deaktiv je nach Nachbarn)
-  const upBtn = /** @type {HTMLDivElement} */ (menu.querySelector('.item-up'));
-  const dnBtn = /** @type {HTMLDivElement} */ (menu.querySelector('.item-down'));
+  // Elemente greifen
+  const upItem   = /** @type {HTMLDivElement} */(menu.querySelector('.item-up'));
+  const downItem = /** @type {HTMLDivElement} */(menu.querySelector('.item-down'));
+  const upLabel   = /** @type {HTMLSpanElement} */(menu.querySelector('.label-up'));
+  const downLabel = /** @type {HTMLSpanElement} */(menu.querySelector('.label-down'));
 
-  const upStatus = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'up');
-  const dnStatus = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'down');
+  // Nachbar-Status bestimmen
+  const upStatus   = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'up');
+  const downStatus = getAdjacentStatus(/** @type {TaskStatus} */(task.status), 'down');
 
-  upBtn.style.opacity = upStatus ? '1' : '.35';
-  upBtn.style.pointerEvents = upStatus ? 'auto' : 'none';
+  // Labels setzen (Spaltennamen anzeigen)
+  upLabel.textContent   = upStatus   ? STATUS_LABELS[upStatus]   : '';
+  downLabel.textContent = downStatus ? STATUS_LABELS[downStatus] : '';
 
-  dnBtn.style.opacity = dnStatus ? '1' : '.35';
-  dnBtn.style.pointerEvents = dnStatus ? 'auto' : 'none';
+  // Items aktiv/deaktiv / sichtbar machen
+  const setState = (item, enabled) => {
+    item.style.opacity = enabled ? '1' : '.35';
+    item.style.pointerEvents = enabled ? 'auto' : 'none';
+    item.style.display = enabled ? 'flex' : 'none'; // wenn kein Nachbar, gar nicht zeigen
+  };
+  setState(upItem,   !!upStatus);
+  setState(downItem, !!downStatus);
 
-  // alte Handler sauber entfernen und neu setzen
-  const cloneUp = upBtn.cloneNode(true); upBtn.replaceWith(cloneUp);
-  const cloneDn = dnBtn.cloneNode(true); dnBtn.replaceWith(cloneDn);
+  // alte Handler entfernen → neu binden
+  const upClone = upItem.cloneNode(true);   upItem.replaceWith(upClone);
+  const dnClone = downItem.cloneNode(true); downItem.replaceWith(dnClone);
 
-  /** @type {HTMLDivElement} */(menu.querySelector('.item-up'))
-    .addEventListener('click', () => { if (upStatus) moveTaskToStatus(task.id, upStatus); menu.style.display='none'; });
-  /** @type {HTMLDivElement} */(menu.querySelector('.item-down'))
-    .addEventListener('click', () => { if (dnStatus) moveTaskToStatus(task.id, dnStatus); menu.style.display='none'; });
+  if (upStatus) {
+    (/** @type {HTMLDivElement} */(menu.querySelector('.item-up'))).addEventListener('click', () => {
+      moveTaskToStatus(task.id, upStatus);
+      menu.style.display = 'none';
+    });
+  }
+  if (downStatus) {
+    (/** @type {HTMLDivElement} */(menu.querySelector('.item-down'))).addEventListener('click', () => {
+      moveTaskToStatus(task.id, downStatus);
+      menu.style.display = 'none';
+    });
+  }
 }
+
 
 
 /** @type {Task[]} */
