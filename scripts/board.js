@@ -51,11 +51,11 @@ function showAddTaskToast() {
   toast.classList.remove('enter'); void toast.offsetHeight; toast.classList.add('enter');
 }
 
-/** ZENTRALER Fehlerdialog (nur noch für echte Fehler, nicht für Validation) */
+/** ZENTRALER Fehlerdialog (nur echte Fehler, nicht für Validation) */
 function showErrorDialog(message) {
   const dlg = document.getElementById('errorDialog');
   if (!(dlg instanceof HTMLDialogElement)) {
-    alert(message); // Fallback
+    alert(message);
     return;
   }
   const p = dlg.querySelector('p');
@@ -63,10 +63,24 @@ function showErrorDialog(message) {
   if (!dlg.open) dlg.showModal();
 }
 
-/** Wird nach DOM-Ready aufgerufen. */
 function onDomReady() {
+  // ─────────────────────────────────────
+  // Validation-Styles sicher injizieren
+  // ─────────────────────────────────────
+  (function ensureValidationStyles() {
+    if (document.getElementById('custom-validation-styles')) return;
+    const s = document.createElement('style');
+    s.id = 'custom-validation-styles';
+    s.textContent = `
+      .field-invalid { border: 2px solid #E74C3C !important; background-color: #fffafa; }
+      .form-group .field-hint { display:none; color:#E74C3C; font-size:.9rem; }
+      .form-group .field-hint.show { display:block; }
+    `;
+    document.head.appendChild(s);
+  })();
+
   // ──────────────────────────────────────────────────────────────────────────
-  // Globale API: Add-Task Overlay öffnen (onclick in board.html)
+  // Globale API: Add-Task Overlay öffnen
   // ──────────────────────────────────────────────────────────────────────────
   // @ts-ignore
   window.openAddTaskDialog = function (/** @type {'todo'|'inprogress'|'awaitingfeedback'|'done'} */ status = 'todo') {
@@ -90,8 +104,7 @@ function onDomReady() {
     if (mediumBtn) mediumBtn.classList.add('active');
 
     addDlg.showModal();
-    // Dropdown-Setup kommt AUS boardFirebase.js
-    // @ts-ignore
+    // @ts-ignore (kommt aus boardFirebase.js)
     window.initAssignedDropdown && window.initAssignedDropdown();
   };
 
@@ -118,9 +131,9 @@ function onDomReady() {
     dialog.close();
     clearAddTaskForm();
   }
-  
+
   // ──────────────────────────────────────────────────────────────────────────
-  // Overlay-Form + verstecktes Pflichtfeld für Priority (native Validation)
+  // Overlay-Form + verstecktes Pflichtfeld für Priority (nur Wert-Holding)
   // ──────────────────────────────────────────────────────────────────────────
   const overlayForm = /** @type {HTMLFormElement|null} */ (dialog?.querySelector('.task-form'));
   let overlayPrioHidden = /** @type {HTMLInputElement|null} */ (dialog?.querySelector('#overlayPriority'));
@@ -129,7 +142,6 @@ function onDomReady() {
     overlayPrioHidden.type = 'text';
     overlayPrioHidden.id = 'overlayPriority';
     overlayPrioHidden.name = 'priority';
-    overlayPrioHidden.required = true;
     Object.assign(overlayPrioHidden.style, {
       position:'absolute', left:'-9999px', opacity:'0', width:'0', height:'0', border:'0', padding:'0'
     });
@@ -138,16 +150,15 @@ function onDomReady() {
   function setOverlayPriority(v /** @type {'urgent'|'medium'|'low'|''} */) {
     if (!overlayPrioHidden) return;
     overlayPrioHidden.value = v || '';
-    overlayPrioHidden.setCustomValidity(overlayPrioHidden.value ? '' : 'Please choose a priority');
   }
 
-  // WICHTIG: Native Required-Attribute für Title, Date, Category setzen
+  // (Optional) Required-Attribute setzen – wir zeigen aber NUR unsere Hints
   const titleEl  = /** @type {HTMLInputElement|null} */   (document.getElementById('title'));
   const dueEl    = /** @type {HTMLInputElement|null} */   (document.getElementById('task-due-date'));
   const catEl    = /** @type {HTMLSelectElement|null} */  (document.getElementById('category'));
   if (titleEl)  { titleEl.required = true; titleEl.minLength = 2; }
   if (dueEl)    { dueEl.required = true; }
-  if (catEl)    { catEl.required = true; }   // ← verhindert Erstellen ohne Category
+  if (catEl)    { catEl.required = true; }
 
   /** Alle Felder des Overlays zurücksetzen. */
   function clearAddTaskForm() {
@@ -156,11 +167,11 @@ function onDomReady() {
     (/** @type {HTMLInputElement}   */ (document.getElementById('task-due-date'))).value = '';
     (/** @type {HTMLSelectElement}  */ (document.getElementById('category'))).selectedIndex = 0;
 
-    // Assigned reset über Helper aus boardFirebase.js
+    // Assigned reset (aus boardFirebase.js)
     // @ts-ignore
     window.__boardResetAssigned && window.__boardResetAssigned();
 
-    // Priority zurücksetzen → Medium aktiv + hidden required Feld setzen
+    // Priority zurücksetzen → Medium aktiv + hidden Wert
     document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
     const m = /** @type {HTMLButtonElement|null} */ (document.querySelector('.priority-buttons .btn[data-priority="medium"]'));
     if (m) m.classList.add('active');
@@ -173,11 +184,15 @@ function onDomReady() {
     if (subtaskInput) subtaskInput.value = '';
     hideInlineActions();
 
-    // Kein Fokus setzen & keine reportValidity hier!
+    // Invalid-UI und Hints entfernen
+    clearInvalidUI(document.getElementById('title'));
+    clearInvalidUI(document.getElementById('task-due-date'));
+    clearInvalidUI(document.getElementById('category'));
+    document.querySelector('.priority-buttons')?.classList.remove('field-invalid');
   }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Priority Button Handling  (+ hidden required Feld setzen)
+  // Priority Button Handling  (+ hidden Wert setzen)
   // ──────────────────────────────────────────────────────────────────────────
   document.querySelectorAll('.priority-buttons .btn')
     .forEach((btn, _, all) => {
@@ -186,6 +201,7 @@ function onDomReady() {
         this.classList.add('active');
         const p = /** @type {HTMLElement} */ (this).dataset.priority || '';
         setOverlayPriority((p === 'urgent' || p === 'medium' || p === 'low') ? p : '');
+        document.querySelector('.priority-buttons')?.classList.remove('field-invalid');
       });
     });
 
@@ -197,10 +213,9 @@ function onDomReady() {
    */
   let subtasks = /** @type {Subtask[]} */ ([]);
 
-  // ---------- Subtask-Eingabe (X & ✓ im Input) ----------
   const subtaskWrap   = /** @type {HTMLDivElement|null} */ (document.querySelector('.input-icon-subtask'));
   const subtaskInput  = /** @type {HTMLInputElement|null} */  (subtaskWrap?.querySelector('input'));
-  const addIconBtn    = /** @type {HTMLButtonElement|null} */ (subtaskWrap?.querySelector('.add-subtask')); // altes Plus-Icon
+  const addIconBtn    = /** @type {HTMLButtonElement|null} */ (subtaskWrap?.querySelector('.add-subtask'));
   const subtaskList   = /** @type {HTMLUListElement|null} */  (document.getElementById('subtask-list'));
 
   // Inline-Container im Input anlegen (falls nicht vorhanden)
@@ -268,7 +283,18 @@ function onDomReady() {
     });
   }
 
-  if (addIconBtn) addIconBtn.addEventListener('click', addSubtask);
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+
+  if (subtaskInput && addIconBtn) {
+    subtaskInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); addSubtask(); }
+    });
+    addIconBtn.addEventListener('click', addSubtask);
+  }
 
   function addSubtask() {
     if (!subtaskInput || !subtaskList) return;
@@ -320,7 +346,6 @@ function onDomReady() {
 
     const row = document.createElement('div');
     row.className = 'subtask-edit-row';
-    // Input-Zeile vollbreit
     row.style.display = 'flex';
     row.style.alignItems = 'center';
     row.style.gap = '8px';
@@ -331,7 +356,6 @@ function onDomReady() {
     input.className = 'subtask-edit-input';
     input.value = oldValue;
     input.placeholder = 'Edit subtask';
-    // Input füllt die Zeile
     input.style.width = '100%';
     input.style.flex = '1 1 auto';
     input.style.boxSizing = 'border-box';
@@ -387,10 +411,12 @@ function onDomReady() {
     input.focus(); input.select();
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-    ));
+  // === heutiges Datum als Minimum (lokale Zeitzone) ===
+  const dueMinEl = /** @type {HTMLInputElement|null} */ (document.getElementById('task-due-date'));
+  if (dueMinEl) {
+    const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
+    const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
+    dueMinEl.min = todayLocalISO;
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -407,17 +433,89 @@ function onDomReady() {
       o.textContent = c;
       catSelect.appendChild(o);
     });
-    // sicherstellen, dass native Validation greift
-    catSelect.required = true;
+    catSelect.required = true; // (wir zeigen aber eigene Hints)
+  }
+
+// ---- Helpers für Hint + rote Border (PATCH) ----
+function getFormGroup(el) {
+  // Versuche zuerst die .form-group, falle sonst auf das direkte Parent zurück
+  return el?.closest?.('.form-group') || el?.parentElement || null;
+}
+
+function ensureHintFor(el) {
+  if (!el) return null;
+  const grp = getFormGroup(el);
+
+  // 1) Versuche, einen existierenden Hint im .form-group zu finden
+  let hint = grp ? grp.querySelector('.field-hint') : null;
+
+  // 2) Wenn keiner existiert: neu erstellen und platzieren
+  if (!hint) {
+    hint = document.createElement('small');
+    hint.className = 'field-hint';
+
+    if (grp) {
+      // Idealer Platz: am Ende der form-group
+      grp.appendChild(hint);
+    } else {
+      // Fallback: direkt unter das Feld
+      el.insertAdjacentElement('afterend', hint);
+    }
+  }
+  return hint;
+}
+  function markInvalid(el) {
+    if (!el) return;
+    el.classList.add('field-invalid');
+    el.setAttribute('aria-invalid', 'true');
+    const hint = ensureHintFor(el);
+    if (hint) hint.classList.add('show');      // ⟵ zeigt den Required-Text unter dem Feld (z. B. Category)
+  }
+  function clearInvalidUI(el) {
+    if (!el) return;
+    el.classList.remove('field-invalid');
+    el.removeAttribute('aria-invalid');
+    const grp = getFormGroup(el);
+    const hint = grp ? grp.querySelector('.field-hint') : null;
+    if (hint) hint.classList.remove('show');
+  }
+
+  // Live-Reset der Fehler, sobald der User tippt/ändert
+  titleEl?.addEventListener('input',   () => clearInvalidUI(titleEl));
+  dueEl?.addEventListener('input',     () => clearInvalidUI(dueEl));
+  catEl?.addEventListener('change',    () => clearInvalidUI(catEl));
+
+  function validateFormCustom() {
+    let ok = true;
+
+    if (!titleEl || titleEl.value.trim().length < 2) { markInvalid(titleEl); ok = false; }
+
+    if (!dueEl || !dueEl.value) {
+      markInvalid(dueEl); ok = false;
+    } else {
+      const tzOffsetMs = new Date().getTimezoneOffset() * 60000;
+      const todayLocalISO = new Date(Date.now() - tzOffsetMs).toISOString().slice(0, 10);
+      if (dueEl.value < todayLocalISO) { markInvalid(dueEl); ok = false; }
+    }
+
+    if (!catEl || !catEl.value) {       // ⟵ Category Required-Check + Hint
+      markInvalid(catEl); ok = false;
+    }
+
+    const prioWrap = document.querySelector('.priority-buttons');
+    const prioVal = (/** @type {HTMLInputElement|null} */(document.getElementById('overlayPriority')))?.value || '';
+    if (!prioVal) { prioWrap?.classList.add('field-invalid'); ok = false; }
+    else          { prioWrap?.classList.remove('field-invalid'); }
+
+    return ok;
   }
 
   // ──────────────────────────────────────────────────────────────────────────
-  // Create Task (native HTML-Validation via reportValidity)
+  // Create Task (nur unsere Custom-Validation)
   // ──────────────────────────────────────────────────────────────────────────
   (/** @type {HTMLButtonElement} */ (document.querySelector('.create_task_btn')))
     .addEventListener('click', () => {
-      // native Browser-Validierung des Overlays
-      if (overlayForm && !overlayForm.reportValidity()) return;
+      if (!validateFormCustom()) return;
 
       const overlayDlg = /** @type {HTMLDialogElement} */ (document.getElementById('addTaskOverlay'));
 
@@ -462,10 +560,9 @@ function onDomReady() {
           const ul = /** @type {HTMLUListElement | null} */ (document.getElementById('subtask-list'));
           if (ul) ul.innerHTML = '';
 
-          showBoardAddToast(); // slidet rein & verschwindet automatisch
+          showBoardAddToast();
         })
         .catch(err => {
-          // Nur Speichere-Fehler noch im Dialog anzeigen
           showErrorDialog("Fehler: " + err.message);
         });
     });
@@ -483,7 +580,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /** Image-only Slide-Toast (Board) – kommt von unten in die Mitte und verschwindet automatisch */
 function showBoardAddToast() {
-  // Styles nur 1× injizieren
   let style = document.getElementById('board-add-toast-style');
   if (!style) {
     style = document.createElement('style');
@@ -516,7 +612,6 @@ function showBoardAddToast() {
     document.head.appendChild(style);
   }
 
-  // Node erstellen/wiederverwenden
   let toast = document.getElementById('boardAddToast');
   if (!toast) {
     toast = document.createElement('div');
@@ -525,20 +620,18 @@ function showBoardAddToast() {
     document.body.appendChild(toast);
   }
 
-  // Eintrittsanimation neu starten
   toast.classList.remove('leave', 'enter');
   // @ts-ignore – reflow
   void toast.offsetWidth;
   toast.classList.add('enter');
 
-  // Auto-Hide
   clearTimeout(/** @type {any} */(showBoardAddToast)._t);
   /** @type {any} */(showBoardAddToast)._t = setTimeout(() => {
     toast.classList.remove('enter');
     toast.classList.add('leave');
     const onEnd = () => {
       toast.removeEventListener('animationend', onEnd);
-      toast.remove();  // komplett raus
+      toast.remove();
     };
     toast.addEventListener('animationend', onEnd);
   }, 1200);

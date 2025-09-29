@@ -1,6 +1,17 @@
 // @ts-check
 /* global firebase, Choices */
 
+// ---- JSDoc: Window mit optionalen People-Maps (nur hier definieren!)
+/**
+ * @typedef {Window & {
+ *   allUsers?: Record<string, { name?: string; email?: string }>;
+ *   allContacts?: Record<string, { name?: string; email?: string }>;
+ * }} PeopleWindow
+ */
+/** @type {PeopleWindow} */
+const W = /** @type {any} */ (window);
+
+
 /**
  * =======================
  * Typen (JSDoc)
@@ -100,6 +111,135 @@ function renderBadgesCap(ids, cap = 4) {
   return first + more;
 }
 
+/**
+ * Custom "Assigned to" für den EDIT-Dialog – gleiche Optik/Logik wie im Add-Task.
+ * SCOPE: innerhalb von `body` (Task-Detail-Dialog), damit es nicht mit dem Add-Overlay kollidiert.
+ * @param {HTMLElement} body  Root-Container (Task-Detail-Body)
+ * @param {string[]=}   preselected  bereits zugewiesene IDs
+ * @returns {{ getSelected: () => string[] }}
+ */
+function initEditAssignedDropdown(body, preselected = []) {
+  // Lokale Kopie, damit Edit und Add-Overlay unabhängig sind
+  /** @type {Record<string, {name:string; initials:string; selected:boolean; email?:string}>} */
+  const localAssigned = {};
+
+  // users + contacts mergen
+  Object.entries(W.allUsers || {}).forEach(([id, u]) => {
+    const name = (u?.name || u?.email || id);
+    localAssigned[id] = {
+      name,
+      email: u?.email || '',
+      initials: name.split(' ').slice(0,2).map(n=>n[0]?.toUpperCase()||'').join(''),
+      selected: preselected.includes(id)
+    };
+  });
+  Object.entries(W.allContacts || {}).forEach(([id, c]) => {
+    if (localAssigned[id]) return;
+    const name = (c?.name || id);
+    localAssigned[id] = {
+      name,
+      initials: name.split(' ').slice(0,2).map(n=>n[0]?.toUpperCase()||'').join(''),
+      selected: preselected.includes(id)
+    };
+  });
+
+  // Markup wie im Add-Task
+  const wrap = document.createElement('div');
+  wrap.className = 'form-group';
+  wrap.innerHTML = `
+    <label for="editAssigned">Assigned to</label>
+    <div class="assigned-to-wrapper">
+      <div class="assigned-select-box" id="editAssignedSelectBox">
+        <span>Select contacts to assign</span>
+        <img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
+      </div>
+      <div class="assigned-dropdown hidden" id="editAssignedDropdown"></div>
+      <div class="assigned-badges" id="editAssignedBadges"></div>
+    </div>
+  `;
+  body.querySelector('form')?.insertBefore(wrap, body.querySelector('#edit-detail-subtasks'));
+
+  const selectBox = /** @type {HTMLDivElement} */ (wrap.querySelector('#editAssignedSelectBox'));
+  const dropdown  = /** @type {HTMLDivElement} */ (wrap.querySelector('#editAssignedDropdown'));
+  const badges    = /** @type {HTMLDivElement} */ (wrap.querySelector('#editAssignedBadges'));
+
+  function renderBadges(){
+    const sel = Object.values(localAssigned).filter(u=>u.selected);
+    badges.innerHTML = '';
+    const cap = 4;
+    sel.slice(0,cap).forEach(u=>{
+      const b = document.createElement('div');
+      b.className = 'avatar-badge';
+      b.textContent = u.initials;
+      b.style.backgroundColor = generateColorFromString(u.name);
+      badges.appendChild(b);
+    });
+    const extra = sel.length - cap;
+    if (extra>0){
+      const more = document.createElement('div');
+      more.className = 'avatar-badge avatar-badge-more';
+      more.textContent = `+${extra}`;
+      badges.appendChild(more);
+    }
+  }
+
+  function renderDropdown(){
+    dropdown.innerHTML = '';
+    Object.entries(localAssigned)
+      .sort(([,a],[,b]) => a.name.localeCompare(b.name))
+      .forEach(([id,u])=>{
+        const opt = document.createElement('div');
+        opt.className = 'custom-option' + (u.selected ? ' selected' : '');
+        opt.tabIndex = 0;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'custom-option-avatar';
+        avatar.style.backgroundColor = generateColorFromString(u.name);
+        avatar.textContent = u.initials;
+
+        const label = document.createElement('div');
+        label.className = 'custom-option-label';
+        label.textContent = u.name + (u.email && u.email.toLowerCase() === (localStorage.getItem('currentUserEmail')||'').toLowerCase() ? ' (You)' : '');
+
+        const checkbox = document.createElement('div');
+        checkbox.className = 'custom-option-checkbox';
+        if (u.selected) checkbox.classList.add('checked');
+
+        opt.append(avatar,label,checkbox);
+        opt.addEventListener('pointerdown',(ev)=>{
+          ev.preventDefault(); ev.stopPropagation();
+          u.selected = !u.selected;
+          renderDropdown();
+          renderBadges();
+        });
+        opt.addEventListener('keydown',(ev)=>{
+          if (ev.key===' '||ev.key==='Enter'){ ev.preventDefault(); u.selected=!u.selected; renderDropdown(); renderBadges(); }
+        });
+
+        dropdown.appendChild(opt);
+      });
+  }
+
+  // Toggle
+  selectBox.addEventListener('click', (ev)=>{
+    ev.preventDefault(); ev.stopPropagation();
+    dropdown.classList.toggle('hidden');
+  });
+  document.addEventListener('click', (e)=>{
+    if (!(e.target instanceof Node)) return;
+    if (!wrap.contains(e.target)) dropdown.classList.add('hidden');
+  });
+
+  renderDropdown();
+  renderBadges();
+
+  return {
+    getSelected: () => Object.entries(localAssigned).filter(([,u])=>u.selected).map(([id])=>id)
+  };
+}
+
+// exportieren
+/** @type {any} */ (window).initEditAssignedDropdown = initEditAssignedDropdown;
 
 /**
  * =======================
@@ -501,151 +641,226 @@ function openTaskDetail(task) {
       (/** @type {HTMLButtonElement} */(body.querySelector('#deleteTaskBtn'))).onclick = () => showDeleteConfirmDialog(task.id, dialog);
       (/** @type {HTMLButtonElement} */(body.querySelector('#closeTaskDetail'))).onclick = () => dialog.close();
     } else {
-      body.innerHTML = `
-        <button id="closeTaskDetail" class="close-task-detail" aria-label="Close">&times;</button>
-        <span class="task-detail-badge cat-${catClass}">${task.category || ""}</span>
-        <form id="editTaskForm" style="display:flex;flex-direction:column;gap:14px;">
-          <label for="editTitle">Title</label>
-          <input id="editTitle" type="text" value="${task.title || ""}" required>
-          <label for="editDescription">Description</label>
-          <textarea id="editDescription" required>${task.description || ""}</textarea>
-          <label for="editDueDate">Due date</label>
-          <div class="input-icon-date">
-            <input type="date" id="editDueDate" value="${task.dueDate || ""}" required>
+  body.innerHTML = `
+    <button id="closeTaskDetail" class="close-task-detail" aria-label="Close">&times;</button>
+    <span class="task-detail-badge cat-${catClass}">${task.category || ""}</span>
+
+    <form id="editTaskForm" style="display:flex;flex-direction:column;gap:14px;">
+      <div class="form-group">
+        <label for="editTitle">Title</label>
+        <input id="editTitle" type="text" value="${task.title || ""}">
+      </div>
+
+      <div class="form-group">
+        <label for="editDescription">Description</label>
+        <textarea id="editDescription">${task.description || ""}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="editDueDate">Due date</label>
+        <div class="input-icon-date">
+          <input type="date" id="editDueDate" value="${task.dueDate || ""}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Priority</label>
+        <div class="priority-buttons">
+          <button type="button" class="btn${(task.priority || "medium") === "urgent" ? " active" : ""}"  data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt=""></button>
+          <button type="button" class="btn${(task.priority || "medium") === "medium" ? " active" : ""}" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt=""></button>
+          <button type="button" class="btn${(task.priority || "medium") === "low" ? " active" : ""}"     data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt=""></button>
+        </div>
+      </div>
+
+      <!-- Assigned to – gleiche Optik wie Add-Task -->
+      <div class="form-group">
+        <label for="editAssigned">Assigned to</label>
+        <div class="assigned-to-wrapper">
+          <div class="assigned-select-box" id="editAssignedSelectBox">
+            <span>Select contacts to assign</span>
+            <img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
           </div>
-          <label>Priority</label>
-          <div class="priority-buttons">
-            <button type="button" class="btn${(task.priority || "medium") === "urgent" ? " active" : ""}"  data-priority="urgent">Urgent <img src="../assets/icons/add_task/urgent_small.png" alt=""></button>
-            <button type="button" class="btn${(task.priority || "medium") === "medium" ? " active" : ""}" data-priority="medium">Medium <img src="../assets/icons/add_task/medium_orange.png" alt=""></button>
-            <button type="button" class="btn${(task.priority || "medium") === "low" ? " active" : ""}"     data-priority="low">Low <img src="../assets/icons/add_task/low.png" alt=""></button>
-          </div>
-          <label>Assigned to</label>
-          <select id="editAssignedTo" multiple></select>
-          <div id="editAssignedAvatars" style="display:flex;gap:7px;"></div>
-          <label for="edit-detail-subtasks">Subtasks</label>
-          <div id="edit-detail-subtasks"></div>
-          <div style="display:flex;justify-content:flex-end;gap:14px;">
-            <button id="saveTaskBtn" class="create_task_btn" type="submit">Ok &#10003;</button>
-          </div>
-        </form>`;
+          <div class="assigned-dropdown hidden" id="editAssignedDropdown"></div>
+          <div class="assigned-badges" id="editAssignedBadges"></div>
+        </div>
+      </div>
 
-      // --- Datum ab heute begrenzen (Edit-Dialog)
-      {
-        const editDue = /** @type {HTMLInputElement|null} */(body.querySelector('#editDueDate'));
-        if (editDue) {
-          const tz = new Date().getTimezoneOffset() * 60000;
-          const todayLocal = new Date(Date.now() - tz).toISOString().slice(0, 10);
-          editDue.min = todayLocal;
-          editDue.addEventListener('input', () => {
-            if (editDue.value && editDue.value < editDue.min) editDue.value = editDue.min;
-          });
-        }
-      }
+      <div class="form-group">
+        <label for="edit-detail-subtasks">Subtasks</label>
+        <div id="edit-detail-subtasks"></div>
+      </div>
 
-      // Priority
-      /** @type {TaskPriority} */
-      let editPrio = /** @type {TaskPriority} */(task.priority || "medium");
-      body.querySelectorAll('.priority-buttons .btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          body.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          editPrio = /** @type {TaskPriority} */((/** @type {HTMLElement} */(this)).dataset.priority || "medium");
-        });
+      <div style="display:flex;justify-content:flex-end;gap:14px;">
+        <button id="saveTaskBtn" class="create_task_btn" type="submit">Ok &#10003;</button>
+      </div>
+    </form>
+  `;
+
+  // --- Datum ab heute begrenzen (Edit-Dialog)
+  {
+    const editDue = /** @type {HTMLInputElement|null} */(body.querySelector('#editDueDate'));
+    if (editDue) {
+      const tz = new Date().getTimezoneOffset() * 60000;
+      const todayLocal = new Date(Date.now() - tz).toISOString().slice(0, 10);
+      editDue.min = todayLocal;
+      editDue.addEventListener('input', () => {
+        if (editDue.value && editDue.value < editDue.min) editDue.value = editDue.min;
       });
-
-      // Assigned (Choices.js)
-      const assignedSelect = /** @type {HTMLSelectElement} */(body.querySelector('#editAssignedTo'));
-      assignedSelect.innerHTML = '';
-
-      if (/** @type {any} */(window).allUsers) {
-        const groupUsers = document.createElement('optgroup'); groupUsers.label = "Registered Users";
-        Object
-          // @ts-ignore
-          .entries(window.allUsers)
-          .forEach(([uid, u]) => {
-            const opt = document.createElement('option');
-            opt.value = String(uid);
-            opt.textContent = u.name || u.email || String(uid);
-            groupUsers.appendChild(opt);
-          });
-        assignedSelect.appendChild(groupUsers);
-      }
-
-      if (/** @type {any} */(window).allContacts) {
-        const groupContacts = document.createElement('optgroup'); groupContacts.label = "Contacts";
-        Object
-          // @ts-ignore
-          .entries(window.allContacts)
-          .forEach(([uid, u]) => {
-            const opt = document.createElement('option');
-            opt.value = String(uid);
-            opt.textContent = u.name;
-            groupContacts.appendChild(opt);
-          });
-        assignedSelect.appendChild(groupContacts);
-      }
-
-      // Destroy/Init Choices
-      if (/** @type {any} */(window).editAssignedChoices) {
-        // @ts-ignore
-        window.editAssignedChoices.destroy();
-      }
-      // @ts-ignore
-      window.editAssignedChoices = new Choices(assignedSelect, {
-        removeItemButton: true,
-        searchEnabled: true,
-        shouldSort: false,
-        placeholder: true,
-        placeholderValue: 'Select contacts to assign'
-      });
-
-      const assignedIds = Array.isArray(task.assignedTo)
-        ? task.assignedTo
-        : (task.assignedTo ? [task.assignedTo] : []);
-      // @ts-ignore
-      window.editAssignedChoices.removeActiveItems();
-      assignedIds.forEach(id => {
-        // @ts-ignore
-        window.editAssignedChoices.setChoiceByValue(String(id));
-      });
-
-      function updateAssignedAvatars() {
-        const avatarDiv = /** @type {HTMLDivElement} */(body.querySelector('#editAssignedAvatars'));
-        avatarDiv.innerHTML = Array.from(assignedSelect.selectedOptions)
-          .map(opt => getProfileBadge(opt.value))
-          .join('');
-      }
-      updateAssignedAvatars();
-      assignedSelect.addEventListener('change', updateAssignedAvatars);
-
-      renderSubtasksEdit(/** @type {HTMLDivElement} */(body.querySelector('#edit-detail-subtasks')), task);
-
-      (/** @type {HTMLButtonElement} */(body.querySelector('#closeTaskDetail'))).onclick = () => dialog.close();
-
-      (/** @type {HTMLFormElement} */(body.querySelector('#editTaskForm'))).onsubmit = function (e) {
-        e.preventDefault();
-        const newTitle   = (/** @type {HTMLInputElement} */(body.querySelector('#editTitle'))).value.trim();
-        const newDesc    = (/** @type {HTMLTextAreaElement} */(body.querySelector('#editDescription'))).value.trim();
-        const newDueDate = (/** @type {HTMLInputElement} */(body.querySelector('#editDueDate'))).value.trim();
-
-        const assignedSel = /** @type {HTMLSelectElement} */(body.querySelector('#editAssignedTo'));
-        const newAssigned = Array.from(assignedSel.selectedOptions).map(opt => opt.value);
-
-        const cleanSubtasks = (task.subtasks || [])
-          .filter(st => st && st.title && st.title.trim())
-          .map(st => ({ title: st.title.trim(), done: !!st.done }));
-
-        firebase.database().ref("tasks/" + task.id).update({
-          title: newTitle,
-          description: newDesc,
-          dueDate: newDueDate,
-          priority: editPrio,
-          assignedTo: newAssigned,
-          subtasks: cleanSubtasks
-        }).then(() => { isEditing = false; renderDetail(); });
-      };
     }
+  }
+
+  // Priority
+  /** @type {TaskPriority} */
+  let editPrio = /** @type {TaskPriority} */(task.priority || "medium");
+  body.querySelectorAll('.priority-buttons .btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      body.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      editPrio = /** @type {TaskPriority} */((/** @type {HTMLElement} */(this)).dataset.priority || "medium");
+    });
+  });
+
+  // ==== Assigned to (gleich wie Add-Task, ohne Choices.js) ====
+
+  // kleine Helfer
+  const W = /** @type {any} */ (window);
+  const allUsers    = W.allUsers    || {};
+  const allContacts = W.allContacts || {};
+  const currentUserEmail = (localStorage.getItem('currentUserEmail') || '').toLowerCase();
+  const toInitials = (name) => name.split(' ').slice(0,2).map(n => n[0]?.toUpperCase() || '').join('');
+
+  const preselected = Array.isArray(task.assignedTo)
+    ? task.assignedTo.map(String)
+    : (task.assignedTo ? [String(task.assignedTo)] : []);
+
+  // lokale Daten zusammenbauen (users + contacts)
+  /** @type {Record<string,{name:string; email?:string; initials:string; selected:boolean}>} */
+  const local = {};
+  Object.entries(allUsers).forEach(([id, u]) => {
+    const name = (u?.name || u?.email || id);
+    local[id] = { name, email: u?.email || '', initials: toInitials(name), selected: preselected.includes(id) };
+  });
+  Object.entries(allContacts).forEach(([id, c]) => {
+    if (local[id]) return;
+    const name = (c?.name || id);
+    local[id] = { name, email: '', initials: toInitials(name), selected: preselected.includes(id) };
+  });
+
+  const selectBox = /** @type {HTMLDivElement} */ (body.querySelector('#editAssignedSelectBox'));
+  const dropdown  = /** @type {HTMLDivElement} */ (body.querySelector('#editAssignedDropdown'));
+  const badges    = /** @type {HTMLDivElement} */ (body.querySelector('#editAssignedBadges'));
+
+  function renderBadges() {
+    const sel = Object.values(local).filter(u => u.selected);
+    badges.innerHTML = '';
+    const cap = 4;
+    sel.slice(0, cap).forEach(u => {
+      const b = document.createElement('div');
+      b.className = 'avatar-badge';
+      b.textContent = u.initials;
+      b.style.backgroundColor = generateColorFromString(u.name);
+      badges.appendChild(b);
+    });
+    const extra = sel.length - cap;
+    if (extra > 0) {
+      const more = document.createElement('div');
+      more.className = 'avatar-badge avatar-badge-more';
+      more.textContent = `+${extra}`;
+      badges.appendChild(more);
+    }
+  }
+
+  function renderDropdown() {
+    const keep = dropdown.scrollTop;
+    dropdown.innerHTML = '';
+
+    Object.entries(local)
+      .sort(([,a],[,b]) => a.name.localeCompare(b.name))
+      .forEach(([id, u]) => {
+        const opt = document.createElement('div');
+        opt.className = 'custom-option' + (u.selected ? ' selected' : '');
+        opt.tabIndex = 0;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'custom-option-avatar';
+        avatar.style.backgroundColor = generateColorFromString(u.name);
+        avatar.textContent = u.initials;
+
+        const label = document.createElement('div');
+        label.className = 'custom-option-label';
+        label.textContent = u.name + (u.email && u.email.toLowerCase() === currentUserEmail ? ' (You)' : '');
+
+        const checkbox = document.createElement('div');
+        checkbox.className = 'custom-option-checkbox';
+        if (u.selected) checkbox.classList.add('checked');
+
+        const toggle = (ev) => {
+          ev.preventDefault(); ev.stopPropagation();
+          u.selected = !u.selected;
+          renderDropdown();
+          renderBadges();
+          dropdown.scrollTop = keep;
+        };
+
+        opt.addEventListener('pointerdown', toggle);
+        opt.addEventListener('keydown', (ev) => {
+          if (ev.key === ' ' || ev.key === 'Enter') toggle(ev);
+        });
+
+        opt.append(avatar, label, checkbox);
+        dropdown.appendChild(opt);
+      });
+
+    dropdown.scrollTop = keep;
+  }
+
+  // Open/Close wie im Add-Overlay
+  selectBox.addEventListener('click', (ev) => {
+    ev.preventDefault(); ev.stopPropagation();
+    dropdown.classList.toggle('hidden');
+  });
+  document.addEventListener('click', (e) => {
+    if (!(e.target instanceof Node)) return;
+    if (!selectBox.parentElement?.contains(e.target)) dropdown.classList.add('hidden');
+  });
+
+  renderDropdown();
+  renderBadges();
+
+  // ---- Subtasks UI beibehalten ----
+  renderSubtasksEdit(/** @type {HTMLDivElement} */(body.querySelector('#edit-detail-subtasks')), task);
+
+  (/** @type {HTMLButtonElement} */(body.querySelector('#closeTaskDetail'))).onclick = () => dialog.close();
+
+  // ---- Save (liest jetzt aus unserem Assigned-UI) ----
+  (/** @type {HTMLFormElement} */(body.querySelector('#editTaskForm'))).onsubmit = function (e) {
+    e.preventDefault();
+
+    const newTitle   = (/** @type {HTMLInputElement} */(body.querySelector('#editTitle'))).value.trim();
+    const newDesc    = (/** @type {HTMLTextAreaElement} */(body.querySelector('#editDescription'))).value.trim();
+    const newDueDate = (/** @type {HTMLInputElement} */(body.querySelector('#editDueDate'))).value.trim();
+
+    // gewählte IDs sammeln
+    const newAssigned = Object.entries(local)
+      .filter(([,u]) => u.selected)
+      .map(([id]) => id);
+
+    const cleanSubtasks = (task.subtasks || [])
+      .filter(st => st && st.title && st.title.trim())
+      .map(st => ({ title: st.title.trim(), done: !!st.done }));
+
+    firebase.database().ref("tasks/" + task.id).update({
+      title: newTitle,
+      description: newDesc,
+      dueDate: newDueDate,
+      priority: editPrio,
+      assignedTo: newAssigned,
+      subtasks: cleanSubtasks
+    }).then(() => { isEditing = false; renderDetail(); });
+  };
+}
+
     dialog.showModal();
   }
 }

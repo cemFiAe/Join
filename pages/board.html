@@ -235,16 +235,39 @@
           </button>
         </div>
 
-          <div class="form-group">
-            <label for="assigned">Assigned to</label>
-            <div class="assigned-to-wrapper">
-              <div id="assignedSelectBox" class="assigned-select-box">
-                <span>Select contacts to assign</span><img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
-              </div>
-              <div id="assignedDropdown" class="assigned-dropdown hidden"></div>
-              <div id="assignedBadges" class="assigned-badges"></div>
-            </div>
-          </div>
+<div class="form-group" id="editAssignedGroup">
+  <label for="editAssignedSelectBox">Assigned to</label>
+
+  <div class="assigned-to-wrapper">
+    <!-- Toggle-Element als Button (fokusierbar, a11y) -->
+    <button
+      type="button"
+      id="editAssignedSelectBox"
+      class="assigned-select-box"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+    >
+      <span>Select contacts to assign</span>
+      <img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
+    </button>
+
+    <!-- Dropdown-Liste (gleiches Styling wie Add Task, aber mit edit-IDs) -->
+    <div
+      id="editAssignedDropdown"
+      class="assigned-dropdown hidden"
+      role="listbox"
+      aria-multiselectable="true"
+    ></div>
+
+    <!-- Badges-Leiste -->
+    <div
+      id="editAssignedBadges"
+      class="assigned-badges"
+      aria-live="polite"
+    ></div>
+  </div>
+</div>
+
 
         <label for="category">Category<span class="required">*</span></label>
         <select id="category" class="option">
@@ -309,17 +332,17 @@
       <div class="form-section">
         <label>Priority</label>
         <div class="priority-buttons">
-          <button type="button" class="btn" data-priority="urgent">
+          <button type="button" class="btn edit-prio-btn" data-priority="urgent">
             Urgent
             <img class="icon default" src="../assets/icons/add_task/urgent_small.png" alt="">
             <img class="icon white" src="../assets/icons/add_task/urgent_white.png" alt="">
           </button>
-          <button type="button" class="btn" data-priority="medium">
+          <button type="button" class="btn edit-prio-btn" data-priority="medium">
             Medium
             <img class="icon default" src="../assets/icons/add_task/medium_orange.png" alt="">
             <img class="icon white" src="../assets/icons/add_task/medium_white.png" alt="">
           </button>
-          <button type="button" class="btn" data-priority="low">
+          <button type="button" class="btn edit-prio-btn" data-priority="low">
             Low
             <img class="icon default" src="../assets/icons/add_task/low.png" alt="">
             <img class="icon white" src="../assets/icons/add_task/low_white.png" alt="">

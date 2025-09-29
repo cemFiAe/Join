@@ -28,6 +28,8 @@
   flex-direction: column;
   gap: 36px;
   padding: 40px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 .add_task_dialog_overlay .headline {
   display: flex;
@@ -125,7 +127,9 @@
   display: flex;
   gap: 8px;
 }
-
+.priority-buttons.edit-prio-btn{
+  font-size: 12px !important;
+}
 .priority-buttons .btn {
   width: 136px;
   height: 56px;
@@ -149,7 +153,7 @@
 }
 .priority-buttons .btn img {
   object-fit: contain;
-  width: 20px;
+  width: 16px;
 }
 .priority-buttons .btn.active {
   background-color: #2A3647;
@@ -168,6 +172,7 @@
 .priority-buttons .btn[data-priority="low"].active {
   background: #21BB40 !important;
 }
+
 
 .add_task_dialog_overlay .btn:hover,
 .priority-buttons .btn:hover {
@@ -467,7 +472,8 @@
   border: none;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(42,54,71,0.16);
-  overflow: visible;
+  overflow-y: scroll;
+  scrollbar-width: none;
   z-index: 1002;
 }
 .task-detail-dialog::backdrop {
@@ -548,6 +554,7 @@
   flex-direction: column;
   gap: 8px;
   margin: 0.6em 0 1.1em;
+  overflow-y: scroll;
 }
 .assigned-user {
   display: flex;
@@ -596,7 +603,7 @@
 .delete-btn:hover { color: rgb(255, 0, 0); background: #F8F6F7; }
 .edit-btn:hover   { color: #29ABE2; background: #F5F7FA; }
 
-.form-group, .assigned-to-wrapper {
+.form-group{
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -665,11 +672,19 @@
   margin-bottom: 0 !important;
   z-index: 10003;
 }
+.choices__list--dropdown {
+  position: static !important;
+  width: 100% !important;
+  margin-top: 6px;
+}
+
 
 /* ===========================
    Assigned to – BEREINIGT
    =========================== */
 .assigned-to-wrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
 }
@@ -694,7 +709,7 @@
 
 /* einziges Dropdown-Block – keine Duplikate */
 .assigned-dropdown {
-  position: absolute;
+  position: static;
   left: 0;
   right: 0;
   top: 48px;                /* JS setzt finalen Abstand = Boxhöhe */
@@ -781,6 +796,7 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  margin-top: 12px;
 }
 .avatar-badge {
   width: 32px;
@@ -798,8 +814,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #29ABE2;
   color: #fff;
