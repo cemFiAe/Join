@@ -26,6 +26,11 @@
     transform: translate(-50%, -50%) translateX(0) !important;
 }
 
+#submit-overlay {
+  width: 214px;
+  height: 56px;
+}
+
 .close-x {
     object-fit: cover;
     height: 32px;

@@ -461,16 +461,16 @@ function createTaskCard(task) {
       ? `<span class="profile-badge more-badge" title="+${overflow} more">+${overflow}</span>`
       : "");
 
-  const subBar = total
-    ? `<div class="task-bar">
-         <div class="bar-wrapper">
-           <div class="progress-bar">
-             <span class="progress-bar-fill" style="width:${Math.round((done / total) * 100)}%"></span>
-           </div>
+  const subBar = (total > 0 && done > 0)
+  ? `<div class="task-bar">
+       <div class="bar-wrapper">
+         <div class="progress-bar">
+           <span class="progress-bar-fill" style="width:${Math.round((done / total) * 100)}%"></span>
          </div>
-         <span class="sub-task">${done}/${total} Subtasks</span>
-       </div>`
-    : "";
+       </div>
+       <span class="sub-task">${done}/${total} Subtasks</span>
+     </div>`
+  : "";
 
   const card = document.createElement("div");
   card.className = "task";

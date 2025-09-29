@@ -84,6 +84,7 @@ function allInputsValid() {
  * Initializes form validation:
  * - Validates only the currently focused input
  * - Disables the submit button until all inputs are valid
+ * - Validates all inputs when create button is klicked
  */
 function setupValidation() {
     const nameInput = document.getElementById("add-name-input");
@@ -91,6 +92,7 @@ function setupValidation() {
     const phoneInput = document.getElementById("add-phone-input");
     const form = document.getElementById("add-contact-form");
     const submitBtn = form.querySelector("button[type='submit']");
+    const overlay = document.getElementById("submit-overlay");
 
     const regexes = {
         name: /^[A-Za-z\s]+$/,
@@ -100,16 +102,16 @@ function setupValidation() {
 
     const errorMsgs = {
         name: {
-            required: "Bitte einen Namen eingeben.",
-            invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+            required: "Please enter a name.",
+            invalid: "Only letters and spaces are allowed."
         },
         mail: {
-            required: "Bitte eine E-Mail-Adresse eingeben.",
-            invalid: "Bitte eine gültige E-Mail eingeben, z.B muster@mail.de"
+            required: "Please enter an e-mail.",
+            invalid: "Please enter a valid e-mail, e.g example@mail.de"
         },
         phone: {
-            required: "Bitte eine Telefonnummer eingeben.",
-            invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+            required: "Please enter a phone number.",
+            invalid: "At least 7 numbers, only numbers / spaces allowed, optional + at start."
         }
     };
 
@@ -132,7 +134,9 @@ function setupValidation() {
                     validateInput(input, regexes.phone, "error-phone", errorMsgs.phone);
                 }
             }
+
             submitBtn.disabled = !allInputsValid();
+            overlay.style.display = submitBtn.disabled ? "block" : "none";
         });
     });
 
@@ -142,10 +146,21 @@ function setupValidation() {
             return;
         }
         submitBtn.disabled = true;
-        setTimeout(() => submitBtn.disabled = false, 1500);
+        overlay.style.display = "block";
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            overlay.style.display = "none";
+        }, 1500);
+    });
+
+    overlay.addEventListener("click", () => {
+        validateInput(nameInput, regexes.name, "error-name", errorMsgs.name);
+        validateInput(mailInput, regexes.mail, "error-mail", errorMsgs.mail);
+        validateInput(phoneInput, regexes.phone, "error-phone", errorMsgs.phone);
     });
 
     submitBtn.disabled = true;
+    overlay.style.display = "block";
 }
 
 /** 
