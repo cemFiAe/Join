@@ -652,7 +652,6 @@ moveBtn.innerHTML = `<img src="../assets/icons/board/switch.png" alt="">`;
 
 // Klick öffnet das Move-Menü; verhindert Öffnen des Detaildialogs
 moveBtn.addEventListener('click', (e) => {
-  e.preventDefault();
   e.stopPropagation();
   showMoveMenuForCard(card, task);
 });
