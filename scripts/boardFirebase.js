@@ -683,7 +683,6 @@ card.appendChild(moveBtn);
     cancelTimer();
     pressTimer = window.setTimeout(() => {
       // Öffne Menü und unterdrücke den „click“ auf Karte
-      ev.preventDefault();
       ev.stopPropagation();
       showMoveMenuForCard(card, task);
     }, LONG_MS);
