@@ -428,7 +428,7 @@ firebase.database().ref("users").once("value").then(snap => {
 
 /** Initialisiert das „Assigned to“-Dropdown im Board-Add-Task-Dialog. */
 function initAssignedDropdown() {
-  // DOM aus dem Add-Task-Dialog
+  // DOM neu greifen (Overlay kann gerade erst in den DOM gekommen sein)
   assignedDropdown  = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedDropdown'));
   assignedBadges    = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedBadges'));
   assignedSelectBox = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedSelectBox'));
@@ -456,92 +456,96 @@ function initAssignedDropdown() {
     };
   });
 
-  // Erste UI-Synchronisierung
   renderAssignedDropdown();
   renderAssignedBadges();
 
-  // Helper: Badges (un)sichtbar machen, ohne Layout zu ändern
-  const setBadgesVisible = (show) => {
-    if (!assignedBadges) return;
-    assignedBadges.style.visibility = show ? 'visible' : 'hidden';
+  // Wrapper für Inside-Checks
+  const wrapper = assignedDropdown.closest('.assigned-to-wrapper');
+
+  // Mehrfaches Verdrahten vermeiden
+  if (assignedSelectBox.dataset._wired === '1') return;
+  assignedSelectBox.dataset._wired = '1';
+
+  // --- Offen/Zu Status & Helpers ---
+  let isOpen = false;
+
+  const openDropdown = () => {
+    if (isOpen) return;
+    isOpen = true;
+
+    // WICHTIG: .hidden MUSS weg, sonst gewinnt evtl. !important
+    assignedDropdown.classList.remove('hidden');
+    assignedDropdown.classList.add('is-open');
+    assignedDropdown.style.display = 'block';
+    assignedSelectBox.setAttribute('aria-expanded', 'true');
+    if (assignedBadges) assignedBadges.style.visibility = 'hidden';
+
+    // Outside-Click erst NACH dem Öffnen registrieren (und im Capture-Modus),
+    // damit der Öffnen-Klick nicht sofort wieder schließt – und um ältere
+    // Listener zu „überstimmen“.
+    setTimeout(() => {
+      const onOutside = (e) => {
+        if (!(e.target instanceof Node)) return;
+        if (wrapper && wrapper.contains(e.target)) return; // Klick ist „inside“
+        closeDropdown();
+        document.removeEventListener('click', onOutside, true);
+      };
+      document.addEventListener('click', onOutside, true);
+    }, 0);
   };
-  setBadgesVisible(true);
 
-  // Helper: Placeholder nie überschreiben
-  const setFixedPlaceholder = () => {
-    const span = assignedSelectBox.querySelector('span');
-    if (span) span.textContent = 'Select contacts to assign';
+  const closeDropdown = () => {
+    if (!isOpen) return;
+    isOpen = false;
+
+    assignedDropdown.classList.remove('is-open');
+    assignedDropdown.classList.add('hidden');
+    assignedDropdown.style.display = 'none';
+    assignedSelectBox.setAttribute('aria-expanded', 'false');
+    if (assignedBadges) assignedBadges.style.visibility = 'visible';
   };
-  setFixedPlaceholder();
 
-  // --- SelectBox öffnen/schließen (nur 1× verdrahten) ---
-  if (!assignedSelectBox.dataset.wired) {
-    assignedSelectBox.dataset.wired = '1';
+  const toggleDropdown = () => (isOpen ? closeDropdown() : openDropdown());
 
-    const toggleOpen = (open) => {
-      if (!assignedDropdown) return;
-      const wantOpen = (open === undefined)
-        ? assignedDropdown.classList.contains('hidden')
-        : !!open;
+  // --- Events: Click / Keyboard / ESC ---
+  // pointerdown verhindert, dass globale Click-Handler denselben Event sehen
+  assignedSelectBox.addEventListener('pointerdown', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.stopImmediatePropagation();
+  });
 
-      if (wantOpen) {
-        assignedDropdown.classList.remove('hidden');
-        assignedDropdown.style.display = 'block';
-        setBadgesVisible(false);     // Badges während offen unsichtbar
-        setFixedPlaceholder();       // Placeholder fix halten
-        // Fokus/Bedienung
-        const first = /** @type {HTMLElement|null} */ (assignedDropdown.querySelector('.custom-option'));
-        first?.focus();
-      } else {
-        assignedDropdown.classList.add('hidden');
-        assignedDropdown.style.display = 'none';
-        setBadgesVisible(true);      // nach dem Schließen Badges zeigen
-        setFixedPlaceholder();       // Placeholder fix halten
-      }
-    };
+  assignedSelectBox.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.stopImmediatePropagation();
+    toggleDropdown();
+  });
 
-    // Klick auf die Box toggelt
-    assignedSelectBox.addEventListener('click', (ev) => {
+  assignedSelectBox.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' || ev.key === ' ') {
       ev.preventDefault();
-      ev.stopPropagation();
-      toggleOpen(); // toggle
-    });
-
-    // Tastatur: Enter/Space öffnet, ESC schließt
-    assignedSelectBox.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        ev.preventDefault();
-        toggleOpen(true);
-      }
-    });
-
-    // ESC im Dropdown schließt
-    assignedDropdown.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape') {
-        ev.preventDefault();
-        toggleOpen(false);
-        assignedSelectBox.focus();
-      }
-    });
-
-    // Outside-Click schließt NUR dieses Dropdown (Listener nur 1×)
-    const self = /** @type {any} */ (initAssignedDropdown);
-    if (!self._outsideListenerInstalled) {
-      self._outsideListenerInstalled = true;
-      document.addEventListener('click', (e) => {
-        if (!assignedDropdown) return;
-        const wrapper = assignedDropdown.closest('.assigned-to-wrapper');
-        const inside = (e.target instanceof Node) && wrapper ? wrapper.contains(e.target) : false;
-        if (!inside) {
-          assignedDropdown.classList.add('hidden');
-          assignedDropdown.style.display = 'none';
-          setBadgesVisible(true);
-          setFixedPlaceholder();
-        }
-      });
+      toggleDropdown();
     }
-  }
+  });
+
+  // Klicks IM Dropdown nicht nach außen bubblern lassen
+  assignedDropdown.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    ev.stopImmediatePropagation();
+  });
+
+  // ESC im Dropdown schließt
+  assignedDropdown.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') {
+      ev.preventDefault();
+      closeDropdown();
+      assignedSelectBox.focus();
+    }
+  });
 }
+
+
 
 /** Tasks abonnieren und Board rendern. */
 function loadAllTasks() {
@@ -1401,3 +1405,4 @@ function renderAssignedBadges() {
     });
   }
 })();
+

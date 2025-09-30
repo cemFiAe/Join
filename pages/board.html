@@ -235,38 +235,24 @@
           </button>
         </div>
 
-<div class="form-group" id="editAssignedGroup">
-  <label for="editAssignedSelectBox">Assigned to</label>
-
+<div class="form-group">
+  <label for="assignedSelectBox">Assigned to</label>
   <div class="assigned-to-wrapper">
-    <!-- Toggle-Element als Button (fokusierbar, a11y) -->
     <button
       type="button"
-      id="editAssignedSelectBox"
+      id="assignedSelectBox"
       class="assigned-select-box"
       aria-haspopup="listbox"
-      aria-expanded="false"
-    >
+      aria-expanded="false">
       <span>Select contacts to assign</span>
       <img class="imgDropdown" src="../assets/icons/add_task/arrow_drop_down.png" alt="">
     </button>
 
-    <!-- Dropdown-Liste (gleiches Styling wie Add Task, aber mit edit-IDs) -->
-    <div
-      id="editAssignedDropdown"
-      class="assigned-dropdown hidden"
-      role="listbox"
-      aria-multiselectable="true"
-    ></div>
-
-    <!-- Badges-Leiste -->
-    <div
-      id="editAssignedBadges"
-      class="assigned-badges"
-      aria-live="polite"
-    ></div>
+    <div id="assignedDropdown" class="assigned-dropdown hidden" role="listbox" aria-multiselectable="true"></div>
+    <div id="assignedBadges"   class="assigned-badges" aria-live="polite"></div>
   </div>
 </div>
+
 
 
         <label for="category">Category<span class="required">*</span></label>

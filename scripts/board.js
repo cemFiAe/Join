@@ -103,9 +103,13 @@ function onDomReady() {
     );
     if (mediumBtn) mediumBtn.classList.add('active');
 
-    addDlg.showModal();
-    // @ts-ignore (kommt aus boardFirebase.js)
-    window.initAssignedDropdown && window.initAssignedDropdown();
+addDlg.showModal();
+// war: window.initAssignedDropdown && window.initAssignedDropdown();
+setTimeout(() => {
+  // @ts-ignore
+  window.initAssignedDropdown && window.initAssignedDropdown();
+}, 0);
+
   };
 
   // ──────────────────────────────────────────────────────────────────────────
