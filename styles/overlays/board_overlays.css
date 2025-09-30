@@ -562,8 +562,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 32px;
-  min-height: 32px;
+  height: 38px;
+  min-height: 38px;
 }
 .assigned-user-name {
   font-size: 1rem;
