@@ -614,3 +614,124 @@ select[multiple] {
   color: #333;
   font-weight: 600;
 }
+/* ================================
+   Mobile Move-To (Board)
+   ================================ */
+   .move-menu{
+    border-radius: 0px 22px 22px 22px;
+   }
+#mobileMoveMenu {
+  position: fixed;
+  inset: auto 12px 16px auto;         /* rechts unten, leicht eingerückt */
+  min-width: 212px;
+  background: #2A3647;                /* Dark-Blue */
+  color: #fff;
+  border-radius: 8px 22px 22px 22px;                 /* große Rundungen */
+  box-shadow: 0 14px 40px rgba(0,0,0,.28),
+              0 4px 12px rgba(0,0,0,.18);
+  padding: 16px 14px 12px;
+  z-index: 10040;                      /* über Dialogen/Tasks */
+  display: none;                       /* per JS auf block gesetzt */
+  transform: translateY(6px);
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+#mobileMoveMenu.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Titel */
+#mobileMoveMenu .mm-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 2px 10px;
+  line-height: 1.1;
+}
+
+/* Liste */
+#mobileMoveMenu .mm-list {
+  display: grid;
+  gap: 8px;
+}
+
+/* Eintrag */
+#mobileMoveMenu .mm-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: background .14s ease, transform .06s ease;
+}
+
+/* Pfeil/Label */
+#mobileMoveMenu .mm-icon {
+  font-size: 18px;
+  line-height: 1;
+  width: 18px;
+  text-align: center;
+}
+#mobileMoveMenu .mm-label {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+/* Hover/Focus (rechte Kachel dunkler, wie im Screenshot) */
+#mobileMoveMenu .mm-item:hover,
+#mobileMoveMenu .mm-item:focus-visible {
+  background: rgba(5, 17, 34, .38);          /* sehr dunkles Blau */
+}
+
+/* aktiver Press-Effekt */
+#mobileMoveMenu .mm-item:active {
+  transform: scale(.985);
+}
+
+/* leichte Trennung nach oben, wenn nötig */
+@media (max-width: 480px) {
+  #mobileMoveMenu {
+    inset: auto 10px 14px auto;
+    min-width: 200px;
+    border-radius: 8px 22px 22px 22px;;
+    padding: 14px 12px 10px;
+  }
+  #mobileMoveMenu .mm-title { font-size: 19px; }
+  #mobileMoveMenu .mm-label { font-size: 17px; }
+}
+
+/* Task-Karten müssen eine Referenz für absolute Positionierung sein */
+.task { position: relative; }
+
+/* Mobile Move-Button (nur mobil sichtbar) */
+.mobile-move-btn{
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  display: none;                /* Standard: ausgeblendet (Desktop) */
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  cursor: pointer;
+}
+.mobile-move-btn img{
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+.mobile-move-btn:active { transform: translateY(1px); }
+
+/* Nur auf kleinen Screens anzeigen */
+@media (max-width: 760px){
+  .mobile-move-btn{ display: flex; }
+}

@@ -643,6 +643,22 @@ function createTaskCard(task) {
       <div>${badgeHtml}</div>
       <img class="prio-icon" src="../assets/icons/board/prio/${prioIcon}.svg" alt="">
     </div>`;
+    // Mobile "Move to" Button oben rechts
+const moveBtn = document.createElement('button');
+moveBtn.className = 'mobile-move-btn';
+moveBtn.type = 'button';
+moveBtn.setAttribute('aria-label', 'Move task');
+moveBtn.innerHTML = `<img src="../assets/icons/board/switch.png" alt="">`;
+
+// Klick öffnet das Move-Menü; verhindert Öffnen des Detaildialogs
+moveBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  showMoveMenuForCard(card, task);
+});
+
+card.appendChild(moveBtn);
+
 
   // Desktop Drag & Drop beibehalten
   card.setAttribute("draggable", "true");
