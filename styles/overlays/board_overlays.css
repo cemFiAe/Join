@@ -15,7 +15,7 @@
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(42,54,71,0.16);
   z-index: 10002;
-  overflow: visible;
+  overflow: auto;
   padding: 0;
 }
 .add_task_dialog_overlay::backdrop {
@@ -316,6 +316,7 @@
   align-items: center;
   gap: 7px;
   height: 40px;
+  padding-left: 8px;
   margin-bottom: 6px;
   position: relative;
   justify-content: space-between;
@@ -479,6 +480,10 @@
 .task-detail-dialog::backdrop {
   background: rgba(42,54,71,0.15);
   backdrop-filter: blur(2px);
+}
+
+.priority-buttons .btn {
+  font-size: 12px;
 }
 
 #taskDetailBody {

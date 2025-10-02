@@ -1,3 +1,14 @@
+@media (min-width: 1920px) {
+    .title {
+        justify-content: flex-start;
+    }
+    .greeting {
+        justify-content: flex-start;
+    }
+}
+
+
+
 @media (max-width: 1310px) {
     .content {
         display: flex; justify-content: flex-start; 
@@ -34,7 +45,11 @@
         }
     }
     .title {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: 120px;
+        gap: 16px;
     }
     .divider_middle {
         display: none;
@@ -83,4 +98,10 @@
     .urgent:hover {
     transform: scale(102%);
 }
+}
+
+@media (max-height: 650px) {
+    .title {
+        display: none;
+    }
 }

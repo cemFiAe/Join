@@ -50,10 +50,29 @@
         margin-inline: 0px;
         width: 100%;
     }
+    .add_task_button {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 16px !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .create-btn-container {
+        transform: scale(0.8);
+        transform-origin: top left;
+        gap: 24px !important;
+    }
 }
 
 @media (max-width: 400px) {
     html {
         overflow: hidden;
+    }
+}
+
+@media (max-width: 326px) {
+    .priority-buttons .btn {
+        font-size: 10px !important;
     }
 }
