@@ -1,8 +1,9 @@
+// @ts-nocheck
 /**
  * this function opens an overlay (Add or Edit) and shows the background overlay.
  * Also attaches a global click listener to close the overlay when
  * clicking outside of it.
- * @param {"add" | "edit"} type - Which overlay should be opened
+ * @param {"add" | "edit"} type - determines which overlay should be opened
  */
 function openOverlay(type) {
     const overlay = type === 'add'
@@ -23,7 +24,7 @@ function openOverlay(type) {
 /**
  * this function closes an overlay (Add or Edit), clears inputs, and hides the background
  * after the CSS transition has finished. Removes the global click listener.
- * @param {"add" | "edit"} type - Which overlay should be closed
+ * @param {"add" | "edit"} type - determines which overlay should be closed
  */
 function closeOverlay(type) {
     clearAddContactInputs();

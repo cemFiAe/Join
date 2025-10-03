@@ -449,7 +449,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
   #taskDetailBody {
     padding: 16px 0px 16px 0px !important;
   }
@@ -483,7 +483,8 @@
 }
 
 .priority-buttons .btn {
-  font-size: 12px;
+  font-size: 16px;
+  padding: 5px;
 }
 
 #taskDetailBody {

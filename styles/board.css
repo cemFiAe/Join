@@ -420,7 +420,7 @@
 
 .task-detail-dialog div,
 .task-detail-dialog .edit-textarea {
-  max-width: 360px;
+  max-width: 420px;
   word-break: break-word;
   overflow-wrap: break-word;
   /* für maximal 3 Zeilen */

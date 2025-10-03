@@ -1,3 +1,4 @@
+// @ts-nocheck
 const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/"
 
 let contacts = [];

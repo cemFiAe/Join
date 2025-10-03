@@ -71,8 +71,9 @@
     }
 }
 
-@media (max-width: 326px) {
+@media (max-width: 350px) {
     .priority-buttons .btn {
-        font-size: 10px !important;
+        padding: 2px !important;
+        gap: 2px !important;
     }
 }
