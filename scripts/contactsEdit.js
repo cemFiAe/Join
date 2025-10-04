@@ -145,22 +145,44 @@ function deleteContactFromEditMobile() {
 }
 
 /**
- * Initializes validation for the edit contact form
+ * Initializes validation behavior for the edit contact form.
+ * Sets up input sanitization, validation, and submit control.
  */
 function setupEditValidation() {
-    const nameInput = document.getElementById("edit-name-input");
-    const mailInput = document.getElementById("edit-mail-input");
-    const phoneInput = document.getElementById("edit-phone-input");
     const form = document.getElementById("edit-contact-form");
+    const inputs = {
+        name: document.getElementById("edit-name-input"),
+        mail: document.getElementById("edit-mail-input"),
+        phone: document.getElementById("edit-phone-input")
+    };
     const submitBtn = form.querySelector("button[type='submit']");
+    const regexes = getRegexes();
+    const errorMsgs = getErrorMessages();
 
-    const regexes = {
+    setupInputSanitizers(inputs);
+    setupInputListeners(inputs, regexes, errorMsgs, submitBtn);
+    setupFormSubmit(form, submitBtn);
+    toggleSubmit(inputs, regexes, submitBtn);
+}
+
+/**
+ * Returns the regular expressions used for field validation.
+ * @returns {Object} Regex patterns for name, mail, and phone validation.
+ */
+function getRegexes() {
+    return {
         name: /^[A-Za-z\s]+$/,
-        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/, 
+        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/,
         phone: /^\+?[0-9\s]{7,}$/
     };
+}
 
-    const errorMsgs = {
+/**
+ * Returns localized error messages for form validation.
+ * @returns {Object} Error messages for name, mail, and phone inputs.
+ */
+function getErrorMessages() {
+    return {
         name: {
             required: "Bitte einen Namen eingeben.",
             invalid: "Nur Buchstaben und Leerzeichen erlaubt."
@@ -174,44 +196,60 @@ function setupEditValidation() {
             invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
         }
     };
+}
 
-    nameInput.addEventListener("input", () => {
-        nameInput.value = nameInput.value.replace(/[^A-Za-z\s]/g, "");
+/**
+ * Sets up input sanitization by removing invalid characters in real time.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ */
+function setupInputSanitizers(inputs) {
+    inputs.name.addEventListener("input", () => {
+        inputs.name.value = inputs.name.value.replace(/[^A-Za-z\s]/g, "");
     });
-
-    phoneInput.addEventListener("input", () => {
-        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d\s]/g, "");
+    inputs.phone.addEventListener("input", () => {
+        inputs.phone.value = inputs.phone.value.replace(/(?!^\+)[^\d\s]/g, "");
     });
+}
 
-    [nameInput, mailInput, phoneInput].forEach(input => {
+/**
+ * Attaches validation and submit toggle logic to input fields.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ * @param {Object} regexes - Regex patterns for validation.
+ * @param {Object} msgs - Error messages for validation feedback.
+ * @param {HTMLButtonElement} submitBtn - The submit button element.
+ */
+function setupInputListeners(inputs, regexes, msgs, submitBtn) {
+    Object.entries(inputs).forEach(([key, input]) => {
         input.addEventListener("input", () => {
-            if (input === nameInput) {
-                validateInput(input, regexes.name, "edit-error-name", errorMsgs.name);
-            } else if (input === mailInput) {
-                validateInput(input, regexes.mail, "edit-error-mail", errorMsgs.mail);
-            } else if (input === phoneInput) {
-                validateInput(input, regexes.phone, "edit-error-phone", errorMsgs.phone);
-            }
-            toggleSubmit();
+            validateInput(input, regexes[key], `edit-error-${key}`, msgs[key]);
+            toggleSubmit(inputs, regexes, submitBtn);
         });
     });
+}
 
-    form.addEventListener("submit", (event) => {
-        if (submitBtn.disabled) {
-            event.preventDefault();
-            return;
-        }
-        submitBtn.disabled = true;
-        setTimeout(() => submitBtn.disabled = false, 1500);
+/**
+ * Prevents multiple form submissions and re-enables the submit button.
+ * @param {HTMLFormElement} form - The form element being validated.
+ * @param {HTMLButtonElement} btn - The submit button to disable temporarily.
+ */
+function setupFormSubmit(form, btn) {
+    form.addEventListener("submit", (e) => {
+        if (btn.disabled) return e.preventDefault();
+        btn.disabled = true;
+        setTimeout(() => (btn.disabled = false), 1500);
     });
+}
 
-    toggleSubmit();
-
-    function toggleSubmit() {
-        submitBtn.disabled = !(
-            regexes.name.test(nameInput.value.trim()) &&
-            regexes.mail.test(mailInput.value.trim()) &&
-            regexes.phone.test(phoneInput.value.trim())
-        );
-    }
+/**
+ * Enables or disables the submit button based on form validity.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ * @param {Object} regexes - The regex validation patterns.
+ * @param {HTMLButtonElement} btn - The submit button to control.
+ */
+function toggleSubmit(inputs, regexes, btn) {
+    btn.disabled = !(
+        regexes.name.test(inputs.name.value.trim()) &&
+        regexes.mail.test(inputs.mail.value.trim()) &&
+        regexes.phone.test(inputs.phone.value.trim())
+    );
 }

@@ -6,40 +6,37 @@ let contacts = [];
 let currentDisplayedContactId = null;
 
 /**
- * this function is used to fetch the contacts from firebase and render the contact list onload
+ * Fetches contacts and users from Firebase, merges them, and renders the list.
  */
-async function onloadFunction() { 
-    let contactResponse = await loadData("/contacts");
-    let userResponse = await loadData("/users");
-
+async function onloadFunction() {
+    const [contactResponse, userResponse] = await Promise.all([
+        loadData("/contacts"),
+        loadData("/users")
+    ]);
     contacts = [];
-
-    // load all contacts
-    if (contactResponse) {
-        let contactsArray = Object.keys(contactResponse);
-        for (let index = 0; index < contactsArray.length; index++) {
-            contacts.push({
-                id: contactsArray[index],
-                data: contactResponse[contactsArray[index]],
-            });
-        }
-    }
-
-    // load all users (that DONT exist already as a contact!)
-    if (userResponse) {
-        let userArray = Object.keys(userResponse);
-        for (let index = 0; index < userArray.length; index++) {
-            // add user only, if the ID doesnt exist as a contact 
-            if (!contacts.find(c => c.id === userArray[index])) {
-                contacts.push({
-                    id: userArray[index],
-                    data: userResponse[userArray[index]],
-                });
-            }
-        }
-    }
-
+    addContacts(contactResponse);
+    addUsers(userResponse);
     renderAllContacts();
+}
+
+/**
+ * Adds all contacts from the response object to the global contacts array.
+ * @param {Object} data - Firebase response for contacts.
+ */
+function addContacts(data) {
+    if (!data) return;
+    Object.entries(data).forEach(([id, info]) => contacts.push({ id, data: info }));
+}
+
+/**
+ * Adds users that don't already exist as contacts.
+ * @param {Object} data - Firebase response for users.
+ */
+function addUsers(data) {
+    if (!data) return;
+    Object.entries(data).forEach(([id, info]) => {
+        if (!contacts.find(c => c.id === id)) contacts.push({ id, data: info });
+    });
 }
 
 /**
