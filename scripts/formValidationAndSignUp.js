@@ -8,7 +8,7 @@ let isValid = true;
   */
 function nameValidation() {
     let valid = nameInput.value !== "";
-    nameDiv.style.padding = valid ? "0px 0px 25px" : "0px 0px 8px";
+    // nameDiv.style.padding = valid ? "0px 0px 25px" : "0px 0px 8px";
     nameInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     nameAlert.style.display = valid ? 'none' : 'block';
     return valid

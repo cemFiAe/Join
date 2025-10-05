@@ -39,8 +39,8 @@ function updateFormStyles(input, alert, isValid) {
     }
 }
 
-emailInput.addEventListener('input', validateForm);
-passwordInput.addEventListener('input', validateForm);
+// emailInput.addEventListener('input', validateForm);
+// passwordInput.addEventListener('input', validateForm);
 
 
 /**

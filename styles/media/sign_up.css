@@ -18,46 +18,49 @@
 
     }
 
+    .blue-line {
+        width: 110px;
+    }
+
     .sign-up-form {
-        padding-top: 4px;
-        height: auto;
+        padding-top: 8px;
     }
 
     .name {
-        height: 66px;
+        height: 60px;
     }
 
     .email {
-        height: 66px;
+        height: 60px;
     }
 
     .password-first {
-        height: 66px;
+        height: 60px;
     }
 
     .password-second {
-        height: 50px;
+        height: 60px;
     }
 
     .name-input {
-        height: 36px;
+        height: 42px;
     }
 
     .email-input {
-        height: 36px;
+        height: 42px;
     }
 
     .sign-up-password {
-        height: 36px;
+        height: 42px;
     }
 
     .confirm-password {
-        height: 36px;
+        height: 42px;
     }
 
     .sign-up-buttons {
         display: flex;
-        height: 82px;
+        height: 86px;
     }
 
     .mobile-sign-up-button {

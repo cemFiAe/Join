@@ -43,7 +43,7 @@
     padding-top: 24px;
     width: 100%;
     max-width: 422px;
-    height: 320px;
+    height: 248px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,7 +60,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 0px 0px 18px;
+    /* padding: 0px 0px 18px; */
     margin: 0px 8px;
 }
 
@@ -106,7 +106,7 @@
 
 /* password input properties */
 .password-first {
-    height: 78px;
+    height: 76px;
 }
 
 .sign-up-password {
@@ -143,7 +143,7 @@
 
 /* confirm password input properties */
 .password-second {
-    height: 78px;
+    height: 76px;
 }
 
 .confirm-password {
@@ -182,13 +182,6 @@
     height: 112px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-}
-
-.checkbox-and-alert {
-    display: flex;
-    justify-content: start;
     align-items: center;
     flex-direction: column;
 }

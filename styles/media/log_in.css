@@ -45,10 +45,10 @@
     .log-in-section {
         margin-bottom: 8px;
     }
-
+/* 
     .password-third {
         height: 76px;
-    }
+    } */
 
     .email-password>input {
         height: 48px;
@@ -56,15 +56,16 @@
     }
 
     .log-in-form {
-        height: 128px;
-        padding-top: 4px;
-        justify-content: space-between;
+        /* height: 128px;
+        padding-top: 4px; */
+        justify-content: center;
+        align-items: center;
     }
 
     .log-in-buttons {
         width: 180px;
         flex-direction: column;
-        padding-top: 12px;
+        /* padding-top: 12px; */
         gap: 8px;
     }
 
@@ -73,7 +74,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-top: 16px;
+        padding-top: 24px;
         gap: 40px;
     }
 

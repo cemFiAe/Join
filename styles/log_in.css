@@ -36,8 +36,8 @@
 }
 
 .log-in-form {
-    padding-top: 16px;
-    height: 180px;
+    padding-top: 8px;
+    height: 140px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,11 +49,11 @@
 }
 
 .password-third {
-    height: 78px;
+    height: 60px;
 }
 
 .log-in-password {
-    height: 48px;
+    height: 42px;
     display: flex;
     justify-content: space-between;
     align-items: center;
