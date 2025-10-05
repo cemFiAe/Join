@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: boardDetailUtil.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: boardDetailUtil.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
+/* global firebase */
+/// &lt;reference path="./boardTypesD.ts" />
+
+/**
+ * Board.DetailUtil – gemeinsame Utilities für das Task-Detail.
+ */
+(function (w) {
+  const Win = /** @type {any} */ (w);
+  Win.Board = Win.Board || {};
+
+  /** @typedef {"urgent"|"medium"|"low"} TaskPriority */
+  /** @typedef {{title:string,done:boolean}} Subtask */
+  /** @typedef {{ id:string, title?:string, description?:string, category?:string, dueDate?:string, priority?:TaskPriority, status:string, assignedTo?:string[]|string, subtasks?:Subtask[] }} Task */
+
+  // ───────────────────────────────────────────────────────────────────
+  // Klassen / Datum
+  // ───────────────────────────────────────────────────────────────────
+  /**
+   * @param {string=} category
+   * @returns {string}
+   */
+  function getDetailCategoryClass(category) {
+    const c = (category || '').toLowerCase();
+    if (c.includes('bug')) return 'task-detail-badge cat-bug';
+    if (c.includes('user')) return 'task-detail-badge cat-userstory';
+    if (c.includes('tech')) return 'task-detail-badge cat-technicaltask';
+    if (c.includes('research')) return 'task-detail-badge cat-research';
+    return 'task-detail-badge';
+  }
+
+  /**
+   * @param {string=} due
+   * @returns {string}
+   */
+  function formatDueDate(due) {
+    if (!due) return '';
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(due)) return due;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(due)) {
+      const dt = new Date(due);
+      if (!isNaN(+dt)) {
+        const mm = String(dt.getMonth() + 1).padStart(2, '0');
+        const dd = String(dt.getDate()).padStart(2, '0');
+        return `${mm}/${dd}/${dt.getFullYear()}`;
+      }
+    }
+    return due;
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // Subtasks: Inline-Edit
+  // ───────────────────────────────────────────────────────────────────
+  /**
+   * @param {HTMLLIElement} li
+   * @param {number} idx
+   * @param {Task} task
+   */
+  function editSubtaskInline(li, idx, task) {
+    const { input, old, actions } = createTitleInput(li);
+    const save   = () => saveTitle(li, idx, task, input.value.trim() || old, actions);
+    const cancel = () => saveTitle(li, idx, task, old, actions);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') save();
+      if (e.key === 'Escape') cancel();
+    });
+    input.addEventListener('blur', save);
+    input.focus();
+  }
+
+  /** @param {HTMLLIElement} li */
+  function createTitleInput(li) {
+    const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
+    const actions = /** @type {HTMLElement} */ (li.querySelector('.subtask-actions'));
+    const old = span.textContent || '';
+    const input = document.createElement('input');
+    input.type = 'text'; input.value = old; input.style.width = '70%';
+    span.replaceWith(input);
+    return { input, old, actions };
+  }
+
+  /**
+   * @param {HTMLLIElement} li
+   * @param {number} idx
+   * @param {Task} task
+   * @param {string} title
+   * @param {HTMLElement} actions
+   */
+  function saveTitle(li, idx, task, title, actions) {
+    if (!Array.isArray(task.subtasks)) task.subtasks = [];
+    task.subtasks[idx].title = title;
+    const input = /** @type {HTMLInputElement} */ (li.querySelector('input[type="text"]'));
+    const ns = document.createElement('span');
+    ns.className = 'subtask-title'; ns.textContent = title; ns.style.flex = '1';
+    input.replaceWith(ns);
+    if (actions) actions.style.display = 'none';
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // Subtasks: Edit-UI Renderer
+  // ───────────────────────────────────────────────────────────────────
+  /**
+   * @param {HTMLDivElement} container
+   * @param {Task} task
+   */
+  function renderSubtasksEdit(container, task) {
+    container.innerHTML = '';
+    const inp = makeInputRow(container, () => addSubtaskFromInput(inp, task, container));
+    const ul = buildList(container);
+    (Array.isArray(task.subtasks) ? task.subtasks : []).forEach((st, i) => {
+      if (!st.title) return;
+      ul.appendChild(liForSubtask(st, i, task, () => renderSubtasksEdit(container, task)));
+    });
+  }
+
+  /**
+   * @param {HTMLDivElement} container
+   * @param {() => void} onAdd
+   */
+  function makeInputRow(container, onAdd) {
+    const row = document.createElement('div'); row.className = 'subtask-input-row';
+    const inp = document.createElement('input'); inp.type = 'text'; inp.placeholder = 'Add subtask'; inp.className = 'edit-subtask-input'; inp.style.flex = '1';
+    const btn = document.createElement('button'); btn.type = 'button'; btn.innerHTML = '&lt;img src="../assets/icons/add_task/subtask_icon.png" style="width:20px" alt="">'; btn.className = 'add-subtask-btn';
+    row.append(inp, btn); container.appendChild(row);
+    btn.onclick = onAdd;
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); onAdd(); } });
+    return inp;
+  }
+
+  /** @param {HTMLDivElement} container */ function buildList(container) {
+    const ul = document.createElement('ul');
+    ul.style.listStyle = 'none'; ul.style.padding = '0'; ul.style.margin = '0';
+    container.appendChild(ul); return ul;
+  }
+
+  /**
+   * @param {HTMLInputElement} inp
+   * @param {Task} task
+   * @param {HTMLDivElement} container
+   */
+  function addSubtaskFromInput(inp, task, container) {
+    const v = inp.value.trim(); if (!v) return;
+    if (!Array.isArray(task.subtasks)) task.subtasks = [];
+    task.subtasks.push({ title: v, done: false });
+    inp.value = ''; renderSubtasksEdit(container, task);
+  }
+
+  /**
+   * @param {Subtask} st
+   * @param {number} idx
+   * @param {Task} task
+   * @param {() => void} rerender
+   */
+  function liForSubtask(st, idx, task, rerender) {
+    const li = document.createElement('li');
+    li.className = 'subtask-item';
+    li.style.display = 'flex'; li.style.alignItems = 'center'; li.style.gap = '7px'; li.style.marginBottom = '4px';
+    li.innerHTML = liMarkup(st);
+    wireLi(li, idx, task, rerender);
+    return li;
+  }
+
+  /** @param {Subtask} st */ function liMarkup(st) {
+    return `
+      &lt;input type="checkbox" ${st.done ? 'checked' : ''} style="margin:0;">
+      &lt;span class="subtask-title" style="flex:1;">${st.title}&lt;/span>
+      &lt;span class="subtask-actions" style="display:none;">
+        &lt;button type="button" class="subtask-edit-btn" title="Bearbeiten">&lt;img src="../assets/icons/add_task/edit.png" style="width:16px" alt="">&lt;/button>
+        &lt;button type="button" class="subtask-delete-btn" title="Löschen">&lt;img src="../assets/icons/board/delete.png" style="width:17px" alt="">&lt;/button>
+      &lt;/span>`;
+  }
+
+  /**
+   * @param {HTMLLIElement} li
+   * @param {number} idx
+   * @param {Task} task
+   * @param {() => void} rerender
+   */
+  function wireLi(li, idx, task, rerender) {
+    const cb = /** @type {HTMLInputElement} */ (li.querySelector('input[type="checkbox"]'));
+    cb.addEventListener('change', (e) => { if (!Array.isArray(task.subtasks)) task.subtasks = []; task.subtasks[idx].done = (/** @type {HTMLInputElement} */(e.currentTarget)).checked; });
+    li.addEventListener('mouseenter', () => { (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'inline-flex'; });
+    li.addEventListener('mouseleave', () => { (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'none'; });
+    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-edit-btn'))).addEventListener('click', () => editSubtaskInline(li, idx, task));
+    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-delete-btn'))).addEventListener('click', () => { if (!Array.isArray(task.subtasks)) task.subtasks = []; task.subtasks.splice(idx, 1); rerender(); });
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // Delete-Dialog
+  // ───────────────────────────────────────────────────────────────────
+  /**
+   * @param {string} taskId
+   * @param {HTMLDialogElement=} parent
+   */
+  function showDeleteConfirmDialog(taskId, parent) {
+    const dlg = /** @type {HTMLDialogElement} */ (document.getElementById('deleteConfirmDialog'));
+    dlg.showModal();
+    (/** @type {HTMLButtonElement} */ (document.getElementById('confirmDeleteBtn'))).onclick = () => {
+      firebase.database().ref('tasks/' + taskId).remove().then(() => { dlg.close(); parent?.close?.(); });
+    };
+    (/** @type {HTMLButtonElement} */ (document.getElementById('cancelDeleteBtn'))).onclick = () => dlg.close();
+  }
+
+  // Export
+  Win.Board.DetailUtil = {
+    getDetailCategoryClass,
+    formatDueDate,
+    editSubtaskInline,
+    renderSubtasksEdit,
+    showDeleteConfirmDialog,
+  };
+})(window);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

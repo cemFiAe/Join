@@ -1,0 +1,14736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Global</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Global</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="editValidationInitialized"><span class="type-signature"></span>editValidationInitialized<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    this function is used to open the edit contact overlay
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="errorMsgs"><span class="type-signature">(constant) </span>errorMsgs<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Error message templates for each input field.Each field has a "required" and an "invalid" message,which are displayed depending on validation result.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="regexes"><span class="type-signature">(constant) </span>regexes<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Regular expression constants used for validating name, email, and phone inputs.- name: Allows only letters (A-Z, a-z) and spaces.- mail: Requires alphanumeric characters and dots before "@", followed by a valid domain.- phone: Allows digits and spaces with an optional leading "+"; must contain at least 7 digits.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addContactLocally"><span class="type-signature"></span>addContactLocally<span class="signature">(id, data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds a contact to the local contacts array.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unique contact ID (from Firebase).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Contact data object containing name, mail, and phone.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line254">line 254</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addContacts"><span class="type-signature"></span>addContacts<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds all contacts from the response object to the global contacts array.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Firebase response for contacts.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addNewContact"><span class="type-signature">(async) </span>addNewContact<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to add a contact to firebase / locally
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">is necessary to prevent the refresh of the page on submit</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addUsers"><span class="type-signature"></span>addUsers<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds users that don't already exist as contacts.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Firebase response for users.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="allInputsValid"><span class="type-signature"></span>allInputsValid<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks all input fields (name, email, phone) and enables/disables the submit button.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - True if all inputs are valid, otherwise false.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="animateContactDetails"><span class="type-signature"></span>animateContactDetails<span class="signature">(container)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to animate the detailed contact information
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the html element containing the contact information</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line346">line 346</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="animateOverlayOut"><span class="type-signature"></span>animateOverlayOut<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to animate the closing of the success overlay
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line268">line 268</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="checkLoadingScreen"><span class="type-signature"></span>checkLoadingScreen<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    We can get to the log in page in three ways: when we open it first time, when we sign up and it forwards us, and when we log out and it forwards us.This function checks if user didn't came from sign up! (but other two ways)If so, it calls showLoadingScreen function.But if the user came from sign up, there is no overlay.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="logInLoading.js.html">logInLoading.js</a>, <a href="logInLoading.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="clearAddContactInputs"><span class="type-signature"></span>clearAddContactInputs<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    clears all inputfields and disables submit buttonthis prevents the button still being active from a valid previous entry
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="clearTaskAssignment"><span class="type-signature">(async) </span>clearTaskAssignment<span class="signature">(taskId)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Clears the assignedTo field of a task in Firebase.Used when the contact ID was the only assignment.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>taskId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the task to clear.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="closeContactOptions"><span class="type-signature"></span>closeContactOptions<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to close a small burgermenu
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="closeOverlay"><span class="type-signature"></span>closeOverlay<span class="signature">(type)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function closes an overlay (Add or Edit), clears inputs, and hides the backgroundafter the CSS transition has finished. Removes the global click listener.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">"add"</span>
+|
+
+<span class="param-type">"edit"</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">determines which overlay should be closed</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="collectUpdatedFormData"><span class="type-signature"></span>collectUpdatedFormData<span class="signature">(current)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to overwrite the data of a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">contains the old contact data of the contact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - contains the new contact data
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="confirmLockIcon"><span class="type-signature"></span>confirmLockIcon<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    It checks if user clicks on the lock-icon which is located in the confirm-password field.If the lock-icon is clicked, confirmPasswordVisibility() function is called.If somewhere else in page is clicked, but not on lock-icon, it ensures that the password is no longer visible,and shows back the lock-icon.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e.target.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Represents the id of clicked element(in this case, lock-icon).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>confirmInput.type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If type is "password", then the password is not visible, if type is "text" then it's visible.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>confirmIcon.src</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL of matching icon for each input type.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordConfirmAndVisibility.js.html">passwordConfirmAndVisibility.js</a>, <a href="passwordConfirmAndVisibility.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createContactGroup"><span class="type-signature"></span>createContactGroup<span class="signature">(letter, contacts)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create contactgroups, f.e "A", and returning the template
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>letter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">f.e "A", used to create the h3</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contacts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">array that contains id and data(name, mail, phone)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line197">line 197</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - containing an h3 with the letter, f.e "A" and a div for each contact
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createDivider"><span class="type-signature"></span>createDivider<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLDivElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create a divider for the contact list
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line209">line 209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - div that is used as a divider
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLDivElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createInitialIcon"><span class="type-signature"></span>createInitialIcon<span class="signature">(initials, color, extraClass, size)</span><span class="type-signature"> &rarr; {HTMLDivElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create the base icon of a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>initials</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the initials of a contact, f.e "Tom Taylor" => "TT"</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a hsl hash, f.e "hsl(210, 70%, 60%)"</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extraClass</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">additional class for the edit overlay, so that the icon is styled accordingly</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">size used for the proportions of the icon in the edit overlay and the font size inside the icon</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - template for the base icon of a contact
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLDivElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createSuccessOverlay"><span class="type-signature"></span>createSuccessOverlay<span class="signature">()</span><span class="type-signature"> &rarr; {HTMLDivElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to add a div element, editing and animating it
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line256">line 256</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - div that represents the successful overlay
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLDivElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteContact"><span class="type-signature">(async) </span>deleteContact<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deletes a contact and removes them from all tasks and contact list.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the contact.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteContactFromEdit"><span class="type-signature"></span>deleteContactFromEdit<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to delete a contact. executed from the editing overlay.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteContactFromEditMobile"><span class="type-signature"></span>deleteContactFromEditMobile<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to delete a contact. executed from the editing overlay on displays of <650 px width
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line139">line 139</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteContactFromFirebase"><span class="type-signature">(async) </span>deleteContactFromFirebase<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deletes a contact from Firebase by its ID.Throws an error if the deletion fails.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact ID to delete.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteData"><span class="type-signature">(async) </span>deleteData<span class="signature">(path)</span><span class="type-signature"> &rarr; {Obejct}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to delete Data from the specific root in firebase
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to change the root that is being fetched from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line91">line 91</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - contact containing data like the id or name, mail and phone
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Obejct</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteMobileContact"><span class="type-signature"></span>deleteMobileContact<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Handles special contact deletion for mobile devices (< 650px width).Prevents default event behavior, deletes the currently displayed contact,and navigates back while closing the contact options menu.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="doPasswordsMatch"><span class="type-signature"></span>doPasswordsMatch<span class="signature">(password, confirmPassword, isMatch)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function checks first if there is any input in confirm-password field.If input is true, it checks if the confirm-password matches the password.Based on these checks, the styling of confirm-password field changes.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User enters his password.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>confirmPassword</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User confirms his password.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isMatch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This is the main condition user must fulfill to sign in.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordConfirmAndVisibility.js.html">passwordConfirmAndVisibility.js</a>, <a href="passwordConfirmAndVisibility.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    It is 'false' if confirm-password input is empty, then alert message, lock-icon and red highlight appears.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="editContact"><span class="type-signature">(async) </span>editContact<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">is necessary to prevent the page from refreshing</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="editMobileContact"><span class="type-signature"></span>editMobileContact<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to edit contact information like name, mail or phone. it is executed on displays of <650 px width.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line117">line 117</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="editOverlayDesktop"><span class="type-signature"></span>editOverlayDesktop<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to resize the edit overlay
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="editOverlayLogic"><span class="type-signature"></span>editOverlayLogic<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to animate the appearing of the edit overlay
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="editOverlayMobile"><span class="type-signature"></span>editOverlayMobile<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to resize the edit overlay
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ensureOwnContactInList"><span class="type-signature"></span>ensureOwnContactInList<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Fügt den eigenen User als Kontakt zur Liste hinzu (falls nicht schon da)Sollte direkt vor dem Rendern der Kontaktliste aufgerufen werden!
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsOwnProfile.js.html">contactsOwnProfile.js</a>, <a href="contactsOwnProfile.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fillEditForm"><span class="type-signature"></span>fillEditForm<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to fill the form of the edit overlay
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">contains information like name, mail or phone</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="finalizeContactDeletion"><span class="type-signature">(async) </span>finalizeContactDeletion<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Finalizes the deletion of a contact by removing it from Firebase,updating the local array, clearing UI state, and re-rendering the contact list.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact ID to delete.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="focusOnNewContact"><span class="type-signature"></span>focusOnNewContact<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Focuses on the newly created contact in the contact list.Uses requestAnimationFrame to ensure the DOM is updated before scrolling/highlighting.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the contact to focus on.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line263">line 263</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getColorFromName"><span class="type-signature"></span>getColorFromName<span class="signature">(name)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create a hsl hash based on the name of a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the name of a contact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - hsl hash that is based on the name of a contact
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getContactById"><span class="type-signature"></span>getContactById<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to find a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of the contact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - object, containing contact data
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getContactDetailsTemplate"><span class="type-signature"></span>getContactDetailsTemplate<span class="signature">(id, data, bgColor)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create the template for the detailed contact information
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object containing contact information like name, mail or phone</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bgColor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">hsl hash used for the background color of the profile icon</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line363">line 363</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - template for the detailed information overview
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getContactTemplateByData"><span class="type-signature"></span>getContactTemplateByData<span class="signature">(data, id)</span><span class="type-signature"> &rarr; {HTMLDivElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to create a contact template
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">json</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is an object containing contact information</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - a template for a contact, used in the contact list
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLDivElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getErrorMessages"><span class="type-signature"></span>getErrorMessages<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns localized error messages for form validation.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line184">line 184</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Error messages for name, mail, and phone inputs.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getFormData"><span class="type-signature"></span>getFormData<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to gather the information from the input fields of the overlay form
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getInitials"><span class="type-signature"></span>getInitials<span class="signature">(name)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to gather the initials of a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the name of a contact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line143">line 143</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - initials of a contact, f.e Tom Taylor => "TT"
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getRegexes"><span class="type-signature"></span>getRegexes<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the regular expressions used for field validation.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line172">line 172</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Regex patterns for name, mail, and phone validation.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="goBack"><span class="type-signature"></span>goBack<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to close the contact detail screen and return to the contact column
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="groupContactsByInitial"><span class="type-signature"></span>groupContactsByInitial<span class="signature">(contactList)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to group the contacts in the contact list and sort them alphebatically
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>contactList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this array is using the data from global contacts array, that is being looped through onloadFunction()</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line180">line 180</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - array that contains all contacts of one letter, f.e "A" as objects inside of it
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="handleContactClick"><span class="type-signature"></span>handleContactClick<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to either execute openContactOverview() or showDetails(id)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line123">line 123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="hideContactDetails"><span class="type-signature"></span>hideContactDetails<span class="signature">(container)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to close the detailed contact overview
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the html element containing the contact information</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line299">line 299</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="highlightAndScrollTo"><span class="type-signature"></span>highlightAndScrollTo<span class="signature">(element, removeOnly<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Scrolls to and highlights a specific contact element inside the contacts container.If removeOnly is true, existing highlights are cleared without applying a new one.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>element</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The contact element to scroll to and highlight.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>removeOnly</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">If true, removes highlights without adding a new one.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line279">line 279</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isEmailValid"><span class="type-signature"></span>isEmailValid<span class="signature">(email)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Validates an email address according to custom rules.The rules are:1. Email must have just one '@' character.2. '@' splits 'email' into 'name part' and 'domain part'.3. Name part must have at least 6 alphanumeric characters. 4. After '@', there must be letters, then a '.', then letters (e.g., "mail.de").5. Domain must contain only letters and at least 2 of them.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The email address to validate.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emailValidation.js.html">emailValidation.js</a>, <a href="emailValidation.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    'true' if valid, 'false' otherwise.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isOwnContact"><span class="type-signature"></span>isOwnContact<span class="signature">(contact)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Prüft, ob ein Kontakt der aktuell eingeloggte User ist
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>contact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ein Kontaktobjekt aus contacts[]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsOwnProfile.js.html">contactsOwnProfile.js</a>, <a href="contactsOwnProfile.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isPasswordValid"><span class="type-signature"></span>isPasswordValid<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Valid password must have minimum 6 charachters.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">var</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">It checks value of users input; just letters and numbers allowed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordValidationAndVisibility.js.html">passwordValidationAndVisibility.js</a>, <a href="passwordValidationAndVisibility.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If conditions are fulfilled, validation is true.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="loadAllTasksFromFirebase"><span class="type-signature">(async) </span>loadAllTasksFromFirebase<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Loads all tasks from Firebase.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - The tasks object from Firebase.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="loadData"><span class="type-signature">(async) </span>loadData<span class="signature">(path)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to fetch the data from firebase and convert it into .json format
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to change the root that is being fetched from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - id that was generated for the contact
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="logOutUser"><span class="type-signature"></span>logOutUser<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Logs out user and redirects them to the login page.Ensures no back navigation after logout.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="logOutUser.js.html">logOutUser.js</a>, <a href="logOutUser.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="nameValidation"><span class="type-signature"></span>nameValidation<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndSignUp.js.html">formValidationAndSignUp.js</a>, <a href="formValidationAndSignUp.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If returns are valid, user will be able to successfully sign up.If not, signing up wont be possible.In each state, different styles to form parts are applied.Return statement has the same role in each and every form part.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onloadFunction"><span class="type-signature">(async) </span>onloadFunction<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Fetches contacts and users from Firebase, merges them, and renders the list.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="openContactOptions"><span class="type-signature"></span>openContactOptions<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to open a small burgermenu
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="openContactOverview"><span class="type-signature"></span>openContactOverview<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to open contact details, showing them next to the contact column.this is intended for display sizes of 650px and higher.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line105">line 105</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="openOverlay"><span class="type-signature"></span>openOverlay<span class="signature">(type)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function opens an overlay (Add or Edit) and shows the background overlay.Also attaches a global click listener to close the overlay whenclicking outside of it.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">"add"</span>
+|
+
+<span class="param-type">"edit"</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">determines which overlay should be opened</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="outsideOverlayClick"><span class="type-signature"></span>outsideOverlayClick<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Global click handler that closes the currently open overlayif the user clicks outside of it (on the background area).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MouseEvent</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The click event</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="passwordLockIcon"><span class="type-signature"></span>passwordLockIcon<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    It checks if user clicks on the lock-icon which is located in the password field.If the lock-icon is clicked, passwordVisibility() function is called.If somewhere else clicked, the password is no longer visible and the lock-icon shows up again.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e.target.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Represents the id of clicked element(in this case, lock-icon).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passwordInput.type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If type is "password", then the password is not visible, if type is "text" then it's visible.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passwordIcon.src</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL of matching icon for each input type.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordValidationAndVisibility.js.html">passwordValidationAndVisibility.js</a>, <a href="passwordValidationAndVisibility.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="passwordVisibility"><span class="type-signature"></span>passwordVisibility<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function determines password visibility based on input type.It is called by clicking on lock-icon, and with further clicking on it, input type changes and so does visibility.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input.type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Based on input type, input can be visible or not visible.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>icon.src</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">icon</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL of matching icon for each input type.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordValidationAndVisibility.js.html">passwordValidationAndVisibility.js</a>, <a href="passwordValidationAndVisibility.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="postData"><span class="type-signature">(async) </span>postData<span class="signature">(path, data)</span><span class="type-signature"> &rarr; {Obejct}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to add Data to a specific root
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to change the root that is being fetched from firebase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">json</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to set the key value pairs that should be posted to firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - contact containing data like the id or name, mail and phone
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Obejct</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="prepareContactSwitch"><span class="type-signature"></span>prepareContactSwitch<span class="signature">(container, contact, id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to reset the animation of the detailed contact overview
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the html element containing the contact information</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object containing the contact data</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">id</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line321">line 321</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="putData"><span class="type-signature">(async) </span>putData<span class="signature">(path, data)</span><span class="type-signature"> &rarr; {Obejct}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to replace Data in the specific root in firebase
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to change the root that is being fetched from firebase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">json</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is used to set the key value pairs that should be posted to firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - contact containing data like the id or name, mail and phone
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Obejct</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeContactFromLocalArray"><span class="type-signature"></span>removeContactFromLocalArray<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Removes a contact from the local contacts array by filtering it out.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact ID to remove from the array.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeIdFromTaskArray"><span class="type-signature">(async) </span>removeIdFromTaskArray<span class="signature">(taskId, assignedTo, id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Removes a specific contact ID from a task's assignedTo array in Firebase.If the contact ID is not in the array, no update is performed.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>taskId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the task to update.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>assignedTo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current array of assigned contact IDs.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact ID to remove.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renderAllContacts"><span class="type-signature"></span>renderAllContacts<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to render all contacts
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line218">line 218</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renderContactDetails"><span class="type-signature"></span>renderContactDetails<span class="signature">(container, contact, id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to render the contact information
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the html element containing the contact information</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an object containing the contact data</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">id</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line335">line 335</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="rerenderContactList"><span class="type-signature"></span>rerenderContactList<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to rerender the updated contact list
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resetContactOverview"><span class="type-signature"></span>resetContactOverview<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to switch the content that is being shown on the contact page.the function hides the contact details and rerenders the contact list.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contacts.js.html">contacts.js</a>, <a href="contacts.js.html#line161">line 161</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="saveAsUser"><span class="type-signature">(async) </span>saveAsUser<span class="signature">(isGuest)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    After correct input, if input matches data from database, only then user will be logged in.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isGuest</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Turns 'false' if already signed-up-user logs in.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndLogIn.js.html">formValidationAndLogIn.js</a>, <a href="formValidationAndLogIn.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If 'true' - user data is saved and user is redirected to summary page, andif 'false' - user remains on login page and alertFormStyles function is called.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="saveContactToFirebase"><span class="type-signature">(async) </span>saveContactToFirebase<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Saves a new contact to Firebase Realtime Database.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Contact data object containing name, mail, and phone.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line244">line 244</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - The newly generated contact ID from Firebase.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setCurrentUser"><span class="type-signature"></span>setCurrentUser<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Setzt den aktuell eingeloggten User (z.B. nach Login-Callback aufrufen)
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsOwnProfile.js.html">contactsOwnProfile.js</a>, <a href="contactsOwnProfile.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupEditValidation"><span class="type-signature"></span>setupEditValidation<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initializes validation behavior for the edit contact form.Sets up input sanitization, validation, and submit control.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupFormSubmit"><span class="type-signature"></span>setupFormSubmit<span class="signature">(form, submitBtn, overlay, inputs)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets up form submission behavior and overlay click validation.- Prevents submission if inputs are invalid.- Temporarily disables submit button and shows overlay on submit.- Validates all inputs when the overlay is clicked.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>form</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLFormElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact form element.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>submitBtn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button of the form.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>overlay</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The overlay element used to indicate submit state.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inputs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;HTMLInputElement></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Array of input elements (name, mail, phone).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line189">line 189</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupFormSubmit"><span class="type-signature"></span>setupFormSubmit<span class="signature">(form, btn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Prevents multiple form submissions and re-enables the submit button.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>form</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLFormElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The form element being validated.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>btn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button to disable temporarily.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupInputListeners"><span class="type-signature"></span>setupInputListeners<span class="signature">(inputs, regexes, msgs, submitBtn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Attaches validation and submit toggle logic to input fields.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The input elements for name, mail, and phone.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>regexes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Regex patterns for validation.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Error messages for validation feedback.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>submitBtn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button element.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line221">line 221</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupInputSanitizers"><span class="type-signature"></span>setupInputSanitizers<span class="signature">(inputs)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets up input sanitization by removing invalid characters in real time.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The input elements for name, mail, and phone.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line205">line 205</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupSanitizers"><span class="type-signature"></span>setupSanitizers<span class="signature">(nameInput, phoneInput)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Attaches input sanitizers to the name and phone fields.- Name field: Removes all characters except letters and spaces.- Phone field: Removes all characters except digits, spaces, and a leading "+".
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>nameInput</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Input element for the contact name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>phoneInput</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Input element for the contact phone number.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupValidation"><span class="type-signature"></span>setupValidation<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initializes form validation logic.- Binds sanitizers to name and phone fields.- Sets up validation listeners for all inputs.- Configures submit behavior and overlay interaction.- Disables submit button and shows overlay by default.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line215">line 215</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupValidationListeners"><span class="type-signature"></span>setupValidationListeners<span class="signature">(inputs, submitBtn, overlay)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets up real-time validation listeners for the given input fields.On each keystroke, validates the active input field and updatesthe submit button/overlay state.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;HTMLInputElement></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Array of input elements (name, mail, phone).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>submitBtn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button of the form.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>overlay</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The overlay element used to indicate submit state.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="showDetails"><span class="type-signature"></span>showDetails<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to show a more detailed overview of a contact
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id that every entry gets from firebase</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line280">line 280</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="showLoadingScreen"><span class="type-signature"></span>showLoadingScreen<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function ensures that overlay with message shows up 0.5swhen the user successfully signs up.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="logInLoading.js.html">logInLoading.js</a>, <a href="logInLoading.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="showOverlay"><span class="type-signature"></span>showOverlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    After 1 second user is forwarded to main page, where he can log in as a registered user.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndSignUp.js.html">formValidationAndSignUp.js</a>, <a href="formValidationAndSignUp.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="showSuccessOverlay"><span class="type-signature"></span>showSuccessOverlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to animate the overlay showing a successful contact creation
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line244">line 244</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="signUpUser"><span class="type-signature">(async) </span>signUpUser<span class="signature">(userData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function is used to send user datas to a server, and to inform user of successfully signing up.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User enters his data, which will be stored on server.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndSignUp.js.html">formValidationAndSignUp.js</a>, <a href="formValidationAndSignUp.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="submitSignUpForm"><span class="type-signature"></span>submitSignUpForm<span class="signature">(event, isValid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">event</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This event means automatic submiting. In this case event is disabled, because before user submits(sing up), each and every form part must be validated.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Only after every validation is true, signUpUser function is called, and user successfully signs up. Otherwise, if just one validation is false, user can't sign up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndSignUp.js.html">formValidationAndSignUp.js</a>, <a href="formValidationAndSignUp.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toggleSubmit"><span class="type-signature"></span>toggleSubmit<span class="signature">(inputs, regexes, btn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Enables or disables the submit button based on form validity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The input elements for name, mail, and phone.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>regexes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The regex validation patterns.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>btn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button to control.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line249">line 249</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toggleSubmitState"><span class="type-signature"></span>toggleSubmitState<span class="signature">(submitBtn, overlay)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the submit button and overlay state depending on form validity.- Disables the submit button if any input is invalid.- Shows the overlay when submit is disabled, hides it otherwise.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>submitBtn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLButtonElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The submit button of the form.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>overlay</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The overlay element used to indicate submit state.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateContactInFirebase"><span class="type-signature">(async) </span>updateContactInFirebase<span class="signature">(id, data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to update the data of a contact in firebase
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of the contact</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">contains information like name, mail or phone</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsEdit.js.html">contactsEdit.js</a>, <a href="contactsEdit.js.html#line110">line 110</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateFormStyles"><span class="type-signature"></span>updateFormStyles<span class="signature">(input, alert, isValid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This is a general function for updating styles to email and password fields.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User enters their data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>alert</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alert messages show up if validation is false.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns values of email and password validations.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndLogIn.js.html">formValidationAndLogIn.js</a>, <a href="formValidationAndLogIn.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateLocalContact"><span class="type-signature"></span>updateLocalContact<span class="signature">(id, data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    this function is used to update the contact array's data
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">this is the id of the contact</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object containing contact information like name, mail or phone</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsBackend.js.html">contactsBackend.js</a>, <a href="contactsBackend.js.html#line388">line 388</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateTaskAssignedTo"><span class="type-signature">(async) </span>updateTaskAssignedTo<span class="signature">(taskId, assignedTo)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the assignedTo field of a task in Firebase with a new array of contact IDs.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>taskId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the task to update.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>assignedTo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new array of assigned contact IDs.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateTasksAssignedToContact"><span class="type-signature">(async) </span>updateTasksAssignedToContact<span class="signature">(tasks, id)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates task assignments to remove a specific contact ID.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tasks</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tasks object from Firebase.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The contact ID to remove.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsDelete.js.html">contactsDelete.js</a>, <a href="contactsDelete.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="userLogIn"><span class="type-signature">(async) </span>userLogIn<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function executes only if the form is valid, i.e., if user input data is written correctly.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndLogIn.js.html">formValidationAndLogIn.js</a>, <a href="formValidationAndLogIn.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateEmailInput"><span class="type-signature"></span>validateEmailInput<span class="signature">(isValid, emailInput, emailAlert, isValid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function validates the email input and updates the styles accordingly.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns validation result.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emailInput</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Email input field.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emailAlert</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alert message beneath input field.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If 'true' email is written correctly.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emailValidation.js.html">emailValidation.js</a>, <a href="emailValidation.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateForm"><span class="type-signature"></span>validateForm<span class="signature">(emailValid, passwordValid)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function ensures Form validation in Log in page.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>emailValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">var</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns the value of email validation.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passwordValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">var</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Returns the value of password validation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="formValidationAndLogIn.js.html">formValidationAndLogIn.js</a>, <a href="formValidationAndLogIn.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If form validation is 'true' proceed with user log in, otherwise stop.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateInput"><span class="type-signature"></span>validateInput<span class="signature">(input, regex, errorId, errorMsg)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Validates an input field against a regex and displays error messages.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The input element to validate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>regex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RegExp</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Regular expression used for validation.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the corresponding error container (DIV).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorMsg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Error messages for empty or invalid input.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - True if input is valid, otherwise false.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validatePassword"><span class="type-signature"></span>validatePassword<span class="signature">(isValid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    This function checks password input, validates it and update defined styles.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isValid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">According to state of this boolean, styles are applied.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="passwordValidationAndVisibility.js.html">passwordValidationAndVisibility.js</a>, <a href="passwordValidationAndVisibility.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    It is 'false' if input is empty, otherwise 'true' and proceeds with validation.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateSpecificInput"><span class="type-signature"></span>validateSpecificInput<span class="signature">(input)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Validates a specific input field by matching its ID againstthe corresponding regex and error messages.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLInputElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The input element to validate.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contactsAdd.js.html">contactsAdd.js</a>, <a href="contactsAdd.js.html#line156">line 156</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="Subtask">Subtask</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addTask.js.html">addTask.js</a>, <a href="addTask.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Subtask">Subtask</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardDetail.js.html">boardDetail.js</a>, <a href="boardDetail.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Subtask">Subtask</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardDetailUtil.js.html">boardDetailUtil.js</a>, <a href="boardDetailUtil.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Subtask">Subtask</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardRender.js.html">boardRender.js</a>, <a href="boardRender.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="SummaryTask">SummaryTask</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Task</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="summaryFirebase.js.html">summaryFirebase.js</a>, <a href="summaryFirebase.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="TaskPriority">TaskPriority</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">"urgent"</span>
+|
+
+<span class="param-type">"medium"</span>
+|
+
+<span class="param-type">"low"</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardDetail.js.html">boardDetail.js</a>, <a href="boardDetail.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="TaskPriority">TaskPriority</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">"urgent"</span>
+|
+
+<span class="param-type">"medium"</span>
+|
+
+<span class="param-type">"low"</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardDetailUtil.js.html">boardDetailUtil.js</a>, <a href="boardDetailUtil.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="TaskPriority">TaskPriority</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">"urgent"</span>
+|
+
+<span class="param-type">"medium"</span>
+|
+
+<span class="param-type">"low"</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardRender.js.html">boardRender.js</a>, <a href="boardRender.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="TaskStatus">TaskStatus</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">"todo"</span>
+|
+
+<span class="param-type">"inprogress"</span>
+|
+
+<span class="param-type">"awaitingfeedback"</span>
+|
+
+<span class="param-type">"done"</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="boardRender.js.html">boardRender.js</a>, <a href="boardRender.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

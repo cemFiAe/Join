@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: logInLoading.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: logInLoading.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+let overlay = document.getElementById('overlay')
+let mainWindow = document.getElementById('main-window')
+let headerLogo = document.getElementById('header-logo')
+let noLogo = document.getElementById('no-logo')
+/**
+ * This function ensures that overlay with message shows up 0.5s
+ * when the user successfully signs up.
+ */
+function showLoadingScreen() {
+    setTimeout(function () {
+        mainWindow.style.display = "block";
+        headerLogo.style.display = "block";
+    }, 200);
+    noLogo.style.display = "none";
+    setTimeout(function () {
+        overlay.style.display = "none";
+    }, 800)
+}
+
+
+/**
+ * We can get to the log in page in three ways: when we open it first time, 
+ * when we sign up and it forwards us, and when we log out and it forwards us.
+ * This function checks if user didn't came from sign up! (but other two ways)
+ * If so, it calls showLoadingScreen function.
+ * But if the user came from sign up, there is no overlay.
+*/
+function checkLoadingScreen() {
+    if (!sessionStorage.getItem('cameFromSignUp')) {
+        showLoadingScreen();
+    } else {
+        overlay.style.display = "none";
+        mainWindow.style.display = "block";
+        sessionStorage.removeItem('cameFromSignUp');
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

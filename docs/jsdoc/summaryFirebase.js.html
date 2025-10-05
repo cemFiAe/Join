@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: summaryFirebase.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: summaryFirebase.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
+/* global firebase */
+/// &lt;reference path="./boardTypesD.ts" />
+
+/** @typedef {Task} SummaryTask */
+/** @typedef {{todo:number,done:number,inProgress:number,feedback:number,urgent:number,all:number,nextDeadline:Date|null}} SummaryStats */
+
+// Robust: 'yyyy-mm-dd' | 'dd/mm/yyyy' | Date-fallback
+function parseTaskDate(dateStr) {
+  if (!dateStr) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return new Date(dateStr);
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+    const [d, m, y] = dateStr.split('/'); return new Date(`${y}-${m}-${d}`);
+  }
+  const dObj = new Date(dateStr);
+  return isNaN(dObj.getTime()) ? null : dObj;
+}
+
+function fetchTasksOnce() {
+  return firebase.database().ref('tasks').once('value')
+    .then(s => /** @type {SummaryTask[]} */ (Object.values(s.val() || {})));
+}
+
+function summarizeTasks(tasks) {
+  const s = { todo:0, done:0, inProgress:0, feedback:0, urgent:0, all:0, nextDeadline:null };
+  for (const t of tasks) {
+    s.all++; const st = String(t.status||'').toLowerCase();
+    if (st==='todo') s.todo++; else if (st==='done') s.done++;
+    else if (st==='inprogress') s.inProgress++; else if (st==='awaitingfeedback') s.feedback++;
+    if (t.priority==='urgent') s.urgent++;
+    const d = parseTaskDate(t.dueDate||''); if (d &amp;&amp; (!s.nextDeadline || d &lt; s.nextDeadline)) s.nextDeadline = d;
+  } return s;
+}
+
+function setText(id, v){ const el=document.getElementById(id); if(el) el.textContent=String(v); }
+
+function updateSummaryUI(s) {
+  setText('summary-todo', s.todo); setText('summary-done', s.done);
+  setText('summary-inprogress', s.inProgress); setText('summary-feedback', s.feedback);
+  setText('summary-urgent', s.urgent); setText('summary-all', s.all);
+  const d = s.nextDeadline;
+  setText('summary-next-deadline', d ? d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'2-digit'}) : '-');
+}
+
+function getGreeting(){ const h=new Date().getHours(); if(h&lt;5)return'Good night,'; if(h&lt;12)return'Good morning,'; if(h&lt;18)return'Good afternoon,'; return'Good evening,'; }
+
+function formatNameHtml(name){
+  const p=(name||'Guest').trim().split(/\s+/); if(p.length&lt;=1) return `&lt;span style="color:#29ABE2;font-weight:800;">${p[0]}&lt;/span>`;
+  const f=p.shift(); return `${f} &lt;span style="color:#29ABE2;font-weight:800;">${p.join(' ')}&lt;/span>`;
+}
+
+function goBoard(hash){ const base='../pages/board.html'; window.location.href = hash ? `${base}#${hash}` : base; }
+
+// findet den Karten-Container (macht ganze Kachel klickbar)
+function cardTarget(el){
+  return /** @type {HTMLElement} */(
+    el.closest('[data-card]') ||
+    el.closest('.summary-card, .summary-box, .summary-item, .tile, .kachel, .count-card, .count-box') ||
+    el
+  );
+}
+
+// macht die übergebenen Elemente/Container klickbar
+function makeClickable(ids, hash) {
+  /** @type {Set&lt;HTMLElement>} */ const targets = new Set();
+  ids.forEach(id => { const n=document.getElementById(id); if(n) targets.add(cardTarget(n)); });
+  targets.forEach(el => {
+    el.style.cursor='pointer'; el.setAttribute('tabindex','0'); el.setAttribute('role','button');
+    const go=()=>goBoard(hash);
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); }});
+  });
+}
+
+function initSummary() {
+  fetchTasksOnce().then(ts => updateSummaryUI(summarizeTasks(ts)));
+  const g=document.getElementById('greeting-message'); const u=document.getElementById('summary-username');
+  if (g) g.textContent=getGreeting();
+  if (u) u.innerHTML=formatNameHtml(localStorage.getItem('currentUserName')||'Guest');
+
+  // IDs der ganzen Kacheln (falls vorhanden) + Fallback auf die Zahl-IDs
+  makeClickable(['card-todo','summary-todo'], 'todo');
+  makeClickable(['card-done','summary-done'], 'done');
+  makeClickable(['card-inprogress','summary-inprogress'], 'inprogress');
+  makeClickable(['card-feedback','summary-feedback'], 'awaitingfeedback');
+  makeClickable(['card-urgent','summary-urgent'], '');
+  makeClickable(['card-all','summary-all'], '');
+  makeClickable(['card-deadline','summary-next-deadline'], '');
+}
+
+document.addEventListener('DOMContentLoaded', initSummary);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contactsEdit.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contactsEdit.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let currentlyEditingContactId = null;
+
+/**
+ * this function is used to open the edit contact overlay
+ * @param {string} id - id of the contact
+ */
+let editValidationInitialized = false;
+
+function openEditContact(id) {
+    event.preventDefault();
+    currentlyEditingContactId = id;
+
+    const contact = getContactById(id);
+    if (!contact) return;
+
+    fillEditForm(contact.data);
+    openOverlay('edit');
+
+    if (!editValidationInitialized) {
+        setupEditValidation();
+        editValidationInitialized = true;
+    }
+}
+
+/**
+ * this function is used to
+ * @param {event} event - is necessary to prevent the page from refreshing
+ */
+async function editContact(event) {
+    event.preventDefault();
+    const id = currentlyEditingContactId;
+    const contact = getContactById(id);
+    if (!contact) return;
+
+    const updatedData = collectUpdatedFormData(contact.data);
+    await updateContactInFirebase(id, updatedData);
+    updateLocalContact(id, updatedData);
+
+    closeOverlay('edit'); 
+}
+
+/**
+ * this function is used to find a contact
+ * @param {string} id - id of the contact
+ * @returns - object, containing contact data
+ */
+function getContactById(id) {
+    return contacts.find(c => c.id === id);
+}
+
+/**
+ * this function is used to fill the form of the edit overlay
+ * @param {object} data - contains information like name, mail or phone 
+ */
+function fillEditForm(data) {
+    document.getElementById('edit-name-input').value = data.name;
+    document.getElementById('edit-mail-input').value = data.mail || data.email || "-";
+    document.getElementById('edit-phone-input').value = data.phone || "-";
+
+    const initials = getInitials(data.name);
+    const color = getColorFromName(data.name);
+    const circleHTML = createInitialIcon(initials, color, 'circle', 128);
+    document.getElementById('edit_initials_circle').innerHTML = circleHTML;
+}
+
+/**
+ * this function is used to animate the appearing of the edit overlay
+ */
+function editOverlayLogic() {
+    currentOpenOverlay = (window.innerWidth &lt;= 650) ? 'edit-mobile' : 'edit-desktop';
+    if (currentOpenOverlay === 'edit-mobile') {
+        editOverlayMobile();
+    } else if (currentOpenOverlay === 'edit-desktop') {
+        editOverlayDesktop();
+    }
+}
+
+/**
+ * this function is used to resize the edit overlay
+ */
+function editOverlayDesktop () {
+    document.getElementById('edit_contact_overlay').style.transform = "translate(-50%, -50%) translateX(0)";
+}
+
+/**
+ * this function is used to resize the edit overlay
+ */
+function editOverlayMobile () {
+    document.getElementById('edit_contact_overlay').style.setProperty("transform", "translate(-50%, -50%) translateX(0) translateY(0)", "important");
+}
+
+/**
+ * this function is used to overwrite the data of a contact
+ * @param {object} current - contains the old contact data of the contact
+ * @returns {object} - contains the new contact data 
+ */
+function collectUpdatedFormData(current) {
+    return {
+        name: document.getElementById('edit-name-input').value.trim() || current.name,
+        mail: document.getElementById('edit-mail-input').value.trim() || current.mail,
+        phone: document.getElementById('edit-phone-input').value.trim() || current.phone,
+    };
+}
+
+/**
+ * this function is used to update the data of a contact in firebase
+ * @param {string} id - id of the contact
+ * @param {object} data - contains information like name, mail or phone 
+ */
+async function updateContactInFirebase(id, data) {
+    await putData(`/contacts/${id}`, data);
+}
+
+/**
+ * this function is used to edit contact information like name, mail or phone. it is executed on displays of &lt;650 px width.
+ */
+function editMobileContact() {
+    event.preventDefault();
+    if (currentDisplayedContactId) {
+        openEditContact(currentDisplayedContactId);
+        closeContactOptions();
+    }
+}
+
+/**
+ * this function is used to delete a contact. executed from the editing overlay.
+ */
+function deleteContactFromEdit() {
+    if (!currentlyEditingContactId) return;
+
+    deleteContact(currentlyEditingContactId);
+
+    closeOverlay('edit');
+}
+
+/**
+ * this function is used to delete a contact. executed from the editing overlay on displays of &lt;650 px width
+ */
+function deleteContactFromEditMobile() {
+    if (!currentlyEditingContactId) return;
+    deleteContact(currentlyEditingContactId);
+    closeEditContact();
+    goBack();
+    closeContactOptions();
+}
+
+/**
+ * Initializes validation behavior for the edit contact form.
+ * Sets up input sanitization, validation, and submit control.
+ */
+function setupEditValidation() {
+    const form = document.getElementById("edit-contact-form");
+    const inputs = {
+        name: document.getElementById("edit-name-input"),
+        mail: document.getElementById("edit-mail-input"),
+        phone: document.getElementById("edit-phone-input")
+    };
+    const submitBtn = form.querySelector("button[type='submit']");
+    const regexes = getRegexes();
+    const errorMsgs = getErrorMessages();
+
+    setupInputSanitizers(inputs);
+    setupInputListeners(inputs, regexes, errorMsgs, submitBtn);
+    setupFormSubmit(form, submitBtn);
+    toggleSubmit(inputs, regexes, submitBtn);
+}
+
+/**
+ * Returns the regular expressions used for field validation.
+ * @returns {Object} Regex patterns for name, mail, and phone validation.
+ */
+function getRegexes() {
+    return {
+        name: /^[A-Za-z\s]+$/,
+        mail: /^[A-Za-z0-9.]+@[A-Za-z]+\.[A-Za-z]+$/,
+        phone: /^\+?[0-9\s]{7,}$/
+    };
+}
+
+/**
+ * Returns localized error messages for form validation.
+ * @returns {Object} Error messages for name, mail, and phone inputs.
+ */
+function getErrorMessages() {
+    return {
+        name: {
+            required: "Bitte einen Namen eingeben.",
+            invalid: "Nur Buchstaben und Leerzeichen erlaubt."
+        },
+        mail: {
+            required: "Bitte eine E-Mail-Adresse eingeben.",
+            invalid: "Bitte eine gültige E-Mail eingeben, z.B muster@mail.de"
+        },
+        phone: {
+            required: "Bitte eine Telefonnummer eingeben.",
+            invalid: "Mindestens 7 Ziffern, nur Zahlen/Leerzeichen, optional + am Anfang."
+        }
+    };
+}
+
+/**
+ * Sets up input sanitization by removing invalid characters in real time.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ */
+function setupInputSanitizers(inputs) {
+    inputs.name.addEventListener("input", () => {
+        inputs.name.value = inputs.name.value.replace(/[^A-Za-z\s]/g, "");
+    });
+    inputs.phone.addEventListener("input", () => {
+        inputs.phone.value = inputs.phone.value.replace(/(?!^\+)[^\d\s]/g, "");
+    });
+}
+
+/**
+ * Attaches validation and submit toggle logic to input fields.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ * @param {Object} regexes - Regex patterns for validation.
+ * @param {Object} msgs - Error messages for validation feedback.
+ * @param {HTMLButtonElement} submitBtn - The submit button element.
+ */
+function setupInputListeners(inputs, regexes, msgs, submitBtn) {
+    Object.entries(inputs).forEach(([key, input]) => {
+        input.addEventListener("input", () => {
+            validateInput(input, regexes[key], `edit-error-${key}`, msgs[key]);
+            toggleSubmit(inputs, regexes, submitBtn);
+        });
+    });
+}
+
+/**
+ * Prevents multiple form submissions and re-enables the submit button.
+ * @param {HTMLFormElement} form - The form element being validated.
+ * @param {HTMLButtonElement} btn - The submit button to disable temporarily.
+ */
+function setupFormSubmit(form, btn) {
+    form.addEventListener("submit", (e) => {
+        if (btn.disabled) return e.preventDefault();
+        btn.disabled = true;
+        setTimeout(() => (btn.disabled = false), 1500);
+    });
+}
+
+/**
+ * Enables or disables the submit button based on form validity.
+ * @param {Object} inputs - The input elements for name, mail, and phone.
+ * @param {Object} regexes - The regex validation patterns.
+ * @param {HTMLButtonElement} btn - The submit button to control.
+ */
+function toggleSubmit(inputs, regexes, btn) {
+    btn.disabled = !(
+        regexes.name.test(inputs.name.value.trim()) &amp;&amp;
+        regexes.mail.test(inputs.mail.value.trim()) &amp;&amp;
+        regexes.phone.test(inputs.phone.value.trim())
+    );
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

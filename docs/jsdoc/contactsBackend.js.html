@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contactsBackend.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contactsBackend.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-nocheck
+const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/"
+
+let contacts = [];
+
+let currentDisplayedContactId = null;
+
+/**
+ * Fetches contacts and users from Firebase, merges them, and renders the list.
+ */
+async function onloadFunction() {
+    const [contactResponse, userResponse] = await Promise.all([
+        loadData("/contacts"),
+        loadData("/users")
+    ]);
+    contacts = [];
+    addContacts(contactResponse);
+    addUsers(userResponse);
+    renderAllContacts();
+}
+
+/**
+ * Adds all contacts from the response object to the global contacts array.
+ * @param {Object} data - Firebase response for contacts.
+ */
+function addContacts(data) {
+    if (!data) return;
+    Object.entries(data).forEach(([id, info]) => contacts.push({ id, data: info }));
+}
+
+/**
+ * Adds users that don't already exist as contacts.
+ * @param {Object} data - Firebase response for users.
+ */
+function addUsers(data) {
+    if (!data) return;
+    Object.entries(data).forEach(([id, info]) => {
+        if (!contacts.find(c => c.id === id)) contacts.push({ id, data: info });
+    });
+}
+
+/**
+ * this function is used to fetch the data from firebase and convert it into .json format
+ * @param {string} path - this is used to change the root that is being fetched from firebase
+ * @returns {string} - id that was generated for the contact 
+ */
+async function loadData(path="") {
+    let response = await fetch(BASE_URL + path + ".json");
+    return responseToJson = await response.json();
+}
+
+/**
+ * this function is used to add Data to a specific root
+ * @param {string} path - this is used to change the root that is being fetched from firebase
+ * @param {json} data - this is used to set the key value pairs that should be posted to firebase
+ * @returns {Obejct} - contact containing data like the id or name, mail and phone
+ */
+async function postData(path="", data={}) {
+    let response = await fetch(BASE_URL + path + ".json", {
+       method: "POST",
+       header: {
+        "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data) 
+    });
+    return responseToJson = await response.json();
+}
+
+/**
+ * this function is used to replace Data in the specific root in firebase
+ * @param {string} path - this is used to change the root that is being fetched from firebase
+ * @param {json} data - this is used to set the key value pairs that should be posted to firebase
+ * @returns {Obejct} - contact containing data like the id or name, mail and phone
+ */
+async function putData(path="", data={}) {
+    let response = await fetch(BASE_URL + path + ".json", {
+       method: "PUT",
+       header: {
+        "Content-Type": "application/json",
+       },
+       body: JSON.stringify(data) 
+    });
+    return responseToJson = await response.json();
+}
+
+/**
+ * this function is used to delete Data from the specific root in firebase
+ * @param {string} path - this is used to change the root that is being fetched from firebase
+ * @returns {Obejct} - contact containing data like the id or name, mail and phone
+ */
+async function deleteData(path="") {
+    let response = await fetch(BASE_URL + path + ".json",{
+        method: "DELETE",
+    });
+    return responseToJson = await response.json();
+}
+
+/**
+ * this function is used to create a contact template
+ * @param {json} data - this is an object containing contact information
+ * @param {string} id - this is the id that every entry gets from firebase 
+ * @returns {HTMLDivElement} - a template for a contact, used in the contact list
+ */
+function getContactTemplateByData(data, id) {
+    const initials = getInitials(data.name);
+    const bgColor = getColorFromName(data.name);
+    const icon = createInitialIcon(initials, bgColor);
+    const email = data.mail || data.email || "";
+
+    return `&lt;div id="contact-${id}" onclick="handleContactClick('${id}')" class="contact_entry">
+          ${icon}
+          &lt;div>
+            &lt;h4 class="contact_name">${data.name}&lt;/h4>
+            &lt;span class="contact_mail" title="${email}">${email}&lt;/span>
+          &lt;/div>
+        &lt;/div>`;
+}
+
+/**
+ * this function is used to either execute openContactOverview() or showDetails(id)
+ * @param {string} id - this is the id that every entry gets from firebase 
+ */
+function handleContactClick(id) {
+    const target = document.getElementById(`contact-${id}`);
+    const isSameContact = currentDisplayedContactId === id;
+
+    if (isSameContact) {
+        highlightAndScrollTo(target, true);
+        hideContactDetails(document.getElementById('contact_information'));
+        return;
+    }
+
+    highlightAndScrollTo(target);
+    if (window.innerWidth &lt;= 650) openContactOverview();
+    showDetails(id);
+}
+
+/**
+ * this function is used to gather the initials of a contact
+ * @param {string} name - this is the name of a contact
+ * @returns {string} - initials of a contact, f.e Tom Taylor => "TT"
+ */
+function getInitials(name) {
+    const parts = name.trim().split(' ');
+    return (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+}
+
+/**
+ * this function is used to create a hsl hash based on the name of a contact
+ * @param {string} name - this is the name of a contact
+ * @returns {string} - hsl hash that is based on the name of a contact
+ */
+function getColorFromName(name) {
+    let hash = 0;
+    for (let i = 0; i &lt; name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash &lt;&lt; 5) - hash);
+    }
+    return `hsl(${hash % 360}, 70%, 60%)`;
+}
+
+/**
+ * this function is used to create the base icon of a contact
+ * @param {string} initials - the initials of a contact, f.e "Tom Taylor" => "TT"
+ * @param {string} color - a hsl hash, f.e "hsl(210, 70%, 60%)"
+ * @param {string} extraClass - additional class for the edit overlay, so that the icon is styled accordingly
+ * @param {number} size - size used for the proportions of the icon in the edit overlay and the font size inside the icon
+ * @returns {HTMLDivElement} - template for the base icon of a contact
+ */
+function createInitialIcon(initials, color, extraClass = '', size) {
+    return `&lt;div class="contact_icon_placeholder ${extraClass}" style="background-color: ${color}; width: ${size}px; height: ${size}px; font-size: ${size / 2.5}px;">
+              ${initials.toUpperCase()}
+            &lt;/div>`;
+}
+
+/**
+ * this function is used to group the contacts in the contact list and sort them alphebatically
+ * @param {Array} contactList - this array is using the data from global contacts array, that is being looped through onloadFunction()
+ * @returns {Array} - array that contains all contacts of one letter, f.e "A" as objects inside of it
+ */
+function groupContactsByInitial(contactList) {
+    const grouped = {};
+    contactList.sort((a, b) => a.data.name.localeCompare(b.data.name));
+    for (let contact of contactList) {
+        const letter = contact.data.name.charAt(0).toUpperCase();
+        if (!grouped[letter]) grouped[letter] = [];
+        grouped[letter].push(contact);
+    }
+    return grouped;
+}
+
+/**
+ * this function is used to create contactgroups, f.e "A", and returning the template
+ * @param {string} letter - f.e "A", used to create the h3
+ * @param {Array} contacts - array that contains id and data(name, mail, phone)
+ * @returns {HTMLElement} - containing an h3 with the letter, f.e "A" and a div for each contact
+ */
+function createContactGroup(letter, contacts) {
+    const group = document.createElement('div');
+    group.classList.add('contact-group');
+    group.innerHTML = `&lt;h3 class="contact_letter">${letter}&lt;/h3>` +
+                      contacts.map(c => getContactTemplateByData(c.data, c.id)).join('');
+    return group;
+}
+
+/**
+ * this function is used to create a divider for the contact list
+ * @returns {HTMLDivElement} - div that is used as a divider
+ */
+function createDivider() {
+    const divider = document.createElement('div');
+    divider.classList.add('contact_devider');
+    return divider;
+}
+
+/**
+ * this function is used to render all contacts
+ */
+function renderAllContacts() {
+    const container = document.getElementById('contacts');
+    container.innerHTML = '&lt;button onclick="openOverlay(`add`)" class="new_contact_btn">Add new contact &lt;img class="person_add" src="../assets/icons/contacts/person_add.svg" alt="">&lt;/button>';
+    const groups = groupContactsByInitial(contacts);
+    const letters = Object.keys(groups).sort();
+
+    for (let i = 0; i &lt; letters.length; i++) {
+        const letter = letters[i];
+        const group = createContactGroup(letter, groups[letter]);
+        container.appendChild(group);
+        if (i &lt; letters.length - 1) container.appendChild(createDivider());
+    }
+}
+
+/**
+ * this function is used to rerender the updated contact list
+ */
+function rerenderContactList() {
+    const container = document.getElementById('contacts');
+    container.innerHTML = '';
+    renderAllContacts();
+}
+
+/**
+ * this function is used to animate the overlay showing a successful contact creation
+ */
+function showSuccessOverlay() {
+    setTimeout(() => {
+        const overlay = createSuccessOverlay();
+        document.body.appendChild(overlay);
+        animateOverlayOut(overlay);
+    }, 600);
+}
+
+/**
+ * this function is used to add a div element, editing and animating it
+ * @returns {HTMLDivElement} - div that represents the successful overlay
+ */
+function createSuccessOverlay() {
+    const overlay = document.createElement('div');
+    overlay.textContent = "Contact successfully created";
+    overlay.classList.add('added-contact-overlay');
+    const anim = window.innerWidth &lt; 650 ? 'newSlideInBottom' : 'newSlideInRight';
+    overlay.style.animation = `${anim} 0.3s ease-out forwards`;
+    return overlay;
+}
+
+/**
+ * this function is used to animate the closing of the success overlay
+ */
+function animateOverlayOut(overlay) {
+    const anim = window.innerWidth &lt; 650 ? 'newSlideOutBottom' : 'newSlideOutRight';
+    setTimeout(() => {
+        overlay.style.animation = `${anim} 0.8s ease-in forwards`;
+        overlay.addEventListener('animationend', e => e.animationName === anim &amp;&amp; overlay.remove());
+    }, 1200);
+}
+
+/**
+ * this function is used to show a more detailed overview of a contact
+ * @param {string} id - this is the id that every entry gets from firebase 
+ */
+function showDetails(id) {
+    const container = document.getElementById('contact_information');
+    const contact = contacts.find(c => c.id === id);
+    if (!contact) return;
+     const isSameContact = currentDisplayedContactId === id;
+     const isVisible = container.style.left !== '100%' &amp;&amp; container.innerHTML !== '';
+
+    if (isSameContact &amp;&amp; isVisible) {
+     hideContactDetails(container);
+    return;
+}
+    currentDisplayedContactId = id;
+    prepareContactSwitch(container, contact, id);
+}
+
+/**
+ * this function is used to close the detailed contact overview
+ * @param {HTMLElement} container - the html element containing the contact information
+ */
+function hideContactDetails(container) {
+    currentDisplayedContactId = null;
+
+    if (window.innerWidth > 650) {
+        container.classList.remove('slide-in');
+        container.classList.add('slide-out');
+        setTimeout(() => {
+            container.innerHTML = '';
+            container.style.left = '100%';
+        }, 300);
+    } else {
+        container.innerHTML = '';
+        container.style.left = '100%';
+    }
+}
+
+/**
+ * this function is used to reset the animation of the detailed contact overview
+ * @param {HTMLElement} container - the html element containing the contact information
+ * @param {Object} contact - an object containing the contact data
+ * @param {id} id - this is the id that every entry gets from firebase 
+ */
+function prepareContactSwitch(container, contact, id) {
+    container.classList.remove('slide-in', 'slide-out');
+    container.style.left = '100%';
+    void container.offsetWidth; 
+    renderContactDetails(container, contact, id);
+    animateContactDetails(container);
+}
+
+/**
+ * this function is used to render the contact information
+ * @param {HTMLElement} container - the html element containing the contact information
+ * @param {Object} contact - an object containing the contact data
+ * @param {id} id - this is the id that every entry gets from firebase 
+ */
+function renderContactDetails(container, contact, id) {
+    const { name } = contact.data;
+    const initials = getInitials(name);
+    const bgColor = getColorFromName(name);
+    container.innerHTML = getContactDetailsTemplate(id, contact.data, initials, bgColor);
+}
+
+/**
+ * this function is used to animate the detailed contact information
+ * @param {HTMLElement} container - the html element containing the contact information
+ */
+function animateContactDetails(container) {
+    if (window.innerWidth > 650) {
+        container.classList.add('slide-in');
+        container.classList.remove('slide-out');
+    } else {
+        container.style.transition = 'none';
+        container.style.left = '16px';
+    }
+}
+
+/**
+ * this function is used to create the template for the detailed contact information
+ * @param {string} id - this is the id that every entry gets from firebase 
+ * @param {Object} data - object containing contact information like name, mail or phone
+ * @param {string} bgColor - hsl hash used for the background color of the profile icon
+ * @returns {HTMLElement} - template for the detailed information overview
+ */
+function getContactDetailsTemplate(id, data, initials, bgColor) {
+    return `
+    &lt;div class="ci-wrapper">
+      &lt;div class="ci-icon" style="background-color: ${bgColor};">${initials}&lt;/div>
+      &lt;div class="ci-menu">
+        &lt;span class="ci-name">${data.name}&lt;/span>
+        &lt;div class="ci-edit">
+          &lt;a onclick="openEditContact('${id}', event)" href="#">&lt;img src="../assets/icons/contacts/edit.svg" alt="">Edit&lt;/a>
+          &lt;a onclick="event.stopPropagation(); deleteContact('${id}')" href="#">&lt;img src="../assets/icons/contacts/delete.svg" alt="">Delete&lt;/a>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+    &lt;span class="ci-head">Contact Information&lt;/span>
+    &lt;h3 class="ci-text">Email&lt;/h3>
+    &lt;span class="ci-mail ci-text">${data.mail || data.email || "–"}&lt;/span>
+    &lt;h3 class="ci-text">Phone&lt;/h3>
+    &lt;span class="ci-text">${data.phone || "–"}&lt;/span>`;
+}
+
+
+/**
+ * this function is used to update the contact array's data
+ * @param {string} id - this is the id of the contact
+ * @param {Object} data - object containing contact information like name, mail or phone
+ */
+function updateLocalContact(id, data) {
+    const contact = getContactById(id);
+    if (contact) contact.data = data;
+
+    rerenderContactList();
+
+    const target = document.getElementById(`contact-${id}`);
+    if (target) {
+        highlightAndScrollTo(target);
+    }
+
+    const container = document.getElementById('contact_information');
+    if (currentDisplayedContactId === id &amp;&amp; container.innerHTML !== '') {
+        renderContactDetails(container, contact, id);
+        animateContactDetails(container);
+    } else {
+        showDetails(id);
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

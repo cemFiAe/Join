@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: board.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: board.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
+/* global firebase */
+/// &lt;reference path="./boardTypesD.ts" />
+
+/**
+ * Board – Add-Task-Overlay &amp; Erstellen von Tasks auf der Board-Seite.
+ * Abhängigkeiten: Board.Core (Helper/Styles), Board.Assigned (Assigned-Dropdown)
+ */
+(function init() {
+  /** @type {any} */ const Win = (window);
+
+  /** DOM ready → alles verdrahten. */
+  function onReady() {
+    /** @type {any} */ const Core = (Win.Board?.Core);
+    /** @type {any} */ const Assigned = (Win.Board?.Assigned);
+    Core?.ensureValidationStyles?.();
+
+    /** @type {HTMLDialogElement} */ const dlg = /** @type {any} */(document.getElementById('addTaskOverlay'));
+    const { showInline, hideInline, addSub, subtasks } = setupSubtasks();
+    const { getPrio, setMediumDefault, wirePrioButtons } = setupPriority();
+    const catSel = setupCategories();
+
+    exposeOpenDialog(dlg, Core, Assigned, setMediumDefault);
+    wireCloseOverlay(dlg);
+
+    wirePrioButtons();
+    setupValidation(Core, catSel);
+    wireCreateTask(dlg, Assigned, getPrio, subtasks, catSel, Core);
+
+    // Min-Date Helper
+    Core?.setDateMinToday?.('#task-due-date');
+
+    // kleine Utilities ↓
+    function exposeOpenDialog(dlg, Core, Assigned, setMediumDefault) {
+      /** @param {'todo'|'inprogress'|'awaitingfeedback'|'done'} [status='todo'] */
+      Win.openAddTaskDialog = function (status = 'todo') {
+        clearForm();
+        dlg.dataset.status = status;
+        const due = /** @type {HTMLInputElement|null} */(document.getElementById('task-due-date'));
+        if (due) due.min = Core?.todayLocalISO?.() || new Date().toISOString().slice(0, 10);
+        setMediumDefault();
+        dlg.showModal();
+        setTimeout(() => Assigned?.initAssignedDropdown?.(), 0);
+      };
+    }
+
+    function wireCloseOverlay(dlg) {
+      const closeBtn = /** @type {HTMLButtonElement|null} */(document.querySelector('.close-add-task-overlay'));
+      const clearBtn = /** @type {HTMLButtonElement|null} */(document.querySelector('.clear_button'));
+      const closeOverlay = (e) => { e?.preventDefault?.(); dlg.close(); clearForm(); };
+      if (closeBtn) closeBtn.onclick = closeOverlay;
+      if (clearBtn) clearBtn.onclick = closeOverlay;
+    }
+
+    function setupPriority() {
+      /** @type {''|'urgent'|'medium'|'low'} */ let prio = 'medium';
+      const setPrio = (v /** @type {string} */) => { prio = (v === 'urgent'||v==='medium'||v==='low') ? v : ''; };
+      const getPrio = () => prio;
+      const setMediumDefault = () => {
+        document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+        (/** @type {HTMLButtonElement|null} */(document.querySelector('.priority-buttons .btn[data-priority="medium"]')))?.classList.add('active');
+        prio = 'medium';
+      };
+      const wirePrioButtons = () => {
+        document.querySelectorAll('.priority-buttons .btn').forEach((btn, _, all) => {
+          btn.addEventListener('click', function () {
+            all.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const raw = (/** @type {HTMLElement} */(this)).dataset.priority || '';
+            setPrio(raw);
+            document.querySelector('.priority-buttons')?.classList.remove('field-invalid');
+          });
+        });
+      };
+      return { getPrio, setMediumDefault, wirePrioButtons };
+    }
+
+    function setupSubtasks() {
+      const wrap = /** @type {HTMLDivElement|null} */(document.querySelector('.input-icon-subtask'));
+      const inp  = /** @type {HTMLInputElement|null} */(wrap?.querySelector('input'));
+      const add  = /** @type {HTMLButtonElement|null} */(wrap?.querySelector('.add-subtask'));
+      const list = /** @type {HTMLUListElement|null} */(document.getElementById('subtask-list'));
+      let inline = /** @type {HTMLDivElement|null} */(wrap?.querySelector('.subtask-inline-actions'));
+      if (wrap &amp;&amp; !inline) inline = buildInline(wrap, inp, () => { addSub(); hideInline(); inp?.focus(); }, () => { if (inp) { inp.value=''; inp.focus(); } hideInline(); });
+      const showInline = () => { if (inline) inline.style.display='flex'; if (add) add.style.display='none'; };
+      const hideInline = () => { if (inline) inline.style.display='none'; if (add) add.style.display=''; };
+      /** @type {{title:string,done:boolean}[]} */ const subtasks = [];
+
+      const escapeHtml = (s) => String(s).replace(/[&amp;&lt;>"']/g, c => ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','>':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[c]));
+
+      const addSub = () => {
+        if (!inp || !list) return;
+        const v = inp.value.trim(); if (!v) return;
+        subtasks.push({ title:v, done:false });
+        const li = buildSubtaskLi(escapeHtml(v));
+        list.appendChild(li); inp.value = '';
+        wireSubtaskLi(li, list, subtasks);
+      };
+
+      if (inp) {
+        inp.addEventListener('focus', showInline);
+        inp.addEventListener('input', showInline);
+        inp.addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); addSub(); hideInline(); inp.focus(); }});
+        inp.addEventListener('blur', () => setTimeout(() => {
+          const inside = document.activeElement instanceof Node &amp;&amp; wrap ? wrap.contains(document.activeElement) : false;
+          if (!inside &amp;&amp; !inp.value.trim()) hideInline();
+        }, 0));
+      }
+      add?.addEventListener('click', addSub);
+
+      return { showInline, hideInline, addSub, subtasks };
+    }
+
+    function buildInline(wrap, inp, onOk, onClear) {
+      const box = document.createElement('div'); box.className = 'subtask-inline-actions';
+      const x = document.createElement('button'); x.type='button'; x.className='inline-btn inline-x'; x.textContent='✕';
+      const ok = document.createElement('button'); ok.type='button'; ok.className='inline-btn inline-check'; ok.textContent='✓';
+      box.append(x, ok); wrap.appendChild(box);
+      x.addEventListener('click', onClear);
+      ok.addEventListener('click', onOk);
+      return box;
+    }
+
+    function buildSubtaskLi(title) {
+      const li = document.createElement('li'); li.className='subtask-item';
+      li.innerHTML = `
+        &lt;span class="subtask-title">${title}&lt;/span>
+        &lt;span class="subtask-actions" style="display:none;">
+          &lt;button type="button" class="subtask-edit-btn" title="Bearbeiten">
+            &lt;img src="../assets/icons/add_task/edit.png" style="width:16px" alt="">
+          &lt;/button>
+          &lt;button type="button" class="subtask-delete-btn" title="Löschen">
+            &lt;img src="../assets/icons/add_task/delete.png" style="width:16px" alt="">
+          &lt;/button>
+        &lt;/span>`;
+      return li;
+    }
+
+    function wireSubtaskLi(li, list, subtasks) {
+      li.addEventListener('mouseenter', () => { const a = /** @type {HTMLElement|null} */(li.querySelector('.subtask-actions')); if (a) a.style.display='inline-block'; });
+      li.addEventListener('mouseleave', () => { const a = /** @type {HTMLElement|null} */(li.querySelector('.subtask-actions')); if (a) a.style.display='none'; });
+      (/** @type {HTMLButtonElement|null} */(li.querySelector('.subtask-delete-btn')))?.addEventListener('click', () => {
+        if (!list) return;
+        const idx = Array.from(list.children).indexOf(li);
+        if (idx > -1) subtasks.splice(idx, 1);
+        li.remove();
+      });
+    }
+
+    function setupCategories() {
+      const sel = /** @type {HTMLSelectElement|null} */(document.getElementById('category'));
+      if (!sel) return null;
+      sel.innerHTML = '&lt;option value="">Select task category&lt;/option>';
+      ["Technical Task","User Story","Bug","Research"].forEach(c => {
+        const o = document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+      });
+      sel.required = true;
+      return sel;
+    }
+
+    function setupValidation(Core, catSel) {
+      const t = /** @type {HTMLInputElement|null} */(document.getElementById('title'));
+      const d = /** @type {HTMLInputElement|null} */(document.getElementById('task-due-date'));
+      t?.addEventListener('input', () => Core?.clearInvalidUI?.(t));
+      d?.addEventListener('input', () => Core?.clearInvalidUI?.(d));
+      catSel?.addEventListener('change', () => Core?.clearInvalidUI?.(catSel));
+    }
+
+    function valid(Core, catSel, prioOk) {
+      const t = /** @type {HTMLInputElement|null} */(document.getElementById('title'));
+      const d = /** @type {HTMLInputElement|null} */(document.getElementById('task-due-date'));
+      let ok = true;
+      if (!t || t.value.trim().length &lt; 2) { Core?.markInvalid?.(t); ok = false; }
+      const today = Core?.todayLocalISO?.() || new Date().toISOString().slice(0, 10);
+      if (!d || !d.value || d.value &lt; today) { Core?.markInvalid?.(d); ok = false; }
+      if (!catSel || !catSel.value) { Core?.markInvalid?.(catSel); ok = false; }
+      if (!prioOk) { document.querySelector('.priority-buttons')?.classList.add('field-invalid'); ok = false; }
+      return ok;
+    }
+
+    function wireCreateTask(dlg, Assigned, getPrio, subtasks, catSel, Core) {
+      (/** @type {HTMLButtonElement} */(document.querySelector('.create_task_btn'))).addEventListener('click', () => {
+        const prio = getPrio();
+        if (!valid(Core, catSel, !!prio)) return;
+        /** @type {'todo'|'inprogress'|'awaitingfeedback'|'done'} */
+        const status = /** @type {any} */(dlg.dataset.status) || 'todo';
+        const task = {
+          title: (/** @type {HTMLInputElement} */(document.getElementById('title'))).value.trim(),
+          description: (/** @type {HTMLTextAreaElement} */(document.getElementById('description'))).value.trim(),
+          dueDate: (/** @type {HTMLInputElement} */(document.getElementById('task-due-date'))).value.trim(),
+          priority: prio,
+          assignedTo: Assigned?.getSelectedAssigned?.() || [],
+          category: (/** @type {HTMLSelectElement} */(document.getElementById('category'))).value,
+          subtasks: [...subtasks],
+          status, createdAt: Date.now()
+        };
+        const key = firebase.database().ref().child('tasks').push().key;
+        firebase.database().ref('tasks/' + key).set({ ...task, id: key })
+          .then(() => { dlg.close(); clearForm(); (/** @type {any} */(Win.Board?.Core))?.showBoardAddToast?.(); });
+      });
+    }
+
+    /** Alles zurücksetzen (ohne Dialog schließen). */
+    function clearForm() {
+      (/** @type {HTMLInputElement} */(document.getElementById('title'))).value = '';
+      (/** @type {HTMLTextAreaElement} */(document.getElementById('description'))).value = '';
+      (/** @type {HTMLInputElement} */(document.getElementById('task-due-date'))).value = '';
+      (/** @type {HTMLSelectElement} */(document.getElementById('category'))).selectedIndex = 0;
+      Assigned?.resetAssigned?.();
+      document.querySelectorAll('.priority-buttons .btn').forEach(b => b.classList.remove('active'));
+      const ul = /** @type {HTMLUListElement|null} */(document.getElementById('subtask-list'));
+      if (ul) ul.innerHTML = '';
+    }
+  }
+
+  // DOM-Ready
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
+  else onReady();
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addContactLocally">addContactLocally</a></li><li><a href="global.html#addContacts">addContacts</a></li><li><a href="global.html#addNewContact">addNewContact</a></li><li><a href="global.html#addUsers">addUsers</a></li><li><a href="global.html#allInputsValid">allInputsValid</a></li><li><a href="global.html#animateContactDetails">animateContactDetails</a></li><li><a href="global.html#animateOverlayOut">animateOverlayOut</a></li><li><a href="global.html#checkLoadingScreen">checkLoadingScreen</a></li><li><a href="global.html#clearAddContactInputs">clearAddContactInputs</a></li><li><a href="global.html#clearTaskAssignment">clearTaskAssignment</a></li><li><a href="global.html#closeContactOptions">closeContactOptions</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectUpdatedFormData">collectUpdatedFormData</a></li><li><a href="global.html#confirmLockIcon">confirmLockIcon</a></li><li><a href="global.html#createContactGroup">createContactGroup</a></li><li><a href="global.html#createDivider">createDivider</a></li><li><a href="global.html#createInitialIcon">createInitialIcon</a></li><li><a href="global.html#createSuccessOverlay">createSuccessOverlay</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromEdit">deleteContactFromEdit</a></li><li><a href="global.html#deleteContactFromEditMobile">deleteContactFromEditMobile</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteData">deleteData</a></li><li><a href="global.html#deleteMobileContact">deleteMobileContact</a></li><li><a href="global.html#doPasswordsMatch">doPasswordsMatch</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editMobileContact">editMobileContact</a></li><li><a href="global.html#editOverlayDesktop">editOverlayDesktop</a></li><li><a href="global.html#editOverlayLogic">editOverlayLogic</a></li><li><a href="global.html#editOverlayMobile">editOverlayMobile</a></li><li><a href="global.html#editValidationInitialized">editValidationInitialized</a></li><li><a href="global.html#ensureOwnContactInList">ensureOwnContactInList</a></li><li><a href="global.html#errorMsgs">errorMsgs</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#finalizeContactDeletion">finalizeContactDeletion</a></li><li><a href="global.html#focusOnNewContact">focusOnNewContact</a></li><li><a href="global.html#getColorFromName">getColorFromName</a></li><li><a href="global.html#getContactById">getContactById</a></li><li><a href="global.html#getContactDetailsTemplate">getContactDetailsTemplate</a></li><li><a href="global.html#getContactTemplateByData">getContactTemplateByData</a></li><li><a href="global.html#getErrorMessages">getErrorMessages</a></li><li><a href="global.html#getFormData">getFormData</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getRegexes">getRegexes</a></li><li><a href="global.html#goBack">goBack</a></li><li><a href="global.html#groupContactsByInitial">groupContactsByInitial</a></li><li><a href="global.html#handleContactClick">handleContactClick</a></li><li><a href="global.html#hideContactDetails">hideContactDetails</a></li><li><a href="global.html#highlightAndScrollTo">highlightAndScrollTo</a></li><li><a href="global.html#isEmailValid">isEmailValid</a></li><li><a href="global.html#isOwnContact">isOwnContact</a></li><li><a href="global.html#isPasswordValid">isPasswordValid</a></li><li><a href="global.html#loadAllTasksFromFirebase">loadAllTasksFromFirebase</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#logOutUser">logOutUser</a></li><li><a href="global.html#nameValidation">nameValidation</a></li><li><a href="global.html#onloadFunction">onloadFunction</a></li><li><a href="global.html#openContactOptions">openContactOptions</a></li><li><a href="global.html#openContactOverview">openContactOverview</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#outsideOverlayClick">outsideOverlayClick</a></li><li><a href="global.html#passwordLockIcon">passwordLockIcon</a></li><li><a href="global.html#passwordVisibility">passwordVisibility</a></li><li><a href="global.html#postData">postData</a></li><li><a href="global.html#prepareContactSwitch">prepareContactSwitch</a></li><li><a href="global.html#putData">putData</a></li><li><a href="global.html#regexes">regexes</a></li><li><a href="global.html#removeContactFromLocalArray">removeContactFromLocalArray</a></li><li><a href="global.html#removeIdFromTaskArray">removeIdFromTaskArray</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderContactDetails">renderContactDetails</a></li><li><a href="global.html#rerenderContactList">rerenderContactList</a></li><li><a href="global.html#resetContactOverview">resetContactOverview</a></li><li><a href="global.html#saveAsUser">saveAsUser</a></li><li><a href="global.html#saveContactToFirebase">saveContactToFirebase</a></li><li><a href="global.html#setCurrentUser">setCurrentUser</a></li><li><a href="global.html#setupEditValidation">setupEditValidation</a></li><li><a href="global.html#setupFormSubmit">setupFormSubmit</a></li><li><a href="global.html#setupInputListeners">setupInputListeners</a></li><li><a href="global.html#setupInputSanitizers">setupInputSanitizers</a></li><li><a href="global.html#setupSanitizers">setupSanitizers</a></li><li><a href="global.html#setupValidation">setupValidation</a></li><li><a href="global.html#setupValidationListeners">setupValidationListeners</a></li><li><a href="global.html#showDetails">showDetails</a></li><li><a href="global.html#showLoadingScreen">showLoadingScreen</a></li><li><a href="global.html#showOverlay">showOverlay</a></li><li><a href="global.html#showSuccessOverlay">showSuccessOverlay</a></li><li><a href="global.html#signUpUser">signUpUser</a></li><li><a href="global.html#submitSignUpForm">submitSignUpForm</a></li><li><a href="global.html#toggleSubmit">toggleSubmit</a></li><li><a href="global.html#toggleSubmitState">toggleSubmitState</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateFormStyles">updateFormStyles</a></li><li><a href="global.html#updateLocalContact">updateLocalContact</a></li><li><a href="global.html#updateTaskAssignedTo">updateTaskAssignedTo</a></li><li><a href="global.html#updateTasksAssignedToContact">updateTasksAssignedToContact</a></li><li><a href="global.html#userLogIn">userLogIn</a></li><li><a href="global.html#validateEmailInput">validateEmailInput</a></li><li><a href="global.html#validateForm">validateForm</a></li><li><a href="global.html#validateInput">validateInput</a></li><li><a href="global.html#validatePassword">validatePassword</a></li><li><a href="global.html#validateSpecificInput">validateSpecificInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Oct 05 2025 17:59:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

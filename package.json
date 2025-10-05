@@ -8,8 +8,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "````markdown\r # 📝 Join – Kanban Project Management Tool",
   "dependencies": {
     "firebase": "^12.1.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.4"
   }
 }
