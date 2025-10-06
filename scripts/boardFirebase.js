@@ -3,23 +3,26 @@
 /// <reference path="./boardTypesD.ts" />
 
 /**
- * Shim/Bridge für alte globale Funktionen der Board-Seite.
+ * @fileoverview
+ * Bridge/Kompatibilitätsschicht für ältere globale Funktionen der Board-Seite.
  *
- * Hintergrund:
- *  - Neue Implementierungen leben unter `window.Board.Assigned`.
- *  - Älterer Code erwartet globale Funktionen:
- *      - `window.initAssignedDropdown()`
- *      - `window.__boardGetSelectedAssigned()`
- *      - `window.__boardResetAssigned()`
- *  - Dieses Script spiegelt die Methoden von `Board.Assigned` auf die
- *    genannten Globalen, sobald DOM verfügbar ist.
+ * Neue Implementierungen leben unter `window.Board.Assigned`. Älterer Code
+ * erwartet jedoch globale Funktionen:
+ *   - `window.initAssignedDropdown()`
+ *   - `window.__boardGetSelectedAssigned()` → string[]
+ *   - `window.__boardResetAssigned()`
  *
- * Es werden **keine** Seiteneffekte erzeugt, wenn `Board.Assigned`
- * (noch) nicht existiert; in diesem Fall passiert einfach nichts.
+ * Dieses Skript spiegelt – sobald DOM verfügbar ist – die Methoden
+ * von `Board.Assigned` auf die oben genannten globalen Funktionen.
+ * Wenn `Board.Assigned` (noch) nicht existiert, passiert nichts.
  */
-(function (w) {
-  /** Fenster als any, damit wir gefahrlos Properties setzen können. */
-  /** @type {any} */
+
+(function bridgeLegacyAssigned(w) {
+  /**
+   * Window als `any` casten, damit Properties ohne TS-Fehler gesetzt
+   * werden können.
+   * @type {any}
+   */
   const Win = w;
   Win.Board = Win.Board || {};
 
@@ -27,9 +30,12 @@
    * Spiegelt (falls vorhanden) die API aus `Board.Assigned` auf globale
    * Funktionen für Legacy-Aufrufer.
    *
+   * Erstellt/überschreibt folgende Globals:
    * - `window.initAssignedDropdown: () => void`
    * - `window.__boardGetSelectedAssigned: () => string[]`
    * - `window.__boardResetAssigned: () => void`
+   *
+   * Führt **keine** Seiteneffekte aus, wenn `Board.Assigned` nicht existiert.
    *
    * @returns {void}
    */
@@ -38,13 +44,16 @@
     const B = Win.Board;
     if (B && B.Assigned) {
       // ▼ Legacy-Globals für bestehenden Code bereitstellen
-      Win.initAssignedDropdown        = B.Assigned.initAssignedDropdown;   // () => void
-      Win.__boardGetSelectedAssigned  = B.Assigned.getSelectedAssigned;    // () => string[]
-      Win.__boardResetAssigned        = B.Assigned.resetAssigned;          // () => void
+      /** @global */
+      Win.initAssignedDropdown = B.Assigned.initAssignedDropdown;   // () => void
+      /** @global */
+      Win.__boardGetSelectedAssigned = B.Assigned.getSelectedAssigned; // () => string[]
+      /** @global */
+      Win.__boardResetAssigned = B.Assigned.resetAssigned;          // () => void
     }
   }
 
-  // Beim ersten passenden Zeitpunkt ausführen.
+  // Beim ersten passenden Zeitpunkt ausführen (DOM bereit oder sofort).
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', exposeAssignedAPIs);
   } else {

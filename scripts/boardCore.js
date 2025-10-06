@@ -26,11 +26,12 @@
   `;
 
   // ────────────────────────────────────────────────────────── Small helpers
+
   /**
-   * Style-Block mit ID sicherstellen.
-   * @param {string} id
-   * @param {string} css
-   * @returns {HTMLStyleElement}
+   * Stellt einen <style>-Block mit fixer ID sicher und setzt den CSS-Inhalt.
+   * @param {string} id   - DOM-ID des Style-Elements
+   * @param {string} css  - CSS-Text, der in das Element geschrieben wird
+   * @returns {HTMLStyleElement} Das (neu erstellte oder bestehende) Style-Element
    */
   function ensureStyle(id, css) {
     let s = /** @type {HTMLStyleElement|null} */ (document.getElementById(id));
@@ -39,20 +40,27 @@
   }
 
   /**
-   * Erstellt (falls nötig) das Toast-Element.
-   * @returns {HTMLElement}
+   * Stellt das Toast-Element für den Board-Toast sicher (lazy erstellt).
+   * @returns {HTMLElement} Das Toast-Root-Element
    */
   function ensureToastEl() {
     let el = document.getElementById('boardAddToast');
-    if (!el) { el = document.createElement('div'); el.id = 'boardAddToast'; el.innerHTML = `<img src="../assets/icons/add_task/board_white.png" alt="">`; document.body.appendChild(el); }
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'boardAddToast';
+      el.innerHTML = `<img src="../assets/icons/add_task/board_white.png" alt="">`;
+      document.body.appendChild(el);
+    }
     return el;
   }
 
   /**
-   * CSS-Animation neu triggern (Klasse entfernen/erzwingen/hinzufügen).
-   * @param {HTMLElement} el
-   * @param {string[]} remove
-   * @param {string} add
+   * Triggert eine CSS-Animation neu, indem Klassen entfernt, Reflow erzwungen
+   * und eine Ziel-Klasse hinzugefügt wird.
+   * @param {HTMLElement} el   - Ziel-Element
+   * @param {string[]} remove  - Klassen, die entfernt werden sollen
+   * @param {string} add       - Klasse, die hinzugefügt wird
+   * @returns {void}
    */
   function retriggerAnim(el, remove, add) {
     remove.forEach(c => el.classList.remove(c));
@@ -62,29 +70,33 @@
   }
 
   // ────────────────────────────────────────────────────────── Styles / Validation
+
   /**
-   * Minimal-Styles für Custom-Validation injizieren.
+   * Injiziert minimale Styles für Custom-Validation (einmalig).
    * @returns {void}
    */
   function ensureValidationStyles() { ensureStyle('custom-validation-styles', VALIDATION_CSS); }
 
   /**
-   * HTML-Escaping für Nutzereingaben (XSS-Schutz).
-   * @param {any} s
-   * @returns {string}
+   * HTML-Entities escapen (XSS-Schutz) für beliebige Werte.
+   * @param {any} s - beliebiger Wert, wird zu String konvertiert
+   * @returns {string} escapeter String
    */
   const escapeHtml = (s) =>
     String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
   /**
-   * Heutiges Datum (lokale TZ) als `YYYY-MM-DD`.
+   * Liefert heutiges Datum in lokaler Zeitzone als `YYYY-MM-DD`.
    * @returns {string}
    */
-  const todayLocalISO = () => { const off = new Date().getTimezoneOffset() * 60000; return new Date(Date.now() - off).toISOString().slice(0,10); };
+  const todayLocalISO = () => {
+    const off = new Date().getTimezoneOffset() * 60000;
+    return new Date(Date.now() - off).toISOString().slice(0,10);
+  };
 
   /**
-   * Setzt `min`-Attribut eines Date-Inputs auf „heute“.
-   * @param {string} selector
+   * Setzt das `min`-Attribut eines Date-Inputs (per Selector) auf „heute“.
+   * @param {string} selector - CSS-Selector des Date-Inputs
    * @returns {void}
    */
   function setDateMinToday(selector) {
@@ -93,7 +105,7 @@
   }
 
   /**
-   * Nächstliegende `.form-group` holen (Fallback: Parent).
+   * Sucht die umgebende `.form-group` eines Elements, fallback: parentElement.
    * @param {HTMLElement | null | undefined} el
    * @returns {HTMLElement | null}
    */
@@ -102,45 +114,55 @@
     (el ? /** @type {HTMLElement|null} */ (el.parentElement) : null);
 
   /**
-   * `.field-hint` unterhalb der `.form-group` sicherstellen.
+   * Stellt einen `.field-hint`-Knoten innerhalb der `.form-group` sicher
+   * und gibt ihn zurück.
    * @param {HTMLElement | null | undefined} el
    * @returns {HTMLElement | null}
    */
   function ensureHintFor(el) {
     const grp = getFormGroup(el); if (!grp) return null;
     let hint = /** @type {HTMLElement|null} */ (grp.querySelector('.field-hint'));
-    if (!hint) { hint = document.createElement('small'); hint.className = 'field-hint'; hint.textContent = 'This field is required'; grp.appendChild(hint); }
+    if (!hint) {
+      hint = document.createElement('small');
+      hint.className = 'field-hint';
+      hint.textContent = 'This field is required';
+      grp.appendChild(hint);
+    }
     return hint;
   }
 
   /**
-   * Feld als invalid markieren (Border, aria, Hint).
+   * Markiert ein Feld als ungültig (rote Border, aria-Attribut, Hint sichtbar).
    * @param {HTMLElement | null | undefined} el
    * @returns {void}
    */
   function markInvalid(el) {
     if (!el) return;
-    el.classList.add('field-invalid'); el.setAttribute('aria-invalid','true');
+    el.classList.add('field-invalid');
+    el.setAttribute('aria-invalid','true');
     ensureHintFor(el)?.classList.add('show');
   }
 
   /**
-   * Invalid-UI entfernen.
+   * Entfernt Invalid-UI (Border/aria/hint) von einem Feld.
    * @param {HTMLElement | null | undefined} el
    * @returns {void}
    */
   function clearInvalidUI(el) {
     if (!el) return;
-    el.classList.remove('field-invalid'); el.removeAttribute('aria-invalid');
+    el.classList.remove('field-invalid');
+    el.removeAttribute('aria-invalid');
     getFormGroup(el)?.querySelector('.field-hint')?.classList.remove('show');
   }
 
   // ────────────────────────────────────────────────────────── Toast
+
   /** Persistenter Timer für den Board-Toast. */
   let boardToastTimer = /** @type {number | undefined} */ (undefined);
 
   /**
-   * Zeigt einen bildbasierten Slide-Toast (Board).
+   * Zeigt den bildbasierten Slide-Toast („Task added“) mittig an
+   * und blendet ihn automatisch wieder aus.
    * @returns {void}
    */
   function showBoardAddToast() {
@@ -149,15 +171,18 @@
     retriggerAnim(el, ['leave','enter'], 'enter');
     if (boardToastTimer) clearTimeout(boardToastTimer);
     boardToastTimer = window.setTimeout(() => {
-      el.classList.remove('enter'); el.classList.add('leave');
+      el.classList.remove('enter');
+      el.classList.add('leave');
       el.addEventListener('animationend', () => el.remove(), { once: true });
     }, 1200);
   }
 
   // ────────────────────────────────────────────────────────── Error dialog
+
   /**
-   * Zentraler Fehlerdialog (Fallback: alert).
-   * @param {string} message
+   * Zeigt einen zentralen Fehlerdialog (Fallback: alert) mit Nachricht.
+   * Erwartet ein `<dialog id="errorDialog"><p>…</p></dialog>` im DOM.
+   * @param {string} message - anzuzeigender Fehlertext
    * @returns {void}
    */
   function showErrorDialog(message) {

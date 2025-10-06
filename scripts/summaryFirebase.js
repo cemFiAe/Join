@@ -5,7 +5,12 @@
 /** @typedef {Task} SummaryTask */
 /** @typedef {{todo:number,done:number,inProgress:number,feedback:number,urgent:number,all:number,nextDeadline:Date|null}} SummaryStats */
 
-// Robust: 'yyyy-mm-dd' | 'dd/mm/yyyy' | Date-fallback
+/**
+ * Robustes Datum-Parsing: unterstützt 'yyyy-mm-dd', 'dd/mm/yyyy'
+ * und fällt ansonsten auf den nativen Date-Parser zurück.
+ * @param {string=} dateStr Eingabe-Datum als String
+ * @returns {Date|null} Geparstes Datum oder null bei Ungültigkeit
+ */
 function parseTaskDate(dateStr) {
   if (!dateStr) return null;
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return new Date(dateStr);
@@ -16,11 +21,20 @@ function parseTaskDate(dateStr) {
   return isNaN(dObj.getTime()) ? null : dObj;
 }
 
+/**
+ * Liest alle Tasks einmalig aus Firebase aus.
+ * @returns {Promise<SummaryTask[]>} Promise mit Taskliste
+ */
 function fetchTasksOnce() {
   return firebase.database().ref('tasks').once('value')
     .then(s => /** @type {SummaryTask[]} */ (Object.values(s.val() || {})));
 }
 
+/**
+ * Erzeugt aggregierte Kennzahlen (Summary) aus der Taskliste.
+ * @param {SummaryTask[]} tasks Aufgabenliste
+ * @returns {SummaryStats} aggregierte Statistik
+ */
 function summarizeTasks(tasks) {
   const s = { todo:0, done:0, inProgress:0, feedback:0, urgent:0, all:0, nextDeadline:null };
   for (const t of tasks) {
@@ -32,8 +46,19 @@ function summarizeTasks(tasks) {
   } return s;
 }
 
+/**
+ * Setzt `textContent` eines Elements (falls vorhanden).
+ * @param {string} id Element-ID
+ * @param {string|number} v Text-/Zahlwert
+ * @returns {void}
+ */
 function setText(id, v){ const el=document.getElementById(id); if(el) el.textContent=String(v); }
 
+/**
+ * Aktualisiert die Summary-UI mit den berechneten Kennzahlen.
+ * @param {SummaryStats} s Statistikwerte
+ * @returns {void}
+ */
 function updateSummaryUI(s) {
   setText('summary-todo', s.todo); setText('summary-done', s.done);
   setText('summary-inprogress', s.inProgress); setText('summary-feedback', s.feedback);
@@ -42,16 +67,35 @@ function updateSummaryUI(s) {
   setText('summary-next-deadline', d ? d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'2-digit'}) : '-');
 }
 
+/**
+ * Liefert eine kurze, tageszeitabhängige Begrüßung.
+ * @returns {string} z. B. "Good morning,"
+ */
 function getGreeting(){ const h=new Date().getHours(); if(h<5)return'Good night,'; if(h<12)return'Good morning,'; if(h<18)return'Good afternoon,'; return'Good evening,'; }
 
+/**
+ * Formatiert den übergebenen Namen für die Anzeige:
+ * Nachnamen (bzw. alles nach dem ersten Wort) werden farbig markiert.
+ * @param {string} name Voller Name (oder leer)
+ * @returns {string} HTML-String
+ */
 function formatNameHtml(name){
   const p=(name||'Guest').trim().split(/\s+/); if(p.length<=1) return `<span style="color:#29ABE2;font-weight:800;">${p[0]}</span>`;
   const f=p.shift(); return `${f} <span style="color:#29ABE2;font-weight:800;">${p.join(' ')}</span>`;
 }
 
+/**
+ * Navigiert zur Board-Seite, optional mit Status-Hash (Spalte vorselektieren).
+ * @param {string} [hash] 'todo' | 'inprogress' | 'awaitingfeedback' | 'done' | ''
+ * @returns {void}
+ */
 function goBoard(hash){ const base='../pages/board.html'; window.location.href = hash ? `${base}#${hash}` : base; }
 
-// findet den Karten-Container (macht ganze Kachel klickbar)
+/**
+ * Findet den passenden klickbaren Karten-Container der Summary-Kachel.
+ * @param {Element} el Ein beliebiges Kind-Element in der Kachel
+ * @returns {HTMLElement} der Container, der klickbar gemacht werden soll
+ */
 function cardTarget(el){
   return /** @type {HTMLElement} */(
     el.closest('[data-card]') ||
@@ -60,7 +104,13 @@ function cardTarget(el){
   );
 }
 
-// macht die übergebenen Elemente/Container klickbar
+/**
+ * Macht die übergebenen Elemente (IDs) als komplette Kachel klickbar
+ * und führt bei Klick/Enter/Space die Board-Navigation aus.
+ * @param {string[]} ids Element-IDs (Zahl &/oder gesamter Kachel-Wrapper)
+ * @param {string} hash Optionaler Board-Hash (Spalte)
+ * @returns {void}
+ */
 function makeClickable(ids, hash) {
   /** @type {Set<HTMLElement>} */ const targets = new Set();
   ids.forEach(id => { const n=document.getElementById(id); if(n) targets.add(cardTarget(n)); });
@@ -72,6 +122,12 @@ function makeClickable(ids, hash) {
   });
 }
 
+/**
+ * Initialisiert die Summary-Seite:
+ * lädt Tasks, berechnet/zeigt Kennzahlen, setzt Begrüßung
+ * und macht die Kacheln klickbar.
+ * @returns {void}
+ */
 function initSummary() {
   fetchTasksOnce().then(ts => updateSummaryUI(summarizeTasks(ts)));
   const g=document.getElementById('greeting-message'); const u=document.getElementById('summary-username');

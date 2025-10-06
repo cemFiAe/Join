@@ -4,6 +4,7 @@
 
 /**
  * Board.DetailUtil – gemeinsame Utilities für das Task-Detail.
+ * Reine Helper (Formatierung, Subtask-UI, Delete-Dialog).
  */
 (function (w) {
   const Win = /** @type {any} */ (w);
@@ -16,9 +17,14 @@
   // ───────────────────────────────────────────────────────────────────
   // Klassen / Datum
   // ───────────────────────────────────────────────────────────────────
+
   /**
-   * @param {string=} category
-   * @returns {string}
+   * Liefert die CSS-Klasse für die Kategorie-Badge im Detail-Dialog.
+   * Erwartete Styles:
+   *  .task-detail-badge.cat-technicaltask | .cat-userstory | .cat-bug | .cat-research
+   *
+   * @param {string=} category - Kategoriename (z. B. "Bug", "User Story", …).
+   * @returns {string} CSS-Klassenstring für das Badge.
    */
   function getDetailCategoryClass(category) {
     const c = (category || '').toLowerCase();
@@ -30,8 +36,14 @@
   }
 
   /**
-   * @param {string=} due
-   * @returns {string}
+   * Normalisiert das Fälligkeitsdatum für die Anzeige.
+   * Accepts:
+   *  - ISO: 'yyyy-mm-dd' → wird in 'mm/dd/yyyy' umgewandelt
+   *  - Bereits formatiert: 'mm/dd/yyyy' → unverändert
+   *  - Sonst: Rückgabe des Originalstrings
+   *
+   * @param {string=} due - Datum als String.
+   * @returns {string} Formatierter Datumsstring 'mm/dd/yyyy' oder Original.
    */
   function formatDueDate(due) {
     if (!due) return '';
@@ -50,10 +62,15 @@
   // ───────────────────────────────────────────────────────────────────
   // Subtasks: Inline-Edit
   // ───────────────────────────────────────────────────────────────────
+
   /**
-   * @param {HTMLLIElement} li
-   * @param {number} idx
-   * @param {Task} task
+   * Startet Inline-Editing für einen Subtask-Titel.
+   * Speichert bei Enter/Blur, verwirft bei Escape.
+   *
+   * @param {HTMLLIElement} li - Listen-Item des Subtasks.
+   * @param {number} idx - Index des Subtasks im Task-Objekt.
+   * @param {Task} task - Task-Objekt, dessen Subtasks editiert werden.
+   * @returns {void}
    */
   function editSubtaskInline(li, idx, task) {
     const { input, old, actions } = createTitleInput(li);
@@ -67,7 +84,15 @@
     input.focus();
   }
 
-  /** @param {HTMLLIElement} li */
+  /**
+   * Ersetzt den Titel-Span durch ein Input-Feld und liefert relevante Referenzen.
+   *
+   * @param {HTMLLIElement} li - Listen-Item des Subtasks.
+   * @returns {{ input: HTMLInputElement, old: string, actions: HTMLElement }}
+   *  - input: erzeugtes Textfeld
+   *  - old: alter Titeltext
+   *  - actions: Actions-Container (wird beim Edit kurz ausgeblendet)
+   */
   function createTitleInput(li) {
     const span = /** @type {HTMLSpanElement} */ (li.querySelector('.subtask-title'));
     const actions = /** @type {HTMLElement} */ (li.querySelector('.subtask-actions'));
@@ -79,15 +104,20 @@
   }
 
   /**
-   * @param {HTMLLIElement} li
-   * @param {number} idx
-   * @param {Task} task
-   * @param {string} title
-   * @param {HTMLElement} actions
+   * Persistiert den (ggf. geänderten) Subtask-Titel im Task-Objekt
+   * und stellt die ursprüngliche Anzeige (Span) wieder her.
+   *
+   * @param {HTMLLIElement} li - Listen-Item des Subtasks.
+   * @param {number} idx - Index des Subtasks im Task-Objekt.
+   * @param {Task} task - Task-Objekt.
+   * @param {string} title - Neuer (oder alter) Titel.
+   * @param {HTMLElement} actions - Actions-Container, der versteckt wird.
+   * @returns {void}
    */
   function saveTitle(li, idx, task, title, actions) {
     if (!Array.isArray(task.subtasks)) task.subtasks = [];
     task.subtasks[idx].title = title;
+
     const input = /** @type {HTMLInputElement} */ (li.querySelector('input[type="text"]'));
     const ns = document.createElement('span');
     ns.className = 'subtask-title'; ns.textContent = title; ns.style.flex = '1';
@@ -98,9 +128,14 @@
   // ───────────────────────────────────────────────────────────────────
   // Subtasks: Edit-UI Renderer
   // ───────────────────────────────────────────────────────────────────
+
   /**
-   * @param {HTMLDivElement} container
-   * @param {Task} task
+   * Rendert die Subtask-Bearbeitungssektion (Input + Liste).
+   * Aktualisiert sich selbst nach Add/Delete/Edit.
+   *
+   * @param {HTMLDivElement} container - Zielcontainer im Detail-Dialog.
+   * @param {Task} task - Task-Objekt mit Subtasks.
+   * @returns {void}
    */
   function renderSubtasksEdit(container, task) {
     container.innerHTML = '';
@@ -113,8 +148,11 @@
   }
 
   /**
-   * @param {HTMLDivElement} container
-   * @param {() => void} onAdd
+   * Erstellt die Eingabezeile zum Hinzufügen neuer Subtasks.
+   *
+   * @param {HTMLDivElement} container - Parent-Container.
+   * @param {() => void} onAdd - Callback, der beim Hinzufügen ausgelöst wird.
+   * @returns {HTMLInputElement} Referenz auf das Input-Feld.
    */
   function makeInputRow(container, onAdd) {
     const row = document.createElement('div'); row.className = 'subtask-input-row';
@@ -126,16 +164,26 @@
     return inp;
   }
 
-  /** @param {HTMLDivElement} container */ function buildList(container) {
+  /**
+   * Erstellt und hängt eine UL-Liste für Subtasks an den Container.
+   *
+   * @param {HTMLDivElement} container - Parent-Container.
+   * @returns {HTMLUListElement} Erzeugte UL-Liste.
+   */
+  function buildList(container) {
     const ul = document.createElement('ul');
     ul.style.listStyle = 'none'; ul.style.padding = '0'; ul.style.margin = '0';
     container.appendChild(ul); return ul;
   }
 
   /**
-   * @param {HTMLInputElement} inp
-   * @param {Task} task
-   * @param {HTMLDivElement} container
+   * Fügt anhand des Eingabefelds einen Subtask dem Task hinzu
+   * und rendert die Subtask-Sektion neu.
+   *
+   * @param {HTMLInputElement} inp - Eingabefeld (Titel).
+   * @param {Task} task - Task-Objekt.
+   * @param {HTMLDivElement} container - Parent-Container (für Rerender).
+   * @returns {void}
    */
   function addSubtaskFromInput(inp, task, container) {
     const v = inp.value.trim(); if (!v) return;
@@ -145,10 +193,13 @@
   }
 
   /**
-   * @param {Subtask} st
-   * @param {number} idx
-   * @param {Task} task
-   * @param {() => void} rerender
+   * Baut ein Listen-Item (LI) für einen Subtask und verdrahtet Events.
+   *
+   * @param {Subtask} st - Subtask-Daten.
+   * @param {number} idx - Index in task.subtasks.
+   * @param {Task} task - Task-Objekt.
+   * @param {() => void} rerender - Callback zum Neu-Rendern (z. B. nach Delete).
+   * @returns {HTMLLIElement} Fertiges LI-Element.
    */
   function liForSubtask(st, idx, task, rerender) {
     const li = document.createElement('li');
@@ -159,7 +210,13 @@
     return li;
   }
 
-  /** @param {Subtask} st */ function liMarkup(st) {
+  /**
+   * Liefert das markup einer Subtask-Zeile (Checkbox + Titel + Actions).
+   *
+   * @param {Subtask} st - Subtask-Daten.
+   * @returns {string} HTML-String für das LI-Innere.
+   */
+  function liMarkup(st) {
     return `
       <input type="checkbox" ${st.done ? 'checked' : ''} style="margin:0;">
       <span class="subtask-title" style="flex:1;">${st.title}</span>
@@ -170,32 +227,63 @@
   }
 
   /**
-   * @param {HTMLLIElement} li
-   * @param {number} idx
-   * @param {Task} task
-   * @param {() => void} rerender
+   * Verdrahtet Events eines Subtask-LI:
+   *  - Checkbox toggelt den Done-Status
+   *  - Hover zeigt/verbirgt Actions
+   *  - Edit öffnet Inline-Editor
+   *  - Delete entfernt den Subtask und rendert neu
+   *
+   * @param {HTMLLIElement} li - Ziel-Listenelement.
+   * @param {number} idx - Index in task.subtasks.
+   * @param {Task} task - Task-Objekt.
+   * @param {() => void} rerender - Rerender-Callback (z. B. nach Delete).
+   * @returns {void}
    */
   function wireLi(li, idx, task, rerender) {
     const cb = /** @type {HTMLInputElement} */ (li.querySelector('input[type="checkbox"]'));
-    cb.addEventListener('change', (e) => { if (!Array.isArray(task.subtasks)) task.subtasks = []; task.subtasks[idx].done = (/** @type {HTMLInputElement} */(e.currentTarget)).checked; });
-    li.addEventListener('mouseenter', () => { (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'inline-flex'; });
-    li.addEventListener('mouseleave', () => { (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'none'; });
-    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-edit-btn'))).addEventListener('click', () => editSubtaskInline(li, idx, task));
-    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-delete-btn'))).addEventListener('click', () => { if (!Array.isArray(task.subtasks)) task.subtasks = []; task.subtasks.splice(idx, 1); rerender(); });
+    cb.addEventListener('change', (e) => {
+      if (!Array.isArray(task.subtasks)) task.subtasks = [];
+      task.subtasks[idx].done = (/** @type {HTMLInputElement} */(e.currentTarget)).checked;
+    });
+
+    li.addEventListener('mouseenter', () => {
+      (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'inline-flex';
+    });
+    li.addEventListener('mouseleave', () => {
+      (/** @type {HTMLElement} */ (li.querySelector('.subtask-actions'))).style.display = 'none';
+    });
+
+    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-edit-btn')))
+      .addEventListener('click', () => editSubtaskInline(li, idx, task));
+
+    (/** @type {HTMLButtonElement} */ (li.querySelector('.subtask-delete-btn')))
+      .addEventListener('click', () => {
+        if (!Array.isArray(task.subtasks)) task.subtasks = [];
+        task.subtasks.splice(idx, 1);
+        rerender();
+      });
   }
 
   // ───────────────────────────────────────────────────────────────────
   // Delete-Dialog
   // ───────────────────────────────────────────────────────────────────
+
   /**
-   * @param {string} taskId
-   * @param {HTMLDialogElement=} parent
+   * Öffnet einen Delete-Bestätigungsdialog und löscht den Task bei Bestätigung.
+   *
+   * @param {string} taskId - ID des zu löschenden Tasks.
+   * @param {HTMLDialogElement=} parent - Optionaler Parent-Dialog, der nach dem Löschen geschlossen wird.
+   * @returns {void}
    */
   function showDeleteConfirmDialog(taskId, parent) {
     const dlg = /** @type {HTMLDialogElement} */ (document.getElementById('deleteConfirmDialog'));
     dlg.showModal();
+
     (/** @type {HTMLButtonElement} */ (document.getElementById('confirmDeleteBtn'))).onclick = () => {
-      firebase.database().ref('tasks/' + taskId).remove().then(() => { dlg.close(); parent?.close?.(); });
+      firebase.database().ref('tasks/' + taskId).remove().then(() => {
+        dlg.close();
+        parent?.close?.();
+      });
     };
     (/** @type {HTMLButtonElement} */ (document.getElementById('cancelDeleteBtn'))).onclick = () => dlg.close();
   }
