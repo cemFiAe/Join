@@ -93,36 +93,43 @@ if (avatarTrigger) {
 
 // -------------------- TABLET BURGER MENU ------------------ //
 
-document.addEventListener("DOMContentLoaded", () => {
-  const tabletTrigger = document.getElementById('tabletTrigger');
-  const tabletMenu = document.getElementById('tabletNavBar');
-  let tabletMenuOpen = false;
+const tabletTrigger = document.getElementById('tabletTrigger');
+const tabletMenu = document.getElementById('tabletNavBar');
+let tabletMenuOpen = false;
 
-  function openTabletMenu() {
-    tabletMenu.classList.add('d_flex');
-    tabletMenuOpen = true;
-    document.addEventListener("click", outsideTabletClickListener);
-  }
+function openTabletMenu() {
+  if (!tabletMenu) return;
+  tabletMenu.classList.add('d_flex');
+  tabletMenuOpen = true;
+  document.addEventListener("click", outsideTabletClickListener);
+}
 
-  function closeTabletMenu() {
-    tabletMenu.classList.remove('d_flex');
-    tabletMenuOpen = false;
-    document.removeEventListener("click", outsideTabletClickListener);
-  }
+function closeTabletMenu() {
+  if (!tabletMenu) return;
+  tabletMenu.classList.remove('d_flex');
+  tabletMenuOpen = false;
+  document.removeEventListener("click", outsideTabletClickListener);
+}
 
-  function toggleTabletMenu(event) {
+function toggleTabletMenu(event) {
+  if (event) {
     event.preventDefault();
     event.stopPropagation();
-    tabletMenuOpen ? closeTabletMenu() : openTabletMenu();
   }
+  tabletMenuOpen ? closeTabletMenu() : openTabletMenu();
+}
 
-  function outsideTabletClickListener(event) {
-    if (!tabletMenu.contains(event.target) && !tabletTrigger.contains(event.target)) {
-      closeTabletMenu();
-    }
+function outsideTabletClickListener(event) {
+  if (
+    tabletMenu &&
+    tabletTrigger &&
+    !tabletMenu.contains(event.target) &&
+    !tabletTrigger.contains(event.target)
+  ) {
+    closeTabletMenu();
   }
+}
 
-  if (tabletTrigger) {
-    tabletTrigger.addEventListener('click', toggleTabletMenu);
-  }
-});
+if (tabletTrigger) {
+  tabletTrigger.addEventListener('click', toggleTabletMenu);
+}

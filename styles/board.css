@@ -429,6 +429,11 @@
   overflow: hidden;
 }
 
+#taskDetailBody ul {
+  overflow-y: auto;
+  max-height: 120px;
+}
+
 select[multiple] {
   min-height: 40px;
   width: 100%;
