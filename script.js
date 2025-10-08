@@ -6,9 +6,11 @@ const mobileAvatar = document.getElementById("mobile-user-avatar");
 let menuOpen = false;
 
 /**
- * this function is used to open the mobile burger menu
+ * Opens the mobile burger menu by sliding it into view.
+ * Also attaches a document-wide click listener to detect outside clicks.
  */
 function openMenu() {
+  if (!mobileNav) return;
   mobileNav.style.transform = "translateX(0)";
   mobileNav.style.marginRight = "16px";
   menuOpen = true;
@@ -16,23 +18,36 @@ function openMenu() {
 }
 
 /**
- * this function is used to close the mobile burger menu
+ * Closes the mobile burger menu by sliding it out of view.
+ * Removes the previously attached outside click listener.
  */
 function closeMenu() {
+  if (!mobileNav) return;
   mobileNav.style.transform = "translateX(100%)";
   mobileNav.style.marginRight = "0";
   menuOpen = false;
   document.removeEventListener("click", handleClickOutside);
 }
 
+/**
+ * Toggles the mobile burger menu between open and closed states.
+ * Prevents the default link or button behavior and stops event bubbling.
+ * @param {MouseEvent} event - The click event that triggered the toggle.
+ */
 function toggleMenu(event) {
   event.preventDefault();
   event.stopPropagation();
   menuOpen ? closeMenu() : openMenu();
 }
 
+/**
+ * Handles clicks outside of the mobile navigation and trigger elements.
+ * Closes the menu when the user clicks outside of it.
+ * @param {MouseEvent} event - The document click event.
+ */
 function handleClickOutside(event) {
   if (
+    mobileNav &&
     !mobileNav.contains(event.target) &&
     event.target !== menuToggle &&
     event.target !== mobileAvatar
@@ -41,6 +56,9 @@ function handleClickOutside(event) {
   }
 }
 
+/**
+ * Attaches event listeners for mobile menu toggling.
+ */
 if (menuToggle) {
   menuToggle.addEventListener("click", toggleMenu);
 }
@@ -55,25 +73,31 @@ const burger = document.getElementById('burger');
 let burgerOpen = false;
 
 /**
- * this function is used to open the burger menu
+ * Opens the desktop burger menu and adds a global click listener.
+ * Makes the menu visible by adding the 'd_flex' class.
  */
 function openBurger() {
+  if (!burger) return;
   burger.classList.add('d_flex');
   burgerOpen = true;
   document.addEventListener("click", outsideClickListener);
 }
 
 /**
- * this function is used to close the burger menu
+ * Closes the desktop burger menu and removes the global click listener.
+ * Hides the menu by removing the 'd_flex' class.
  */
 function closeBurger() {
+  if (!burger) return;
   burger.classList.remove('d_flex');
   burgerOpen = false;
   document.removeEventListener("click", outsideClickListener);
 }
 
 /**
- * this function is used to toggle the burger menu
+ * Toggles the desktop burger menu between open and closed states.
+ * Prevents default click behavior and event propagation.
+ * @param {MouseEvent} event - The click event that triggered the toggle.
  */
 function toggleBurgerMenu(event) {
   event.preventDefault();
@@ -81,12 +105,25 @@ function toggleBurgerMenu(event) {
   burgerOpen ? closeBurger() : openBurger();
 }
 
+/**
+ * Detects clicks outside of the burger menu and its trigger avatar.
+ * Closes the menu when a click occurs elsewhere on the page.
+ * @param {MouseEvent} event - The document click event.
+ */
 function outsideClickListener(event) {
-  if (!burger.contains(event.target) && !avatarTrigger.contains(event.target)) {
+  if (
+    burger &&
+    avatarTrigger &&
+    !burger.contains(event.target) &&
+    !avatarTrigger.contains(event.target)
+  ) {
     closeBurger();
   }
 }
 
+/**
+ * Attaches the click listener to the desktop avatar trigger.
+ */
 if (avatarTrigger) {
   avatarTrigger.addEventListener('click', toggleBurgerMenu);
 }
@@ -97,6 +134,10 @@ const tabletTrigger = document.getElementById('tabletTrigger');
 const tabletMenu = document.getElementById('tabletNavBar');
 let tabletMenuOpen = false;
 
+/**
+ * Opens the tablet navigation menu and attaches an outside click listener.
+ * Adds the 'd_flex' class to make the menu visible.
+ */
 function openTabletMenu() {
   if (!tabletMenu) return;
   tabletMenu.classList.add('d_flex');
@@ -104,6 +145,10 @@ function openTabletMenu() {
   document.addEventListener("click", outsideTabletClickListener);
 }
 
+/**
+ * Closes the tablet navigation menu and removes the outside click listener.
+ * Removes the 'd_flex' class to hide the menu.
+ */
 function closeTabletMenu() {
   if (!tabletMenu) return;
   tabletMenu.classList.remove('d_flex');
@@ -111,6 +156,11 @@ function closeTabletMenu() {
   document.removeEventListener("click", outsideTabletClickListener);
 }
 
+/**
+ * Toggles the tablet navigation menu between open and closed states.
+ * Prevents default click behavior and stops event propagation.
+ * @param {MouseEvent} event - The click event triggering the toggle.
+ */
 function toggleTabletMenu(event) {
   if (event) {
     event.preventDefault();
@@ -119,6 +169,11 @@ function toggleTabletMenu(event) {
   tabletMenuOpen ? closeTabletMenu() : openTabletMenu();
 }
 
+/**
+ * Detects clicks outside of the tablet menu and its trigger button.
+ * Closes the menu if the user clicks anywhere else on the document.
+ * @param {MouseEvent} event - The click event on the document.
+ */
 function outsideTabletClickListener(event) {
   if (
     tabletMenu &&
@@ -130,6 +185,10 @@ function outsideTabletClickListener(event) {
   }
 }
 
+/**
+ * Attaches the main click listener to the tablet trigger button
+ * if the element exists in the DOM.
+ */
 if (tabletTrigger) {
   tabletTrigger.addEventListener('click', toggleTabletMenu);
 }
