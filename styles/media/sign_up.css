@@ -14,48 +14,11 @@
         font-size: 32px;
         margin-right: 64px;
         max-width: 180px;
-        margin-block: 8px;
-
+        margin-block: 6px;
     }
 
     .blue-line {
         width: 110px;
-    }
-
-    .sign-up-form {
-        padding-top: 8px;
-    }
-
-    .name {
-        height: 60px;
-    }
-
-    .email {
-        height: 60px;
-    }
-
-    .password-first {
-        height: 60px;
-    }
-
-    .password-second {
-        height: 60px;
-    }
-
-    .name-input {
-        height: 42px;
-    }
-
-    .email-input {
-        height: 42px;
-    }
-
-    .sign-up-password {
-        height: 42px;
-    }
-
-    .confirm-password {
-        height: 42px;
     }
 
     .sign-up-buttons {

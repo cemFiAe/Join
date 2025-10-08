@@ -3,7 +3,7 @@
  * The rules are:
  * 1. Email must have just one '@' character.
  * 2. '@' splits 'email' into 'name part' and 'domain part'.
- * 3. Name part must have at least 6 alphanumeric characters. 
+ * 3. Name part must have alphanumeric characters. 
  * 4. After '@', there must be letters, then a '.', then letters (e.g., "mail.de").
  * 5. Domain must contain only letters and at least 2 of them.
  * @param {string} email - The email address to validate.
@@ -16,8 +16,7 @@ function isEmailValid(email) {
     let namePart = emailParts[0];
     let domainPart = emailParts[1];
 
-    let charCount = (namePart.match(/[A-Za-z0-9]/g) || []).length;
-    if (charCount < 6) return false;
+    namePart.match(/[A-Za-z0-9]/g) || []
 
     if (!/^[A-Za-z]+\.[A-Za-z]{2,}$/.test(domainPart)) return false;
 
@@ -37,4 +36,4 @@ function validateEmailInput() {
     emailInput.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     emailAlert.style.display = isValid ? 'none' : 'block';
 }
-// emailInput.addEventListener('input', validateEmailInput);
+emailInput.addEventListener('input', validateEmailInput);

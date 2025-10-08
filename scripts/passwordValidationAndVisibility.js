@@ -14,7 +14,7 @@ function validatePassword() {
     passwordDiv.style.borderColor = isValid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
     passwordAlert.style.display = isValid ? 'none' : 'block';
 }
-// passwordInput.addEventListener('input', validatePassword);
+passwordInput.addEventListener('input', validatePassword);
 
 
 /**

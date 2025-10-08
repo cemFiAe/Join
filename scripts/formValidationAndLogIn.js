@@ -38,7 +38,6 @@ function updateFormStyles(input, alert, isValid) {
         alert.style.display = 'block';
     }
 }
-
 // emailInput.addEventListener('input', validateForm);
 // passwordInput.addEventListener('input', validateForm);
 
@@ -129,7 +128,7 @@ async function saveAsUser() {
         }
 
         return true;
-    } else {
+    } else if (!userObj || userObj.password !== passwordInput.value.trim()) {
         alertFormStyle();
         return false;
     }
