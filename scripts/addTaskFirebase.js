@@ -1,57 +1,56 @@
 // addTaskFirebase.js
 // @ts-check
+// Initializes Add-Task page: Firebase integration, DOM refs, validation, and handlers.
 
-/** Casting auf Window, damit TS die globalen Objekte akzeptiert. */
+/** Casting window for TS to accept globals */
 const Win = /** @type {any} */ (window);
-/** Firebase kommt über das CDN. */
+/** Firebase from CDN */
 const firebase = /** @type {any} */ (Win.firebase);
 
 /**
- * Struktur aller DOM-Referenzen, die wir auf der Add-Task-Seite brauchen.
+ * Structure of all DOM references needed on Add-Task page.
  * @typedef {Object} AddTaskRefs
- * @property {any} Core                         - Globale AddTask-API (aus addTaskCore.js / addTask.js)
- * @property {HTMLInputElement|null} titleEl    - Titel‐Input
- * @property {HTMLTextAreaElement|null} descEl  - Beschreibung‐Textarea
- * @property {HTMLInputElement|null} dueEl      - Fälligkeitsdatum
- * @property {HTMLSelectElement|null} catEl     - Kategorie‐Select
- * @property {HTMLDivElement|null} prioWrap     - Wrapper für Priority-Buttons
- * @property {HTMLDivElement|null} dd           - Assigned-Dropdown (Liste)
- * @property {HTMLDivElement|null} badges       - Badge-Leiste für ausgewählte Kontakte
- * @property {HTMLButtonElement|null} createBtn - „Create Task“-Button
- * @property {HTMLButtonElement|null} clearBtn  - „Clear“-Button
- * @property {HTMLDivElement|null} selectBox    - Klickfläche, die das Dropdown öffnet
- * @property {HTMLDivElement|null} ddBox        - Container des Dropdowns (zum Show/Hide)
+ * @property {any} Core                      - Global AddTask API
+ * @property {HTMLInputElement|null} titleEl
+ * @property {HTMLTextAreaElement|null} descEl
+ * @property {HTMLInputElement|null} dueEl
+ * @property {HTMLSelectElement|null} catEl
+ * @property {HTMLDivElement|null} prioWrap
+ * @property {HTMLDivElement|null} dd
+ * @property {HTMLDivElement|null} badges
+ * @property {HTMLButtonElement|null} createBtn
+ * @property {HTMLButtonElement|null} clearBtn
+ * @property {HTMLDivElement|null} selectBox
+ * @property {HTMLDivElement|null} ddBox
  */
 
-document.addEventListener('DOMContentLoaded', () => { initAddTaskPage(); });
+document.addEventListener('DOMContentLoaded', initAddTaskPage);
 
 /**
- * Sammelt alle DOM-Referenzen der Seite an einer Stelle.
+ * Collects all DOM references in one object.
  * @returns {AddTaskRefs}
  */
 function getRefs() {
   const d = document;
   return {
     Core: Win.AddTask,
-    titleEl: /** @type {HTMLInputElement|null} */ (d.getElementById('title')),
-    descEl:  /** @type {HTMLTextAreaElement|null} */ (d.getElementById('description')),
-    dueEl:   /** @type {HTMLInputElement|null} */ (d.getElementById('due')),
-    catEl:   /** @type {HTMLSelectElement|null} */ (d.getElementById('category')),
-    prioWrap:/** @type {HTMLDivElement|null} */ (d.querySelector('.priority-buttons')),
-    dd:      /** @type {HTMLDivElement|null} */ (d.getElementById('assignedDropdown')),
-    badges:  /** @type {HTMLDivElement|null} */ (d.getElementById('assignedBadges')),
-    createBtn:/** @type {HTMLButtonElement|null} */ (d.querySelector('.create_task_btn')),
-    clearBtn: /** @type {HTMLButtonElement|null} */ (d.querySelector('.clear_button')),
-    selectBox:/** @type {HTMLDivElement|null} */ (d.getElementById('assignedSelectBox')),
-    ddBox:   /** @type {HTMLDivElement|null} */ (d.getElementById('assignedDropdown')),
+    titleEl: d.getElementById('title'),
+    descEl: d.getElementById('description'),
+    dueEl: d.getElementById('due'),
+    catEl: d.getElementById('category'),
+    prioWrap: d.querySelector('.priority-buttons'),
+    dd: d.getElementById('assignedDropdown'),
+    badges: d.getElementById('assignedBadges'),
+    createBtn: d.querySelector('.create_task_btn'),
+    clearBtn: d.querySelector('.clear_button'),
+    selectBox: d.getElementById('assignedSelectBox'),
+    ddBox: d.getElementById('assignedDropdown'),
   };
 }
 
 /**
- * Bereitet Eingabefelder und UI-Komponenten vor
- * (Styles, Min-Datum, Kategorien, Priority-Buttons, Subtask-UI).
+ * Prepares inputs and UI: styles, min-date, categories, priority, subtasks.
  * @param {AddTaskRefs} R
- * @returns {void}
  */
 function prepareInputs(R) {
   R.Core.ensureValidationStyles();
@@ -62,40 +61,35 @@ function prepareInputs(R) {
 }
 
 /**
- * Lädt Benutzer/Kontakte und rendert das Assigned-Dropdown samt Badges.
+ * Loads users and renders Assigned dropdown and badges.
  * @param {AddTaskRefs} R
- * @returns {void}
  */
 function setupAssigned(R) {
-  R.Core.loadAssignedUsers().then(() => {
+  R.Core.loadAssignedUsers().then(()=>{
     R.Core.renderAssignedDropdown(R.dd);
     R.Core.renderAssignedBadges(R.badges);
   });
 }
 
 /**
- * Verdrahtet das Öffnen/Schließen des Assigned-Dropdowns
- * inkl. Outside-Click-Handling.
+ * Handles Assigned dropdown toggle and outside click.
  * @param {AddTaskRefs} R
- * @returns {void}
  */
 function setupDropdownToggle(R) {
   if (!R.selectBox || !R.ddBox) return;
-  R.selectBox.addEventListener('click', () => R.ddBox.classList.toggle('hidden'));
-  document.addEventListener('click', (e) => {
-    const wrap = /** @type {HTMLDivElement|null} */ (document.querySelector('.assigned-to-wrapper'));
-    const tgt = e.target;
-    if (wrap && tgt instanceof Node && !wrap.contains(tgt)) R.ddBox.classList.add('hidden');
+  R.selectBox.addEventListener('click',()=>R.ddBox.classList.toggle('hidden'));
+  document.addEventListener('click',e=>{
+    const wrap = document.querySelector('.assigned-to-wrapper');
+    if (wrap && e.target instanceof Node && !wrap.contains(e.target)) R.ddBox.classList.add('hidden');
   });
 }
 
 /**
- * Baut das Task-Payload aus den aktuellen Formwerten.
+ * Builds Firebase-ready payload from form inputs.
  * @param {AddTaskRefs} R
- * @returns {Record<string, any>} Firebase-fertiges Objekt.
+ * @returns {Record<string,any>}
  */
 function createTaskPayload(R) {
-  /** @type {'urgent'|'medium'|'low'|''} */
   const priority = R.Core.state.priority;
   return {
     title: R.titleEl?.value.trim() ?? '',
@@ -111,44 +105,39 @@ function createTaskPayload(R) {
 }
 
 /**
- * Verdrahtet den „Create Task“-Button:
- * validiert, schreibt in Firebase und zeigt Toast/Redirect.
+ * Wires the Create Task button: validate, save to Firebase, show toast, redirect.
  * @param {AddTaskRefs} R
  * @param {() => boolean} validate
- * @returns {void}
  */
 function setupCreateHandler(R, validate) {
-  R.createBtn?.addEventListener('click', (e) => {
+  R.createBtn?.addEventListener('click', e=>{
     e.preventDefault();
-    if (!validate()) return;
+    if(!validate()) return;
     const payload = createTaskPayload(R);
     const key = firebase.database().ref().child('tasks').push().key;
-    firebase.database().ref('tasks/' + key).set({ ...payload, id: key })
-      .then(() => {
+    firebase.database().ref('tasks/' + key).set({...payload,id:key})
+      .then(()=>{
         R.Core.showToast();
-        setTimeout(() => { window.location.href = '../pages/board.html'; }, 1600);
+        setTimeout(()=>{ window.location.href='../pages/board.html'; },1600);
       })
-      .catch(err => console.error('Fehler beim Speichern:', err));
+      .catch(err=>console.error('Error saving task:', err));
   });
 }
 
 /**
- * Verdrahtet den „Clear“-Button zum kompletten Formular-Reset.
+ * Wires Clear button to reset entire form.
  * @param {AddTaskRefs} R
- * @returns {void}
  */
 function setupClearHandler(R) {
-  R.clearBtn?.addEventListener('click', (e) => {
+  R.clearBtn?.addEventListener('click', e=>{
     e.preventDefault();
     R.Core.clearForm();
   });
 }
 
 /**
- * Setzt Min-Datum zusätzlich auf mögliche externe Date-Inputs,
- * die außerhalb der Add-Seite existieren können.
+ * Sets min date for potential external date inputs.
  * @param {AddTaskRefs} R
- * @returns {void}
  */
 function setExtraMins(R) {
   R.Core.setDateMinToday('#task-due-date');
@@ -156,9 +145,7 @@ function setExtraMins(R) {
 }
 
 /**
- * Einstiegspunkt für die Add-Task-Seite:
- * holt Refs, bereitet UI vor, lädt Assigned, bindet Handler und Validation.
- * @returns {void}
+ * Entry point for Add-Task page: gets refs, prepares UI, loads Assigned, wires handlers.
  */
 function initAddTaskPage() {
   const R = getRefs();

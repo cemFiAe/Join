@@ -4,46 +4,45 @@
 
 /**
  * @fileoverview
- * Board-Rendering (Spalten füllen), Suche & Firebase-Stream.
- * Nutzt die UI-/Karten-/DnD-Funktionen aus `window.Board.RenderUI`.
- * Exportiert unter `window.Board.Render`.
+ * Board rendering: populates columns, search, and Firebase stream.
+ * Uses UI / card / drag-and-drop functions from `window.Board.RenderUI`.
+ * Exported under `window.Board.Render`.
  */
 
-(function (w) {
-  /** @type {any} */ const Win = (w);
-  Win.Board = Win.Board || {};
-  /** @type {any} */ const UI = Win.Board.RenderUI; // kommt aus boardRender.ui.js
+const Win = /** @type {any} */ (window);
+Win.Board = Win.Board || {};
+const UI = Win.Board.RenderUI; // comes from boardRender.ui.js
 
-  /** @typedef {"todo"|"inprogress"|"awaitingfeedback"|"done"} TaskStatus */
-  /** @typedef {"urgent"|"medium"|"low"} TaskPriority */
-  /** @typedef {{title:string,done:boolean}} Subtask */
-  /** @typedef {{ id:string, title?:string, description?:string, category?:string, dueDate?:string, priority?:TaskPriority, status:TaskStatus, assignedTo?:string[]|string, subtasks?:Subtask[] }} Task */
+/** @typedef {"todo"|"inprogress"|"awaitingfeedback"|"done"} TaskStatus */
+/** @typedef {"urgent"|"medium"|"low"} TaskPriority */
+/** @typedef {{title:string,done:boolean}} Subtask */
+/** @typedef {{ id:string, title?:string, description?:string, category?:string, dueDate?:string, priority?:TaskPriority, status:TaskStatus, assignedTo?:string[]|string, subtasks?:Subtask[] }} Task */
 
-  if (!UI) { console.error('boardRender.ui.js muss VOR boardRender.js geladen werden.'); return; }
+if (!UI) {
+  console.error('boardRender.ui.js must be loaded BEFORE boardRender.js.');
+} else {
 
-  /** Aktuell bekannte Tasks (vom Stream). */
+  /** Currently known tasks from the stream */
   /** @type {Task[]} */
   let tasks = [];
 
   // ───────────────────────────────────────────────────────────────
-  // Render (Spalten)
+  // Column rendering
   // ───────────────────────────────────────────────────────────────
 
   /**
-   * Leert alle Board-Spalten (DOM-Container).
-   * @returns {void}
+   * Clears all board columns in the DOM.
    */
   function clearColumns() {
     Object.values(UI.COLS).forEach(id => {
-      const col = /** @type {HTMLDivElement} */ (document.getElementById(id));
+      const col = /** @type {HTMLDivElement|null} */ (document.getElementById(id));
       if (col) col.innerHTML = '';
     });
   }
 
   /**
-   * Erzeugt & hängt Karten in die passenden Spalten.
-   * @param {Task[]} arr - Liste der zu rendernden Tasks.
-   * @returns {void}
+   * Creates and mounts cards into their corresponding columns.
+   * @param {Task[]} arr - List of tasks to render
    */
   function mountCards(arr) {
     arr.forEach(t => {
@@ -53,9 +52,8 @@
   }
 
   /**
-   * Zeigt „No tasks …“-Platzhalter für leere Spalten.
-   * @param {Task[]} arr - Tasks (zum Prüfen der Leere).
-   * @returns {void}
+   * Shows "No tasks ..." placeholders for empty columns.
+   * @param {Task[]} arr - Tasks to check for emptiness
    */
   function showEmptyPlaceholders(arr) {
     Object.entries(UI.COLS).forEach(([st, id]) => {
@@ -68,9 +66,8 @@
   }
 
   /**
-   * Rendert das komplette Board (alle Spalten).
-   * @param {Task[]} arr - Aufgabenliste.
-   * @returns {void}
+   * Renders the complete board (all columns).
+   * @param {Task[]} arr - List of tasks
    */
   function renderBoard(arr) {
     clearColumns();
@@ -79,24 +76,23 @@
   }
 
   // ───────────────────────────────────────────────────────────────
-  // Suche & Stream
+  // Search & Firebase stream
   // ───────────────────────────────────────────────────────────────
 
   /**
-   * Filtert Tasks nach Titel/Beschreibung (case-insensitive) und rendert.
-   * @param {string} v - Suchstring.
-   * @returns {void}
+   * Filters tasks by title or description (case-insensitive) and renders them.
+   * @param {string} query - Search string
    */
-  function searchTasks(v) {
-    const q = v.trim().toLowerCase();
-    const f = (t /** @type {Task} */) =>
-      (t.title || '').toLowerCase().includes(q) || (t.description || '').toLowerCase().includes(q);
-    renderBoard(q ? tasks.filter(f) : tasks);
+  function searchTasks(query) {
+    const q = query.trim().toLowerCase();
+    const filterFn = (t /** @type {Task} */) =>
+      (t.title || '').toLowerCase().includes(q) ||
+      (t.description || '').toLowerCase().includes(q);
+    renderBoard(q ? tasks.filter(filterFn) : tasks);
   }
 
   /**
-   * Verdrahtet Desktop- & Mobile-Suchfelder mit dem Filterhandler.
-   * @returns {void}
+   * Wires desktop & mobile search inputs to the filter handler.
    */
   function wireSearchInputs() {
     const q1 = /** @type {HTMLInputElement|null} */ (document.getElementById('taskSearch'));
@@ -106,19 +102,18 @@
   }
 
   /**
-   * Abonniert den Firebase-Stream auf `tasks` und rendert bei Änderungen.
-   * @returns {void}
+   * Subscribes to the Firebase `tasks` stream and renders on updates.
    */
   function watchTasks() {
-    firebase.database().ref('tasks').on('value', s => {
-      const obj = /** @type {Record<string, any>|null} */ (s.val()) || {};
-      tasks = Object.values(obj); renderBoard(tasks);
+    firebase.database().ref('tasks').on('value', snapshot => {
+      const obj = /** @type {Record<string, any>|null} */ (snapshot.val()) || {};
+      tasks = Object.values(obj);
+      renderBoard(tasks);
     });
   }
 
   /**
-   * Startet Live-Stream, Suche & initialisiert alle Drop-Zonen.
-   * @returns {void}
+   * Starts live stream, search inputs, and initializes all drop zones.
    */
   function startTasksStream() {
     UI.initAllDropZones();
@@ -135,4 +130,4 @@
     startTasksStream,
     showMoveMenuForCard: UI.showMoveMenuForCard,
   };
-})(window);
+}

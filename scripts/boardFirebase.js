@@ -1,62 +1,35 @@
 // @ts-check
-/* global firebase */ // (wird hier nicht genutzt, bleibt nur für Konsistenz)
+/* global firebase */ // (kept for consistency)
 /// <reference path="./boardTypesD.ts" />
 
 /**
- * @fileoverview
- * Bridge/Kompatibilitätsschicht für ältere globale Funktionen der Board-Seite.
- *
- * Neue Implementierungen leben unter `window.Board.Assigned`. Älterer Code
- * erwartet jedoch globale Funktionen:
- *   - `window.initAssignedDropdown()`
- *   - `window.__boardGetSelectedAssigned()` → string[]
- *   - `window.__boardResetAssigned()`
- *
- * Dieses Skript spiegelt – sobald DOM verfügbar ist – die Methoden
- * von `Board.Assigned` auf die oben genannten globalen Funktionen.
- * Wenn `Board.Assigned` (noch) nicht existiert, passiert nichts.
+ * Bridge/compatibility layer for older global functions of the Board page.
+ * Exposes:
+ *   - window.initAssignedDropdown()
+ *   - window.__boardGetSelectedAssigned() → string[]
+ *   - window.__boardResetAssigned()
+ * 
+ * Mirrors Board.Assigned if available. Does nothing if Board.Assigned is not defined.
  */
 
-(function bridgeLegacyAssigned(w) {
-  /**
-   * Window als `any` casten, damit Properties ohne TS-Fehler gesetzt
-   * werden können.
-   * @type {any}
-   */
-  const Win = w;
-  Win.Board = Win.Board || {};
+const Win = /** @type {any} */ (window);
+Win.Board = Win.Board || {};
 
-  /**
-   * Spiegelt (falls vorhanden) die API aus `Board.Assigned` auf globale
-   * Funktionen für Legacy-Aufrufer.
-   *
-   * Erstellt/überschreibt folgende Globals:
-   * - `window.initAssignedDropdown: () => void`
-   * - `window.__boardGetSelectedAssigned: () => string[]`
-   * - `window.__boardResetAssigned: () => void`
-   *
-   * Führt **keine** Seiteneffekte aus, wenn `Board.Assigned` nicht existiert.
-   *
-   * @returns {void}
-   */
-  function exposeAssignedAPIs() {
-    /** @type {any} */
-    const B = Win.Board;
-    if (B && B.Assigned) {
-      // ▼ Legacy-Globals für bestehenden Code bereitstellen
-      /** @global */
-      Win.initAssignedDropdown = B.Assigned.initAssignedDropdown;   // () => void
-      /** @global */
-      Win.__boardGetSelectedAssigned = B.Assigned.getSelectedAssigned; // () => string[]
-      /** @global */
-      Win.__boardResetAssigned = B.Assigned.resetAssigned;          // () => void
-    }
+function exposeAssignedAPIs() {
+  const B = Win.Board;
+  if (B && B.Assigned) {
+    /** @global */
+    Win.initAssignedDropdown = B.Assigned.initAssignedDropdown;       // () => void
+    /** @global */
+    Win.__boardGetSelectedAssigned = B.Assigned.getSelectedAssigned;  // () => string[]
+    /** @global */
+    Win.__boardResetAssigned = B.Assigned.resetAssigned;             // () => void
   }
+} // <-- function properly closed here
 
-  // Beim ersten passenden Zeitpunkt ausführen (DOM bereit oder sofort).
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', exposeAssignedAPIs);
-  } else {
-    exposeAssignedAPIs();
-  }
-})(window);
+// Run when DOM is ready or immediately if already loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', exposeAssignedAPIs);
+} else {
+  exposeAssignedAPIs();
+}
