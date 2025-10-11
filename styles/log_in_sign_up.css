@@ -1,6 +1,10 @@
 
 /* general properties for both log in and sign up */
 
+body {
+    overflow-y: hidden;
+}
+
 header {
     display: flex;
     justify-content: space-between;

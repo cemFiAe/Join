@@ -15,6 +15,10 @@
         display: flex;
     }
 
+    .sign-up-window {
+        margin-top: 16px;
+    }
+
     .mobile-footer {
         display: flex;
     }
