@@ -1,15 +1,8 @@
-/**
- * Zeigt den eigenen Account auch in der Kontaktliste und macht ihn bearbeitbar.
- * Diese Datei muss nach currentUser.js und vor contacts.js eingebunden werden!
- */
+let currentUserId = null; 
+let currentUserMail = null; 
 
-// === Konfigurationswerte anpassen (z.B. nach Login setzen) ===
-let currentUserId = null; // z.B. "abc123"
-let currentUserMail = null; // z.B. "ich@beispiel.de"
-
-// --- Initialisierung ---
 /**
- * Setzt den aktuell eingeloggten User (z.B. nach Login-Callback aufrufen)
+ * sets the current logged in user (f.e after login-callback)
  */
 function setCurrentUser(id, mail) {
     currentUserId = id;
@@ -17,27 +10,24 @@ function setCurrentUser(id, mail) {
 }
 
 /**
- * Prüft, ob ein Kontakt der aktuell eingeloggte User ist
- * @param {Object} contact - ein Kontaktobjekt aus contacts[]
+ * checks, if a contact is the currently logged in user
+ * @param {Object} contact - an object from contacts[]
  * @returns {boolean}
  */
 function isOwnContact(contact) {
-    // Prüft auf id oder (wenn nicht vorhanden) auf Mail
     return (contact.id === currentUserId) ||
         (contact.data && contact.data.mail && contact.data.mail === currentUserMail);
 }
 
 /**
- * Fügt den eigenen User als Kontakt zur Liste hinzu (falls nicht schon da)
- * Sollte direkt vor dem Rendern der Kontaktliste aufgerufen werden!
+ * adds the user to the contact list (if not already added)
+ * should be called before the rendering of the contactlist!
  */
 function ensureOwnContactInList() {
     if (!currentUserId || !currentUserMail) return;
 
-    // Ist schon als Kontakt drin?
     let alreadyExists = contacts.some(c => isOwnContact(c));
     if (!alreadyExists) {
-        // Dummy-Daten, ggf. aus User-Profil laden!
         contacts.push({
             id: currentUserId,
             data: {
@@ -49,12 +39,10 @@ function ensureOwnContactInList() {
     }
 }
 
-// --- PATCH: Rendering hooken ---
 /**
- * Patcht das Rendern der Kontakte so, dass der eigene User immer dabei ist
+ * patches the rendering of the contacts, so that the user shows up
  */
 (function () {
-    // Original-Funktion speichern
     const originalRenderAllContacts = window.renderAllContacts;
 
     window.renderAllContacts = function () {
@@ -62,10 +50,3 @@ function ensureOwnContactInList() {
         originalRenderAllContacts.apply(this, arguments);
     };
 })();
-
-/**
- * Optional: Beim Klick/Öffnen eines Kontakts extra Stil setzen oder Sperre
- * (z.B. falls eigenes Profil nicht löschbar sein soll)
- * Dazu kannst du in showDetails oder handleContactClick prüfen:
- * if (isOwnContact(contact)) { ... }
- */

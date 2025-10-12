@@ -9,6 +9,6 @@ window.addEventListener('DOMContentLoaded', function() {
         !window.location.pathname.endsWith("/index.html") &&
         !window.location.pathname.endsWith("index.html")
     ) {
-        window.location.replace("./index.html"); // Replace current page, no history left to go back to
+        window.location.replace("./index.html");
     }
 });

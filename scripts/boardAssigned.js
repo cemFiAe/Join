@@ -1,6 +1,3 @@
-// @ts-check
-/* global firebase */
-
 /**
  * Board.Assigned – People / "Assigned to" logic for the Board
  * Loads users/contacts, builds dropdown & badges, provides helpers
@@ -66,6 +63,10 @@ function getProfileBadge(id) {
 
 // ────────────────────────────── Rendering
 
+/**
+ * Creates and appends an avatar badge element for a selected user.
+ * @param {{ name: string, initials: string }} u - The user object containing name and initials.
+ */
 function appendBadge(u) {
   const b = document.createElement('div');
   b.className = 'avatar-badge';
@@ -74,6 +75,10 @@ function appendBadge(u) {
   badges?.appendChild(b);
 }
 
+/**
+ * Appends a "+N" badge when there are more than 4 assigned users.
+ * @param {number} extra - The number of additional users beyond the visible badges.
+ */
 function appendMore(extra) {
   const m = document.createElement('div');
   m.className = 'avatar-badge avatar-badge-more';
@@ -81,6 +86,10 @@ function appendMore(extra) {
   badges?.appendChild(m);
 }
 
+/**
+ * Renders up to 4 assigned user badges and, if necessary, a "+N" badge
+ * for any remaining selected users.
+ */
 function renderAssignedBadges() {
   if (!badges) return;
   badges.innerHTML = '';
@@ -90,28 +99,63 @@ function renderAssignedBadges() {
   if (extra > 0) appendMore(extra);
 }
 
+/**
+ * Returns the assigned users as a sorted array of entries, ordered alphabetically by name.
+ * @returns {[string, { name: string, initials: string, selected: boolean, email?: string }][]}
+ * An array of key-value pairs representing user entries.
+ */
 function entriesSorted() {
   return Object.entries(assignedUsers).sort(([, a], [, b]) => a.name.localeCompare(b.name));
 }
 
+/**
+ * Builds a selectable dropdown option element for an assigned user,
+ * including avatar, name, and selection toggle behavior.
+ * @param {{ name: string, initials: string, email?: string, selected: boolean }} u - The user object to render.
+ * @param {number} keep - The current scroll position to maintain after re-render.
+ * @returns {HTMLDivElement} The constructed option element.
+ */
 function buildOption(u, keep) {
   const opt = document.createElement('div');
   opt.className = 'custom-option' + (u.selected ? ' selected' : '');
   opt.tabIndex = 0;
 
+  const av = buildOptionAvatar(u);
+  const lab = buildOptionLabel(u);
+  const chk = buildOptionCheckbox(u);
+
+  attachOptionToggle(opt, u, keep);
+  opt.append(av, lab, chk);
+  return opt;
+}
+
+/** Builds the avatar element for a dropdown option */
+function buildOptionAvatar(u) {
   const av = document.createElement('div');
   av.className = 'custom-option-avatar';
   av.style.backgroundColor = generateColorFromString(u.name);
   av.textContent = u.initials;
+  return av;
+}
 
+/** Builds the label element for a dropdown option */
+function buildOptionLabel(u) {
   const lab = document.createElement('div');
   lab.className = 'custom-option-label';
   lab.textContent = u.name + (((u.email || '').toLowerCase() === currentUserEmail) ? ' (You)' : '');
+  return lab;
+}
 
+/** Builds the checkbox element for a dropdown option */
+function buildOptionCheckbox(u) {
   const chk = document.createElement('div');
   chk.className = 'custom-option-checkbox';
   if (u.selected) chk.classList.add('checked');
+  return chk;
+}
 
+/** Attaches click and keyboard toggle handlers to the option element */
+function attachOptionToggle(opt, u, keep) {
   const toggle = (ev) => {
     ev.preventDefault(); ev.stopPropagation();
     u.selected = !u.selected;
@@ -119,14 +163,14 @@ function buildOption(u, keep) {
     renderAssignedBadges();
     if (dd) dd.scrollTop = keep;
   };
-
   opt.addEventListener('pointerdown', toggle);
   opt.addEventListener('keydown', ev => { if (ev.key === ' ' || ev.key === 'Enter') toggle(ev); });
-
-  opt.append(av, lab, chk);
-  return opt;
 }
 
+/**
+ * Renders the full “Assigned to” dropdown by sorting and displaying all user options.
+ * Preserves scroll position during re-render.
+ */
 function renderAssignedDropdown() {
   if (!dd) return;
   const keep = dd.scrollTop;
@@ -137,6 +181,10 @@ function renderAssignedDropdown() {
 
 // ────────────────────────────── Init & API
 
+/**
+ * Resolves and caches references to key DOM elements used in the assigned user UI.
+ * @returns {boolean} True if all required elements were found, otherwise false.
+ */
 function resolveDom() {
   dd = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedDropdown'));
   badges = /** @type {HTMLDivElement|null} */ (document.getElementById('assignedBadges'));
@@ -144,6 +192,10 @@ function resolveDom() {
   return !!(dd && selectBox);
 }
 
+/**
+ * Merges users and contacts into a unified assignedUsers object,
+ * ensuring no duplicates and adding default selection state and initials.
+ */
 function mergePeople() {
   assignedUsers = {};
   Object.entries(users || {}).forEach(([id, u]) => {
@@ -157,41 +209,70 @@ function mergePeople() {
   });
 }
 
+/**
+ * Initializes dropdown toggle logic by wiring up event listeners
+ * for opening, closing, and keyboard interactions on a custom select box.
+ * Ensures only one wiring per element by checking a dataset flag.
+ */
 function setupToggleHandlers() {
   if (!selectBox || selectBox.dataset._wired === '1') return;
   selectBox.dataset._wired = '1';
   let open = false;
 
-  function openDropdown() {
+  const openDropdown = () => {
     if (open) return;
     open = true;
     if (dd) { dd.classList.remove('hidden'); dd.style.display = 'block'; }
-    setTimeout(() => {
-      const off = (e) => {
-        if (!(e.target instanceof Node)) return;
-        if (selectBox?.parentElement?.contains(e.target)) return;
-        closeDropdown();
-        document.removeEventListener('click', off, true);
-      };
-      document.addEventListener('click', off, true);
-    }, 0);
-  }
+    attachOutsideClickHandler(closeDropdown);
+  };
 
-  function closeDropdown() {
+  const closeDropdown = () => {
     if (!open) return;
     open = false;
     if (dd) { dd.classList.add('hidden'); dd.style.display = 'none'; }
-  }
+  };
 
-  const toggle = () => (open ? closeDropdown() : openDropdown());
+  initToggleEvents({ openDropdown, closeDropdown, isOpen: () => open });
+}
+
+/**
+ * Attaches a temporary global click listener that closes the dropdown
+ * when the user clicks outside of the select box area.
+ * Automatically removes itself after execution.
+ * @param {Function} closeFn - The function to close the dropdown
+ */
+function attachOutsideClickHandler(closeFn) {
+  setTimeout(() => {
+    const off = (e) => {
+      if (!(e.target instanceof Node)) return;
+      if (selectBox?.parentElement?.contains(e.target)) return;
+      closeFn();
+      document.removeEventListener('click', off, true);
+    };
+    document.addEventListener('click', off, true);
+  }, 0);
+}
+
+/**
+ * Initializes click, keyboard, and pointer handlers for dropdown toggle.
+ * @param {{ openDropdown: Function, closeDropdown: Function, isOpen: Function }} actions
+ */
+function initToggleEvents({ openDropdown, closeDropdown, isOpen }) {
+  const toggle = () => (isOpen() ? closeDropdown() : openDropdown());
 
   selectBox.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); });
   selectBox.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); toggle(); });
-  selectBox.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); } });
+  selectBox.addEventListener('keydown', e => { if ([' ', 'Enter'].includes(e.key)) { e.preventDefault(); toggle(); } });
+
   dd?.addEventListener('click', e => e.stopPropagation());
   dd?.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closeDropdown(); selectBox?.focus(); } });
 }
 
+/**
+ * Initializes the "Assigned to" dropdown by resolving DOM elements,
+ * merging users and contacts, rendering dropdown options and badges,
+ * and setting up dropdown toggle event handlers.
+ */
 function initAssignedDropdown() {
   if (!resolveDom()) return;
   mergePeople();
@@ -200,10 +281,18 @@ function initAssignedDropdown() {
   setupToggleHandlers();
 }
 
+/**
+ * Retrieves the IDs of all currently selected assigned users.
+ * @returns {string[]} An array of user IDs corresponding to selected users.
+ */
 function getSelectedAssigned() {
   return Object.entries(assignedUsers).filter(([, u]) => u.selected).map(([id]) => id);
 }
 
+/**
+ * Resets all assigned user selections to false, re-renders the dropdown and badges,
+ * and hides the dropdown menu element.
+ */
 function resetAssigned() {
   Object.values(assignedUsers).forEach(u => u.selected = false);
   renderAssignedDropdown();

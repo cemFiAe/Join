@@ -1,6 +1,3 @@
-// @ts-check
-/* global firebase */
-
 /**
  * Board – Add-Task Overlay & Task Creation on Board Page
  * Dependencies: Board.Core (Helpers/Styles), Board.Assigned (Assigned Dropdown)
@@ -34,7 +31,11 @@ function initBoardAddTask() {
 // --- Global functions ---
 
 /**
- * Expose `window.openAddTaskDialog(status)` and set defaults
+ * Expose `window.openAddTaskDialog(status)` and set defaults.
+ * @param {HTMLDialogElement} dlgEl - The dialog element for the Add Task overlay.
+ * @param {object} core - Core utilities object containing helper functions.
+ * @param {object} assigned - Assigned user handler object with initialization methods.
+ * @param {Function} setMedium - Function to set the medium priority as default.
  */
 function exposeOpenDialog(dlgEl, core, assigned, setMedium) {
   Win.openAddTaskDialog = function(status = 'todo') {
@@ -51,7 +52,8 @@ function exposeOpenDialog(dlgEl, core, assigned, setMedium) {
 }
 
 /**
- * Wire close/clear buttons of the overlay
+ * Wire close/clear buttons of the overlay.
+ * @param {HTMLDialogElement} dlgEl - The dialog element for the Add Task overlay.
  */
 function wireCloseOverlay(dlgEl) {
   const closeBtn = /** @type {HTMLButtonElement|null} */ (document.querySelector('.close-add-task-overlay'));
@@ -92,53 +94,108 @@ function setupPriority() {
 }
 
 /**
- * Setup Subtask input (inline actions, list, delete)
+ * Initializes the subtask input system with inline actions, list handling, and events.
+ * @returns {{ showInline: Function, hideInline: Function, addSub: Function, subtasks: Array }}
  */
 function setupSubtasks() {
   const wrap = /** @type {HTMLDivElement|null} */ (document.querySelector('.input-icon-subtask'));
   const inp = wrap?.querySelector('input');
   const add = wrap?.querySelector('.add-subtask');
   const list = /** @type {HTMLUListElement|null} */ (document.getElementById('subtask-list'));
-  let inline = wrap?.querySelector('.subtask-inline-actions');
-
-  if (wrap && !inline) {
-    inline = buildInline(
-      wrap,
-      inp,
-      () => { addSub(); hideInline(); inp?.focus(); },
-      () => { if (inp) { inp.value=''; inp.focus(); } hideInline(); }
-    );
-  }
-
-  const showInline = () => { if (inline) inline.style.display='flex'; if (add) add.style.display='none'; };
-  const hideInline = () => { if (inline) inline.style.display='none'; if (add) add.style.display=''; };
+  const inline = initInline(wrap, inp, add);
   const subtasks = [];
+  const { showInline, hideInline } = inline;
 
-  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-  const addSub = () => {
-    if (!inp || !list) return;
-    const v = inp.value.trim(); if (!v) return;
-    subtasks.push({ title:v, done:false });
-    const li = buildSubtaskLi(escapeHtml(v));
-    list.appendChild(li); inp.value='';
-    wireSubtaskLi(li, list, subtasks);
-  };
-
-  inp?.addEventListener('focus', showInline);
-  inp?.addEventListener('input', showInline);
-  inp?.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); addSub(); hideInline(); inp.focus(); } });
-  inp?.addEventListener('blur', () => setTimeout(() => {
-    const inside = document.activeElement instanceof Node && wrap ? wrap.contains(document.activeElement) : false;
-    if (!inside && !inp.value.trim()) hideInline();
-  }, 0));
+  const addSub = () => handleAddSub(inp, list, subtasks, hideInline);
+  setupInputEvents(inp, add, wrap, showInline, hideInline, addSub);
   add?.addEventListener('click', addSub);
 
   return { showInline, hideInline, addSub, subtasks };
 }
 
 /**
- * Build inline action bar for subtask input
+ * Initializes the inline action elements for the subtask input area.
+ * @param {HTMLElement|null} wrap - The container element.
+ * @param {HTMLInputElement|null} inp - The input element.
+ * @param {HTMLElement|null} add - The add button element.
+ * @returns {{ showInline: Function, hideInline: Function }}
+ */
+function initInline(wrap, inp, add) {
+  let inline = wrap?.querySelector('.subtask-inline-actions');
+  if (wrap && !inline) {
+    inline = buildInline(
+      wrap, inp,
+      () => { add.click(); hideInline(); inp?.focus(); },
+      () => { if (inp) inp.value=''; hideInline(); inp?.focus(); }
+    );
+  }
+  const showInline = () => { if (inline) inline.style.display='flex'; if (add) add.style.display='none'; };
+  const hideInline = () => { if (inline) inline.style.display='none'; if (add) add.style.display=''; };
+  return { showInline, hideInline };
+}
+
+/**
+ * Escapes HTML special characters in a string for safe insertion into the DOM.
+ * @param {string} s - The input string.
+ * @returns {string} The escaped HTML string.
+ */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+  );
+}
+
+/**
+ * Handles the logic for adding a new subtask to the list.
+ * @param {HTMLInputElement|null} inp - The input field.
+ * @param {HTMLUListElement|null} list - The subtask list element.
+ * @param {Array} subtasks - The subtask array.
+ * @param {Function} hideInline - Function to hide the inline controls.
+ */
+function handleAddSub(inp, list, subtasks, hideInline) {
+  if (!inp || !list) return;
+  const v = inp.value.trim();
+  if (!v) return;
+  subtasks.push({ title: v, done: false });
+  const li = buildSubtaskLi(escapeHtml(v));
+  list.appendChild(li);
+  inp.value = '';
+  wireSubtaskLi(li, list, subtasks);
+  hideInline();
+  inp.focus();
+}
+
+/**
+ * Attaches all event listeners to the subtask input and inline UI.
+ * @param {HTMLInputElement|null} inp - The input field element.
+ * @param {HTMLElement|null} add - The add button element.
+ * @param {HTMLElement|null} wrap - The wrapping container element.
+ * @param {Function} showInline - Function to show inline actions.
+ * @param {Function} hideInline - Function to hide inline actions.
+ * @param {Function} addSub - Function to add a subtask.
+ */
+function setupInputEvents(inp, add, wrap, showInline, hideInline, addSub) {
+  inp?.addEventListener('focus', showInline);
+  inp?.addEventListener('input', showInline);
+  inp?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addSub();
+    }
+  });
+  inp?.addEventListener('blur', () => setTimeout(() => {
+    const inside = document.activeElement instanceof Node && wrap?.contains(document.activeElement);
+    if (!inside && !inp.value.trim()) hideInline();
+  }, 0));
+}
+
+/**
+ * Build inline action bar for subtask input.
+ * @param {HTMLDivElement} wrap - Wrapper element containing the input and buttons.
+ * @param {HTMLInputElement|null} inp - The subtask input element.
+ * @param {Function} onOk - Callback function executed when the confirm (✓) button is clicked.
+ * @param {Function} onClear - Callback function executed when the clear (✕) button is clicked.
+ * @returns {HTMLDivElement} The constructed inline actions container element.
  */
 function buildInline(wrap, inp, onOk, onClear) {
   const box = document.createElement('div'); box.className='subtask-inline-actions';
@@ -151,7 +208,9 @@ function buildInline(wrap, inp, onOk, onClear) {
 }
 
 /**
- * Build a Subtask LI element
+ * Build a Subtask LI element.
+ * @param {string} title - The title of the subtask to display in the list item.
+ * @returns {HTMLLIElement} A list item element representing the subtask.
  */
 function buildSubtaskLi(title) {
   const li = document.createElement('li'); li.className='subtask-item';
@@ -169,7 +228,10 @@ function buildSubtaskLi(title) {
 }
 
 /**
- * Wire hover and delete for Subtask LI
+ * Wire hover and delete for Subtask LI.
+ * @param {HTMLLIElement} li - The list item element representing the subtask.
+ * @param {HTMLUListElement|null} list - The unordered list element containing all subtasks.
+ * @param {{ title: string, done: boolean }[]} subtasksModel - The array representing the current subtasks model.
  */
 function wireSubtaskLi(li, list, subtasksModel) {
   li.addEventListener('mouseenter', () => { li.querySelector('.subtask-actions')?.setAttribute('style','display:inline-block'); });
@@ -197,7 +259,9 @@ function setupCategories() {
 }
 
 /**
- * Wire validation to Title/Due/Category fields
+ * Wire validation to Title/Due/Category fields.
+ * @param {object} core - Core utilities object containing validation helper methods.
+ * @param {HTMLSelectElement|null} catSel - The category selection element to validate.
  */
 function setupValidation(core, catSel) {
   const t = document.getElementById('title');
@@ -208,7 +272,11 @@ function setupValidation(core, catSel) {
 }
 
 /**
- * Check all custom validations
+ * Check all custom validations.
+ * @param {object} core - Core utilities object containing validation methods.
+ * @param {HTMLSelectElement|null} catSel - The category selection element to validate.
+ * @param {boolean} prioOk - Whether a priority has been selected.
+ * @returns {boolean} True if all validations pass, otherwise false.
  */
 function valid(core, catSel, prioOk) {
   const t = document.getElementById('title');
@@ -225,32 +293,58 @@ function valid(core, catSel, prioOk) {
 }
 
 /**
- * Wire Create Task button
+ * Wires the "Create Task" button and handles new task creation.
+ * @param {HTMLElement} dlgEl - The dialog element for task creation.
+ * @param {object} assigned - The assigned users handler.
+ * @param {Function} getPrio - Function to retrieve the selected priority.
+ * @param {Array} subtasksModel - Array containing current subtasks.
+ * @param {HTMLElement} catSel - The category selector element.
+ * @param {object} core - The core validation or app context object.
  */
 function wireCreateTask(dlgEl, assigned, getPrio, subtasksModel, catSel, core) {
   const btn = document.querySelector('.create_task_btn');
-  btn?.addEventListener('click', () => {
+  btn?.addEventListener('click', async () => {
     const prio = getPrio();
     if (!valid(core, catSel, !!prio)) return;
-    const status = dlgEl.dataset.status || 'todo';
-    const task = {
-      title: document.getElementById('title')?.value.trim() || '',
-      description: document.getElementById('description')?.value.trim() || '',
-      dueDate: document.getElementById('task-due-date')?.value.trim() || '',
-      priority: prio,
-      assignedTo: assigned?.getSelectedAssigned?.() || [],
-      category: document.getElementById('category')?.value || '',
-      subtasks: [...subtasksModel],
-      status,
-      createdAt: Date.now()
-    };
-    const key = firebase.database().ref().child('tasks').push().key;
-    firebase.database().ref('tasks/' + key).set({ ...task, id: key }).then(() => {
-      dlgEl.close();
-      clearForm();
-      Win.Board?.Core?.showBoardAddToast?.();
-    });
+    const task = buildTaskObject(dlgEl, assigned, prio, subtasksModel);
+    await saveTaskToFirebase(task, dlgEl);
   });
+}
+
+/**
+ * Builds a task object from form input and given parameters.
+ * @param {HTMLElement} dlgEl - The dialog element containing data attributes.
+ * @param {object} assigned - The assigned users handler.
+ * @param {string} prio - The selected priority.
+ * @param {Array} subtasksModel - The list of subtasks.
+ * @returns {object} The constructed task object.
+ */
+function buildTaskObject(dlgEl, assigned, prio, subtasksModel) {
+  const getVal = id => document.getElementById(id)?.value.trim() || '';
+  return {
+    title: getVal('title'),
+    description: getVal('description'),
+    dueDate: getVal('task-due-date'),
+    priority: prio,
+    assignedTo: assigned?.getSelectedAssigned?.() || [],
+    category: document.getElementById('category')?.value || '',
+    subtasks: [...subtasksModel],
+    status: dlgEl.dataset.status || 'todo',
+    createdAt: Date.now()
+  };
+}
+
+/**
+ * Saves the task object to Firebase and handles UI feedback after success.
+ * @param {object} task - The task object to be saved.
+ * @param {HTMLElement} dlgEl - The dialog element to close after save.
+ */
+async function saveTaskToFirebase(task, dlgEl) {
+  const key = firebase.database().ref().child('tasks').push().key;
+  await firebase.database().ref('tasks/' + key).set({ ...task, id: key });
+  dlgEl.close();
+  clearForm();
+  Win.Board?.Core?.showBoardAddToast?.();
 }
 
 /**

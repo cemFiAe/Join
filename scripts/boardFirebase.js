@@ -1,5 +1,3 @@
-// @ts-check
-/* global firebase */ // (kept for consistency)
 /// <reference path="./boardTypesD.ts" />
 
 /**

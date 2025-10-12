@@ -15,37 +15,45 @@ const auth = firebase.auth();
 // ---- SIGN UP ----
 /**
  * Handles sign-up form submission, creates user, saves to DB, and redirects.
- * @param {Event} event
- * @returns {boolean}
+ * @param {Event} event - The submit event from the sign-up form.
+ * @returns {boolean} Always returns false to prevent form reload.
  */
 function signedUp(event) {
   event.preventDefault();
-  const nameInput = document.getElementById("name-input");
-  const emailInput = document.getElementById("sign-up-email-input");
-  const passwordInput = document.getElementById("sign-up-password");
-  const confirmPasswordInput = document.getElementById("confirm-password");
-  const signedUpScreen = document.getElementById("signed-up-screen");
-  if (!nameInput || !emailInput || !passwordInput || !confirmPasswordInput) return false;
+  const els = {
+    name: document.getElementById("name-input"),
+    email: document.getElementById("sign-up-email-input"),
+    pass: document.getElementById("sign-up-password"),
+    confirm: document.getElementById("confirm-password"),
+    screen: document.getElementById("signed-up-screen")
+  };
+  if (!els.name || !els.email || !els.pass || !els.confirm) return false;
 
-  const name = nameInput.value.trim();
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-  const confirmPassword = confirmPasswordInput.value;
+  const name = els.name.value.trim();
+  const email = els.email.value.trim();
+  const pass = els.pass.value;
+  const confirm = els.confirm.value;
+  if (pass !== confirm) return alert("Passwords do not match!"), false;
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match!");
-    return false;
-  }
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      firebase.database().ref("users/" + userCredential.user.uid).set({ name, email });
-      if (signedUpScreen) signedUpScreen.style.display = "flex";
-      setTimeout(()=> window.location.href="../pages/log_in.html", 2000);
-    })
-    .catch(error => alert(error.message));
-
+  createUser(email, pass, name, els.screen);
   return false;
+}
+
+/**
+ * Creates a new Firebase user and handles post-sign-up actions.
+ * @param {string} email - The user’s email.
+ * @param {string} pass - The user’s password.
+ * @param {string} name - The user’s name.
+ * @param {HTMLElement|null} screen - The success screen element.
+ */
+function createUser(email, pass, name, screen) {
+  auth.createUserWithEmailAndPassword(email, pass)
+    .then(u => {
+      firebase.database().ref("users/" + u.user.uid).set({ name, email });
+      if (screen) screen.style.display = "flex";
+      setTimeout(() => window.location.href = "../pages/log_in.html", 2000);
+    })
+    .catch(e => alert(e.message));
 }
 
 // ---- LOGIN ----

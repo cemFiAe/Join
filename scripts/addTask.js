@@ -1,10 +1,6 @@
-// addTask.js
-// Extends global AddTask with Assigned-/Subtasks-UI, Toast & Clear logic.
-
 /** @typedef {{ title: string, done: boolean }} Subtask */
 /** @typedef {{ name: string, initials: string, selected: boolean, email?: string }} AssignedUserEntry */
 
-// Access AddTask (must be loaded from addTaskCore.js first)
 const A = window.AddTask;
 if (!A) {
   console.error('addTaskCore.js must be loaded before addTask.js');
@@ -102,6 +98,10 @@ function ensureInlineStyles() {
 
 /**
  * Rebuilds a subtask list item after editing.
+ * @param {HTMLLIElement} li - The subtask list item element.
+ * @param {string} text - The new text for the subtask.
+ * @param {Subtask} subtaskObj - The subtask data object.
+ * @returns {void}
  */
 function rebuildSubtaskLi(li, text, subtaskObj) {
   subtaskObj.title=text; li.classList.remove('editing');
@@ -115,7 +115,9 @@ function rebuildSubtaskLi(li, text, subtaskObj) {
 }
 
 /**
- * Builds inline edit row (input + OK/Cancel).
+ * Builds the inline edit row for a subtask (input + OK/Cancel buttons).
+ * @param {string} oldValue - The current subtask text.
+ * @returns {{ row: HTMLDivElement, input: HTMLInputElement, btnOk: HTMLButtonElement, btnCancel: HTMLButtonElement }}
  */
 function buildEditRow(oldValue){
   const row=document.createElement('div'); row.className='subtask-edit-box';
@@ -129,8 +131,12 @@ function buildEditRow(oldValue){
   return {row,input,btnOk,btnCancel};
 }
 
+
 /**
- * Starts inline editing for a subtask.
+ * Starts inline editing mode for a subtask.
+ * @param {HTMLLIElement} li - The subtask list item element.
+ * @param {Subtask} subtaskObj - The subtask data object.
+ * @returns {void}
  */
 function editSubtask(li, subtaskObj){
   const old=subtaskObj.title;
@@ -144,7 +150,11 @@ function editSubtask(li, subtaskObj){
 }
 
 /**
- * Adds a new subtask list item.
+ * Creates and appends a new subtask list item to the list.
+ * @param {string} value - The subtask title.
+ * @param {HTMLUListElement} list - The subtask list element.
+ * @param {Subtask} obj - The subtask object reference.
+ * @returns {void}
  */
 function createSubtaskLi(value,list,obj){
   const li=document.createElement('li'); li.className='subtask-item';

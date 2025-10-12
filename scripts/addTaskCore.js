@@ -1,7 +1,3 @@
-// addTaskCore.js
-// @ts-check
-// Initializes and extends global AddTask object with state, utils, priority, and validation.
-
 /** @typedef {{ title:string, done:boolean }} Subtask */
 /** @typedef {{ name:string, initials:string, selected:boolean, email?:string }} AssignedUserEntry */
 

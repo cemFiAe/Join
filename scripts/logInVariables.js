@@ -1,4 +1,3 @@
-// Alle DOM-Elemente NUR EINMAL deklarieren
 let emailInput         = document.getElementById('log-in-email-input');
 let emailAlert         = document.getElementById('log-in-email-alert');
 

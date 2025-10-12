@@ -1,15 +1,13 @@
-// @ts-check
-/* global firebase */
 /// <reference path="./boardTypesD.ts" />
 
 /** @typedef {Task} SummaryTask */
 /** @typedef {{todo:number,done:number,inProgress:number,feedback:number,urgent:number,all:number,nextDeadline:Date|null}} SummaryStats */
 
 /**
- * Robustes Datum-Parsing: unterstützt 'yyyy-mm-dd', 'dd/mm/yyyy'
- * und fällt ansonsten auf den nativen Date-Parser zurück.
- * @param {string=} dateStr Eingabe-Datum als String
- * @returns {Date|null} Geparstes Datum oder null bei Ungültigkeit
+ * Robustly parses a date string in 'yyyy-mm-dd' or 'dd/mm/yyyy' format.
+ * Falls back to the native Date parser if format is unrecognized.
+ * @param {string=} dateStr - The date string to parse.
+ * @returns {Date|null} The parsed Date object, or null if invalid.
  */
 function parseTaskDate(dateStr) {
   if (!dateStr) return null;
@@ -22,8 +20,8 @@ function parseTaskDate(dateStr) {
 }
 
 /**
- * Liest alle Tasks einmalig aus Firebase aus.
- * @returns {Promise<SummaryTask[]>} Promise mit Taskliste
+ * Fetches all tasks once from Firebase.
+ * @returns {Promise<SummaryTask[]>} A promise resolving to the list of tasks.
  */
 function fetchTasksOnce() {
   return firebase.database().ref('tasks').once('value')
@@ -31,9 +29,9 @@ function fetchTasksOnce() {
 }
 
 /**
- * Erzeugt aggregierte Kennzahlen (Summary) aus der Taskliste.
- * @param {SummaryTask[]} tasks Aufgabenliste
- * @returns {SummaryStats} aggregierte Statistik
+ * Aggregates task data into summary statistics.
+ * @param {SummaryTask[]} tasks - Array of tasks to summarize.
+ * @returns {SummaryStats} Aggregated summary statistics.
  */
 function summarizeTasks(tasks) {
   const s = { todo:0, done:0, inProgress:0, feedback:0, urgent:0, all:0, nextDeadline:null };
@@ -47,17 +45,15 @@ function summarizeTasks(tasks) {
 }
 
 /**
- * Setzt `textContent` eines Elements (falls vorhanden).
- * @param {string} id Element-ID
- * @param {string|number} v Text-/Zahlwert
- * @returns {void}
+ * Sets the textContent of an element if it exists.
+ * @param {string} id - Element ID.
+ * @param {string|number} v - Text or number value to set.
  */
 function setText(id, v){ const el=document.getElementById(id); if(el) el.textContent=String(v); }
 
 /**
- * Aktualisiert die Summary-UI mit den berechneten Kennzahlen.
- * @param {SummaryStats} s Statistikwerte
- * @returns {void}
+ * Updates the summary UI with the calculated statistics.
+ * @param {SummaryStats} s - Summary statistics to display.
  */
 function updateSummaryUI(s) {
   setText('summary-todo', s.todo); setText('summary-done', s.done);
@@ -68,16 +64,15 @@ function updateSummaryUI(s) {
 }
 
 /**
- * Liefert eine kurze, tageszeitabhängige Begrüßung.
- * @returns {string} z. B. "Good morning,"
+ * Returns a short, time-of-day dependent greeting.
+ * @returns {string} e.g., "Good morning,"
  */
 function getGreeting(){ const h=new Date().getHours(); if(h<5)return'Good night,'; if(h<12)return'Good morning,'; if(h<18)return'Good afternoon,'; return'Good evening,'; }
 
 /**
- * Formatiert den übergebenen Namen für die Anzeige:
- * Nachnamen (bzw. alles nach dem ersten Wort) werden farbig markiert.
- * @param {string} name Voller Name (oder leer)
- * @returns {string} HTML-String
+ * Formats a full name for display, highlighting all parts after the first word.
+ * @param {string} name - Full name (may be empty).
+ * @returns {string} HTML string with styled name.
  */
 function formatNameHtml(name){
   const p=(name||'Guest').trim().split(/\s+/); if(p.length<=1) return `<span style="color:#29ABE2;font-weight:800;">${p[0]}</span>`;
@@ -85,16 +80,15 @@ function formatNameHtml(name){
 }
 
 /**
- * Navigiert zur Board-Seite, optional mit Status-Hash (Spalte vorselektieren).
- * @param {string} [hash] 'todo' | 'inprogress' | 'awaitingfeedback' | 'done' | ''
- * @returns {void}
+ * Navigates to the board page, optionally including a column hash to preselect a column.
+ * @param {string} [hash] - Optional status hash ('todo', 'inprogress', 'awaitingfeedback', 'done').
  */
 function goBoard(hash){ const base='../pages/board.html'; window.location.href = hash ? `${base}#${hash}` : base; }
 
 /**
- * Findet den passenden klickbaren Karten-Container der Summary-Kachel.
- * @param {Element} el Ein beliebiges Kind-Element in der Kachel
- * @returns {HTMLElement} der Container, der klickbar gemacht werden soll
+ * Finds the appropriate clickable container for a summary card.
+ * @param {Element} el - Any child element inside the card.
+ * @returns {HTMLElement} The container element that should be made clickable.
  */
 function cardTarget(el){
   return /** @type {HTMLElement} */(
@@ -105,11 +99,9 @@ function cardTarget(el){
 }
 
 /**
- * Macht die übergebenen Elemente (IDs) als komplette Kachel klickbar
- * und führt bei Klick/Enter/Space die Board-Navigation aus.
- * @param {string[]} ids Element-IDs (Zahl &/oder gesamter Kachel-Wrapper)
- * @param {string} hash Optionaler Board-Hash (Spalte)
- * @returns {void}
+ * Makes the given elements (by ID) fully clickable and triggers board navigation on click or keyboard interaction.
+ * @param {string[]} ids - Element IDs for tiles or wrappers.
+ * @param {string} hash - Optional board hash for column selection.
  */
 function makeClickable(ids, hash) {
   /** @type {Set<HTMLElement>} */ const targets = new Set();
@@ -123,10 +115,9 @@ function makeClickable(ids, hash) {
 }
 
 /**
- * Initialisiert die Summary-Seite:
- * lädt Tasks, berechnet/zeigt Kennzahlen, setzt Begrüßung
- * und macht die Kacheln klickbar.
- * @returns {void}
+ * Initializes the summary page:
+ * Loads tasks, calculates and displays statistics, sets greeting message,
+ * and makes summary tiles clickable.
  */
 function initSummary() {
   fetchTasksOnce().then(ts => updateSummaryUI(summarizeTasks(ts)));
@@ -134,7 +125,6 @@ function initSummary() {
   if (g) g.textContent=getGreeting();
   if (u) u.innerHTML=formatNameHtml(localStorage.getItem('currentUserName')||'Guest');
 
-  // IDs der ganzen Kacheln (falls vorhanden) + Fallback auf die Zahl-IDs
   makeClickable(['card-todo','summary-todo'], 'todo');
   makeClickable(['card-done','summary-done'], 'done');
   makeClickable(['card-inprogress','summary-inprogress'], 'inprogress');

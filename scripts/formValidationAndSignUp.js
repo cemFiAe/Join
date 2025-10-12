@@ -15,6 +15,11 @@ function nameValidation() {
 nameInput.addEventListener('input', nameValidation)
 
 
+/**
+ * Validates the email input field.
+ * Updates the input border color and shows/hides the email alert based on validity.
+ * @returns {boolean} True if the email is valid, false otherwise.
+ */
 function emailValidation() {
     let valid = isEmailValid(emailInput.value);
     emailInput.style.borderColor = valid ? 'rgb(41, 171, 226)' : 'rgb(255, 0, 31)';
@@ -23,6 +28,11 @@ function emailValidation() {
 }
 
 
+/**
+ * Validates the password input field.
+ * Updates the input border color and shows/hides the password alert based on validity.
+ * @returns {boolean} True if the password is valid, false otherwise.
+ */
 function passwordValidation() {
     let password = passwordInput.value.trim();
     let valid = isPasswordValid(password)
@@ -32,6 +42,11 @@ function passwordValidation() {
 }
 
 
+/**
+ * Validates that the confirm password input matches the password input.
+ * Updates the input border color and shows/hides the confirm password alert.
+ * @returns {boolean} True if the confirm password matches the password, false otherwise.
+ */
 function confirmPasswordValidation() {
     let password = passwordInput.value.trim();
     let confirmPassword = confirmInput.value.trim();
@@ -43,6 +58,11 @@ function confirmPasswordValidation() {
 }
 
 
+/**
+ * Checks if the privacy policy checkbox is checked.
+ * Shows or hides the policy alert based on checkbox state.
+ * @returns {boolean} True if the checkbox is checked, false otherwise.
+ */
 function privacyPolicyValidation() {
     let valid = !checkboxUnchecked;
     policyAlert.style.display = valid ? 'none' : 'block';
@@ -50,8 +70,17 @@ function privacyPolicyValidation() {
 }
 
 
+/**
+ * Tracks the current state of the privacy policy checkbox.
+ * True if unchecked, false if checked.
+ */
 let checkboxUnchecked = true;
 
+
+/**
+ * Toggles the privacy policy checkbox state and updates the checkbox image.
+ * Shows or hides the policy alert based on the new state.
+ */
 function checkboxClick() {
     checkboxUnchecked = !checkboxUnchecked;
     checkbox.src = checkboxUnchecked ? "./assets/icons/sign_up/checkbox_unchecked.svg" : "./assets/icons/sign_up/checkbox_checked.svg";

@@ -38,8 +38,6 @@ function updateFormStyles(input, alert, isValid) {
         alert.style.display = 'block';
     }
 }
-// emailInput.addEventListener('input', validateForm);
-// passwordInput.addEventListener('input', validateForm);
 
 
 /**
@@ -51,9 +49,8 @@ async function userLogIn(e) {
     try {
         let success = await saveAsUser();
         if (success) {
-            // After successful login, set loggedIn to true and redirect
             localStorage.setItem("loggedIn", "true");
-            window.location.replace("./pages/summary.html"); // Replace to avoid going back
+            window.location.replace("./pages/summary.html");
         }
     } catch (error) {
         console.error("Login failed", error);
@@ -64,76 +61,78 @@ logInButton.addEventListener('click', userLogIn);
 
 
 /**
- * After correct input, if input matches data from database, only then user will be logged in.
- * @param {boolean} isGuest Turns 'false' if already signed-up-user logs in. 
- * @returns If 'true' - user data is saved and user is redirected to summary page, and
- * if 'false' - user remains on login page and alertFormStyles function is called.
+ * Checks if a user exists in the database by email.
+ * @param {Object} database - The users database object.
+ * @param {string} email - The email to search for.
+ * @returns {{id:string, user:Object}|null} Found user or null.
+ */
+function findUserByEmail(database, email) {
+    for (const [id, user] of Object.entries(database)) {
+        if (user.email === email) return { id, user };
+    }
+    return null;
+}
+
+/**
+ * Saves user data in localStorage for a logged-in user.
+ * @param {Object} user - The user object to save.
+ */
+function saveUserLocally(user) {
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("currentUserName", user.name);
+    localStorage.setItem("currentUserType", "user");
+    localStorage.setItem("currentUser", JSON.stringify({
+        name: user.name,
+        email: user.email,
+        isGuest: false
+    }));
+}
+
+/**
+ * Ensures user exists in contacts database; adds if missing.
+ * @param {Object} user - The user object.
+ * @param {string} baseUrl - Firebase base URL.
+ */
+async function ensureUserContact(user, baseUrl) {
+    try {
+        const resp = await fetch(baseUrl + "contacts.json");
+        const contacts = await resp.json();
+        const exists = contacts && Object.values(contacts).some(c => c.mail === user.email);
+        if (!exists) {
+            await fetch(baseUrl + "contacts.json", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: user.name, mail: user.email, phone: user.phone || "" })
+            });
+        }
+    } catch (err) { console.error('Error saving contact:', err); }
+}
+
+/**
+ * Logs in a user if credentials match the database.
+ * @returns {Promise<boolean>} True if login successful, false otherwise.
  */
 async function saveAsUser() {
     const BASE_URL = "https://join-group-project-default-rtdb.europe-west1.firebasedatabase.app/";
-    const response = await fetch(BASE_URL + "users.json");
-    const database = await response.json();
+    const dbResp = await fetch(BASE_URL + "users.json");
+    const db = await dbResp.json();
 
-    // Search for the user with matching email
-    let userId = null;
-    let userObj = null;
-    for (const [id, user] of Object.entries(database)) {
-        if (user.email === emailInput.value) {
-            userId = id;
-            userObj = user;
-            break;
-        }
-    }
-
-    if (userObj && userObj.password === passwordInput.value.trim()) {
-        // User found, save login data
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("currentUserName", userObj.name);
-        localStorage.setItem("currentUserType", "user");
-        localStorage.setItem("currentUser", JSON.stringify({
-            name: userObj.name,
-            email: userObj.email,
-            isGuest: false
-        }));
-
-        // Add user to contacts if not already present
-        try {
-            const contactsResponse = await fetch(BASE_URL + "contacts.json");
-            const contactsDb = await contactsResponse.json();
-            let alreadyContact = false;
-            if (contactsDb) {
-                for (const c of Object.values(contactsDb)) {
-                    if (c.mail === userObj.email) {
-                        alreadyContact = true;
-                        break;
-                    }
-                }
-            }
-            if (!alreadyContact) {
-                const addContactRes = await fetch(BASE_URL + "contacts.json", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        name: userObj.name,
-                        mail: userObj.email,
-                        phone: userObj.phone || ""
-                    })
-                });
-                if (!addContactRes.ok) {
-                    throw new Error('Contact could not be saved!');
-                }
-            }
-        } catch (err) {
-            console.error('Error saving contact:', err);
-        }
-
-        return true;
-    } else if (!userObj || userObj.password !== passwordInput.value.trim()) {
+    const found = findUserByEmail(db, emailInput.value);
+    if (!found || found.user.password !== passwordInput.value.trim()) {
         alertFormStyle();
         return false;
     }
+
+    saveUserLocally(found.user);
+    await ensureUserContact(found.user, BASE_URL);
+    return true;
 }
 
+
+/**
+ * Highlights the email and password input fields to indicate invalid credentials.
+ * Displays an error message below the password field.
+ */
 function alertFormStyle() {
     passwordDiv.style.borderColor = 'rgb(255, 0, 31)';
     passwordAlert.style.display = "block";
@@ -141,7 +140,10 @@ function alertFormStyle() {
     emailInput.style.borderColor = 'rgb(255, 0, 31)';
 }
 
-// Guest Login
+
+/**
+ * Saves guest user data in localStorage and marks the user as logged in.
+ */
 function saveAsGuest() {
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem("currentUserName", "Guest");
@@ -153,11 +155,22 @@ function saveAsGuest() {
     }));
 }
 
+
+/**
+ * Handles guest login on button click.
+ * Saves guest user data and redirects to the summary page if login is successful.
+ * @param {Event} e - The click event from the guest login button.
+ */
 function guestLogIn(e) {
     e.preventDefault();
     saveAsGuest();
     if (localStorage.getItem("loggedIn") === "true") {
-        window.location.replace("./pages/summary.html"); // Replace to avoid going back
+        window.location.replace("./pages/summary.html");
     }
 }
+
+
+/**
+ * Attaches the guest login handler to the guest login button.
+ */
 guestLogInButton.addEventListener('click', guestLogIn);

@@ -1,6 +1,3 @@
-// @ts-check
-/* global firebase */
-
 /**
  * Board.Detail – orchestrates Task Detail dialog (View + Edit)
  * Dependencies: Board.DetailUtil (U), Board.Assigned (Assigned)
@@ -15,7 +12,11 @@ const U = Win.Board.DetailUtil;
 /** @typedef {{ id:string, title?:string, description?:string, category?:string, dueDate?:string, priority?:TaskPriority, status:string, assignedTo?:string[]|string, subtasks?:Subtask[] }} Task */
 
 // ────────────────────────────────────────── View builders
-
+/**
+ * Builds the HTML string for viewing a task detail dialog.
+ * @param {Task} t - The task object to render.
+ * @returns {string} HTML string for the view mode of the task dialog.
+ */
 function buildViewHTML(t) {
   const pr = { urgent: 'prio_top.svg', medium: 'prio_mid.svg', low: 'prio_low.svg' };
   const prIcon = pr[t.priority || 'medium'];
@@ -69,6 +70,11 @@ function buildViewHTML(t) {
     </div>`;
 }
 
+/**
+ * Builds the HTML string for editing a task in a task detail dialog.
+ * @param {Task} t - The task object to render.
+ * @returns {string} HTML string for the edit mode of the task dialog.
+ */
 function buildEditHTML(t) {
   const catCls = U.getDetailCategoryClass(t.category);
   const def = (p) => (t.priority || 'medium') === p ? ' active' : '';
@@ -126,7 +132,13 @@ function buildEditHTML(t) {
 }
 
 // ────────────────────────────────────────── Small wiring
-
+/**
+ * Wires up task detail view mode interactions including subtasks, edit, delete, and close buttons.
+ * @param {HTMLElement} body - The dialog body element containing the task view HTML.
+ * @param {Task} task - The task object being displayed.
+ * @param {HTMLDialogElement} dlg - The dialog element.
+ * @param {() => void} toEdit - Callback to switch to edit mode.
+ */
 function wireView(body, task, dlg, toEdit) {
   body.querySelectorAll('.subtask-checkbox').forEach((el) => {
     el.addEventListener('change', (ev) => {
@@ -142,6 +154,10 @@ function wireView(body, task, dlg, toEdit) {
   (/** @type {HTMLButtonElement} */(body.querySelector('#closeTaskDetail'))).onclick = () => dlg.close();
 }
 
+/**
+ * Sets the minimum date of the task edit due date input to today and prevents selecting past dates.
+ * @param {HTMLElement} body - The dialog body element containing the edit due date input.
+ */
 function setMinDate(body) {
   const el = /** @type {HTMLInputElement|null} */ (body.querySelector('#editDueDate'));
   if (!el) return;
@@ -150,6 +166,12 @@ function setMinDate(body) {
   el.addEventListener('input', () => { if (el.value && el.value < el.min) el.value = el.min; });
 }
 
+/**
+ * Wires the priority buttons in edit mode and tracks the selected priority.
+ * @param {HTMLElement} body - The dialog body containing the priority buttons.
+ * @param {TaskPriority} [current] - The currently selected priority.
+ * @returns {TaskPriority} The selected priority after wiring buttons.
+ */
 function wirePrioButtons(body, current) {
   let prio = current || 'medium';
   body.querySelectorAll('.priority-buttons .btn').forEach(btn => {
@@ -163,6 +185,11 @@ function wirePrioButtons(body, current) {
   return prio;
 }
 
+/**
+ * Builds a local assignment model combining all users and contacts, marking preselected users.
+ * @param {Task} task - The task object with assigned users.
+ * @returns {Record<string, {name:string,email?:string,initials:string,selected:boolean}>} Local assignment model.
+ */
 function buildLocalAssign(task) {
   const allU = Win.allUsers||{};
   const allC = Win.allContacts||{};
@@ -182,6 +209,11 @@ function buildLocalAssign(task) {
   return local;
 }
 
+/**
+ * Renders the avatar badges of selected users (max 4 visible, extra as "+N").
+ * @param {Record<string, {name:string,email?:string,initials:string,selected:boolean}>} local - Local assignment model.
+ * @param {HTMLElement} bad - Badge container element.
+ */
 function renderAssignBadges(local, bad) {
   bad.innerHTML = '';
   const sel = Object.values(local).filter(u=>u.selected);
@@ -201,49 +233,92 @@ function renderAssignBadges(local, bad) {
   }
 }
 
+/**
+ * Creates a single dropdown option element for a user.
+ * @param {{name:string,email?:string,initials:string,selected:boolean}} u - User object.
+ * @param {number} keep - Scroll position to maintain.
+ * @param {Record<string, any>} local - Local assignment model.
+ * @param {HTMLElement} dd - Dropdown container.
+ * @returns {HTMLDivElement} The created option element.
+ */
+function createAssignOption(u, keep, local, dd) {
+  const opt = document.createElement('div');
+  opt.className = 'custom-option' + (u.selected ? ' selected' : '');
+  opt.tabIndex = 0;
+
+  const toggle = e => {
+    e.preventDefault(); e.stopPropagation();
+    u.selected = !u.selected;
+    renderAssignDropdown(local, dd);
+    renderAssignBadges(local, document.getElementById('editAssignedBadges'));
+    dd.scrollTop = keep;
+  };
+
+  opt.addEventListener('pointerdown', toggle);
+  opt.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter') toggle(e); });
+  opt.append(createAvatar(u), createLabel(u), createCheckbox(u));
+  return opt;
+}
+
+/**
+ * Creates the avatar element for a dropdown option.
+ * @param {{name: string, initials: string}} u - User object with name and initials.
+ * @returns {HTMLDivElement} The avatar element with initials and background color.
+ */
+function createAvatar(u) {
+  const av = document.createElement('div');
+  av.className = 'custom-option-avatar';
+  av.style.background = Assigned?.generateColorFromString?.(u.name) || '#888';
+  av.textContent = u.initials;
+  return av;
+}
+
+/**
+ * Creates the label element for a dropdown option.
+ * Adds "(You)" if the user matches the current logged-in user.
+ * @param {{name: string, email?: string}} u - User object with name and optional email.
+ * @returns {HTMLDivElement} The label element with user name and "(You)" if applicable.
+ */
+function createLabel(u) {
+  const me = (localStorage.getItem('currentUserEmail')||'').toLowerCase();
+  const you = ((u.email||'').toLowerCase() === me ? ' (You)' : '');
+  const lab = document.createElement('div');
+  lab.className = 'custom-option-label';
+  lab.textContent = u.name + you;
+  return lab;
+}
+
+/**
+ * Creates the checkbox element for a dropdown option.
+ * @param {{selected: boolean}} u - User object with selected state.
+ * @returns {HTMLDivElement} The checkbox element, marked checked if user is selected.
+ */
+function createCheckbox(u) {
+  const chk = document.createElement('div');
+  chk.className = 'custom-option-checkbox';
+  if (u.selected) chk.classList.add('checked');
+  return chk;
+}
+
+/**
+ * Renders the dropdown list of users for task assignment.
+ * @param {Record<string, {name:string,email?:string,initials:string,selected:boolean}>} local - Local assignment model.
+ * @param {HTMLElement} dd - Dropdown container element.
+ */
 function renderAssignDropdown(local, dd) {
   const keep = dd.scrollTop;
   dd.innerHTML = '';
   Object.entries(local)
     .sort(([,a],[,b])=>a.name.localeCompare(b.name))
-    .forEach(([id,u])=>{
-      const opt=document.createElement('div');
-      opt.className='custom-option'+(u.selected?' selected':'');
-      opt.tabIndex=0;
-
-      const av=document.createElement('div');
-      av.className='custom-option-avatar';
-      av.style.backgroundColor=Assigned?.generateColorFromString?.(u.name)||'#888';
-      av.textContent=u.initials;
-
-      const lab=document.createElement('div');
-      lab.className='custom-option-label';
-      lab.textContent=
-        u.name +
-        (((u.email||'').toLowerCase()===(localStorage.getItem('currentUserEmail')||'').toLowerCase())
-          ? ' (You)' : '');
-
-      const chk=document.createElement('div');
-      chk.className='custom-option-checkbox';
-      if(u.selected) chk.classList.add('checked');
-
-      const toggle=(ev)=>{
-        ev.preventDefault(); ev.stopPropagation();
-        u.selected=!u.selected;
-        renderAssignDropdown(local,dd);
-        renderAssignBadges(local, /** @type {HTMLDivElement} */(document.getElementById('editAssignedBadges')));
-        dd.scrollTop=keep;
-      };
-
-      opt.addEventListener('pointerdown',toggle);
-      opt.addEventListener('keydown',(e)=>{ if(e.key===' '||e.key==='Enter') toggle(e); });
-
-      opt.append(av,lab,chk);
-      dd.appendChild(opt);
-    });
+    .forEach(([id,u]) => dd.appendChild(createAssignOption(u, keep, local, dd)));
   dd.scrollTop = keep;
 }
 
+/**
+ * Wires interactions for the assigned users dropdown, including toggle and click outside handling.
+ * @param {HTMLElement} body - The dialog body element.
+ * @param {Record<string, {name:string,email?:string,initials:string,selected:boolean}>} local - Local assignment model.
+ */
 function wireAssign(body, local) {
   const sel = body.querySelector('#editAssignedSelectBox');
   const dd  = body.querySelector('#editAssignedDropdown');
@@ -263,6 +338,14 @@ function wireAssign(body, local) {
   renderAssignBadges(local, bad);
 }
 
+/**
+ * Wires saving the task edits to Firebase when the edit form is submitted.
+ * @param {HTMLElement} body - The dialog body containing the edit form.
+ * @param {Task} task - The task being edited.
+ * @param {Record<string, {name:string,email?:string,initials:string,selected:boolean}>} local - Local assignment model.
+ * @param {() => void} done - Callback executed after successful save.
+ * @param {() => TaskPriority} getPrio - Function returning the currently selected priority.
+ */
 function wireSave(body, task, local, done, getPrio) {
   body.querySelector('#editTaskForm').onsubmit = (e) => {
     e.preventDefault();
@@ -281,11 +364,13 @@ function wireSave(body, task, local, done, getPrio) {
 }
 
 // ────────────────────────────────────────── Entry point
-
+/**
+ * Opens the task detail dialog in view mode and enables switching to edit mode.
+ * @param {Task} task - The task object to display.
+ */
 function openTaskDetail(task) {
   const dlg = document.getElementById('taskDetailDialog');
   const body = document.getElementById('taskDetailBody');
-
   let isEditing = false;
   let editPrio = task.priority||'medium';
 

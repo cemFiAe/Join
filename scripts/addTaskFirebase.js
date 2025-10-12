@@ -1,7 +1,3 @@
-// addTaskFirebase.js
-// @ts-check
-// Initializes Add-Task page: Firebase integration, DOM refs, validation, and handlers.
-
 /** Casting window for TS to accept globals */
 const Win = /** @type {any} */ (window);
 /** Firebase from CDN */
@@ -10,7 +6,7 @@ const firebase = /** @type {any} */ (Win.firebase);
 /**
  * Structure of all DOM references needed on Add-Task page.
  * @typedef {Object} AddTaskRefs
- * @property {any} Core                      - Global AddTask API
+ * @property {any} Core                      
  * @property {HTMLInputElement|null} titleEl
  * @property {HTMLTextAreaElement|null} descEl
  * @property {HTMLInputElement|null} dueEl
